@@ -2,7 +2,7 @@
 
 Read workspace `CLAUDE.md` and shared-agent rules first. Product spec and reviewed implementation plan remain at `Cowork/Outputs/Weekly-Shop/`; the adopted product name is MSTRCHF 9000. Root orchestrator owns canonical execution plan `loop/001/plan.md`, `progress.md`, contract changes, integration and acceptance routing.
 
-Work only within the explicit package/file ownership in the dispatch. Read-only access to shared code is allowed. Do not edit another worker's files, global dependency manifests, frozen contracts or migration numbering without root authorisation. The root integrates and commits; workers must report changed files, exact commands/counts/results, unresolved concerns and actual capabilities. Do not infer completion from a scaffold or mocks.
+Work only within the explicit package/file ownership in the dispatch. Read-only access to shared code is allowed. Do not edit another worker's files, global dependency manifests, frozen contracts or migration numbering without root authorisation. Root integrates commits; a worker explicitly assigned its own isolated branch may commit only its authorised files there. Workers must report changed files, exact commands/counts/results, unresolved concerns and actual capabilities. Do not infer completion from a scaffold or mocks.
 
 User explicitly requested new Codex chats for tasks and authorised the root orchestrator to coordinate them through completion. Workers do not create more user-owned chats. Root handles Asana and canonical loop updates; each chat has separate Codex session records. Workers may use bounded internal research helpers where useful, but no duplicate reviewer for the same package.
 
