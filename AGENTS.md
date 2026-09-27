@@ -10,4 +10,4 @@ Production UI remains gated by the workspace design playbook. Design artefacts a
 
 Keep private loop/account/session evidence out of distribution. Runtime household data belongs in local app data, not this synced repository. No credentials or browser cookies in logs or fixtures. Use synthetic test records. No access to Legacy or active-excluded Freya. Never directly delete workspace files; honour workspace recovery rules.
 
-Proposed executable/identifier slug: `mstrchf-9000`. Existing plan package/test names `weekly-shop-*` may remain internal during initial contract freeze; root must record a single consistent naming choice before code.
+Executable/app slug: `mstrchf-9000`; Rust packages: `mstrchf-*`; runtime directory: `%LOCALAPPDATA%/MSTRCHF9000`. Root adopted these names before code. Historical `weekly-shop-*` check examples in the reviewed plan map to the corresponding `mstrchf-*` packages.
