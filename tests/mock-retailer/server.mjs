@@ -31,6 +31,92 @@ function initial() {
         label: { status: 'not-food', ingredients: [], allergens: [], evidence: 'Not food' }, offer: null }
     ] };
 }
+// Structural recovery validation, not authenticity: valid local edits cannot
+// be distinguished from genuine history without a separate trust mechanism.
+function validateRecoveredEvent(event, index, previous) {
+  const require = condition => { if (!condition) throw new Error('Invalid ledger structure or state'); };
+  const object = x => x !== null && typeof x === 'object' && !Array.isArray(x);
+  const fields = (x, required, optional = []) => object(x) && required.every(k => Object.hasOwn(x, k)) &&
+    Object.keys(x).every(k => required.includes(k) || optional.includes(k));
+  const text = x => typeof x === 'string' && x.length > 0 && x.length <= 500;
+  const id = x => typeof x === 'string' && /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(x);
+  const day = x => typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x) &&
+    Number.isFinite(Date.parse(x)) && new Date(x).toISOString().slice(0, 10) === x;
+  const strings = x => Array.isArray(x) && x.length <= 100 && x.every(text);
+  const skus = ['beans', 'eggs', 'soap'];
+  const actionId = x => typeof x === 'string' && /^[A-Za-z0-9_-]{1,80}$/.test(x);
+  const eventFields = {
+    reset: ['snapshot'], 'server-start': ['snapshot', 'pendingPolicy'],
+    control: ['snapshot', 'control'], 'read-failure': ['snapshot'],
+    'action-received': ['snapshot', 'requestId', 'actionId', 'mode', 'actor', 'input'],
+    mutation: ['snapshot', 'requestId', 'actionId', 'actor', 'sku', 'before', 'after'],
+    'gate-wait': ['requestId', 'stage'], 'gate-release': ['requestId', 'stage'],
+    'gate-discard': ['requestId', 'stage'], 'not-committed': ['requestId'], 'ack-dropped': ['requestId']
+  };
+  require(object(event) && typeof event.type === 'string' && Object.hasOwn(eventFields, event.type));
+  require(fields(event, ['seq', 'at', 'runId', 'type', ...eventFields[event.type]],
+    event.type === 'reset' ? ['previousRunId'] : event.type === 'ack-dropped' ? ['transport'] : []));
+  require(event.seq === index + 1 && id(event.runId) && text(event.at) && Number.isFinite(Date.parse(event.at)));
+  require(index === 0 ? event.type === 'reset' : event.type === 'reset' || event.runId === previous?.runId);
+  if ('previousRunId' in event) require(id(event.previousRunId) && event.previousRunId === previous?.runId);
+  if ('requestId' in event) require(id(event.requestId));
+  if ('stage' in event) require(['before', 'ack'].includes(event.stage));
+  if ('transport' in event) require(['raw-pre-response-close', 'truncated-response'].includes(event.transport));
+  if ('pendingPolicy' in event) require(event.pendingPolicy === 'abandon; never replay');
+  if ('actor' in event) require(['manual', 'worker'].includes(event.actor) &&
+    (event.actor === 'manual' ? event.actionId === null : actionId(event.actionId)));
+  if (event.type === 'mutation') require(skus.includes(event.sku) && integer(event.before, 0, 99) && integer(event.after, 0, 99));
+  if (event.type === 'action-received') {
+    const x = event.input, manual = event.actor === 'manual';
+    require(MODES.includes(event.mode) && fields(x, ['basketId', 'sku', 'quantity', ...(manual ? [] : ['operation', 'actionId'])]));
+    // Received input is evidence, not canonical identity: a non-UUID basket
+    // string may have been recorded and correctly rejected with HTTP 409.
+    require(typeof x.basketId === 'string' && x.basketId.length <= MAX_BODY && skus.includes(x.sku) && integer(x.quantity, 0, 99));
+    if (!manual) require(actionId(x.actionId) && x.actionId === event.actionId &&
+      ['add', 'set'].includes(x.operation) && (x.operation !== 'add' || x.quantity > 0));
+  }
+  if (event.type === 'control') {
+    const x = event.control;
+    require(fields(x, [], ['nextAction', 'readFailures', 'loggedIn', 'product', 'release', 'discard']) && Object.keys(x).length > 0);
+    if ('nextAction' in x) require(MODES.includes(x.nextAction));
+    if ('readFailures' in x) require(integer(x.readFailures, 0, 100));
+    if ('loggedIn' in x) require(typeof x.loggedIn === 'boolean');
+    for (const key of ['release', 'discard']) if (key in x) require(['before', 'ack'].includes(x[key]));
+    require(!('release' in x && 'discard' in x));
+    if ('product' in x) {
+      const p = x.product;
+      require(fields(p, ['sku'], ['inStock', 'pricePence', 'labelStatus']) && skus.includes(p.sku));
+      if ('inStock' in p) require(typeof p.inStock === 'boolean');
+      if ('pricePence' in p) require(p.pricePence === null || integer(p.pricePence, 0, 100000));
+      if ('labelStatus' in p) require(['known', 'unknown', 'contradictory'].includes(p.labelStatus));
+    }
+  }
+  if (!Object.hasOwn(event, 'snapshot')) return;
+  const s = event.snapshot;
+  require(fields(s, ['synthetic', 'runId', 'basketId', 'loggedIn', 'revision', 'readFailures', 'nextAction', 'context', 'basket', 'products']));
+  require(s.synthetic === true && id(s.runId) && s.runId === event.runId && id(s.basketId) && s.basketId !== s.runId);
+  require(event.type === 'reset' || s.basketId === previous?.basketId);
+  require(typeof s.loggedIn === 'boolean' && integer(s.revision, 0, 10000) && integer(s.readFailures, 0, 100) && MODES.includes(s.nextAction));
+  require(fields(s.context, ['currency', 'deliveryDate', 'loyaltyMember']) && s.context.currency === 'GBP' &&
+    day(s.context.deliveryDate) && typeof s.context.loyaltyMember === 'boolean');
+  require(fields(s.basket, ['beans', 'soap'], ['eggs']) && Object.values(s.basket).every(q => integer(q, 0, 99)));
+  require(Array.isArray(s.products) && s.products.length === 3);
+  const seen = new Set();
+  for (const p of s.products) {
+    require(fields(p, ['sku', 'name', 'variant', 'packCount', 'netGrams', 'drainedGrams', 'unit', 'pricePence', 'inStock', 'label', 'offer']));
+    require(skus.includes(p.sku) && !seen.has(p.sku)); seen.add(p.sku);
+    require(text(p.name) && text(p.variant) && integer(p.packCount, 1, 99) && ['g', 'each'].includes(p.unit) && typeof p.inStock === 'boolean');
+    for (const key of ['netGrams', 'drainedGrams']) require(p[key] === null || integer(p[key], 1, 1000000));
+    require(p.drainedGrams === null || (p.netGrams !== null && p.drainedGrams <= p.netGrams));
+    require(p.pricePence === null || integer(p.pricePence, 0, 100000));
+    require(fields(p.label, ['status', 'ingredients', 'allergens', 'evidence']) &&
+      ['known', 'unknown', 'contradictory', 'not-food'].includes(p.label.status) && text(p.label.evidence));
+    require(p.label.status === 'unknown' ? p.label.ingredients === null && p.label.allergens === null : strings(p.label.ingredients) && strings(p.label.allergens));
+    if (p.offer !== null) require(fields(p.offer, ['packs', 'totalPence', 'requiresLoyalty', 'starts', 'ends']) &&
+      integer(p.offer.packs, 1, 99) && integer(p.offer.totalPence, 0, 100000) && typeof p.offer.requiresLoyalty === 'boolean' &&
+      day(p.offer.starts) && day(p.offer.ends) && p.offer.starts <= p.offer.ends);
+  }
+}
 async function body(req) {
   if (req.headers['content-type'] !== 'application/json') fail(415, 'Use application/json');
   if (Number(req.headers['content-length']) > MAX_BODY) fail(413, 'Request too large');
@@ -81,12 +167,13 @@ export async function start({ dataDir, port = 0 } = {}) {
     if (existsSync(file)) {
       if (statSync(file).size > MAX_LEDGER) throw new Error('Ledger exceeds size limit');
       const text = readFileSync(file, 'utf8'); ledgerBytes = Buffer.byteLength(text);
+      if (!text.trim()) throw new Error('Invalid ledger: existing evidence is empty');
       if (text && !text.endsWith('\n')) throw new Error('Incomplete ledger tail; preserve evidence, no automatic repair');
-      events = text.trim() ? text.trimEnd().split('\n').map(line => JSON.parse(line)) : [];
+      events = text.slice(0, -1).split('\n').map(line => JSON.parse(line));
       if (events.length > 10000) throw new Error('Ledger exceeds event limit');
       for (const [i, event] of events.entries()) {
-        if (event.seq !== i + 1 || !event.type) throw new Error('Invalid ledger sequence');
-        if (event.snapshot) current = event.snapshot;
+        validateRecoveredEvent(event, i, current);
+        if (Object.hasOwn(event, 'snapshot')) current = event.snapshot;
       }
       if (events.length && (!current?.synthetic || !current.basketId)) throw new Error('Invalid ledger state');
     }

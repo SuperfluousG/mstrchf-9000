@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import { request } from 'node:http';
-import { appendFileSync, mkdtempSync, readFileSync } from 'node:fs';
+import { appendFileSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { start } from './server.mjs';
 
 function call(shop, path, body, extra = {}) {
@@ -285,4 +285,84 @@ test('optional raw disconnect closes before response and exposes repeatable clie
   await add(shop, basketId, 'raw');
   t.assert.equal((await state(shop)).basket.beans, 3);
   t.assert.equal((await ledger(shop)).filter(e => e.type === 'mutation').length, 2);
+});
+
+// Recovery must reject valid JSON with invalid canonical types before appending
+// server-start. These edits are corruption fixtures, not an authenticity test.
+const corruptions = [
+  ['string quantity', rows => { rows.at(-1).snapshot.basket.beans = '5'; }],
+  ['negative quantity', rows => { rows.at(-1).snapshot.basket.beans = -3; }],
+  ['out-of-range quantity', rows => { rows.at(-1).snapshot.basket.beans = 100; }],
+  ['fractional quantity', rows => { rows.at(-1).snapshot.basket.beans = 1.5; }],
+  ['null quantity', rows => { rows.at(-1).snapshot.basket.beans = null; }],
+  ['unknown basket SKU', rows => { rows.at(-1).snapshot.basket.foreign = 2; }],
+  ['array basket', rows => { rows.at(-1).snapshot.basket = [1, 2]; }],
+  ['missing products', rows => { delete rows.at(-1).snapshot.products; }],
+  ['duplicate product SKU', rows => { rows.at(-1).snapshot.products[1].sku = 'beans'; }],
+  ['invalid price', rows => { rows.at(-1).snapshot.products[0].pricePence = -1; }],
+  ['invalid pack count', rows => { rows.at(-1).snapshot.products[0].packCount = '1'; }],
+  ['invalid stock flag', rows => { rows.at(-1).snapshot.products[0].inStock = 'false'; }],
+  ['malformed label', rows => { rows.at(-1).snapshot.products[0].label = {}; }],
+  ['malformed offer', rows => { rows.at(-1).snapshot.products[0].offer.requiresLoyalty = 'false'; }],
+  ['missing context', rows => { delete rows.at(-1).snapshot.context; }],
+  ['invalid context flag', rows => { rows.at(-1).snapshot.context.loyaltyMember = 'false'; }],
+  ['invalid identity', rows => { rows.at(-1).snapshot.basketId = 42; }],
+  ['invalid synthetic marker', rows => { rows.at(-1).snapshot.synthetic = 'true'; }],
+  ['invalid login flag', rows => { rows.at(-1).snapshot.loggedIn = 0; }],
+  ['invalid revision', rows => { rows.at(-1).snapshot.revision = -1; }],
+  ['invalid failure count', rows => { rows.at(-1).snapshot.readFailures = 101; }],
+  ['invalid armed fault', rows => { rows.at(-1).snapshot.nextAction = 'checkout'; }],
+  ['null snapshot', rows => { rows.at(-1).snapshot = null; }],
+  ['earlier invalid snapshot', rows => { rows[0].snapshot.basket.beans = '5'; }],
+  ['invalid event type', rows => { rows.at(-1).type = true; }],
+  ['event identity mismatch', rows => { rows.at(-1).runId = crypto.randomUUID(); }],
+];
+for (const [name, corrupt] of corruptions) test(`recovery rejects ${name} without changing ledger bytes`, async t => {
+  const shop = await fixture(t); await shop.close();
+  const file = `${shop.dataDir}/ledger.jsonl`;
+  const rows = readFileSync(file, 'utf8').trimEnd().split('\n').map(JSON.parse);
+  corrupt(rows);
+  writeFileSync(file, rows.map(row => JSON.stringify(row)).join('\n') + '\n');
+  const before = readFileSync(file);
+  await t.assert.rejects(async () => {
+    const unexpected = await start({ dataDir: shop.dataDir }); t.after(() => unexpected.close());
+  }, /Invalid ledger/);
+  t.assert.deepEqual(readFileSync(file), before);
+});
+
+for (const [name, bytes] of [['empty', ''], ['whitespace-only', ' \n']]) test(`recovery rejects ${name} existing ledger without replacing evidence`, async t => {
+  const shop = await fixture(t); await shop.close();
+  const file = `${shop.dataDir}/ledger.jsonl`; writeFileSync(file, bytes);
+  await t.assert.rejects(async () => {
+    const unexpected = await start({ dataDir: shop.dataDir }); t.after(() => unexpected.close());
+  }, /Invalid ledger/);
+  t.assert.equal(readFileSync(file, 'utf8'), bytes);
+});
+
+test('validated recovery preserves legitimate manual quantities and changed observations', async t => {
+  const shop = await fixture(t); const { basketId } = await state(shop);
+  await call(shop, '/api/manual', { basketId, sku: 'beans', quantity: 5 });
+  await add(shop, basketId, 'eggs', { sku: 'eggs', quantity: 2 });
+  await control(shop, { loggedIn: false, readFailures: 2,
+    product: { sku: 'beans', labelStatus: 'unknown', pricePence: null, inStock: false } });
+  await shop.close();
+  const restarted = await start({ dataDir: shop.dataDir }); t.after(() => restarted.close());
+  const recovered = (await admin(restarted)).state;
+  t.assert.equal(recovered.basketId, basketId);
+  t.assert.deepEqual(recovered.basket, { beans: 5, soap: 2, eggs: 2 });
+  t.assert.equal(recovered.loggedIn, false); t.assert.equal(recovered.readFailures, 2);
+  t.assert.equal(recovered.products[0].pricePence, null);
+  t.assert.equal(recovered.products[0].label.ingredients, null);
+  await control(restarted, { loggedIn: true, readFailures: 0, product: { sku: 'beans', inStock: true } });
+  t.assert.equal((await add(restarted, basketId, 'after-recovery')).data.quantity, 6);
+});
+
+test('recovery accepts legitimate evidence of a rejected foreign basket request', async t => {
+  const shop = await fixture(t); const before = await state(shop);
+  t.assert.equal((await add(shop, 'foreign-basket', 'rejected')).status, 409);
+  await shop.close();
+  const restarted = await start({ dataDir: shop.dataDir }); t.after(() => restarted.close());
+  t.assert.equal((await state(restarted)).basketId, before.basketId);
+  t.assert.deepEqual((await state(restarted)).basket, { beans: 1, soap: 2 });
+  t.assert.equal((await ledger(restarted)).filter(e => e.type === 'mutation').length, 0);
 });
