@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synthetic test shop — MSTRCHF recovery fixture</title>
+<style>body{font-family:system-ui,sans-serif;max-width:72rem;margin:2rem auto;padding:0 1rem}header{border:3px solid;padding:1rem}section{margin:2rem 0}button,input,select{font:inherit;margin:.3rem;padding:.4rem}article{border:1px solid #888;padding:1rem;margin:1rem 0}pre{white-space:pre-wrap;overflow-wrap:anywhere}label{display:inline-block}#status{border-left:4px solid;padding:1rem}summary{cursor:pointer}button{cursor:pointer}</style>
+<header><h1>Synthetic test shop</h1><p>Local recovery fixture. All products, prices, labels and basket contents are invented. No accounts, credentials, orders or payments.</p><p>No app grants or worker-stop verification are implemented here.</p></header>
+<p id="status" role="status">Loading synthetic shop…</p>
+<button id="refresh">Read shop state</button><button id="evidence">Refresh independent server evidence</button>
+<section aria-labelledby="basket-heading"><h2 id="basket-heading">Observed basket</h2><pre id="basket">Not read yet</pre></section>
+<section aria-labelledby="products-heading"><h2 id="products-heading">Synthetic products</h2><div id="products"></div></section>
+<section aria-labelledby="control-heading"><h2 id="control-heading">Test operator controls</h2>
+<p>Operator evidence bypasses simulated shop read/login failures. It is not an app observation or stop proof. Controls are available to any local client; they are not a security boundary between workers.</p>
+<form id="fault"><label>Next worker action <select name="nextAction"><option>normal</option><option>drop-after-commit</option><option>hold-after-commit</option><option>never-commit</option><option>gate-before-commit</option><option>raw-drop-after-commit</option></select></label><button>Arm one-shot fault</button></form>
+<p>The optional raw-drop-after-commit fault may cause browser transport retries and multiple mutations. Always reconcile the observed quantity.</p>
+<button data-release="before">Release before-commit gate</button><button data-discard="before">Discard before-commit gate</button>
+<button data-release="ack">Release withheld acknowledgement</button><button data-discard="ack">Drop withheld acknowledgement</button>
+<form id="reads"><label>Fail next shop reads <input name="readFailures" type="number" min="0" max="100" value="0"></label><button>Set read failures</button></form>
+<button id="login">Simulate signed in</button><button id="logout">Simulate expired sign-in</button>
+<form id="product-control"><label>SKU <select name="sku"><option>beans</option><option>eggs</option><option>soap</option></select></label><label>Stock <select name="inStock"><option value="true">In stock</option><option value="false">Out of stock</option></select></label><label>Price in pence (blank = unknown)<input name="pricePence" type="number" min="0" max="100000" value="80"></label><label>Label <select name="labelStatus"><option>known</option><option>unknown</option><option>contradictory</option></select></label><button>Change synthetic observation</button></form>
+<form id="manual"><label>Manual SKU <select name="sku"><option>beans</option><option>eggs</option><option>soap</option></select></label><label>Exact quantity <input name="quantity" type="number" min="0" max="99" value="1"></label><button>Apply manual basket edit</button></form>
+<button id="reset">Reset synthetic shop (keeps ledger)</button>
+<h3>Independent server state and pending gates</h3><pre id="oracle">Not read yet</pre>
+<details><summary>Independent append-only action ledger</summary><pre id="ledger"></pre></details></section>
+<script src="/shop.js"></script></html>
