@@ -527,7 +527,8 @@
       ]
     },
     "HttpUrl": {
-      "pattern": "^https?://[^\\s\\u0000-\\u001f]{1,2040}$",
+      "maxLength": 2048,
+      "pattern": "^(?:http://[^\\s\\u0000-\\u001f]{1,2041}|https://[^\\s\\u0000-\\u001f]{1,2040})$",
       "type": "string"
     },
     "ImageRecord": {

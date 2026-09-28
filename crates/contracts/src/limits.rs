@@ -104,10 +104,14 @@ impl<'de, T: Deserialize<'de>, const MIN: usize, const MAX: usize> Deserialize<'
                 mut s: S,
             ) -> Result<Self::Value, S::Error> {
                 let mut a = Vec::new();
-                while let Some(x) = s.next_element::<T>()? {
+                loop {
                     if a.len() == B {
-                        return Err(serde::de::Error::custom("CODE:limit_exceeded"));
+                        s.next_element_seed(RejectOverLimit)?;
+                        break;
                     }
+                    let Some(x) = s.next_element::<T>()? else {
+                        break;
+                    };
                     a.push(x);
                 }
                 if a.len() < A {
@@ -117,6 +121,13 @@ impl<'de, T: Deserialize<'de>, const MIN: usize, const MAX: usize> Deserialize<'
             }
         }
         d.deserialize_seq(V::<T, MIN, MAX>(PhantomData))
+    }
+}
+struct RejectOverLimit;
+impl<'de> serde::de::DeserializeSeed<'de> for RejectOverLimit {
+    type Value = ();
+    fn deserialize<D: Deserializer<'de>>(self, _: D) -> Result<Self::Value, D::Error> {
+        Err(serde::de::Error::custom("CODE:limit_exceeded"))
     }
 }
 impl<T: JsonSchema, const A: usize, const B: usize> JsonSchema for BoundedVec<T, A, B> {

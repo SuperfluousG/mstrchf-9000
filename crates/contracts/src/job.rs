@@ -276,10 +276,52 @@ pub fn validate_request_shape(r: &JobRequestV1) -> Result<(), DomainError> {
     {
         return Err(refuse(ErrorCode::LimitExceeded, "/allowed_artefacts"));
     }
+    validate_payload_references(&r.payload, &r.context_stamp)?;
     if input_digest(&RequestMaterial::from(r))? != r.input_digest {
         return Err(refuse(ErrorCode::DigestMismatch, "/input_digest"));
     }
     Ok(())
+}
+
+fn validate_payload_references(
+    payload: &JobPayload,
+    stamp: &ContextStamp,
+) -> Result<(), DomainError> {
+    let known = |reference: &RecipeRef| stamp.recipe_refs.contains(reference);
+    let closed = match payload {
+        JobPayload::PersonalisedPlan {
+            recipe_refs,
+            history,
+            other_weeks,
+            ..
+        } => {
+            recipe_refs.iter().all(known)
+                && history.selected_recipe_refs.iter().all(known)
+                && history.ordered_recipe_refs.iter().all(known)
+                && history.feedback.iter().all(|f| known(&f.recipe))
+                && other_weeks.iter().all(|w| {
+                    w.selections
+                        .iter()
+                        .all(|s| s.slot.week_id == w.week_id && known(&s.recipe))
+                })
+        }
+        JobPayload::GenericCatalogue { public_recipes, .. } => public_recipes
+            .iter()
+            .all(|r| r.extras.iter().all(|e| known(&e.recipe))),
+        JobPayload::RecipeCandidate { adaptation, .. } => adaptation
+            .0
+            .as_ref()
+            .is_none_or(|a| a.portion_requests.iter().all(|p| known(&p.recipe))),
+        JobPayload::ProductObservation { .. }
+        | JobPayload::CalendarPublication { .. }
+        | JobPayload::BookingCheck { .. }
+        | JobPayload::SetupCheck { .. } => true,
+    };
+    if closed {
+        Ok(())
+    } else {
+        Err(refuse(ErrorCode::MissingReference, "/payload"))
+    }
 }
 pub fn validate_result_shape(r: &JobResultV1) -> Result<(), DomainError> {
     validate_stamp(&r.context_stamp)?;
@@ -359,9 +401,17 @@ pub fn validate_result_binding(
         return Ok(());
     }
     match (&request.payload,&request.scope,&result.proposal){
-        (JobPayload::PersonalisedPlan{..},ActionScope::Plan{slots,..},ResultProposal::Plan{proposal})=>{
+        (JobPayload::PersonalisedPlan{requirements,recipe_refs,..},ActionScope::Plan{slots,..},ResultProposal::Plan{proposal})=>{
             if proposal.changes.len()!=request.context_stamp.write_weeks.len(){return Err(refuse(ErrorCode::ScopeViolation,"/proposal/data/proposal/changes"));}
             for c in proposal.changes.iter(){if !request.context_stamp.write_weeks.iter().any(|w|w.week_id==c.week_id&&w.revision==c.base_revision)||!c.replace_slots.iter().all(|s|slots.contains(&s.slot)){return Err(refuse(ErrorCode::ScopeViolation,"/proposal/data/proposal/changes"));}}
+            for (change_index, change) in proposal.changes.iter().enumerate() {
+                for (slot_index, proposed) in change.replace_slots.iter().enumerate() {
+                    if let Some(selection) = &proposed.selection.0 {
+                        let required = requirements.iter().find(|r|r.slot == proposed.slot).ok_or_else(||refuse(ErrorCode::MissingReference,"/proposal/data/proposal/changes"))?;
+                        validate_selection_membership(selection,required,recipe_refs,&request.context_stamp,&format!("/proposal/data/proposal/changes/{change_index}/replace_slots/{slot_index}/selection"))?;
+                    }
+                }
+            }
         },
         (JobPayload::GenericCatalogue{public_recipes,..},_,ResultProposal::Catalogue{recipe_refs})=>{for rf in recipe_refs.iter(){if !public_recipes.iter().any(|r|r.recipe_id==rf.recipe_id&&r.revision==rf.revision&&recipe_digest(r).ok().as_ref()==Some(&rf.digest)){return Err(refuse(ErrorCode::ScopeViolation,"/proposal/data/recipe_refs"));}}},
         (JobPayload::RecipeCandidate{..},_,ResultProposal::Recipe{..})|(JobPayload::SetupCheck{..},_,ResultProposal::Setup{..})=>{},
@@ -369,6 +419,72 @@ pub fn validate_result_binding(
         (JobPayload::CalendarPublication{..},_,ResultProposal::None{})=>{},
         (JobPayload::BookingCheck{..},_,ResultProposal::None{})=>{if !result.observations.iter().any(|o|matches!(o,ResultObservation::Read{observation} if matches!(observation.body,ReadBody::Slots{..}))){return Err(refuse(ErrorCode::ScopeViolation,"/observations"));}},
         _=>return Err(refuse(ErrorCode::ScopeViolation,"/proposal"))
+    }
+    Ok(())
+}
+
+fn validate_selection_membership(
+    selection: &MealSelection,
+    required: &MealRequirements,
+    allowed: &[RecipeRef],
+    stamp: &ContextStamp,
+    path: &str,
+) -> Result<(), DomainError> {
+    let recipe_allowed =
+        |recipe: &RecipeRef| allowed.contains(recipe) && stamp.recipe_refs.contains(recipe);
+    if !recipe_allowed(&selection.recipe) {
+        return Err(refuse(
+            ErrorCode::MissingReference,
+            &format!("{path}/recipe"),
+        ));
+    }
+    let serving_allowed = |serving: &DinerServing, recipe: &RecipeRef| {
+        required
+            .attendees
+            .iter()
+            .any(|a| a.person == serving.person && a.age_band == serving.preset_ref.age_band)
+            && serving.preset_ref.recipe == *recipe
+            && recipe_allowed(&serving.preset_ref.recipe)
+            && serving.preset_ref.meal_type == selection.slot.meal_type
+    };
+    if !selection
+        .servings
+        .iter()
+        .all(|s| serving_allowed(s, &selection.recipe))
+        || (required.enabled
+            && required.location != MealLocation::Skip
+            && selection.servings.len() != required.attendees.len())
+    {
+        return Err(refuse(
+            ErrorCode::ForeignReference,
+            &format!("{path}/servings"),
+        ));
+    }
+    for (index, extra) in selection.extras.iter().enumerate() {
+        if !recipe_allowed(&extra.recipe) {
+            return Err(refuse(
+                ErrorCode::MissingReference,
+                &format!("{path}/extras/{index}/recipe"),
+            ));
+        }
+        if !extra.recipients.iter().all(|p| {
+            serving_allowed(p, &extra.recipe)
+                && selection.servings.iter().any(|s| s.person == p.person)
+        }) {
+            return Err(refuse(
+                ErrorCode::ForeignReference,
+                &format!("{path}/extras/{index}/recipients"),
+            ));
+        }
+    }
+    if !selection.meal_overrides.portions.iter().all(|p| {
+        required.attendees.iter().any(|a| a.person == p.person)
+            && selection.servings.iter().any(|s| s.person == p.person)
+    }) {
+        return Err(refuse(
+            ErrorCode::ForeignReference,
+            &format!("{path}/meal_overrides/portions"),
+        ));
     }
     Ok(())
 }

@@ -1,13 +1,8 @@
 use mstrchf_contracts::*;
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, schemars::JsonSchema)]
 struct Probe {
     values: Vec<u8>,
-}
-impl ValidateShape for Probe {
-    fn validate_shape(&self) -> Result<(), Vec<ValidationIssue>> {
-        Ok(())
-    }
 }
 #[test]
 fn raw_duplicate_key() {

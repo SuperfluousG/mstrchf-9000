@@ -4,10 +4,13 @@ use std::borrow::Cow;
 use ts_rs::{Config, TS};
 macro_rules! wire_string {
     ($name:ident,$pattern:expr,$valid:expr) => {
+        wire_string!($name, $pattern, $valid, None::<usize>);
+    };
+    ($name:ident,$pattern:expr,$valid:expr,$max_length:expr) => {
         #[derive(Clone,Debug,PartialEq,Eq,PartialOrd,Ord,Serialize)]
         #[serde(transparent)] pub struct $name(pub String);
         impl<'de> Deserialize<'de> for $name {fn deserialize<D:Deserializer<'de>>(d:D)->Result<Self,D::Error>{let s=String::deserialize(d)?;if !($valid)(&s){return Err(serde::de::Error::custom("CODE:invalid_value"));}Ok(Self(s))}}
-        impl JsonSchema for $name{fn schema_name()->Cow<'static,str>{stringify!($name).into()}fn json_schema(_: &mut SchemaGenerator)->Schema{schemars::json_schema!({"type":"string","pattern":$pattern})}}
+        impl JsonSchema for $name{fn schema_name()->Cow<'static,str>{stringify!($name).into()}fn json_schema(_: &mut SchemaGenerator)->Schema{let mut schema=schemars::json_schema!({"type":"string","pattern":$pattern});if let Some(max_length)=$max_length{schema.insert("maxLength".into(),max_length.into());}schema}}
         impl TS for $name{type WithoutGenerics=Self;type OptionInnerType=Self;fn output_path()->Option<std::path::PathBuf>{Some(std::path::PathBuf::from(concat!(stringify!($name),".ts")))}fn name(_: &Config)->String{stringify!($name).into()}fn inline(_: &Config)->String{format!("string & {{ readonly __brand: \"{}\" }}",stringify!($name))}fn decl(c:&Config)->String{format!("type {} = {};",Self::name(c),Self::inline(c))}fn decl_concrete(c:&Config)->String{Self::decl(c)}fn visit_dependencies(v:&mut impl ts_rs::TypeVisitor) where Self:'static{v.visit::<Self>();}}
     };
 }
@@ -96,9 +99,10 @@ text_type!(NameText, 80, false);
 text_type!(LongText, 65536, true);
 wire_string!(
     HttpUrl,
-    "^https?://[^\\s\\u0000-\\u001f]{1,2040}$",
-    |s: &str| s.len() <= 2048
+    "^(?:http://[^\\s\\u0000-\\u001f]{1,2041}|https://[^\\s\\u0000-\\u001f]{1,2040})$",
+    |s: &str| s.chars().count() <= 2048
         && (s.starts_with("https://") || s.starts_with("http://"))
         && s.split_once("://").is_some_and(|(_, a)| !a.is_empty())
-        && !s.chars().any(|c| c.is_control() || c.is_whitespace())
+        && !s.chars().any(|c| c.is_control() || c.is_whitespace()),
+    Some(2048usize)
 );

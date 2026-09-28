@@ -60,6 +60,32 @@ impl AppCommand {
         }
     }
 }
+
+/// Rejects RequestJob commands whose typed action and scope are incompatible.
+/// Current-state and authority checks remain the command handler's responsibility.
+pub fn validate_request_job_command(command: &AppCommandV1) -> Result<(), DomainError> {
+    let AppCommand::RequestJob { action, scope } = &command.command else {
+        return Ok(());
+    };
+    let compatible = matches!(
+        (action, scope),
+        (Action::Setup, ActionScope::Setup { .. })
+            | (Action::Plan, ActionScope::Plan { .. })
+            | (Action::AddAdaptRecipe, ActionScope::Recipe { .. })
+            | (Action::PrepareShop, ActionScope::Shop { .. })
+            | (Action::FinishWeek, ActionScope::Calendar { .. })
+            | (Action::CheckBooking, ActionScope::Booking { .. })
+    );
+    if compatible {
+        Ok(())
+    } else {
+        Err(DomainError::new(
+            ErrorCode::ScopeViolation,
+            "/command/data/scope",
+        ))
+    }
+}
+
 pub fn authorize_command(kind: CommandKind, caller: CallerClass) -> Result<(), DomainError> {
     let allowed = match caller {
         CallerClass::ExchangeImport => false,

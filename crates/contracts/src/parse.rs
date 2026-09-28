@@ -4,7 +4,8 @@ use serde::{
     de::{DeserializeOwned, DeserializeSeed, MapAccess, SeqAccess, Visitor},
 };
 use serde_json::Value;
-pub trait ValidateShape: Serialize {
+use std::collections::BTreeMap;
+pub trait ValidateShape: Serialize + schemars::JsonSchema {
     fn validate_shape(&self) -> Result<(), Vec<ValidationIssue>>;
     fn validate_wire(_value: &Value) -> Result<(), Vec<ValidationIssue>> {
         Ok(())
@@ -49,7 +50,12 @@ pub(crate) fn shape_error(issues: Vec<ValidationIssue>) -> DomainError {
     }
 }
 pub fn parse_document<T: DeserializeOwned + ValidateShape>(bytes: &[u8]) -> Result<T, DomainError> {
-    let value = parse_value(bytes)?;
+    if bytes.len() > MAX_DOCUMENT_BYTES {
+        return Err(DomainError::new(ErrorCode::LimitExceeded, ""));
+    }
+    let schema = crate::schema::schema_for::<T>();
+    let bounds = CollectionBounds::from_schema(&schema);
+    let value = parse_value_with_bounds(bytes, &bounds)?;
     T::validate_wire(&value).map_err(shape_error)?;
     let result: T = serde_json::from_value(value).map_err(|e| decode_error(&e.to_string()))?;
     Ok(result)
@@ -330,18 +336,25 @@ pub(crate) fn decode_error(message: &str) -> DomainError {
         ErrorCode::InvalidValue
     };
     let path = message
-        .split('`')
+        .split("CODE:limit_exceeded@")
         .nth(1)
-        .map(|s| format!("/{s}"))
+        .map(|s| s.split(" at line ").next().unwrap_or(s).to_owned())
+        .or_else(|| message.split('`').nth(1).map(|s| format!("/{s}")))
         .unwrap_or_default();
     DomainError::new(code, &path)
 }
-pub(crate) fn parse_value(bytes: &[u8]) -> Result<Value, DomainError> {
+fn parse_value_with_bounds(bytes: &[u8], bounds: &CollectionBounds) -> Result<Value, DomainError> {
     if bytes.len() > MAX_DOCUMENT_BYTES {
         return Err(DomainError::new(ErrorCode::LimitExceeded, ""));
     }
     let mut d = serde_json::Deserializer::from_slice(bytes);
-    let v = BoundedValue { depth: 0 }.deserialize(&mut d).map_err(|e| {
+    let v = BoundedValue {
+        depth: 0,
+        bounds,
+        path: String::new(),
+    }
+    .deserialize(&mut d)
+    .map_err(|e| {
         let s = e.to_string();
         if s.contains("CODE:") {
             decode_error(&s)
@@ -353,10 +366,106 @@ pub(crate) fn parse_value(bytes: &[u8]) -> Result<Value, DomainError> {
         .map_err(|_| DomainError::new(ErrorCode::MalformedJson, ""))?;
     Ok(v)
 }
-struct BoundedValue {
-    depth: usize,
+
+/// A compact collection-bound view of the generated wire schema. It is built
+/// before consuming untrusted JSON, so object field order does not determine
+/// when a nested array limit becomes available. All branches of a tagged union
+/// contribute their data fields, including when `data` precedes `kind`.
+#[derive(Default)]
+struct CollectionBounds {
+    max_items: Option<usize>,
+    conflicting_max: bool,
+    properties: BTreeMap<String, CollectionBounds>,
+    items: Option<Box<CollectionBounds>>,
+    prefix_items: Vec<CollectionBounds>,
 }
-impl<'de> DeserializeSeed<'de> for BoundedValue {
+impl CollectionBounds {
+    fn from_schema(schema: &Value) -> Self {
+        let mut result = Self::default();
+        result.merge_schema(schema, schema, &mut Vec::new());
+        result
+    }
+    fn merge_schema(&mut self, root: &Value, schema: &Value, refs: &mut Vec<String>) {
+        if let Some(reference) = schema.get("$ref").and_then(Value::as_str)
+            && !refs.iter().any(|seen| seen == reference)
+            && let Some(target) = root.pointer(reference.trim_start_matches('#'))
+        {
+            refs.push(reference.into());
+            self.merge_schema(root, target, refs);
+            refs.pop();
+        }
+        if let Some(maximum) = schema.get("maxItems").and_then(Value::as_u64) {
+            let maximum = usize::try_from(maximum).unwrap_or(usize::MAX);
+            if self.max_items.is_some_and(|old| old != maximum) {
+                self.conflicting_max = true;
+            }
+            self.max_items = Some(self.max_items.map_or(maximum, |old| old.max(maximum)));
+        }
+        if let Some(properties) = schema.get("properties").and_then(Value::as_object) {
+            for (name, child) in properties {
+                self.properties
+                    .entry(name.clone())
+                    .or_default()
+                    .merge_schema(root, child, refs);
+            }
+        }
+        if let Some(item) = schema.get("items") {
+            self.items
+                .get_or_insert_with(Default::default)
+                .merge_schema(root, item, refs);
+        }
+        if let Some(items) = schema.get("prefixItems").and_then(Value::as_array) {
+            if self.prefix_items.len() < items.len() {
+                self.prefix_items.resize_with(items.len(), Self::default);
+            }
+            for (bound, item) in self.prefix_items.iter_mut().zip(items) {
+                bound.merge_schema(root, item, refs);
+            }
+        }
+        for keyword in ["allOf", "anyOf", "oneOf"] {
+            if let Some(branches) = schema.get(keyword).and_then(Value::as_array) {
+                for branch in branches {
+                    self.merge_schema(root, branch, refs);
+                }
+            }
+        }
+    }
+    fn item(&self, index: usize) -> &Self {
+        self.prefix_items
+            .get(index)
+            .or(self.items.as_deref())
+            .unwrap_or(&EMPTY_BOUNDS)
+    }
+    #[cfg(test)]
+    fn collect_conflicts(&self, path: &str, out: &mut Vec<String>) {
+        if self.conflicting_max {
+            out.push(path.into());
+        }
+        for (key, child) in &self.properties {
+            child.collect_conflicts(&pointer(path, key), out);
+        }
+        if let Some(child) = &self.items {
+            child.collect_conflicts(&pointer(path, "*"), out);
+        }
+        for (index, child) in self.prefix_items.iter().enumerate() {
+            child.collect_conflicts(&pointer(path, &index.to_string()), out);
+        }
+    }
+}
+static EMPTY_BOUNDS: CollectionBounds = CollectionBounds {
+    max_items: None,
+    conflicting_max: false,
+    properties: BTreeMap::new(),
+    items: None,
+    prefix_items: Vec::new(),
+};
+
+struct BoundedValue<'a> {
+    depth: usize,
+    bounds: &'a CollectionBounds,
+    path: String,
+}
+impl<'de> DeserializeSeed<'de> for BoundedValue<'_> {
     type Value = Value;
     fn deserialize<D: Deserializer<'de>>(self, d: D) -> Result<Value, D::Error> {
         if self.depth > MAX_DEPTH {
@@ -365,7 +474,7 @@ impl<'de> DeserializeSeed<'de> for BoundedValue {
         d.deserialize_any(self)
     }
 }
-impl<'de> Visitor<'de> for BoundedValue {
+impl<'de> Visitor<'de> for BoundedValue<'_> {
     type Value = Value;
     fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "bounded JSON")
@@ -381,6 +490,8 @@ impl<'de> Visitor<'de> for BoundedValue {
             }
             let value = map.next_value_seed(BoundedValue {
                 depth: self.depth + 1,
+                bounds: self.bounds.properties.get(&key).unwrap_or(&EMPTY_BOUNDS),
+                path: pointer(&self.path, &key),
             })?;
             out.insert(key, value);
         }
@@ -388,12 +499,23 @@ impl<'de> Visitor<'de> for BoundedValue {
     }
     fn visit_seq<S: SeqAccess<'de>>(self, mut seq: S) -> Result<Value, S::Error> {
         let mut out = Vec::new();
-        while let Some(v) = seq.next_element_seed(BoundedValue {
-            depth: self.depth + 1,
-        })? {
-            if out.len() >= 4096 {
-                return Err(serde::de::Error::custom("CODE:limit_exceeded"));
+        let maximum = self.bounds.max_items.unwrap_or(4096).min(4096);
+        loop {
+            if out.len() == maximum {
+                // SeqAccess returns None at `]` without invoking this seed.
+                // If another element exists, the seed refuses it before its
+                // body is decoded or allocated.
+                seq.next_element_seed(RejectElement { path: self.path })?;
+                break;
             }
+            let Some(v) = seq.next_element_seed(BoundedValue {
+                depth: self.depth + 1,
+                bounds: self.bounds.item(out.len()),
+                path: pointer(&self.path, &out.len().to_string()),
+            })?
+            else {
+                break;
+            };
             out.push(v);
         }
         Ok(Value::Array(out))
@@ -418,5 +540,35 @@ impl<'de> Visitor<'de> for BoundedValue {
     }
     fn visit_f64<E: serde::de::Error>(self, _: f64) -> Result<Value, E> {
         Err(E::custom("CODE:invalid_value"))
+    }
+}
+struct RejectElement {
+    path: String,
+}
+impl<'de> DeserializeSeed<'de> for RejectElement {
+    type Value = ();
+    fn deserialize<D: Deserializer<'de>>(self, _deserializer: D) -> Result<Self::Value, D::Error> {
+        Err(serde::de::Error::custom(format!(
+            "CODE:limit_exceeded@{}",
+            self.path
+        )))
+    }
+}
+
+#[cfg(test)]
+mod collection_bounds_tests {
+    use super::*;
+
+    #[test]
+    fn registered_roots_have_no_conflicting_union_array_maxima() {
+        let generated = crate::schema::render_contracts().unwrap();
+        for root in crate::schema::ROOT_NAMES {
+            let bytes = &generated[&format!("contracts/v1/{root}.schema.json")];
+            let schema: Value = serde_json::from_slice(bytes).unwrap();
+            let bounds = CollectionBounds::from_schema(&schema);
+            let mut conflicts = Vec::new();
+            bounds.collect_conflicts("", &mut conflicts);
+            assert!(conflicts.is_empty(), "{root}: {conflicts:?}");
+        }
     }
 }

@@ -327,6 +327,14 @@ pub fn validate_grant_shape(grant: &OperationGrant) -> Result<(), DomainError> {
     if grant.expires_at.timestamp_seconds() <= grant.granted_at.timestamp_seconds() {
         return Err(DomainError::new(ErrorCode::InvalidValue, "/expires_at"));
     }
+    if let ExternalAction::HoldSlot { expires_at, .. } = &grant.action
+        && expires_at.timestamp_seconds() <= grant.granted_at.timestamp_seconds()
+    {
+        return Err(DomainError::new(
+            ErrorCode::InvalidValue,
+            "/action/expires_at",
+        ));
+    }
     Ok(())
 }
 

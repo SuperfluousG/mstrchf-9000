@@ -42,7 +42,11 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
                         if field == "ingredients" && x.get("ingredient_id") == Some(&Value::Null) {
                             continue;
                         }
-                        let identity = collection_identity(field, x);
+                        let identity = if name == "RecipeCandidate" && field == "ingredients" {
+                            key(&x.get("ingredient_id"))
+                        } else {
+                            collection_identity(field, x)
+                        };
                         if !seen.insert(identity) {
                             return Err(err(ErrorCode::InvalidValue, &format!("/{field}")));
                         }
@@ -360,11 +364,18 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
         "EventBatch" => {
             let b: EventBatch = decoded(v)?;
             require(
-                b.events.iter().all(|e| e.logical_key.week_id == b.week_id)
-                    && b.events.iter().any(|e| {
-                        e.logical_key.kind == CalendarEventKind::Delivery
-                            && e.logical_key.order_id.0.as_ref() == Some(&b.order_id)
-                    }),
+                b.events.iter().all(|e| {
+                    e.logical_key.week_id == b.week_id
+                        && (e.logical_key.kind != CalendarEventKind::Delivery
+                            || e.logical_key.order_id.0.as_ref() == Some(&b.order_id))
+                }),
+                ErrorCode::IdentityMismatch,
+                "/events",
+            )?;
+            require(
+                b.events
+                    .iter()
+                    .any(|e| e.logical_key.kind == CalendarEventKind::Delivery),
                 ErrorCode::InvalidValue,
                 "/events",
             )?;
@@ -373,6 +384,7 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
                 "/events",
             )
         }
+        "AppCommandV1" => validate_request_job_command(&decoded(v)?),
         "ReadScope" => validate_read_scope(&decoded(v)?),
         "ReadObservationV1" => validate_read_shape(&decoded(v)?),
         "OperationRequest" => validate_operation_shape(&decoded(v)?),
@@ -744,11 +756,13 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                     ));
                 }
             }
-            require(
-                r.attendees.len() == expected.len(),
-                ErrorCode::ForeignReference,
-                "/requirements/attendees",
-            )?;
+            if r.enabled {
+                require(
+                    r.attendees.len() == expected.len(),
+                    ErrorCode::ForeignReference,
+                    "/requirements/attendees",
+                )?;
+            }
             for a in r.attendees.iter() {
                 let (_, age, req) = expected
                     .iter()
@@ -766,6 +780,20 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
         }
         for s in w.plan.selections.iter() {
             check_ref(&s.recipe, c)?;
+            for serving in s.servings.iter() {
+                require(
+                    person_known_in_context(&serving.person, c),
+                    ErrorCode::ForeignReference,
+                    "/selections/servings/person",
+                )?;
+            }
+            for portion in s.meal_overrides.portions.iter() {
+                require(
+                    person_known_in_context(&portion.person, c),
+                    ErrorCode::ForeignReference,
+                    "/selections/meal_overrides/portions/person",
+                )?;
+            }
             let recipe = c
                 .recipes
                 .iter()
@@ -773,6 +801,19 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                 .ok_or_else(|| err(ErrorCode::MissingReference, "/selections/recipe"))?;
             for e in s.extras.iter() {
                 check_ref(&e.recipe, c)?;
+                for recipient in e.recipients.iter() {
+                    check_preset_ref(
+                        &recipient.preset_ref,
+                        &e.recipe,
+                        c,
+                        "/selections/extras/recipients/preset_ref",
+                    )?;
+                    require(
+                        person_known_in_context(&recipient.person, c),
+                        ErrorCode::ForeignReference,
+                        "/selections/extras/recipients/person",
+                    )?;
+                }
                 require(
                     recipe
                         .extras
@@ -790,9 +831,10 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                 )?;
             }
             for p in s.servings.iter() {
-                require(
-                    p.preset_ref.recipe == s.recipe,
-                    ErrorCode::ForeignReference,
+                check_preset_ref(
+                    &p.preset_ref,
+                    &s.recipe,
+                    c,
                     "/selections/servings/preset_ref",
                 )?;
             }
@@ -818,6 +860,36 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
             check_ref(&e.recipe, c)?;
         }
     }
+    for selected in c
+        .history
+        .selected
+        .iter()
+        .chain(c.history.ordered.iter().map(|ordered| &ordered.selection))
+    {
+        check_ref(&selected.recipe, c)?;
+        for serving in selected.servings.iter() {
+            check_preset_ref(
+                &serving.preset_ref,
+                &selected.recipe,
+                c,
+                "/history/servings/preset_ref",
+            )?;
+        }
+        for extra in selected.extras.iter() {
+            check_ref(&extra.recipe, c)?;
+            for recipient in extra.recipients.iter() {
+                check_preset_ref(
+                    &recipient.preset_ref,
+                    &extra.recipe,
+                    c,
+                    "/history/extras/recipients/preset_ref",
+                )?;
+            }
+        }
+    }
+    for feedback in c.history.feedback.iter() {
+        check_ref(&feedback.recipe, c)?;
+    }
     let edges: cxx::Edges = c
         .recipes
         .iter()
@@ -833,6 +905,31 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
         .collect();
     acyclic(&edges, "/recipes/extras")
 }
+fn person_known_in_context(person: &PersonRef, context: &PlanningContext) -> bool {
+    match person {
+        PersonRef::Diner { diner_id } => context
+            .household
+            .diners
+            .iter()
+            .any(|diner| diner.diner_id == *diner_id),
+        PersonRef::Guest {
+            occasion_id,
+            guest_id,
+        } => context
+            .weeks
+            .iter()
+            .flat_map(|week| week.cells.iter())
+            .any(|cell| {
+                cell.occasion.0.as_ref().is_some_and(|occasion| {
+                    occasion.occasion_id == *occasion_id
+                        && occasion
+                            .guests
+                            .iter()
+                            .any(|guest| guest.guest_id == *guest_id)
+                })
+            }),
+    }
+}
 mod cxx {
     pub type Edges = std::collections::BTreeMap<String, Vec<String>>;
 }
@@ -841,6 +938,36 @@ fn check_ref(r: &RecipeRef, c: &PlanningContext) -> Result<(), DomainError> {
         c.stamp.recipe_refs.contains(r),
         ErrorCode::MissingReference,
         "/recipe_refs",
+    )
+}
+fn check_preset_ref(
+    preset_ref: &PortionPresetRef,
+    serving_recipe: &RecipeRef,
+    context: &PlanningContext,
+    path: &str,
+) -> Result<(), DomainError> {
+    check_ref(&preset_ref.recipe, context)?;
+    require(
+        &preset_ref.recipe == serving_recipe,
+        ErrorCode::ForeignReference,
+        path,
+    )?;
+    let recipe = context
+        .recipes
+        .iter()
+        .find(|recipe| {
+            recipe.recipe_id == preset_ref.recipe.recipe_id
+                && recipe.revision == preset_ref.recipe.revision
+        })
+        .ok_or_else(|| err(ErrorCode::MissingReference, path))?;
+    require(
+        recipe.portion_presets.iter().any(|preset| {
+            preset.preset == preset_ref.preset
+                && preset.age_band == preset_ref.age_band
+                && preset.meal_type == preset_ref.meal_type
+        }),
+        ErrorCode::MissingReference,
+        path,
     )
 }
 fn acyclic(edges: &cxx::Edges, path: &str) -> Result<(), DomainError> {
@@ -894,6 +1021,42 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
     )?;
     let ingredients: BTreeSet<_> = r.ingredients.iter().map(|i| &i.ingredient_id).collect();
     let steps: BTreeSet<_> = r.steps.iter().map(|s| s.step_id).collect();
+    for component in r.components.iter() {
+        require(
+            component
+                .ingredient_ids
+                .iter()
+                .all(|ingredient| ingredients.contains(ingredient)),
+            ErrorCode::MissingReference,
+            "/components/ingredient_ids",
+        )?;
+        require(
+            component.storage_rule_ids.iter().all(|rule_id| {
+                r.storage.iter().any(|rule| {
+                    rule.evidence_id == *rule_id && rule.component_id == component.component_id
+                })
+            }),
+            ErrorCode::MissingReference,
+            "/components/storage_rule_ids",
+        )?;
+    }
+    for storage in r.storage.iter() {
+        require(
+            components.contains(&storage.component_id),
+            ErrorCode::MissingReference,
+            "/storage/component_id",
+        )?;
+    }
+    for extra in r.extras.iter() {
+        require(
+            extra
+                .supported_with
+                .iter()
+                .all(|component_id| components.contains(component_id)),
+            ErrorCode::MissingReference,
+            "/extras/supported_with",
+        )?;
+    }
     for i in r.ingredients.iter() {
         require(
             components.contains(&i.component_id) && i.step_ids.iter().all(|s| steps.contains(s)),

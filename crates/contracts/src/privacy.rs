@@ -88,7 +88,7 @@ pub fn validate_outbound(
 /// A fragment inherits the containing request's authority. Narrow a copied scope
 /// only after checking membership; never admit it as an independent request.
 fn validate_fragment(payload: &JobPayload, request: &JobRequestV1) -> Result<(), DomainError> {
-    if std::mem::discriminant(payload) != std::mem::discriminant(&request.payload) {
+    if !fragment_within_parent(payload, &request.payload) {
         return Err(DomainError::new(
             ErrorCode::ScopeViolation,
             "/artefacts/payload",
@@ -141,4 +141,138 @@ fn validate_fragment(payload: &JobPayload, request: &JobRequestV1) -> Result<(),
     scoped.payload = payload.clone();
     scoped.input_digest = input_digest(&RequestMaterial::from(&scoped))?;
     validate_request_shape(&scoped)
+}
+
+fn subset<T: PartialEq>(fragment: &[T], parent: &[T]) -> bool {
+    fragment.iter().all(|item| parent.contains(item))
+}
+
+// Permission-bearing records are indivisible. Collections may omit complete
+// records, but a retained record may not acquire new identities or lose rules.
+fn fragment_within_parent(fragment: &JobPayload, parent: &JobPayload) -> bool {
+    match (fragment, parent) {
+        (
+            JobPayload::PersonalisedPlan {
+                requirements,
+                recipe_refs,
+                preferences,
+                history,
+                other_weeks,
+            },
+            JobPayload::PersonalisedPlan {
+                requirements: pr,
+                recipe_refs: refs,
+                preferences: prefs,
+                history: ph,
+                other_weeks: pw,
+            },
+        ) => {
+            subset(requirements, pr)
+                && subset(recipe_refs, refs)
+                && preferences == prefs
+                && subset(&history.selected_recipe_refs, &ph.selected_recipe_refs)
+                && subset(&history.ordered_recipe_refs, &ph.ordered_recipe_refs)
+                && subset(&history.hidden_recipe_ids, &ph.hidden_recipe_ids)
+                && subset(&history.feedback, &ph.feedback)
+                && subset(other_weeks, pw)
+        }
+        (
+            JobPayload::GenericCatalogue {
+                public_recipes,
+                meal_types,
+            },
+            JobPayload::GenericCatalogue {
+                public_recipes: recipes,
+                meal_types: meals,
+            },
+        ) => subset(public_recipes, recipes) && subset(meal_types, meals),
+        (
+            JobPayload::RecipeCandidate {
+                source_id,
+                source,
+                source_text,
+                adaptation,
+            },
+            JobPayload::RecipeCandidate {
+                source_id: id,
+                source: ps,
+                source_text: text,
+                adaptation: pa,
+            },
+        ) => {
+            source_id == id
+                && source == ps
+                && source_text == text
+                && match (&adaptation.0, &pa.0) {
+                    (None, None) => true,
+                    (Some(a), Some(p)) => {
+                        a.requirements == p.requirements
+                            && subset(&a.equipment, &p.equipment)
+                            && subset(&a.portion_requests, &p.portion_requests)
+                    }
+                    _ => false,
+                }
+        }
+        (
+            JobPayload::ProductObservation {
+                read_scope,
+                products,
+                approved_contribution,
+            },
+            JobPayload::ProductObservation {
+                read_scope: scope,
+                products: pp,
+                approved_contribution: pc,
+            },
+        ) => {
+            read_scope == scope
+                && subset(products, pp)
+                && match (&approved_contribution.0, &pc.0) {
+                    (None, None) => true,
+                    (Some(a), Some(p)) => {
+                        a.approval_id == p.approval_id
+                            && a.derived_digest == p.derived_digest
+                            && a.product_evidence_digest == p.product_evidence_digest
+                            && a.price_approval_digest == p.price_approval_digest
+                            && subset(&a.lines, &p.lines)
+                    }
+                    _ => false,
+                }
+        }
+        (
+            JobPayload::CalendarPublication { batch, read_scope },
+            JobPayload::CalendarPublication {
+                batch: pb,
+                read_scope: ps,
+            },
+        ) => {
+            read_scope == ps
+                && batch.week_id == pb.week_id
+                && batch.order_id == pb.order_id
+                && batch.approved_plan_digest == pb.approved_plan_digest
+                && batch.destination_id == pb.destination_id
+                && subset(&batch.events, &pb.events)
+        }
+        (
+            JobPayload::BookingCheck {
+                week_ids,
+                read_scope,
+            },
+            JobPayload::BookingCheck {
+                week_ids: pw,
+                read_scope: ps,
+            },
+        ) => read_scope == ps && subset(week_ids, pw),
+        (
+            JobPayload::SetupCheck {
+                provider,
+                requested_capabilities,
+            },
+            JobPayload::SetupCheck {
+                provider: pp,
+                requested_capabilities: pc,
+            },
+        ) => provider == pp && subset(requested_capabilities, pc),
+        _ => false,
+    }
 }
