@@ -2801,6 +2801,55 @@
       "stage": "semantic",
       "file": "raw_oversize_and_depth--artefact_total_over_32mib.json",
       "expected": "limit_exceeded"
+    },
+    {
+      "id": "positive_snapshot_initial_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-initial-privacy.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_snapshot_partial_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-partial-privacy.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_snapshot_equal_privacy_copies",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-equal-privacy-copies.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_snapshot_missing_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-missing-privacy.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "negative_snapshot_null_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-null-privacy.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_snapshot_draft_privacy_mismatch",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-draft-privacy-mismatch.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_snapshot_profile_privacy_mismatch",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-profile-privacy-mismatch.json",
+      "expected": "context_stale"
     }
   ]
 }

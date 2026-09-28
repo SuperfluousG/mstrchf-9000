@@ -2,7 +2,7 @@ import type {
   Diner, DinerId, WeekId, JobPayload,
   DecimalU64, Revision, Instant, Unit, Resolution, Quantity,
   JobRequestV1, WeekPlanDocumentV1, MealRequirementsDocumentV1,
-  EventBatchDocumentV1,
+  EventBatchDocumentV1, Snapshot, PrivacyPolicy,
 } from '../../app/generated/contracts';
 
 type Assert<T extends true> = T;
@@ -13,6 +13,17 @@ type _WeekIncludesNull = Assert<null extends JobRequestV1['week_id'] ? true : fa
 type _WeekPlanEnvelope = Assert<IsRequired<WeekPlanDocumentV1, 'schema_version'>>;
 type _RequirementsEnvelope = Assert<IsRequired<MealRequirementsDocumentV1, 'meal_requirements'>>;
 type _EventBatchEnvelope = Assert<IsRequired<EventBatchDocumentV1, 'event_batch'>>;
+type _SnapshotPolicyRequired = Assert<IsRequired<Snapshot, 'privacy'>>;
+type _SnapshotPolicyNonNull = Assert<null extends Snapshot['privacy'] ? false : true>;
+declare const snapshot: Snapshot;
+declare const policy: PrivacyPolicy;
+const { privacy: _privacy, ...withoutPrivacy } = snapshot;
+// @ts-expect-error Snapshot policy cannot be omitted or inferred from Connections
+const missingSnapshotPrivacy: Snapshot = withoutPrivacy;
+// @ts-expect-error Snapshot policy is non-null
+const nullSnapshotPrivacy: Snapshot = { ...snapshot, privacy: null };
+const explicitSnapshotPrivacy: Snapshot = { ...snapshot, privacy: policy };
+void [_privacy, missingSnapshotPrivacy, nullSnapshotPrivacy, explicitSnapshotPrivacy];
 
 declare const amount: Quantity;
 const acceptedUnit: Unit = amount.unit;

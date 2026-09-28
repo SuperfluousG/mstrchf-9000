@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "snapshot_revision": "1",
+  "household_draft": {
+    "schema_version": 1,
+    "household_id": "hh_00000000000000000000000000000001",
+    "revision": "1",
+    "completed_stages": [
+      "food_preferences"
+    ],
+    "diners": [],
+    "preferences": {
+      "spending_style": "balanced",
+      "higher_protein": false,
+      "more_variety": true,
+      "quick_meals": false,
+      "whole_food_preference": true,
+      "dislikes": [],
+      "equipment": [
+        "hob"
+      ],
+      "preferred_hands_on_minutes": 30,
+      "meal_times": [
+        {
+          "meal_type": "breakfast",
+          "time": "08:00:00"
+        },
+        {
+          "meal_type": "dinner",
+          "time": "18:00:00"
+        },
+        {
+          "meal_type": "lunch",
+          "time": "12:00:00"
+        }
+      ],
+      "mobility": {
+        "reheating": false,
+        "cold_storage": false,
+        "temperature": "either"
+      }
+    },
+    "usual_week": null,
+    "connections": null
+  },
+  "profile": null,
+  "weeks": [],
+  "jobs": [],
+  "conflicts": [],
+  "privacy": {
+    "revision": "2",
+    "use_ai_features": true,
+    "include_household_requirements": false,
+    "confirmed_at": "2026-12-28T12:00:00Z"
+  }
+}

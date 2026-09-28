@@ -451,7 +451,7 @@ export type SlotId = { week_id: WeekId, date: LocalDate, meal_type: MealType, };
 
 export type SlotObservation = { slot_ref: Text, start: ZonedMoment, end: ZonedMoment, available: boolean, charge: Price, hold_expires_at: Instant | null, financial_commitment: FinancialCommitment, };
 
-export type Snapshot = { schema_version: SchemaVersion, snapshot_revision: Revision, household_draft: HouseholdDraft, profile: HouseholdProfile | null, weeks: Array<Week>, jobs: Array<JobSummary>, conflicts: Array<Conflict>, };
+export type Snapshot = { schema_version: SchemaVersion, snapshot_revision: Revision, privacy: PrivacyPolicy, household_draft: HouseholdDraft, profile: HouseholdProfile | null, weeks: Array<Week>, jobs: Array<JobSummary>, conflicts: Array<Conflict>, };
 
 export type SourceRecord = { url: HttpUrl | null, source_revision: Text | null, retrieved_at: Instant, authors: Array<Text>, adaptation_notice: Text | null, origin: RecipeSourceOrigin, };
 

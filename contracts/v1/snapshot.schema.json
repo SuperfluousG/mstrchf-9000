@@ -2176,6 +2176,9 @@
     "jobs": {
       "$ref": "#/$defs/Array_JobSummary_0_1024"
     },
+    "privacy": {
+      "$ref": "#/$defs/PrivacyPolicy"
+    },
     "profile": {
       "$ref": "#/$defs/Nullable_HouseholdProfile"
     },
@@ -2192,6 +2195,7 @@
   "required": [
     "schema_version",
     "snapshot_revision",
+    "privacy",
     "household_draft",
     "profile",
     "weeks",

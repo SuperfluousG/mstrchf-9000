@@ -2407,5 +2407,11 @@
       "next_action": null
     }
   ],
-  "conflicts": []
+  "conflicts": [],
+  "privacy": {
+    "revision": "1",
+    "use_ai_features": true,
+    "include_household_requirements": true,
+    "confirmed_at": "2026-12-28T12:00:00Z"
+  }
 }

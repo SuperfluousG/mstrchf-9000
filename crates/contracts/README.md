@@ -10,6 +10,8 @@ An outbound artefact contains one strict JobPayload fragment. It has the same va
 
 The Rust crate generates 19 JSON Schema 2020-12 roots and `app/generated/contracts.ts`. These files are checked in. TypeScript represents brands, required nullable fields and tagged unions; it cannot enforce runtime bounds, uniqueness, reduced rational arithmetic, contextual references, digests or authority. JSON Schema covers representable shape constraints; Rust supplies semantic checks. The explicit ts-rs warnings about ignored Serde attributes are retained; fixture parity tests verify the actual generated shapes.
 
+`Snapshot.privacy` is required local app state, including during unfinished onboarding. Any present draft or profile policy copy must equal it; disagreement is `ContextStale`. The contract does not default missing policy or complete onboarding stages. Atomic policy writes, projection updates and restart visibility belong to storage; Snapshot is not an outbound JobPayload variant.
+
 With Rust 1.94.0 and Node 24, use:
 
 ```powershell

@@ -85,6 +85,24 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
     }
     match name {
         "ContextStamp" => validate_stamp(&decoded(v)?),
+        "Snapshot" => {
+            let snapshot: Snapshot = decoded(v)?;
+            if let Some(connections) = &snapshot.household_draft.connections.0 {
+                require(
+                    connections.privacy == snapshot.privacy,
+                    ErrorCode::ContextStale,
+                    "/household_draft/connections/privacy",
+                )?;
+            }
+            if let Some(profile) = &snapshot.profile.0 {
+                require(
+                    profile.connections.privacy == snapshot.privacy,
+                    ErrorCode::ContextStale,
+                    "/profile/connections/privacy",
+                )?;
+            }
+            Ok(())
+        }
         "HouseholdDraft" => {
             let h: HouseholdDraft = decoded(v)?;
             let confirmed = !h.diners.is_empty()
