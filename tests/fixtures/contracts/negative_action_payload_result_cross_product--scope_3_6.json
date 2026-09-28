@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_0000000000000000000000000000000e",
+  "action": "add_adapt_recipe",
+  "week_id": null,
+  "base_plan_revision": null,
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [],
+    "read_weeks": [],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "recipe_candidate",
+    "data": {
+      "source_id": "ev_00000000000000000000000000000001",
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-28T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "source_text": "Synthetic candidate source text.",
+      "adaptation": null
+    }
+  },
+  "scope": {
+    "kind": "booking",
+    "data": {
+      "week_ids": [
+        "wk_00000000000000000000000000000001"
+      ],
+      "read_scope": {
+        "read_id": "rd_00000000000000000000000000000004",
+        "resource": {
+          "kind": "basket",
+          "data": {
+            "key": {
+              "retailer": "tesco",
+              "account_ref": "synthetic-account-1",
+              "basket_id": "bk_00000000000000000000000000000001"
+            }
+          }
+        },
+        "purpose": "slot_discovery",
+        "allowed_kinds": [
+          "slots"
+        ],
+        "products": [],
+        "event_ids": [],
+        "not_before": "2026-12-28T10:00:00Z",
+        "expires_at": "2026-12-28T20:00:00Z"
+      }
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "253a6bcc3b9077e285bf3013e1e780bf162d2a85c95f57f5161bf81b0e5d4d41"
+}

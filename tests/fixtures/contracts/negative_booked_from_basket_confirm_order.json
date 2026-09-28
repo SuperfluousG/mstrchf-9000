@@ -1,0 +1,31 @@
+{
+  "caller": "exchange_import",
+  "command": {
+    "kind": "confirm_order",
+    "data": {
+      "confirmation": {
+        "week_id": "wk_11111111111111111111111111111111",
+        "approval_id": "au_11111111111111111111111111111111",
+        "delivery_start": {
+          "local_date": "2026-12-30",
+          "local_time": "12:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-30T12:00:00Z"
+        },
+        "delivery_end": {
+          "local_date": "2026-12-30",
+          "local_time": "12:30:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-30T12:30:00Z"
+        },
+        "confirmed_at": "2026-12-28T12:00:00Z",
+        "source": {
+          "kind": "user_confirmation",
+          "data": {}
+        }
+      }
+    }
+  }
+}

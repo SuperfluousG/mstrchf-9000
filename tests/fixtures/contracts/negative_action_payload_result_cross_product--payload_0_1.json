@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_0000000000000000000000000000000c",
+  "action": "setup",
+  "week_id": null,
+  "base_plan_revision": null,
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [],
+    "read_weeks": [],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "personalised_plan",
+    "data": {
+      "requirements": [
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          },
+          "enabled": true,
+          "location": "at_home",
+          "attendees": [
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000001"
+                }
+              },
+              "age_band": "adult",
+              "hard_requirements": [
+                {
+                  "kind": "diet",
+                  "data": {
+                    "code": "vegetarian"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "regular",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            },
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000002"
+                }
+              },
+              "age_band": "teen",
+              "hard_requirements": [
+                {
+                  "kind": "allergen_exclusion",
+                  "data": {
+                    "code": "cereals_containing_gluten"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "larger",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            }
+          ],
+          "shared_hard_requirements": [
+            {
+              "kind": "allergen_exclusion",
+              "data": {
+                "code": "cereals_containing_gluten"
+              }
+            },
+            {
+              "kind": "diet",
+              "data": {
+                "code": "vegetarian"
+              }
+            }
+          ],
+          "equipment": [
+            "hob"
+          ],
+          "mobility": {
+            "reheating": false,
+            "cold_storage": false,
+            "temperature": "either"
+          },
+          "eat_by": {
+            "local_date": "2026-12-28",
+            "local_time": "18:00:00",
+            "zone": "Europe/London",
+            "resolution": "unambiguous",
+            "instant": "2026-12-28T18:00:00Z"
+          },
+          "preferred_hands_on_minutes": 30,
+          "leftovers_allowed": false
+        }
+      ],
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_00000000000000000000000000000001",
+          "revision": "1",
+          "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+        }
+      ],
+      "preferences": {
+        "spending_style": "balanced",
+        "higher_protein": false,
+        "more_variety": true,
+        "quick_meals": false,
+        "whole_food_preference": true,
+        "preferred_hands_on_minutes": 30
+      },
+      "history": {
+        "selected_recipe_refs": [],
+        "ordered_recipe_refs": [],
+        "hidden_recipe_ids": [],
+        "feedback": []
+      },
+      "other_weeks": []
+    }
+  },
+  "scope": {
+    "kind": "setup",
+    "data": {
+      "provider": "codex_local"
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "796b93402f78603947a9f4a1d707957ab55bed0b951ff9f29a0bd5071cdfffff"
+}

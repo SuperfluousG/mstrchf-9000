@@ -1,0 +1,18 @@
+{
+  "caller": "exchange_import",
+  "command": {
+    "kind": "record_user_stop",
+    "data": {
+      "worker": {
+        "provider": "codex_local",
+        "provider_build": "synthetic-build-1",
+        "native_task_ref": "synthetic-task-1",
+        "job_id": "jb_00000000000000000000000000000014",
+        "generation": "1"
+      },
+      "qualification_id": "ev_11111111111111111111111111111111",
+      "procedure_version": "1",
+      "visible_status": "completed"
+    }
+  }
+}

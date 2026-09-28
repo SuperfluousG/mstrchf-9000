@@ -1,0 +1,7 @@
+# Generated digests compare exact LF bytes on every checkout, including Windows.
+/contracts/v1/* text eol=lf
+/app/generated/contracts.ts text eol=lf
+/tests/fixtures/contracts/*.json text eol=lf
+# Malformed/oversized parser evidence must retain its literal bytes. Binary diffs
+# also avoid treating intentionally invalid whitespace as source formatting.
+/tests/fixtures/contracts/*.txt -text -diff

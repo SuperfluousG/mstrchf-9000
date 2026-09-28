@@ -1,0 +1,2771 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "Action": {
+      "enum": [
+        "setup",
+        "plan",
+        "add_adapt_recipe",
+        "prepare_shop",
+        "finish_week",
+        "check_booking"
+      ],
+      "type": "string"
+    },
+    "ActionScope": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "mode": {
+                  "$ref": "#/$defs/PlanMode"
+                },
+                "slots": {
+                  "$ref": "#/$defs/Array_SlotId_0_84"
+                }
+              },
+              "required": [
+                "mode",
+                "slots"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "plan",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "source_ids": {
+                  "$ref": "#/$defs/Array_EvidenceId_1_64"
+                }
+              },
+              "required": [
+                "source_ids"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "recipe",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "approval_id": {
+                  "$ref": "#/$defs/Nullable_ApprovalId"
+                },
+                "key": {
+                  "$ref": "#/$defs/BasketKey"
+                },
+                "phase": {
+                  "$ref": "#/$defs/ShopPhase"
+                },
+                "read_scope": {
+                  "$ref": "#/$defs/ReadScope"
+                }
+              },
+              "required": [
+                "key",
+                "phase",
+                "approval_id",
+                "read_scope"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "shop",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "approval_id": {
+                  "$ref": "#/$defs/ApprovalId"
+                },
+                "destination_id": {
+                  "$ref": "#/$defs/CalendarDestinationId"
+                },
+                "event_ids": {
+                  "$ref": "#/$defs/Array_CalendarEventId_1_256"
+                },
+                "read_scope": {
+                  "$ref": "#/$defs/ReadScope"
+                }
+              },
+              "required": [
+                "destination_id",
+                "event_ids",
+                "approval_id",
+                "read_scope"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "read_scope": {
+                  "$ref": "#/$defs/ReadScope"
+                },
+                "week_ids": {
+                  "$ref": "#/$defs/Array_WeekId_1_4"
+                }
+              },
+              "required": [
+                "week_ids",
+                "read_scope"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "booking",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "provider": {
+                  "$ref": "#/$defs/Provider"
+                }
+              },
+              "required": [
+                "provider"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "setup",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "AgeBand": {
+      "enum": [
+        "adult",
+        "teen",
+        "child_1_3",
+        "child_4_6",
+        "child_7_10",
+        "child_11_12"
+      ],
+      "type": "string"
+    },
+    "AllergenCode": {
+      "enum": [
+        "celery",
+        "cereals_containing_gluten",
+        "crustaceans",
+        "eggs",
+        "fish",
+        "lupin",
+        "milk",
+        "molluscs",
+        "mustard",
+        "peanuts",
+        "sesame",
+        "soybeans",
+        "sulphur_dioxide_sulphites",
+        "tree_nuts"
+      ],
+      "type": "string"
+    },
+    "AppCommand": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "draft": {
+                  "$ref": "#/$defs/HouseholdDraft"
+                }
+              },
+              "required": [
+                "draft"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "save_household_draft",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "expected_profile_revision": {
+                  "$ref": "#/$defs/Revision"
+                },
+                "profile": {
+                  "$ref": "#/$defs/HouseholdProfile"
+                }
+              },
+              "required": [
+                "profile",
+                "expected_profile_revision"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "update_profile",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "expected_policy_revision": {
+                  "$ref": "#/$defs/Revision"
+                },
+                "policy": {
+                  "$ref": "#/$defs/PrivacyPolicy"
+                }
+              },
+              "required": [
+                "policy",
+                "expected_policy_revision"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "set_privacy",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "expected_week_revision": {
+                  "$ref": "#/$defs/Revision"
+                },
+                "week": {
+                  "$ref": "#/$defs/WeekEdit"
+                }
+              },
+              "required": [
+                "week",
+                "expected_week_revision"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "save_week",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "context_stamp": {
+                  "$ref": "#/$defs/ContextStamp"
+                },
+                "proposal": {
+                  "$ref": "#/$defs/PlanProposal"
+                }
+              },
+              "required": [
+                "proposal",
+                "context_stamp"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "apply_plan_proposal",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "confirmations": {
+                  "$ref": "#/$defs/Array_EssentialsConfirmation_1_4096"
+                }
+              },
+              "required": [
+                "confirmations"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "confirm_essentials",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "derived_digest": {
+                  "$ref": "#/$defs/PayloadDigest"
+                },
+                "plan_revision": {
+                  "$ref": "#/$defs/Revision"
+                },
+                "week_id": {
+                  "$ref": "#/$defs/WeekId"
+                }
+              },
+              "required": [
+                "week_id",
+                "plan_revision",
+                "derived_digest"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "approve_plan",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "confirmation": {
+                  "$ref": "#/$defs/OrderConfirmation"
+                }
+              },
+              "required": [
+                "confirmation"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "confirm_order",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "action": {
+                  "$ref": "#/$defs/Action"
+                },
+                "scope": {
+                  "$ref": "#/$defs/ActionScope"
+                }
+              },
+              "required": [
+                "action",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "request_job",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "job_id": {
+                  "$ref": "#/$defs/JobId"
+                }
+              },
+              "required": [
+                "job_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "cancel_job",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "procedure_version": {
+                  "$ref": "#/$defs/Revision"
+                },
+                "qualification_id": {
+                  "$ref": "#/$defs/EvidenceId"
+                },
+                "visible_status": {
+                  "$ref": "#/$defs/VisibleTerminalStatus"
+                },
+                "worker": {
+                  "$ref": "#/$defs/WorkerIdentity"
+                }
+              },
+              "required": [
+                "worker",
+                "qualification_id",
+                "procedure_version",
+                "visible_status"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "record_user_stop",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "destination_id": {
+                  "$ref": "#/$defs/CalendarDestinationId"
+                },
+                "event_batch_digest": {
+                  "$ref": "#/$defs/Digest"
+                },
+                "order_id": {
+                  "$ref": "#/$defs/OrderId"
+                }
+              },
+              "required": [
+                "order_id",
+                "destination_id",
+                "event_batch_digest"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "request_calendar_publication",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ApprovalId": {
+      "pattern": "^au_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Array_CalendarEventId_0_256": {
+      "items": {
+        "$ref": "#/$defs/CalendarEventId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_CalendarEventId_1_256": {
+      "items": {
+        "$ref": "#/$defs/CalendarEventId"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_CellDefault_21_21": {
+      "items": {
+        "$ref": "#/$defs/CellDefault"
+      },
+      "maxItems": 21,
+      "minItems": 21,
+      "type": "array"
+    },
+    "Array_Cell_21_21": {
+      "items": {
+        "$ref": "#/$defs/Cell"
+      },
+      "maxItems": 21,
+      "minItems": 21,
+      "type": "array"
+    },
+    "Array_ComponentId_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_DeliveryPreference_0_7": {
+      "items": {
+        "$ref": "#/$defs/DeliveryPreference"
+      },
+      "maxItems": 7,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DinerId_0_64": {
+      "items": {
+        "$ref": "#/$defs/DinerId"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DinerServing_1_64": {
+      "items": {
+        "$ref": "#/$defs/DinerServing"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_Diner_0_64": {
+      "items": {
+        "$ref": "#/$defs/Diner"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Diner_1_64": {
+      "items": {
+        "$ref": "#/$defs/Diner"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_EquipmentCode_0_9": {
+      "items": {
+        "$ref": "#/$defs/EquipmentCode"
+      },
+      "maxItems": 9,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_EssentialsConfirmation_1_4096": {
+      "items": {
+        "$ref": "#/$defs/EssentialsConfirmation"
+      },
+      "maxItems": 4096,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_EvidenceId_1_64": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ExtraSelection_0_64": {
+      "items": {
+        "$ref": "#/$defs/ExtraSelection"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Guest_0_64": {
+      "items": {
+        "$ref": "#/$defs/Guest"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_HardRequirement_1_64": {
+      "items": {
+        "$ref": "#/$defs/HardRequirement"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_HouseholdStage_0_4": {
+      "items": {
+        "$ref": "#/$defs/HouseholdStage"
+      },
+      "maxItems": 4,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_IngredientId_0_256": {
+      "items": {
+        "$ref": "#/$defs/IngredientId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_MealPortionOverride_0_3": {
+      "items": {
+        "$ref": "#/$defs/MealPortionOverride"
+      },
+      "maxItems": 3,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_MealTime_3_3": {
+      "items": {
+        "$ref": "#/$defs/MealTime"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+    },
+    "Array_MealType_0_3": {
+      "items": {
+        "$ref": "#/$defs/MealType"
+      },
+      "maxItems": 3,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_PersonPortionOverride_0_64": {
+      "items": {
+        "$ref": "#/$defs/PersonPortionOverride"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ProductRef_0_256": {
+      "items": {
+        "$ref": "#/$defs/ProductRef"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ProposedSelection_0_21": {
+      "items": {
+        "$ref": "#/$defs/ProposedSelection"
+      },
+      "maxItems": 21,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ReadKind_1_4": {
+      "items": {
+        "$ref": "#/$defs/ReadKind"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_RecipeRef_0_512": {
+      "items": {
+        "$ref": "#/$defs/RecipeRef"
+      },
+      "maxItems": 512,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ReminderChannel_0_2": {
+      "items": {
+        "$ref": "#/$defs/ReminderChannel"
+      },
+      "maxItems": 2,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ReminderPrompt_0_2": {
+      "items": {
+        "$ref": "#/$defs/ReminderPrompt"
+      },
+      "maxItems": 2,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_SlotId_0_84": {
+      "items": {
+        "$ref": "#/$defs/SlotId"
+      },
+      "maxItems": 84,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_WeekChange_1_4": {
+      "items": {
+        "$ref": "#/$defs/WeekChange"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_WeekId_1_4": {
+      "items": {
+        "$ref": "#/$defs/WeekId"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_WeekRevision_0_4": {
+      "items": {
+        "$ref": "#/$defs/WeekRevision"
+      },
+      "maxItems": 4,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_boolean_7_7": {
+      "items": {
+        "type": "boolean"
+      },
+      "maxItems": 7,
+      "minItems": 7,
+      "type": "array"
+    },
+    "BasketId": {
+      "pattern": "^bk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "BasketKey": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "basket_id": {
+          "$ref": "#/$defs/BasketId"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        }
+      },
+      "required": [
+        "retailer",
+        "account_ref",
+        "basket_id"
+      ],
+      "type": "object"
+    },
+    "BatchId": {
+      "pattern": "^ba_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "BatchUse": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "batch_id": {
+                  "$ref": "#/$defs/BatchId"
+                }
+              },
+              "required": [
+                "batch_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "new_batch",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "batch_id": {
+                  "$ref": "#/$defs/BatchId"
+                },
+                "component_ids": {
+                  "$ref": "#/$defs/Array_ComponentId_1_128"
+                }
+              },
+              "required": [
+                "batch_id",
+                "component_ids"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "leftover",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "CalendarDestinationId": {
+      "pattern": "^cd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CalendarEventId": {
+      "pattern": "^ce_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Cell": {
+      "additionalProperties": false,
+      "properties": {
+        "attendee_ids": {
+          "$ref": "#/$defs/Array_DinerId_0_64"
+        },
+        "choice": {
+          "$ref": "#/$defs/MealLocation"
+        },
+        "occasion": {
+          "$ref": "#/$defs/Nullable_Occasion"
+        },
+        "slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "slot",
+        "choice",
+        "attendee_ids",
+        "occasion"
+      ],
+      "type": "object"
+    },
+    "CellDefault": {
+      "additionalProperties": false,
+      "properties": {
+        "attendee_ids": {
+          "$ref": "#/$defs/Array_DinerId_0_64"
+        },
+        "choice": {
+          "$ref": "#/$defs/MealLocation"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "weekday": {
+          "$ref": "#/$defs/Weekday"
+        }
+      },
+      "required": [
+        "weekday",
+        "meal_type",
+        "choice",
+        "attendee_ids"
+      ],
+      "type": "object"
+    },
+    "CommandId": {
+      "pattern": "^cm_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ComponentId": {
+      "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Connections": {
+      "additionalProperties": false,
+      "properties": {
+        "calendar_destination": {
+          "$ref": "#/$defs/Nullable_CalendarDestinationId"
+        },
+        "delivery_preferences": {
+          "$ref": "#/$defs/Array_DeliveryPreference_0_7"
+        },
+        "harness": {
+          "$ref": "#/$defs/Nullable_Provider"
+        },
+        "loyalty": {
+          "$ref": "#/$defs/LoyaltyStatus"
+        },
+        "privacy": {
+          "$ref": "#/$defs/PrivacyPolicy"
+        },
+        "reminders": {
+          "$ref": "#/$defs/ReminderSettings"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Nullable_Retailer"
+        }
+      },
+      "required": [
+        "harness",
+        "retailer",
+        "calendar_destination",
+        "loyalty",
+        "delivery_preferences",
+        "privacy",
+        "reminders"
+      ],
+      "type": "object"
+    },
+    "ContextStamp": {
+      "additionalProperties": false,
+      "properties": {
+        "catalogue_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "history_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "household_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "privacy_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "ranking_policy_version": {
+          "$ref": "#/$defs/Revision"
+        },
+        "read_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        },
+        "recipe_refs": {
+          "$ref": "#/$defs/Array_RecipeRef_0_512"
+        },
+        "settings_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "write_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        }
+      },
+      "required": [
+        "household_revision",
+        "settings_revision",
+        "privacy_revision",
+        "history_revision",
+        "catalogue_revision",
+        "ranking_policy_version",
+        "recipe_refs",
+        "read_weeks",
+        "write_weeks"
+      ],
+      "type": "object"
+    },
+    "DeliveryPreference": {
+      "additionalProperties": false,
+      "properties": {
+        "earliest": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "latest": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "weekday": {
+          "$ref": "#/$defs/Weekday"
+        }
+      },
+      "required": [
+        "weekday",
+        "earliest",
+        "latest"
+      ],
+      "type": "object"
+    },
+    "DemandDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "DemandLineId": {
+      "pattern": "^dl_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "DietCode": {
+      "enum": [
+        "vegetarian",
+        "vegan",
+        "gluten_free"
+      ],
+      "type": "string"
+    },
+    "Digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "Diner": {
+      "additionalProperties": false,
+      "properties": {
+        "age_band": {
+          "$ref": "#/$defs/AgeBand"
+        },
+        "diner_id": {
+          "$ref": "#/$defs/DinerId"
+        },
+        "dislikes": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "display_name": {
+          "$ref": "#/$defs/Nullable_NameText"
+        },
+        "portions": {
+          "$ref": "#/$defs/PortionPreference"
+        },
+        "restrictions": {
+          "$ref": "#/$defs/RestrictionDeclaration"
+        }
+      },
+      "required": [
+        "diner_id",
+        "display_name",
+        "age_band",
+        "restrictions",
+        "dislikes",
+        "portions"
+      ],
+      "type": "object"
+    },
+    "DinerId": {
+      "pattern": "^dn_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "DinerServing": {
+      "additionalProperties": false,
+      "properties": {
+        "person": {
+          "$ref": "#/$defs/PersonRef"
+        },
+        "preset_ref": {
+          "$ref": "#/$defs/PortionPresetRef"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "person",
+        "preset_ref",
+        "servings"
+      ],
+      "type": "object"
+    },
+    "EquipmentCode": {
+      "enum": [
+        "hob",
+        "oven",
+        "microwave",
+        "fridge",
+        "kettle",
+        "toaster",
+        "blender",
+        "slow_cooker",
+        "pressure_cooker"
+      ],
+      "type": "string"
+    },
+    "EssentialsChoice": {
+      "enum": [
+        "have_enough",
+        "add_to_shop"
+      ],
+      "type": "string"
+    },
+    "EssentialsConfirmation": {
+      "additionalProperties": false,
+      "properties": {
+        "choice": {
+          "$ref": "#/$defs/EssentialsChoice"
+        },
+        "confirmed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "demand_digest": {
+          "$ref": "#/$defs/DemandDigest"
+        },
+        "displayed_quantity": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "line_id": {
+          "$ref": "#/$defs/DemandLineId"
+        }
+      },
+      "required": [
+        "line_id",
+        "choice",
+        "displayed_quantity",
+        "demand_digest",
+        "confirmed_at"
+      ],
+      "type": "object"
+    },
+    "EvidenceId": {
+      "pattern": "^ev_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExternalResource": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "$ref": "#/$defs/BasketKey"
+                }
+              },
+              "required": [
+                "key"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "basket",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "destination_id": {
+                  "$ref": "#/$defs/CalendarDestinationId"
+                }
+              },
+              "required": [
+                "destination_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ExtraId": {
+      "pattern": "^ex_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExtraSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "extra_id": {
+          "$ref": "#/$defs/ExtraId"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "recipients": {
+          "$ref": "#/$defs/Array_DinerServing_1_64"
+        }
+      },
+      "required": [
+        "extra_id",
+        "recipe",
+        "recipients"
+      ],
+      "type": "object"
+    },
+    "Generation": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "Guest": {
+      "additionalProperties": false,
+      "properties": {
+        "age_band": {
+          "$ref": "#/$defs/AgeBand"
+        },
+        "guest_id": {
+          "$ref": "#/$defs/GuestId"
+        },
+        "portion": {
+          "$ref": "#/$defs/PortionPreference"
+        },
+        "restrictions": {
+          "$ref": "#/$defs/RestrictionDeclaration"
+        }
+      },
+      "required": [
+        "guest_id",
+        "age_band",
+        "restrictions",
+        "portion"
+      ],
+      "type": "object"
+    },
+    "GuestId": {
+      "pattern": "^gu_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "HardRequirement": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "$ref": "#/$defs/AllergenCode"
+                }
+              },
+              "required": [
+                "code"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "allergen_exclusion",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "$ref": "#/$defs/DietCode"
+                }
+              },
+              "required": [
+                "code"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "diet",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "ingredient_id": {
+                  "$ref": "#/$defs/IngredientId"
+                }
+              },
+              "required": [
+                "ingredient_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "ingredient_exclusion",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "HouseholdDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_stages": {
+          "$ref": "#/$defs/Array_HouseholdStage_0_4"
+        },
+        "connections": {
+          "$ref": "#/$defs/Nullable_Connections"
+        },
+        "diners": {
+          "$ref": "#/$defs/Array_Diner_0_64"
+        },
+        "household_id": {
+          "$ref": "#/$defs/HouseholdId"
+        },
+        "preferences": {
+          "$ref": "#/$defs/Nullable_Preferences"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        },
+        "usual_week": {
+          "$ref": "#/$defs/Nullable_UsualWeek"
+        }
+      },
+      "required": [
+        "schema_version",
+        "household_id",
+        "revision",
+        "completed_stages",
+        "diners",
+        "preferences",
+        "usual_week",
+        "connections"
+      ],
+      "type": "object"
+    },
+    "HouseholdId": {
+      "pattern": "^hh_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "HouseholdProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "connections": {
+          "$ref": "#/$defs/Connections"
+        },
+        "diners": {
+          "$ref": "#/$defs/Array_Diner_1_64"
+        },
+        "household_id": {
+          "$ref": "#/$defs/HouseholdId"
+        },
+        "preferences": {
+          "$ref": "#/$defs/Preferences"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        },
+        "usual_week": {
+          "$ref": "#/$defs/UsualWeek"
+        }
+      },
+      "required": [
+        "schema_version",
+        "household_id",
+        "revision",
+        "diners",
+        "preferences",
+        "usual_week",
+        "connections"
+      ],
+      "type": "object"
+    },
+    "HouseholdStage": {
+      "enum": [
+        "household",
+        "food_preferences",
+        "usual_week",
+        "connections"
+      ],
+      "type": "string"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "IngredientId": {
+      "pattern": "^ig_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "JobId": {
+      "pattern": "^jb_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "LocalDate": {
+      "description": "Gregorian date 1900-01-01 through 2199-12-31",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+      "type": "string"
+    },
+    "LocalTime": {
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+      "type": "string"
+    },
+    "LoyaltyStatus": {
+      "enum": [
+        "confirmed_member",
+        "not_member",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "MealLocation": {
+      "enum": [
+        "at_home",
+        "on_the_move",
+        "skip"
+      ],
+      "type": "string"
+    },
+    "MealOverrides": {
+      "additionalProperties": false,
+      "properties": {
+        "eat_by": {
+          "$ref": "#/$defs/Nullable_ZonedMoment"
+        },
+        "portions": {
+          "$ref": "#/$defs/Array_PersonPortionOverride_0_64"
+        }
+      },
+      "required": [
+        "portions",
+        "eat_by"
+      ],
+      "type": "object"
+    },
+    "MealPortionOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        }
+      },
+      "required": [
+        "meal_type",
+        "preset",
+        "adjustment"
+      ],
+      "type": "object"
+    },
+    "MealSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_use": {
+          "$ref": "#/$defs/BatchUse"
+        },
+        "extras": {
+          "$ref": "#/$defs/Array_ExtraSelection_0_64"
+        },
+        "meal_overrides": {
+          "$ref": "#/$defs/MealOverrides"
+        },
+        "origin": {
+          "$ref": "#/$defs/SelectionOrigin"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "repeat_authorised": {
+          "type": "boolean"
+        },
+        "servings": {
+          "$ref": "#/$defs/Array_DinerServing_1_64"
+        },
+        "slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "slot",
+        "recipe",
+        "origin",
+        "repeat_authorised",
+        "servings",
+        "extras",
+        "batch_use",
+        "meal_overrides"
+      ],
+      "type": "object"
+    },
+    "MealTime": {
+      "additionalProperties": false,
+      "properties": {
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "time": {
+          "$ref": "#/$defs/LocalTime"
+        }
+      },
+      "required": [
+        "meal_type",
+        "time"
+      ],
+      "type": "object"
+    },
+    "MealType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "type": "string"
+    },
+    "MealTypeEnabled": {
+      "additionalProperties": false,
+      "properties": {
+        "breakfast": {
+          "type": "boolean"
+        },
+        "dinner": {
+          "type": "boolean"
+        },
+        "lunch": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "type": "object"
+    },
+    "Mobility": {
+      "additionalProperties": false,
+      "properties": {
+        "cold_storage": {
+          "type": "boolean"
+        },
+        "reheating": {
+          "type": "boolean"
+        },
+        "temperature": {
+          "$ref": "#/$defs/MobilityTemperature"
+        }
+      },
+      "required": [
+        "reheating",
+        "cold_storage",
+        "temperature"
+      ],
+      "type": "object"
+    },
+    "MobilityTemperature": {
+      "enum": [
+        "hot",
+        "cold",
+        "either"
+      ],
+      "type": "string"
+    },
+    "NameText": {
+      "maxLength": 80,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Nullable_ApprovalId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApprovalId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_CalendarDestinationId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CalendarDestinationId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Connections": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Connections"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Instant": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Instant"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_MealSelection": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MealSelection"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_NameText": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NameText"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Occasion": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Occasion"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Preferences": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Preferences"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Provider": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Provider"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Retailer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Retailer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_UsualWeek": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UsualWeek"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ZonedMoment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Occasion": {
+      "additionalProperties": false,
+      "properties": {
+        "guests": {
+          "$ref": "#/$defs/Array_Guest_0_64"
+        },
+        "host_diner_ids": {
+          "$ref": "#/$defs/Array_DinerId_0_64"
+        },
+        "occasion_id": {
+          "$ref": "#/$defs/OccasionId"
+        }
+      },
+      "required": [
+        "occasion_id",
+        "guests",
+        "host_diner_ids"
+      ],
+      "type": "object"
+    },
+    "OccasionId": {
+      "pattern": "^oc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "OrderConfirmation": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_id": {
+          "$ref": "#/$defs/ApprovalId"
+        },
+        "confirmed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "delivery_end": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "delivery_start": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "source": {
+          "$ref": "#/$defs/OrderConfirmationSource"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "approval_id",
+        "delivery_start",
+        "delivery_end",
+        "confirmed_at",
+        "source"
+      ],
+      "type": "object"
+    },
+    "OrderConfirmationSource": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "kind": {
+              "const": "user_confirmation",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "evidence_id": {
+                  "$ref": "#/$defs/EvidenceId"
+                }
+              },
+              "required": [
+                "evidence_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "authorised_read",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "OrderId": {
+      "pattern": "^or_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "PayloadDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "PersonPortionOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "person": {
+          "$ref": "#/$defs/PersonRef"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        }
+      },
+      "required": [
+        "person",
+        "preset",
+        "adjustment"
+      ],
+      "type": "object"
+    },
+    "PersonRef": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "diner",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "guest_id": {
+                  "$ref": "#/$defs/GuestId"
+                },
+                "occasion_id": {
+                  "$ref": "#/$defs/OccasionId"
+                }
+              },
+              "required": [
+                "occasion_id",
+                "guest_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "guest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "PlanMode": {
+      "enum": [
+        "fill_open",
+        "swap_named",
+        "replace_suggestions"
+      ],
+      "type": "string"
+    },
+    "PlanProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "changes": {
+          "$ref": "#/$defs/Array_WeekChange_1_4"
+        }
+      },
+      "required": [
+        "changes"
+      ],
+      "type": "object"
+    },
+    "PortionPreference": {
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "meal_overrides": {
+          "$ref": "#/$defs/Array_MealPortionOverride_0_3"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        }
+      },
+      "required": [
+        "preset",
+        "adjustment",
+        "meal_overrides"
+      ],
+      "type": "object"
+    },
+    "PortionPresetName": {
+      "enum": [
+        "smaller",
+        "regular",
+        "larger"
+      ],
+      "type": "string"
+    },
+    "PortionPresetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "age_band": {
+          "$ref": "#/$defs/AgeBand"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        }
+      },
+      "required": [
+        "recipe",
+        "preset",
+        "age_band",
+        "meal_type"
+      ],
+      "type": "object"
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "Preferences": {
+      "additionalProperties": false,
+      "properties": {
+        "dislikes": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "equipment": {
+          "$ref": "#/$defs/Array_EquipmentCode_0_9"
+        },
+        "higher_protein": {
+          "type": "boolean"
+        },
+        "meal_times": {
+          "$ref": "#/$defs/Array_MealTime_3_3"
+        },
+        "mobility": {
+          "$ref": "#/$defs/Mobility"
+        },
+        "more_variety": {
+          "type": "boolean"
+        },
+        "preferred_hands_on_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "quick_meals": {
+          "type": "boolean"
+        },
+        "spending_style": {
+          "$ref": "#/$defs/SpendingStyle"
+        },
+        "whole_food_preference": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "spending_style",
+        "higher_protein",
+        "more_variety",
+        "quick_meals",
+        "whole_food_preference",
+        "dislikes",
+        "equipment",
+        "preferred_hands_on_minutes",
+        "meal_times",
+        "mobility"
+      ],
+      "type": "object"
+    },
+    "PrivacyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed_at": {
+          "$ref": "#/$defs/Nullable_Instant"
+        },
+        "include_household_requirements": {
+          "type": "boolean"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "use_ai_features": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "revision",
+        "use_ai_features",
+        "include_household_requirements",
+        "confirmed_at"
+      ],
+      "type": "object"
+    },
+    "ProductRef": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        },
+        "variant_id": {
+          "$ref": "#/$defs/Nullable_Text"
+        }
+      },
+      "required": [
+        "retailer",
+        "product_id",
+        "variant_id"
+      ],
+      "type": "object"
+    },
+    "ProposedSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "selection": {
+          "$ref": "#/$defs/Nullable_MealSelection"
+        },
+        "slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "slot",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "Provider": {
+      "enum": [
+        "codex_local",
+        "claude_cowork"
+      ],
+      "type": "string"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "ReadId": {
+      "pattern": "^rd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ReadKind": {
+      "enum": [
+        "products",
+        "basket",
+        "calendar_events",
+        "slots"
+      ],
+      "type": "string"
+    },
+    "ReadPurpose": {
+      "enum": [
+        "initial",
+        "reconciliation",
+        "verification",
+        "slot_discovery"
+      ],
+      "type": "string"
+    },
+    "ReadScope": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_kinds": {
+          "$ref": "#/$defs/Array_ReadKind_1_4"
+        },
+        "event_ids": {
+          "$ref": "#/$defs/Array_CalendarEventId_0_256"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "not_before": {
+          "$ref": "#/$defs/Instant"
+        },
+        "products": {
+          "$ref": "#/$defs/Array_ProductRef_0_256"
+        },
+        "purpose": {
+          "$ref": "#/$defs/ReadPurpose"
+        },
+        "read_id": {
+          "$ref": "#/$defs/ReadId"
+        },
+        "resource": {
+          "$ref": "#/$defs/ExternalResource"
+        }
+      },
+      "required": [
+        "read_id",
+        "resource",
+        "purpose",
+        "allowed_kinds",
+        "products",
+        "event_ids",
+        "not_before",
+        "expires_at"
+      ],
+      "type": "object"
+    },
+    "RecipeDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "RecipeId": {
+      "pattern": "^rc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "RecipeRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/RecipeDigest"
+        },
+        "recipe_id": {
+          "$ref": "#/$defs/RecipeId"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        }
+      },
+      "required": [
+        "recipe_id",
+        "revision",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "ReminderChannel": {
+      "enum": [
+        "local",
+        "calendar"
+      ],
+      "type": "string"
+    },
+    "ReminderPrompt": {
+      "enum": [
+        "unfinished_plan",
+        "booking_opportunity"
+      ],
+      "type": "string"
+    },
+    "ReminderSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "$ref": "#/$defs/Array_ReminderChannel_0_2"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "prompts": {
+          "$ref": "#/$defs/Array_ReminderPrompt_0_2"
+        }
+      },
+      "required": [
+        "enabled",
+        "channels",
+        "prompts"
+      ],
+      "type": "object"
+    },
+    "Resolution": {
+      "enum": [
+        "unambiguous",
+        "earlier",
+        "later"
+      ],
+      "type": "string"
+    },
+    "RestrictionDeclaration": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "kind": {
+              "const": "unconfirmed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "confirmed_at": {
+                  "$ref": "#/$defs/Instant"
+                }
+              },
+              "required": [
+                "confirmed_at"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "confirmed_none",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "confirmed_at": {
+                  "$ref": "#/$defs/Instant"
+                },
+                "requirements": {
+                  "$ref": "#/$defs/Array_HardRequirement_1_64"
+                }
+              },
+              "required": [
+                "confirmed_at",
+                "requirements"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "confirmed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Retailer": {
+      "enum": [
+        "tesco"
+      ],
+      "type": "string"
+    },
+    "Revision": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SelectionOrigin": {
+      "enum": [
+        "fixed",
+        "suggested"
+      ],
+      "type": "string"
+    },
+    "ShopPhase": {
+      "enum": [
+        "observe",
+        "reconcile",
+        "mutate"
+      ],
+      "type": "string"
+    },
+    "SlotId": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "date",
+        "meal_type"
+      ],
+      "type": "object"
+    },
+    "SpendingStyle": {
+      "enum": [
+        "value",
+        "balanced",
+        "flexible"
+      ],
+      "type": "string"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "UsualWeek": {
+      "additionalProperties": false,
+      "properties": {
+        "cells": {
+          "$ref": "#/$defs/Array_CellDefault_21_21"
+        },
+        "day_enabled": {
+          "$ref": "#/$defs/Array_boolean_7_7"
+        },
+        "enabled_meal_types": {
+          "$ref": "#/$defs/Array_MealType_0_3"
+        },
+        "suggest_leftovers": {
+          "type": "boolean"
+        },
+        "zone": {
+          "$ref": "#/$defs/ZoneId"
+        }
+      },
+      "required": [
+        "enabled_meal_types",
+        "day_enabled",
+        "cells",
+        "suggest_leftovers",
+        "zone"
+      ],
+      "type": "object"
+    },
+    "VisibleTerminalStatus": {
+      "enum": [
+        "cancelled",
+        "completed"
+      ],
+      "type": "string"
+    },
+    "WeekChange": {
+      "additionalProperties": false,
+      "properties": {
+        "base_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "replace_slots": {
+          "$ref": "#/$defs/Array_ProposedSelection_0_21"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "base_revision",
+        "replace_slots"
+      ],
+      "type": "object"
+    },
+    "WeekEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "cells": {
+          "$ref": "#/$defs/Array_Cell_21_21"
+        },
+        "day_enabled": {
+          "$ref": "#/$defs/Array_boolean_7_7"
+        },
+        "defaults_snapshot": {
+          "$ref": "#/$defs/UsualWeek"
+        },
+        "meal_type_enabled": {
+          "$ref": "#/$defs/MealTypeEnabled"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "defaults_snapshot",
+        "day_enabled",
+        "meal_type_enabled",
+        "cells"
+      ],
+      "type": "object"
+    },
+    "WeekId": {
+      "pattern": "^wk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "WeekRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "Weekday": {
+      "enum": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "type": "string"
+    },
+    "WorkerIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "generation": {
+          "$ref": "#/$defs/Generation"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        },
+        "native_task_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "provider": {
+          "$ref": "#/$defs/Provider"
+        },
+        "provider_build": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "provider",
+        "provider_build",
+        "native_task_ref",
+        "job_id",
+        "generation"
+      ],
+      "type": "object"
+    },
+    "ZoneId": {
+      "description": "Case-sensitive IANA timezone accepted by pinned chrono-tz",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*$",
+      "type": "string"
+    },
+    "ZonedMoment": {
+      "additionalProperties": false,
+      "properties": {
+        "instant": {
+          "$ref": "#/$defs/Instant"
+        },
+        "local_date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "local_time": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "zone": {
+          "$ref": "#/$defs/ZoneId"
+        }
+      },
+      "required": [
+        "local_date",
+        "local_time",
+        "zone",
+        "resolution",
+        "instant"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:app-command",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "command": {
+      "$ref": "#/$defs/AppCommand"
+    },
+    "command_id": {
+      "$ref": "#/$defs/CommandId"
+    },
+    "expected_snapshot_revision": {
+      "$ref": "#/$defs/Revision"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    }
+  },
+  "required": [
+    "schema_version",
+    "command_id",
+    "expected_snapshot_revision",
+    "command"
+  ],
+  "title": "AppCommandV1",
+  "type": "object"
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_0000000000000000000000000000000c",
+  "action": "setup",
+  "week_id": null,
+  "base_plan_revision": null,
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [],
+    "read_weeks": [],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [
+    {
+      "artefact_id": "ar_00000000000000000000000000000001",
+      "relative_name": "input/ar_00000000000000000000000000000001.json",
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byte_length": 7340032,
+      "media_type": "application/json"
+    },
+    {
+      "artefact_id": "ar_00000000000000000000000000000002",
+      "relative_name": "input/ar_00000000000000000000000000000002.json",
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byte_length": 7340032,
+      "media_type": "application/json"
+    },
+    {
+      "artefact_id": "ar_00000000000000000000000000000003",
+      "relative_name": "input/ar_00000000000000000000000000000003.json",
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byte_length": 7340032,
+      "media_type": "application/json"
+    },
+    {
+      "artefact_id": "ar_00000000000000000000000000000004",
+      "relative_name": "input/ar_00000000000000000000000000000004.json",
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byte_length": 7340032,
+      "media_type": "application/json"
+    },
+    {
+      "artefact_id": "ar_00000000000000000000000000000005",
+      "relative_name": "input/ar_00000000000000000000000000000005.json",
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "byte_length": 7340032,
+      "media_type": "application/json"
+    }
+  ],
+  "payload": {
+    "kind": "setup_check",
+    "data": {
+      "provider": "codex_local",
+      "requested_capabilities": [
+        "scoped_file_read"
+      ]
+    }
+  },
+  "scope": {
+    "kind": "setup",
+    "data": {
+      "provider": "codex_local"
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "0ac9dfea831104e6829132ca0a1b8f6b144798af0504708781e68aaddf0c945c"
+}

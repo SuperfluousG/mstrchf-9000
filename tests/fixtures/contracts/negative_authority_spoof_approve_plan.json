@@ -1,0 +1,11 @@
+{
+  "caller": "exchange_import",
+  "command": {
+    "kind": "approve_plan",
+    "data": {
+      "week_id": "wk_11111111111111111111111111111111",
+      "plan_revision": "1",
+      "derived_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "demand": {
+    "input_plan_digest": "de39f29ff0302a9f932eabdec43b2587ee14543f89a68ff934f66c9addca271b",
+    "lines": [
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "ingredient_id": "ig_00000000000000000000000000000001",
+        "quantity": {
+          "amount": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "dry"
+        },
+        "origin_batches": [
+          "ba_00000000000000000000000000000002"
+        ],
+        "origin_extras": [],
+        "essential": true,
+        "conversion_evidence_ids": []
+      }
+    ],
+    "digest": "310293f3c60185b0449525c024ac6af570503000987a0fa84bad211daf1196db"
+  },
+  "confirmation": {
+    "line_id": "dl_00000000000000000000000000000001",
+    "choice": "have_enough",
+    "displayed_quantity": {
+      "amount": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "unit": "g",
+      "form": "dry"
+    },
+    "demand_digest": "310293f3c60185b0449525c024ac6af570503000987a0fa84bad211daf1196db",
+    "confirmed_at": "2026-12-20T12:00:00Z"
+  }
+}

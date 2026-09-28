@@ -1,0 +1,11 @@
+{
+  "operator": "add",
+  "left": {
+    "numerator": "1",
+    "denominator": "999999"
+  },
+  "right": {
+    "numerator": "1",
+    "denominator": "1000000"
+  }
+}

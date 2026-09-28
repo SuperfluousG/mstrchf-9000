@@ -1,0 +1,10 @@
+{
+  "type": "zoned_moment",
+  "value": {
+    "local_date": "2027-03-28",
+    "local_time": "01:30:00",
+    "zone": "Europe/London",
+    "resolution": "unambiguous",
+    "instant": "2027-03-28T01:30:00Z"
+  }
+}

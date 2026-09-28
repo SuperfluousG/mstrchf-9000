@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "event_batch": {
+    "week_id": "wk_00000000000000000000000000000001",
+    "order_id": "or_00000000000000000000000000000001",
+    "approved_plan_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "destination_id": "cd_00000000000000000000000000000001",
+    "events": [
+      {
+        "event_id": "ce_00000000000000000000000000000001",
+        "logical_key": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "kind": "delivery",
+          "session_id": null,
+          "order_id": "or_00000000000000000000000000000001",
+          "recipe_revision": "1"
+        },
+        "payload_revision": "1",
+        "start": {
+          "local_date": "2026-12-30",
+          "local_time": "12:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-30T12:00:00Z"
+        },
+        "end": {
+          "local_date": "2026-12-30",
+          "local_time": "12:30:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-30T12:30:00Z"
+        },
+        "title": "Synthetic delivery reminder",
+        "body": "Synthetic phone-readable reminder.",
+        "event_payload_digest": "88332a60fd415312b96b917f04900b11a1a38ae2094387c5feb06a02e32363bf"
+      }
+    ]
+  }
+}

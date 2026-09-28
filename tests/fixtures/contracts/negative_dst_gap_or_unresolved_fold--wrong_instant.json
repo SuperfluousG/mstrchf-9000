@@ -1,0 +1,10 @@
+{
+  "type": "zoned_moment",
+  "value": {
+    "local_date": "2026-10-25",
+    "local_time": "01:30:00",
+    "zone": "Europe/London",
+    "resolution": "earlier",
+    "instant": "2026-10-25T01:30:00Z"
+  }
+}

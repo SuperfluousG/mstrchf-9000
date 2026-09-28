@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_0000000000000000000000000000000b",
+  "action": "plan",
+  "week_id": "wk_00000000000000000000000000000001",
+  "base_plan_revision": "1",
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "1",
+        "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+      },
+      {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1",
+        "digest": "43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017"
+      }
+    ],
+    "read_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      }
+    ],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "setup_check",
+    "data": {
+      "provider": "codex_local",
+      "requested_capabilities": [
+        "scoped_file_read"
+      ]
+    }
+  },
+  "scope": {
+    "kind": "plan",
+    "data": {
+      "mode": "fill_open",
+      "slots": []
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "fced93c8010bc244b6ff6df60b387fbc2623a06460549b5a6d7377b48b881ceb"
+}

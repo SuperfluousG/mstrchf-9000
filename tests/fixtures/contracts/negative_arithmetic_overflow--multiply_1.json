@@ -1,0 +1,11 @@
+{
+  "operator": "multiply",
+  "left": {
+    "numerator": "1000000000000",
+    "denominator": "1"
+  },
+  "right": {
+    "numerator": "2",
+    "denominator": "1"
+  }
+}

@@ -1,0 +1,1218 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "Array_BasketLine_0_512": {
+      "items": {
+        "$ref": "#/$defs/BasketLine"
+      },
+      "maxItems": 512,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_BoundedCount_2_8": {
+      "items": {
+        "$ref": "#/$defs/BoundedCount"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Array_CalendarObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/CalendarObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_OfferObservation_0_64": {
+      "items": {
+        "$ref": "#/$defs/OfferObservation"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ProductObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/ProductObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Quantity_2_8": {
+      "items": {
+        "$ref": "#/$defs/Quantity"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Array_SlotObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/SlotObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Text_2_8": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Availability": {
+      "enum": [
+        "in_stock",
+        "out_of_stock",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "BasketId": {
+      "pattern": "^bk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "BasketKey": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "basket_id": {
+          "$ref": "#/$defs/BasketId"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        }
+      },
+      "required": [
+        "retailer",
+        "account_ref",
+        "basket_id"
+      ],
+      "type": "object"
+    },
+    "BasketLine": {
+      "additionalProperties": false,
+      "properties": {
+        "product": {
+          "$ref": "#/$defs/ProductRef"
+        },
+        "quantity": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit_price": {
+          "$ref": "#/$defs/Price"
+        }
+      },
+      "required": [
+        "product",
+        "quantity",
+        "unit_price"
+      ],
+      "type": "object"
+    },
+    "BasketSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "delivery_charge": {
+          "$ref": "#/$defs/Price"
+        },
+        "delivery_context": {
+          "$ref": "#/$defs/RetailerDeliveryContext"
+        },
+        "key": {
+          "$ref": "#/$defs/BasketKey"
+        },
+        "lines": {
+          "$ref": "#/$defs/Array_BasketLine_0_512"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        }
+      },
+      "required": [
+        "key",
+        "delivery_context",
+        "observed_at",
+        "lines",
+        "delivery_charge"
+      ],
+      "type": "object"
+    },
+    "BoundedCount": {
+      "maximum": 10000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "CalendarDestinationId": {
+      "pattern": "^cd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CalendarEventId": {
+      "pattern": "^ce_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CalendarObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/CalendarEventId"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "observed_payload_digest": {
+          "$ref": "#/$defs/Nullable_Digest"
+        },
+        "provider_event_ref": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "state": {
+          "$ref": "#/$defs/CalendarObservationState"
+        },
+        "user_changed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "event_id",
+        "provider_event_ref",
+        "observed_payload_digest",
+        "state",
+        "observed_at",
+        "user_changed"
+      ],
+      "type": "object"
+    },
+    "CalendarObservationState": {
+      "enum": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "Currency": {
+      "enum": [
+        "GBP"
+      ],
+      "type": "string"
+    },
+    "DecimalU64": {
+      "description": "Canonical decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "DeliveryApplicable": {
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "Digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "ExternalResource": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "$ref": "#/$defs/BasketKey"
+                }
+              },
+              "required": [
+                "key"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "basket",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "destination_id": {
+                  "$ref": "#/$defs/CalendarDestinationId"
+                }
+              },
+              "required": [
+                "destination_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fact": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/BoundedCount"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_BoundedCount_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fact2": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/Quantity"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_Quantity_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fact3": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/Text"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_Text_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "FinancialCommitment": {
+      "enum": [
+        "none",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "HttpUrl": {
+      "pattern": "^https?://[^\\s\\u0000-\\u001f]{1,2040}$",
+      "type": "string"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "InputDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "JobId": {
+      "pattern": "^jb_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "LocalDate": {
+      "description": "Gregorian date 1900-01-01 through 2199-12-31",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+      "type": "string"
+    },
+    "LocalTime": {
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+      "type": "string"
+    },
+    "Nullable_Digest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Instant": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Instant"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_LocalDate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LocalDate"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "OfferKind": {
+      "enum": [
+        "unit_price",
+        "multibuy"
+      ],
+      "type": "string"
+    },
+    "OfferObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "delivery_applicable": {
+          "$ref": "#/$defs/DeliveryApplicable"
+        },
+        "kind": {
+          "$ref": "#/$defs/OfferKind"
+        },
+        "loyalty_required": {
+          "type": "boolean"
+        },
+        "minimum_packs": {
+          "$ref": "#/$defs/BoundedCount"
+        },
+        "offer_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "total_pence": {
+          "$ref": "#/$defs/DecimalU64"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "valid_to": {
+          "$ref": "#/$defs/LocalDate"
+        }
+      },
+      "required": [
+        "offer_ref",
+        "kind",
+        "minimum_packs",
+        "total_pence",
+        "loyalty_required",
+        "valid_from",
+        "valid_to",
+        "delivery_applicable"
+      ],
+      "type": "object"
+    },
+    "PackObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "$ref": "#/$defs/Fact"
+        },
+        "drained": {
+          "$ref": "#/$defs/Fact2"
+        },
+        "net": {
+          "$ref": "#/$defs/Fact2"
+        }
+      },
+      "required": [
+        "count",
+        "net",
+        "drained"
+      ],
+      "type": "object"
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "Price": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "currency": {
+                  "$ref": "#/$defs/Currency"
+                },
+                "pence": {
+                  "$ref": "#/$defs/DecimalU64"
+                }
+              },
+              "required": [
+                "pence",
+                "currency"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "observed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "basis": {
+                  "$ref": "#/$defs/Text"
+                },
+                "currency": {
+                  "$ref": "#/$defs/Currency"
+                },
+                "pence": {
+                  "$ref": "#/$defs/DecimalU64"
+                }
+              },
+              "required": [
+                "pence",
+                "currency",
+                "basis"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "estimated",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ProductObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "allergens": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "availability": {
+          "$ref": "#/$defs/Availability"
+        },
+        "delivery_context": {
+          "$ref": "#/$defs/RetailerDeliveryContext"
+        },
+        "ingredients": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "offers": {
+          "$ref": "#/$defs/Array_OfferObservation_0_64"
+        },
+        "pack": {
+          "$ref": "#/$defs/PackObservation"
+        },
+        "price": {
+          "$ref": "#/$defs/Price"
+        },
+        "product": {
+          "$ref": "#/$defs/ProductRef"
+        },
+        "storage": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "url": {
+          "$ref": "#/$defs/HttpUrl"
+        }
+      },
+      "required": [
+        "product",
+        "url",
+        "title",
+        "pack",
+        "price",
+        "offers",
+        "availability",
+        "ingredients",
+        "allergens",
+        "storage",
+        "delivery_context",
+        "observed_at"
+      ],
+      "type": "object"
+    },
+    "ProductRef": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        },
+        "variant_id": {
+          "$ref": "#/$defs/Nullable_Text"
+        }
+      },
+      "required": [
+        "retailer",
+        "product_id",
+        "variant_id"
+      ],
+      "type": "object"
+    },
+    "Provider": {
+      "enum": [
+        "codex_local",
+        "claude_cowork"
+      ],
+      "type": "string"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "ReadActor": {
+      "additionalProperties": false,
+      "properties": {
+        "native_task_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "provider": {
+          "$ref": "#/$defs/Provider"
+        }
+      },
+      "required": [
+        "provider",
+        "native_task_ref"
+      ],
+      "type": "object"
+    },
+    "ReadBody": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "delivery_context": {
+                  "$ref": "#/$defs/RetailerDeliveryContext"
+                },
+                "items": {
+                  "$ref": "#/$defs/Array_ProductObservation_0_256"
+                }
+              },
+              "required": [
+                "delivery_context",
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "products",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "snapshot": {
+                  "$ref": "#/$defs/BasketSnapshot"
+                }
+              },
+              "required": [
+                "snapshot"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "basket",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "items": {
+                  "$ref": "#/$defs/Array_CalendarObservation_0_256"
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar_events",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "delivery_context": {
+                  "$ref": "#/$defs/RetailerDeliveryContext"
+                },
+                "items": {
+                  "$ref": "#/$defs/Array_SlotObservation_0_256"
+                }
+              },
+              "required": [
+                "delivery_context",
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "slots",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ReadId": {
+      "pattern": "^rd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ReadObservationId": {
+      "pattern": "^ob_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Resolution": {
+      "enum": [
+        "unambiguous",
+        "earlier",
+        "later"
+      ],
+      "type": "string"
+    },
+    "Retailer": {
+      "enum": [
+        "tesco"
+      ],
+      "type": "string"
+    },
+    "RetailerDeliveryContext": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "context_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "delivery_date": {
+          "$ref": "#/$defs/Nullable_LocalDate"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        },
+        "slot_ref": {
+          "$ref": "#/$defs/Nullable_Text"
+        }
+      },
+      "required": [
+        "retailer",
+        "account_ref",
+        "context_ref",
+        "delivery_date",
+        "slot_ref"
+      ],
+      "type": "object"
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SlotObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "charge": {
+          "$ref": "#/$defs/Price"
+        },
+        "end": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "financial_commitment": {
+          "$ref": "#/$defs/FinancialCommitment"
+        },
+        "hold_expires_at": {
+          "$ref": "#/$defs/Nullable_Instant"
+        },
+        "slot_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "start": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "slot_ref",
+        "start",
+        "end",
+        "available",
+        "charge",
+        "hold_expires_at",
+        "financial_commitment"
+      ],
+      "type": "object"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "UnknownReason": {
+      "enum": [
+        "missing",
+        "unreadable",
+        "not_exposed"
+      ],
+      "type": "string"
+    },
+    "ZoneId": {
+      "description": "Case-sensitive IANA timezone accepted by pinned chrono-tz",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*$",
+      "type": "string"
+    },
+    "ZonedMoment": {
+      "additionalProperties": false,
+      "properties": {
+        "instant": {
+          "$ref": "#/$defs/Instant"
+        },
+        "local_date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "local_time": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "zone": {
+          "$ref": "#/$defs/ZoneId"
+        }
+      },
+      "required": [
+        "local_date",
+        "local_time",
+        "zone",
+        "resolution",
+        "instant"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:read-observation",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "$ref": "#/$defs/ReadBody"
+    },
+    "input_digest": {
+      "$ref": "#/$defs/InputDigest"
+    },
+    "job_id": {
+      "$ref": "#/$defs/JobId"
+    },
+    "observation_id": {
+      "$ref": "#/$defs/ReadObservationId"
+    },
+    "observed_at": {
+      "$ref": "#/$defs/Instant"
+    },
+    "read_id": {
+      "$ref": "#/$defs/ReadId"
+    },
+    "reader": {
+      "$ref": "#/$defs/ReadActor"
+    },
+    "resource": {
+      "$ref": "#/$defs/ExternalResource"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    }
+  },
+  "required": [
+    "schema_version",
+    "observation_id",
+    "read_id",
+    "job_id",
+    "input_digest",
+    "reader",
+    "resource",
+    "observed_at",
+    "body"
+  ],
+  "title": "ReadObservationV1",
+  "type": "object"
+}
