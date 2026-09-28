@@ -798,16 +798,21 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
         }
         for s in w.plan.selections.iter() {
             check_ref(&s.recipe, c)?;
+            let selected_cell = w
+                .cells
+                .iter()
+                .find(|cell| cell.slot == s.slot)
+                .ok_or_else(|| err(ErrorCode::ForeignReference, "/plan/selections"))?;
             for serving in s.servings.iter() {
                 require(
-                    person_known_in_context(&serving.person, c),
+                    person_known_for_cell(&serving.person, c, selected_cell),
                     ErrorCode::ForeignReference,
                     "/selections/servings/person",
                 )?;
             }
             for portion in s.meal_overrides.portions.iter() {
                 require(
-                    person_known_in_context(&portion.person, c),
+                    person_known_for_cell(&portion.person, c, selected_cell),
                     ErrorCode::ForeignReference,
                     "/selections/meal_overrides/portions/person",
                 )?;
@@ -827,7 +832,7 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                         "/selections/extras/recipients/preset_ref",
                     )?;
                     require(
-                        person_known_in_context(&recipient.person, c),
+                        person_known_for_cell(&recipient.person, c, selected_cell),
                         ErrorCode::ForeignReference,
                         "/selections/extras/recipients/person",
                     )?;
@@ -923,7 +928,7 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
         .collect();
     acyclic(&edges, "/recipes/extras")
 }
-fn person_known_in_context(person: &PersonRef, context: &PlanningContext) -> bool {
+fn person_known_for_cell(person: &PersonRef, context: &PlanningContext, cell: &Cell) -> bool {
     match person {
         PersonRef::Diner { diner_id } => context
             .household
@@ -933,19 +938,13 @@ fn person_known_in_context(person: &PersonRef, context: &PlanningContext) -> boo
         PersonRef::Guest {
             occasion_id,
             guest_id,
-        } => context
-            .weeks
-            .iter()
-            .flat_map(|week| week.cells.iter())
-            .any(|cell| {
-                cell.occasion.0.as_ref().is_some_and(|occasion| {
-                    occasion.occasion_id == *occasion_id
-                        && occasion
-                            .guests
-                            .iter()
-                            .any(|guest| guest.guest_id == *guest_id)
-                })
-            }),
+        } => cell.occasion.0.as_ref().is_some_and(|occasion| {
+            occasion.occasion_id == *occasion_id
+                && occasion
+                    .guests
+                    .iter()
+                    .any(|guest| guest.guest_id == *guest_id)
+        }),
     }
 }
 mod cxx {

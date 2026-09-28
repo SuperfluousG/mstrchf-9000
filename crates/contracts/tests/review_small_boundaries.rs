@@ -53,6 +53,49 @@ fn http_and_https_share_the_exact_2048_character_boundary_in_schema_and_runtime(
 }
 
 #[test]
+fn url_schema_matches_control_and_unicode_whitespace_admission() {
+    let generated = schema::render_contracts().unwrap();
+    let candidate: Value =
+        serde_json::from_slice(&generated["contracts/v1/recipe-candidate.schema.json"]).unwrap();
+    let validator = jsonschema::draft202012::options()
+        .build(candidate.pointer("/$defs/HttpUrl").unwrap())
+        .unwrap();
+    // Explicit C0, DEL/C1 and Unicode White_Space values. Do not use a regex
+    // shorthand as the test oracle: ECMAScript whitespace includes FEFF.
+    let forbidden = (0..=0x20)
+        .chain(0x7f..=0xa0)
+        .chain([0x1680])
+        .chain(0x2000..=0x200a)
+        .chain([0x2028, 0x2029, 0x202f, 0x205f, 0x3000]);
+    let permitted = [
+        0x21, 0x7e, 0xa1, 0x167f, 0x1681, 0x180e, 0x200b, 0x200d, 0x2027, 0x202a, 0x202e, 0x2030,
+        0x205e, 0x2060, 0x3001, 0xfeff, 0xe9, 0x1f980,
+    ];
+    let mut failures = Vec::new();
+    for (scalar, expected) in forbidden
+        .map(|c| (c, false))
+        .chain(permitted.into_iter().map(|c| (c, true)))
+    {
+        let character = char::from_u32(scalar).unwrap();
+        for scheme in ["http://", "https://"] {
+            for suffix in [
+                format!("{character}example.test/ab"),
+                format!("example.test/a{character}b"),
+                format!("example.test/ab{character}"),
+            ] {
+                let value = json!(format!("{scheme}{suffix}"));
+                let runtime = parse_document::<HttpUrl>(&bytes(&value)).is_ok();
+                let schema = validator.is_valid(&value);
+                if runtime != expected || schema != expected {
+                    failures.push(format!("{scheme} U+{scalar:04X} in {suffix:?}: runtime={runtime}, schema={schema}, expected={expected}"));
+                }
+            }
+        }
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+}
+
+#[test]
 fn request_job_command_rejects_incompatible_action_and_scope_at_admission() {
     let cases = [
         ("setup", "job-request-setup.json"),

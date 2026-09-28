@@ -81,6 +81,111 @@ fn f04_disabled_selection_keeps_resolved_person_identity() {
     rejected::<PlanningContext>(&context, ErrorCode::ForeignReference);
 }
 
+fn retained_guest_context() -> (Value, usize, Value) {
+    let mut context = disabled_retained_context();
+    let week_id = context["weeks"][0]["range"]["week_id"].clone();
+    for requirement in context["requirements"].as_array_mut().unwrap() {
+        if requirement["slot"]["week_id"] == week_id {
+            requirement["attendees"] = json!([]);
+            requirement["shared_hard_requirements"] = json!([]);
+        }
+    }
+    let person = json!({
+        "kind":"guest",
+        "data":{
+            "occasion_id":"oc_00000000000000000000000000000099",
+            "guest_id":"gu_00000000000000000000000000000099"
+        }
+    });
+    let guest = json!({
+        "guest_id":person["data"]["guest_id"],
+        "age_band":"adult",
+        "restrictions":{
+            "kind":"confirmed_none",
+            "data":{"confirmed_at":"2026-12-28T10:00:00Z"}
+        },
+        "portion":{
+            "preset":"regular",
+            "adjustment":{"numerator":"1","denominator":"1"},
+            "meal_overrides":[]
+        }
+    });
+    let selected_slot = context["weeks"][0]["plan"]["selections"][0]["slot"].clone();
+    let cells = context["weeks"][0]["cells"].as_array().unwrap();
+    let target_index = cells
+        .iter()
+        .position(|cell| cell["slot"] == selected_slot)
+        .unwrap();
+    let hosts = context["weeks"][0]["cells"][target_index]["attendee_ids"].clone();
+    context["weeks"][0]["cells"][target_index]["occasion"] = json!({
+        "occasion_id":person["data"]["occasion_id"],
+        "guests":[guest],
+        "host_diner_ids":hosts
+    });
+    context["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] = person.clone();
+    (context, target_index, person)
+}
+
+fn move_guest_occasion(context: &mut Value, from: usize, week: usize, to: usize) {
+    let occasion = context["weeks"][0]["cells"][from]["occasion"].clone();
+    context["weeks"][0]["cells"][from]["occasion"] = Value::Null;
+    context["weeks"][week]["cells"][to]["occasion"] = occasion;
+    context["weeks"][week]["cells"][to]["occasion"]["host_diner_ids"] =
+        context["weeks"][week]["cells"][to]["attendee_ids"].clone();
+}
+
+#[test]
+fn r2_inactive_guest_resolves_only_in_selected_cell_occasion() {
+    let (control, target, _) = retained_guest_context();
+    parse::<PlanningContext>(&control).unwrap();
+    let mut other_cell = control.clone();
+    move_guest_occasion(&mut other_cell, target, 0, (target + 3) % 21);
+    rejected::<PlanningContext>(&other_cell, ErrorCode::ForeignReference);
+    let mut other_week = control;
+    move_guest_occasion(&mut other_week, target, 1, 0);
+    rejected::<PlanningContext>(&other_week, ErrorCode::ForeignReference);
+}
+
+#[test]
+fn r2_inactive_extra_recipient_and_override_keep_scoped_guest_identity() {
+    let (mut extra_control, target, person) = retained_guest_context();
+    let extra_recipe = extra_control["stamp"]["recipe_refs"][1].clone();
+    let mut recipient = extra_control["weeks"][0]["plan"]["selections"][0]["servings"][0].clone();
+    recipient["preset_ref"]["recipe"] = extra_recipe.clone();
+    extra_control["weeks"][0]["plan"]["selections"][0]["extras"] = json!([{
+        "extra_id":"ex_00000000000000000000000000000001",
+        "recipe":extra_recipe,
+        "recipients":[recipient]
+    }]);
+    parse::<PlanningContext>(&extra_control).unwrap();
+    let mut foreign_extra = extra_control;
+    move_guest_occasion(&mut foreign_extra, target, 0, (target + 3) % 21);
+    rejected::<PlanningContext>(&foreign_extra, ErrorCode::ForeignReference);
+
+    let (mut override_control, target, _) = retained_guest_context();
+    override_control["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] =
+        fixture("week-disabled-retained.json")["plan"]["selections"][0]["servings"][0]["person"]
+            .clone();
+    override_control["weeks"][0]["plan"]["selections"][0]["meal_overrides"]["portions"] = json!([{
+        "person":person,
+        "preset":"regular",
+        "adjustment":{"numerator":"1","denominator":"1"}
+    }]);
+    parse::<PlanningContext>(&override_control).unwrap();
+    move_guest_occasion(&mut override_control, target, 0, (target + 3) % 21);
+    rejected::<PlanningContext>(&override_control, ErrorCode::ForeignReference);
+}
+
+#[test]
+fn r2_retained_diner_remains_valid_with_zero_effective_attendees() {
+    let (mut context, target, _) = retained_guest_context();
+    context["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] =
+        fixture("week-disabled-retained.json")["plan"]["selections"][0]["servings"][0]["person"]
+            .clone();
+    move_guest_occasion(&mut context, target, 0, (target + 3) % 21);
+    parse::<PlanningContext>(&context).unwrap();
+}
+
 #[test]
 fn f05_disabled_requirements_may_omit_attendees_but_supplied_people_resolve() {
     let mut context = fixture("planning-context.json");

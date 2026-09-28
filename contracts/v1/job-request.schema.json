@@ -1404,7 +1404,7 @@
     },
     "HttpUrl": {
       "maxLength": 2048,
-      "pattern": "^(?:http://[^\\s\\u0000-\\u001f]{1,2041}|https://[^\\s\\u0000-\\u001f]{1,2040})$",
+      "pattern": "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
       "type": "string"
     },
     "ImageRecord": {
