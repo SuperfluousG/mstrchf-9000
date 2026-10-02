@@ -1,0 +1,255 @@
+[
+  {
+    "id": "SK15-known-zero",
+    "pool": "canonical/pool-SK15.jcs.json",
+    "context": "canonical/context-SK02-value.jcs.json",
+    "evidence": "inputs/ranking-evidence-SK15-zero.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_unavailable": [],
+    "scope": "literal native expectations, no native ranking execution",
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 4,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    }
+  },
+  {
+    "id": "SEL-R1-01-SK15-unknown",
+    "pool": "canonical/pool-SK15.jcs.json",
+    "context": "canonical/context-SK02-value.jcs.json",
+    "evidence": "inputs/ranking-evidence-SK15-unknown.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_unavailable": [
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "literal native expectations, no native ranking execution",
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 4,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    }
+  },
+  {
+    "id": "SK18-expired",
+    "pool": "canonical/pool-SK15.jcs.json",
+    "context": "canonical/context-SK02-value.jcs.json",
+    "evidence": "inputs/ranking-evidence-SK15-zero.json",
+    "evaluated_at": "2026-12-23T12:00:00Z",
+    "expected_unavailable": [
+      {
+        "metric": "purchase_cost",
+        "causes": [
+          {
+            "reason": "expired_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "expired_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "literal native expectations, no native ranking execution",
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    }
+  },
+  {
+    "id": "SK18-noncomparable",
+    "pool": "canonical/pool-SK15.jcs.json",
+    "context": "canonical/context-SK02-value.jcs.json",
+    "evidence": "inputs/ranking-evidence-SK18-noncomparable.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_unavailable": [
+      {
+        "metric": "purchase_cost",
+        "causes": [
+          {
+            "reason": "noncomparable_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "noncomparable_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "literal native expectations, no native ranking execution",
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    }
+  },
+  {
+    "id": "SK18-multiple",
+    "pool": "canonical/pool-SK15.jcs.json",
+    "context": "canonical/context-SK02-value.jcs.json",
+    "evidence": "inputs/ranking-evidence-SK18-multiple.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_unavailable": [
+      {
+        "metric": "purchase_cost",
+        "causes": [
+          {
+            "reason": "expired_evidence",
+            "choices": [
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb"
+            ]
+          },
+          {
+            "reason": "expired_evidence",
+            "choices": [
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "literal native expectations, no native ranking execution",
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    }
+  },
+  {
+    "id": "SEL-R1-02-SK16",
+    "context": "canonical/context-retained.jcs.json",
+    "pool": "canonical/pool-retained.jcs.json",
+    "evidence": "inputs/ranking-evidence-scenario-no-quotes-retained.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_metric_readings": {
+      "ingredient_reuse": {
+        "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 1,
+        "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+      },
+      "recipe_recency_count": {
+        "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 1,
+        "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+      }
+    },
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 2,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 4
+    },
+    "expected_unavailable": [
+      {
+        "metric": "purchase_cost",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "genuine bound contexts; price/waste unavailable rather than symbolic equal-price premise"
+  },
+  {
+    "id": "SEL-R1-02-SK17",
+    "context": "canonical/context-cleared.jcs.json",
+    "pool": "canonical/pool-cleared.jcs.json",
+    "evidence": "inputs/ranking-evidence-scenario-no-quotes-cleared.json",
+    "evaluated_at": "2026-12-21T12:00:00Z",
+    "expected_metric_readings": {
+      "ingredient_reuse": {
+        "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+        "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+      },
+      "recipe_recency_count": {
+        "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+        "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+      }
+    },
+    "expected_scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 0
+    },
+    "expected_unavailable": [
+      {
+        "metric": "purchase_cost",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      },
+      {
+        "metric": "unused_purchase_value",
+        "causes": [
+          {
+            "reason": "missing_evidence",
+            "choices": [
+              "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+              "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "genuine bound contexts; price/waste unavailable rather than symbolic equal-price premise"
+  }
+]

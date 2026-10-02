@@ -1,0 +1,2459 @@
+[
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000065",
+      "revision": "1",
+      "digest": "f97bdd26d4cd2f3d8770b4dc697bceb5ad6d8b1cf58119318684ebdfcdb34f80"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "source_and_rights",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "rights": {
+          "licence_id": "synthetic-personal-only",
+          "licence_url": null,
+          "attribution": "SYNTHETIC author A",
+          "adaptations": [],
+          "distribution": "permitted",
+          "evidence_ids": [
+            "ev_00000000000000000000000000000065"
+          ]
+        },
+        "review": {
+          "kind": "source_review",
+          "actor": "human",
+          "note": "SYNTHETIC source evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_00000000000000000000000000000065"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000066",
+      "revision": "1",
+      "digest": "6100d923c904be0af2d9898b77b4e698e89718a22616800e8e9f5889f1139256"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "quantity",
+      "value": {
+        "ingredients": [
+          {
+            "ingredient_id": "ig_00000000000000000000000000000001",
+            "name": "SYNTHETIC rice",
+            "quantity": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "raw"
+            },
+            "discrete": false,
+            "conversion_evidence": [],
+            "component_id": "co_00000000000000000000000000000001",
+            "step_ids": [
+              1
+            ]
+          }
+        ],
+        "yield": {
+          "servings": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "basis": "Synthetic two-serving yield",
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              }
+            }
+          ]
+        },
+        "review": {
+          "kind": "quantity_review",
+          "actor": "human",
+          "note": "SYNTHETIC quantity evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_00000000000000000000000000000066"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000067",
+      "revision": "1",
+      "digest": "aa2864d71fcfcc336a3549a5bb7e730d32255eabfa54410e5dc535c5018a5584"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "dietary_review",
+      "value": {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000067"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000068",
+      "revision": "1",
+      "digest": "a2fe39084b58fc3d907185462f4caedcd7061e6a45ade72ed6ef4f7b1e2d62d5"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "dietary",
+      "value": {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000068",
+        "review_id": "ev_00000000000000000000000000000067",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000069",
+      "revision": "1",
+      "digest": "cc8b291e55b6ad3a074f916bf6226fa0408e1a70d68a77e514b80b1d52e00037"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "portion",
+      "value": {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000069"
+        ]
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000006a",
+      "revision": "1",
+      "digest": "a5b6cdc487decbb9910116e2d776fb42cc12a2e8a0b16e88d7204224bda2339c"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "storage",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_0000000000000000000000000000006a",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 86400
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000006c",
+      "revision": "1",
+      "digest": "d19614a502b6a7a8c1be4c07d900717c4fcfa9ab0d185a8a450320c0f5bedc0e"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "component_class",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "class": "rice"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000006d",
+      "revision": "1",
+      "digest": "54f8a799b21c362b08e646ac938117b28b1e5292eee5d94fe7551e36708c1325"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "nutrition",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "per_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "protein_g": {
+          "numerator": "10",
+          "denominator": "1"
+        },
+        "energy_kcal": null,
+        "estimated": true
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000006e",
+      "revision": "1",
+      "digest": "0acaf974816809b7e8e5d490b13583eb54b1384a6442f8992ccfdc68aed0bb8a"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000006f",
+      "revision": "1",
+      "digest": "d39f28a32a0f9755f71370d3267a5536224d23777f46449be717d03a463405f4"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000070",
+      "revision": "1",
+      "digest": "0acaf974816809b7e8e5d490b13583eb54b1384a6442f8992ccfdc68aed0bb8a"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000071",
+      "revision": "1",
+      "digest": "d39f28a32a0f9755f71370d3267a5536224d23777f46449be717d03a463405f4"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "2"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000c9",
+      "revision": "1",
+      "digest": "38a024894f51f142bb6f9f72f65c4a2729daddb9d4dd0bd4ceb6a51a2f1df6c9"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "source_and_rights",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "rights": {
+          "licence_id": "synthetic-personal-only",
+          "licence_url": null,
+          "attribution": "SYNTHETIC author A",
+          "adaptations": [],
+          "distribution": "permitted",
+          "evidence_ids": [
+            "ev_000000000000000000000000000000c9"
+          ]
+        },
+        "review": {
+          "kind": "source_review",
+          "actor": "human",
+          "note": "SYNTHETIC source evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_000000000000000000000000000000c9"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000ca",
+      "revision": "1",
+      "digest": "57da9303ae5c25d07d6c7a9280067cf3ad15a89dcd2e7fef87c40fd4a9147289"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "quantity",
+      "value": {
+        "ingredients": [
+          {
+            "ingredient_id": "ig_00000000000000000000000000000001",
+            "name": "SYNTHETIC rice",
+            "quantity": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "raw"
+            },
+            "discrete": false,
+            "conversion_evidence": [],
+            "component_id": "co_00000000000000000000000000000001",
+            "step_ids": [
+              1
+            ]
+          }
+        ],
+        "yield": {
+          "servings": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "basis": "Synthetic two-serving yield",
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              }
+            }
+          ]
+        },
+        "review": {
+          "kind": "quantity_review",
+          "actor": "human",
+          "note": "SYNTHETIC quantity evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_000000000000000000000000000000ca"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000cb",
+      "revision": "1",
+      "digest": "4f5f0bb5f29bd4bb07d31dd3e027418f8c4b6117222f671af8101557e44d1915"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "dietary_review",
+      "value": {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000000cb"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000cc",
+      "revision": "1",
+      "digest": "2a44b0c9f4708e91789251a1c26306cfa20d5ff85f98c8e06248c69863cfb7a1"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "dietary",
+      "value": {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000000cc",
+        "review_id": "ev_000000000000000000000000000000cb",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000cd",
+      "revision": "1",
+      "digest": "10fcd783723e7e8317d6a1777b27f91f60fb0227e82d6280d31254fa65ca32c7"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "portion",
+      "value": {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_000000000000000000000000000000cd"
+        ]
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000ce",
+      "revision": "1",
+      "digest": "ebfbca2e0f3cf4e6cee57347e006e115da3e19a3d271ea935ffd29e947a3b643"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "storage",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000000ce",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 86400
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d0",
+      "revision": "1",
+      "digest": "a8cc182716c21e3dfef8e8fb998bfae8647ed82a9f3653af48f1937a94ea3fe2"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "component_class",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "class": "rice"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d1",
+      "revision": "1",
+      "digest": "c10e9806135a4c50c48d795550bf5576dc76dd12efa7f63897418b1e0db1e5aa"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "nutrition",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "per_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "protein_g": {
+          "numerator": "10",
+          "denominator": "1"
+        },
+        "energy_kcal": null,
+        "estimated": true
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d2",
+      "revision": "1",
+      "digest": "f00dc10e957d9ccef3f600347441d3d37b46f521b1f46af60d8b1e76273c1ca3"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d3",
+      "revision": "1",
+      "digest": "208fca90c21e51025fc24200b2de82079d6c6ccfea15652dfb8dc0df1d26172f"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d4",
+      "revision": "1",
+      "digest": "f00dc10e957d9ccef3f600347441d3d37b46f521b1f46af60d8b1e76273c1ca3"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000000d5",
+      "revision": "1",
+      "digest": "208fca90c21e51025fc24200b2de82079d6c6ccfea15652dfb8dc0df1d26172f"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "10"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000012d",
+      "revision": "1",
+      "digest": "1923ef864e4b77330f40ab81ea060a5c508c44ad686f7963b51d4bca95f88283"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "source_and_rights",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "rights": {
+          "licence_id": "synthetic-personal-only",
+          "licence_url": null,
+          "attribution": "SYNTHETIC author A",
+          "adaptations": [],
+          "distribution": "permitted",
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        },
+        "review": {
+          "kind": "source_review",
+          "actor": "human",
+          "note": "SYNTHETIC source evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_0000000000000000000000000000012d"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000012e",
+      "revision": "1",
+      "digest": "33abd8e77e6dba571df3945a8333e14916cdc28f28daca87970420dc52b4d3b1"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "quantity",
+      "value": {
+        "ingredients": [
+          {
+            "ingredient_id": "ig_00000000000000000000000000000002",
+            "name": "SYNTHETIC beans",
+            "quantity": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "raw"
+            },
+            "discrete": false,
+            "conversion_evidence": [],
+            "component_id": "co_00000000000000000000000000000001",
+            "step_ids": [
+              1
+            ]
+          }
+        ],
+        "yield": {
+          "servings": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "basis": "Synthetic two-serving yield",
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              }
+            }
+          ]
+        },
+        "review": {
+          "kind": "quantity_review",
+          "actor": "human",
+          "note": "SYNTHETIC quantity evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_0000000000000000000000000000012e"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000012f",
+      "revision": "1",
+      "digest": "5c1d12de03b65b8e61443585102ef0bb606f2389296dfa6546e4cbae74283cea"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "dietary_review",
+      "value": {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_0000000000000000000000000000012f"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000130",
+      "revision": "1",
+      "digest": "9c14e4abd3b26ac8d61134435eabce5f74adef79698582b1f2712deba8560d75"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "dietary",
+      "value": {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000130",
+        "review_id": "ev_0000000000000000000000000000012f",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000131",
+      "revision": "1",
+      "digest": "112195d2de5e4a4c1bc1a4ebf4a0ba46c6c8e701140ad7af1d2b6d39852cad01"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "portion",
+      "value": {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000131"
+        ]
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000132",
+      "revision": "1",
+      "digest": "bec0fdbecedfc59f3ec0dafbe9ffd90fd42b90de5dbebbef8a0e68e057490db6"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "storage",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000132",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000134",
+      "revision": "1",
+      "digest": "5f4b063f4f7664d7ab2ccc12284ee2c816fb257937ab6bad7742c992fecf1b66"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "component_class",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "class": "general"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000135",
+      "revision": "1",
+      "digest": "fd7784b5e73bdf3a166ea52432ca58bfdcf89726980f4c9c8963c28bfcba4424"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "nutrition",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "per_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "protein_g": {
+          "numerator": "20",
+          "denominator": "1"
+        },
+        "energy_kcal": null,
+        "estimated": true
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000136",
+      "revision": "1",
+      "digest": "1fb801328de7bb53e0a40f6ca8cabe984763019909bc922d732858f9fd7aa3b0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000137",
+      "revision": "1",
+      "digest": "b0a4e30115c7057cd67b8ee0cca03c8d46806e76bbe695955f4d5b213fb7802f"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000138",
+      "revision": "1",
+      "digest": "1fb801328de7bb53e0a40f6ca8cabe984763019909bc922d732858f9fd7aa3b0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000139",
+      "revision": "1",
+      "digest": "b0a4e30115c7057cd67b8ee0cca03c8d46806e76bbe695955f4d5b213fb7802f"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000191",
+      "revision": "1",
+      "digest": "acaa29fdc4967f66296800efd849a3060081980371b7c1dc621aadf1eb27cb5e"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "source_and_rights",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "rights": {
+          "licence_id": "synthetic-personal-only",
+          "licence_url": null,
+          "attribution": "SYNTHETIC author A",
+          "adaptations": [],
+          "distribution": "permitted",
+          "evidence_ids": [
+            "ev_00000000000000000000000000000191"
+          ]
+        },
+        "review": {
+          "kind": "source_review",
+          "actor": "human",
+          "note": "SYNTHETIC source evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_00000000000000000000000000000191"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000192",
+      "revision": "1",
+      "digest": "7ac2a1a89e6e9b7800434f0ee7d6a7b74a35aca13ea632c0b59b8e6ac5e31ad0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "quantity",
+      "value": {
+        "ingredients": [
+          {
+            "ingredient_id": "ig_00000000000000000000000000000003",
+            "name": "SYNTHETIC lentils",
+            "quantity": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "raw"
+            },
+            "discrete": false,
+            "conversion_evidence": [],
+            "component_id": "co_00000000000000000000000000000001",
+            "step_ids": [
+              1
+            ]
+          }
+        ],
+        "yield": {
+          "servings": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "basis": "Synthetic two-serving yield",
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              }
+            }
+          ]
+        },
+        "review": {
+          "kind": "quantity_review",
+          "actor": "human",
+          "note": "SYNTHETIC quantity evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_00000000000000000000000000000192"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000193",
+      "revision": "1",
+      "digest": "f00258a1bfd6e4a7e60a18599a7af27b51300f27969a956ac2b23a253c4e5fa9"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "dietary_review",
+      "value": {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000193"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000194",
+      "revision": "1",
+      "digest": "f0150cfe3adbf668ceefecd3aca13e939992477dc6d177368bfc4d75c34bbe13"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "dietary",
+      "value": {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000194",
+        "review_id": "ev_00000000000000000000000000000193",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000195",
+      "revision": "1",
+      "digest": "10e9969c541cc91e78150f72a5e99e29b65e4b0014f8bb27786cbcb4ff8913e9"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "portion",
+      "value": {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000195"
+        ]
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000196",
+      "revision": "1",
+      "digest": "eb4ed3ae0b8525a448e6ed5034905e6bf5cf95927067b79440a6b0fcca4a602c"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "storage",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000196",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000198",
+      "revision": "1",
+      "digest": "6e4ace65cbb7b29f4093dbd4229837701e1ffb81bd2e9136933365d4ff9b3812"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "component_class",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "class": "general"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000199",
+      "revision": "1",
+      "digest": "31f8d12011535fcd3e9cf9d060de1d8d702e643e5fa8b2d9d4b51c163f555e81"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "nutrition",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "per_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "protein_g": {
+          "numerator": "40",
+          "denominator": "1"
+        },
+        "energy_kcal": null,
+        "estimated": true
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000019a",
+      "revision": "1",
+      "digest": "8fa3425202dcf45c2180fb8f062d7432bc23c4e7f8d56ff5523f48b8ef97947b"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000019b",
+      "revision": "1",
+      "digest": "85775a63bd8c291547d01c9b903e0f0ca7dbb637e1f2306d50ce14df275a5e87"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000019c",
+      "revision": "1",
+      "digest": "8fa3425202dcf45c2180fb8f062d7432bc23c4e7f8d56ff5523f48b8ef97947b"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000019d",
+      "revision": "1",
+      "digest": "85775a63bd8c291547d01c9b903e0f0ca7dbb637e1f2306d50ce14df275a5e87"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000003",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001f5",
+      "revision": "1",
+      "digest": "2cb995f47814fe981fa59e6e69ac5d0cd1780e0a0448c352492ccd9f2a39549b"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "source_and_rights",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "rights": {
+          "licence_id": "synthetic-personal-only",
+          "licence_url": null,
+          "attribution": "SYNTHETIC author A",
+          "adaptations": [],
+          "distribution": "permitted",
+          "evidence_ids": [
+            "ev_000000000000000000000000000001f5"
+          ]
+        },
+        "review": {
+          "kind": "source_review",
+          "actor": "human",
+          "note": "SYNTHETIC source evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_000000000000000000000000000001f5"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001f6",
+      "revision": "1",
+      "digest": "59a326c6d54895de9e292cfcf04013519460a41076dd8c88dc232906313170a9"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "quantity",
+      "value": {
+        "ingredients": [
+          {
+            "ingredient_id": "ig_00000000000000000000000000000004",
+            "name": "SYNTHETIC chicken",
+            "quantity": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "raw"
+            },
+            "discrete": false,
+            "conversion_evidence": [],
+            "component_id": "co_00000000000000000000000000000001",
+            "step_ids": [
+              1
+            ]
+          }
+        ],
+        "yield": {
+          "servings": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "basis": "Synthetic two-serving yield",
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              }
+            }
+          ]
+        },
+        "review": {
+          "kind": "quantity_review",
+          "actor": "human",
+          "note": "SYNTHETIC quantity evidence",
+          "at": "2026-10-02T12:00:00Z",
+          "evidence_id": "ev_000000000000000000000000000001f6"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001f7",
+      "revision": "1",
+      "digest": "bdfd75a239852d7cf381df0830a38e20e9769168daff0f156a8a64e29c04cc73"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "dietary_review",
+      "value": {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000001f7"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001f8",
+      "revision": "1",
+      "digest": "ad5a3f75403803409fe36d09965f04fb71ba4cb3d778f813c8b8dea47e5503e2"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "dietary",
+      "value": {
+        "verdict": "conflicting",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000001f8",
+        "review_id": "ev_000000000000000000000000000001f7",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001f9",
+      "revision": "1",
+      "digest": "267710bade527413c8a27a7e59db5d1154093a647648f7a557841db0653cab55"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "portion",
+      "value": {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_000000000000000000000000000001f9"
+        ]
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001fa",
+      "revision": "1",
+      "digest": "978ee0fe25a0e92163c68c8de7937b9fa87fbb65b9c52186b44a806024142f57"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "storage",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000001fa",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001fc",
+      "revision": "1",
+      "digest": "db7eb56388714b57b5bec70297656a78918db2caca8c48711734455264d34c67"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "component_class",
+      "value": {
+        "component_id": "co_00000000000000000000000000000001",
+        "class": "general"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001fd",
+      "revision": "1",
+      "digest": "572f43e9229bbe07739ec1824b146333b4ad63cf74bfe04c4f912724130e0354"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "nutrition",
+      "value": {
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "per_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "protein_g": {
+          "numerator": "50",
+          "denominator": "1"
+        },
+        "energy_kcal": null,
+        "estimated": true
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001fe",
+      "revision": "1",
+      "digest": "0830b4a79ea203a53683abefa43070d199f19999cb0010ca5e236c37b3f4a466"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000001ff",
+      "revision": "1",
+      "digest": "a413c2a97a41b3bdb321b5f6a3538dbd0e163d89a9eee244a647f43e16195ff0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000200",
+      "revision": "1",
+      "digest": "0830b4a79ea203a53683abefa43070d199f19999cb0010ca5e236c37b3f4a466"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "categories",
+      "value": [
+        "synthetic-dinner"
+      ],
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000201",
+      "revision": "1",
+      "digest": "a413c2a97a41b3bdb321b5f6a3538dbd0e163d89a9eee244a647f43e16195ff0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "recipe_id": "rc_00000000000000000000000000000004",
+        "revision": "1"
+      },
+      "claim": "whole_food",
+      "value": true,
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000003e9",
+      "revision": "1",
+      "digest": "e635d8e4cb0712522e4cda23b97ae3bdaeff77ae372371b1941b38ee9de2c1c3"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000003ea",
+      "revision": "1",
+      "digest": "3f2f82a719d8b1dcd4285f2f522516112de0eb59210e39b5a393ffdefd5101c9"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000003eb",
+      "revision": "1",
+      "digest": "cfc51ee281a852993613fe66886da7cbfbaec97e9a3b2f5d8ce46405ad88462b"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000044d",
+      "revision": "1",
+      "digest": "98d57113c2125ff9837e23d0e62ff20b5d9f3e714bba6398df1059f7bbcb8850"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000044e",
+      "revision": "1",
+      "digest": "2c7e61a0eac298cd6c61d2eb8350bfa184bd98ced8b662363077ad8504bb164f"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_0000000000000000000000000000044f",
+      "revision": "1",
+      "digest": "46ac6d790111571c3979e45829b839818727ecac34e310bfc42b59cb143e27d6"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "59da1b338206ded0fa4e3b8a6c95a62c1c971565c829f109b3f35b53222e7729",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "5a4a06a9b60eaaa50893a64160062ad05c2044a0023603740f0723304e278dd2",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007d1",
+      "revision": "1",
+      "digest": "79d6f4e09386ebfbe60ee233a1292764ba0ac7191be9e4a72bac532620cf8d2d"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "d7d8ea255687dc9c2e278646068c41df2147a8032924a1cc08c82c51401f8f2c",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "1c7c7c33b5a469ba89c50ad7bd02fe9c7e7e64f524277bc173a895509843e98a",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007d2",
+      "revision": "1",
+      "digest": "fe32f582d34dcd16adf6af9f32084a208d9c64b1ed0c44e4dc09e18a7578f883"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "d7d8ea255687dc9c2e278646068c41df2147a8032924a1cc08c82c51401f8f2c",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "1c7c7c33b5a469ba89c50ad7bd02fe9c7e7e64f524277bc173a895509843e98a",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007d3",
+      "revision": "1",
+      "digest": "3eda828d600c3a9dd4a87c0343baec900b9eb4a3272ef9de6ffbdcf85d6b03b7"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "d7d8ea255687dc9c2e278646068c41df2147a8032924a1cc08c82c51401f8f2c",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "1c7c7c33b5a469ba89c50ad7bd02fe9c7e7e64f524277bc173a895509843e98a",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007db",
+      "revision": "1",
+      "digest": "f66d59f0be2c3e8282d5d51f93cac30741ca493fc507e26549da1c57befb82be"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "d0bfd9f7428b1454b982db3c0844d42e92f493273865d998364f9cdd8002cfa6",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "b9afcf81541506c4c3f2a1d8478c28e743e0a0ac9275d6cb1a025e14bea03236",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007dc",
+      "revision": "1",
+      "digest": "d425286a8050b1671bb7771bafd468fc8afb032b0a64668f347c77d9967864ba"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "d0bfd9f7428b1454b982db3c0844d42e92f493273865d998364f9cdd8002cfa6",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "b9afcf81541506c4c3f2a1d8478c28e743e0a0ac9275d6cb1a025e14bea03236",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007dd",
+      "revision": "1",
+      "digest": "bf6f6964f7567f7a1026037073252c8940e289757e8bb1a601cee6ce30d4b189"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "d0bfd9f7428b1454b982db3c0844d42e92f493273865d998364f9cdd8002cfa6",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "b9afcf81541506c4c3f2a1d8478c28e743e0a0ac9275d6cb1a025e14bea03236",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007e5",
+      "revision": "1",
+      "digest": "ba9a6bb5dfad0a492f5b21ce8b4174fe8dd26eac9ab196234505f2ef9aa4dfa0"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007e6",
+      "revision": "1",
+      "digest": "cd8465e08195cee6b502517f156f4b9a8c52718d7fe05cb5d6f9b4409c46f158"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007e7",
+      "revision": "1",
+      "digest": "ee86867ad43fe4547edeefc2b58ecf10050987bcbff77276b0262344f3f6d4d2"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007ef",
+      "revision": "1",
+      "digest": "39d319bc1e1fbda9fd775a0029cdabf5685f1cf8222af7433ee0ae35062ac6c5"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+        "baseline_context_digest": "27d35af7dc50fc2c4760e6758ea0d31a87237672ddbf39c17bc89765923298a0",
+        "scenario_plan_digest": "58b300da99bca488a74cfe2d2da6c8ce30b17d72c4dc65365114ad1b83ce46d4",
+        "comparison_key": "298e124ce219cfaaf16e4257ee723f25ebdec3e4473662293516103e1bb247a7",
+        "total_purchase_pence": {
+          "numerator": "700",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007f0",
+      "revision": "1",
+      "digest": "0aa657d5ba5016e6e0661321b4dc37097253794e8fc51a07d80cc61545d7d316"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "27d35af7dc50fc2c4760e6758ea0d31a87237672ddbf39c17bc89765923298a0",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "298e124ce219cfaaf16e4257ee723f25ebdec3e4473662293516103e1bb247a7",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_000000000000000000000000000007f1",
+      "revision": "1",
+      "digest": "e2fe68ee25e8e8a3e681c75201c51f42b084fcc20051b90c26a186a81e586ec3"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "27d35af7dc50fc2c4760e6758ea0d31a87237672ddbf39c17bc89765923298a0",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "298e124ce219cfaaf16e4257ee723f25ebdec3e4473662293516103e1bb247a7",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        }
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000bb9",
+      "revision": "1",
+      "digest": "791ef27f5853db2071cc96d0d5f250ea9dcd66e25f002c81234bfcac63f48308"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null,
+        "kind": "estimated_purchase",
+        "observed_at": "2026-12-21T12:00:00Z",
+        "valid_until": "2026-12-22T12:00:00Z"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000bba",
+      "revision": "1",
+      "digest": "7ab7420bb9f5b46445d490bed19934b8001bde87291c0b30c06ca8f51d6a52c2"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null,
+        "kind": "estimated_purchase",
+        "observed_at": "2026-12-21T12:00:00Z",
+        "valid_until": "2026-12-22T12:00:00Z"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000bbb",
+      "revision": "1",
+      "digest": "b30ea649a42f1e757b09a2c21a74119dbeb76ca5469c8c8f08c2dba140a10420"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "aa53592c8fb83ddb450f568f74d593adaab6d900601070658f94af54f1c2cfe9",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "kind": "estimated_purchase",
+        "observed_at": "2026-12-21T12:00:00Z",
+        "valid_until": "2026-12-22T12:00:00Z"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000bbc",
+      "revision": "1",
+      "digest": "791ef27f5853db2071cc96d0d5f250ea9dcd66e25f002c81234bfcac63f48308"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "209b5703f8790f5bd9ea2d7844c95aca78ca3edc4733551b43faabd25935d0f8",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "300",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": null,
+        "kind": "estimated_purchase",
+        "observed_at": "2026-12-21T12:00:00Z",
+        "valid_until": "2026-12-22T12:00:00Z"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  },
+  {
+    "pin": {
+      "evidence_id": "ev_00000000000000000000000000000bbd",
+      "revision": "1",
+      "digest": "ad8dc7b6ea232397704de378e2ff56d1d3c9fd1f3e84c384c0518e3c9c75fa20"
+    },
+    "material": {
+      "synthetic": true,
+      "recipe_identity": {
+        "scenario": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee"
+      },
+      "claim": "synthetic_purchase_estimate",
+      "value": {
+        "synthetic": true,
+        "choice_digest": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+        "baseline_context_digest": "3168e597d15bbcd36ef1017ea8495dd7167afb23494ea1538310114705caf370",
+        "scenario_plan_digest": "e8ad0cf9cff8fe69531e6e36fb078ff15be42bfa27f7b1ce955de37915f7feee",
+        "comparison_key": "c2390ee1044745c5b1dbbbdd8e733c15401dee19247d917e2356eabff225e281",
+        "total_purchase_pence": {
+          "numerator": "500",
+          "denominator": "1"
+        },
+        "unused_purchase_value_pence": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "kind": "estimated_purchase",
+        "observed_at": "2026-12-20T12:00:00Z",
+        "valid_until": "2026-12-21T11:59:59Z"
+      },
+      "recorded_at": "2026-12-21T12:00:00Z"
+    }
+  }
+]
