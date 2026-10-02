@@ -241,7 +241,7 @@ export type MealOverrides = { portions: Array<PersonPortionOverride>, eat_by: Zo
 
 export type MealPortionOverride = { meal_type: MealType, preset: PortionPresetName, adjustment: PositiveRational, };
 
-export type MealRequirements = { slot: SlotId, enabled: boolean, location: MealLocation, attendees: Array<AttendeeRequirement>, shared_hard_requirements: Array<HardRequirement>, equipment: Array<EquipmentCode>, mobility: Mobility, eat_by: ZonedMoment, preferred_hands_on_minutes: number, leftovers_allowed: boolean, };
+export type MealRequirements = { slot: SlotId, enabled: boolean, location: MealLocation, attendees: Array<AttendeeRequirement>, shared_hard_requirements: Array<HardRequirement>, equipment: Array<EquipmentCode>, mobility: Mobility, eat_by: ZonedMoment | null, preferred_hands_on_minutes: number, leftovers_allowed: boolean, };
 
 export type MealRequirementsDocumentV1 = { schema_version: SchemaVersion, meal_requirements: MealRequirements, };
 

@@ -133,3 +133,71 @@ fn diet_exact_code() {
         ErrorCode::UnknownField
     );
 }
+#[test]
+fn inactive_exact_fragment_and_both_privacy_gates() {
+    let r = request("positive_inactive_request.json");
+    let mut fragment = serde_json::to_value(&r.payload).unwrap();
+    fragment["data"]["requirements"]
+        .as_array_mut()
+        .unwrap()
+        .truncate(1);
+    let b = bundle(r, fragment);
+    validate_outbound(&b, &policy(true)).unwrap();
+    assert_eq!(
+        validate_outbound(&b, &policy(false)).unwrap_err().code,
+        ErrorCode::PrivacyDenied
+    );
+    let mut ai_off = policy(true);
+    ai_off.use_ai_features = false;
+    assert_eq!(
+        validate_outbound(&b, &ai_off).unwrap_err().code,
+        ErrorCode::PrivacyDenied
+    );
+    let mut out_of_scope = b.clone();
+    if let ActionScope::Plan { slots, .. } = &mut out_of_scope.request.scope {
+        slots.0.remove(0);
+    }
+    out_of_scope.request.input_digest =
+        input_digest(&RequestMaterial::from(&out_of_scope.request)).unwrap();
+    assert_eq!(
+        validate_outbound(&out_of_scope, &policy(true))
+            .unwrap_err()
+            .code,
+        ErrorCode::ScopeViolation
+    );
+}
+#[test]
+fn rehashed_deadline_and_activity_changes_are_not_exact_fragments() {
+    let active = request("job-request-complete-noop.json");
+    for mode in 0..3 {
+        let mut parent = active.clone();
+        let mut fragment = serde_json::to_value(&active.payload).unwrap();
+        let requirement = &mut fragment["data"]["requirements"][0];
+        match mode {
+            0 => {
+                requirement["eat_by"]["local_time"] = json!("19:00:00");
+                requirement["eat_by"]["instant"] = json!("2026-12-28T19:00:00Z");
+            }
+            1 => {
+                requirement["enabled"] = json!(false);
+                requirement["eat_by"] = Value::Null;
+            }
+            _ => {
+                let JobPayload::PersonalisedPlan { requirements, .. } = &mut parent.payload else {
+                    panic!("fixture premise")
+                };
+                requirements.0[0].enabled = false;
+                requirements.0[0].eat_by = Nullable(None);
+            }
+        }
+        // Both fragments have legal shape/semantics in isolation. Exact record
+        // equality, not merely the slot or freshly recomputed hash, grants scope.
+        parse_document::<JobPayload>(&serde_json::to_vec(&fragment).unwrap()).unwrap();
+        let b = bundle(parent, fragment);
+        assert_eq!(
+            validate_outbound(&b, &policy(true)).unwrap_err().code,
+            ErrorCode::ScopeViolation,
+            "mode={mode}"
+        );
+    }
+}

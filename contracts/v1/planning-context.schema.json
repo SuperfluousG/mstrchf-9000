@@ -1485,7 +1485,7 @@
           "$ref": "#/$defs/Array_AttendeeRequirement_0_64"
         },
         "eat_by": {
-          "$ref": "#/$defs/ZonedMoment"
+          "$ref": "#/$defs/Nullable_ZonedMoment"
         },
         "enabled": {
           "type": "boolean"
