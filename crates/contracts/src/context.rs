@@ -754,6 +754,9 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
     c.requirements
         .validate_shape()
         .map_err(crate::parse::shape_error)?;
+    c.recipes
+        .validate_shape()
+        .map_err(crate::parse::shape_error)?;
     validate_stamp(&c.stamp)?;
     require(
         c.stamp.household_revision == c.household.revision

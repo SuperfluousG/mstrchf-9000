@@ -87,6 +87,12 @@ pub fn validate_request_shape(r: &JobRequestV1) -> Result<(), DomainError> {
             .validate_shape()
             .map_err(crate::parse::shape_error)?;
     }
+    if let JobPayload::GenericCatalogue { public_recipes, .. } = &r.payload {
+        // Validate the embedded children, never recursively validate this request.
+        public_recipes
+            .validate_shape()
+            .map_err(crate::parse::shape_error)?;
+    }
     validate_stamp(&r.context_stamp)?;
     if r.created_at.0 >= r.expires_at.0 {
         return Err(refuse(ErrorCode::InvalidValue, "/expires_at"));

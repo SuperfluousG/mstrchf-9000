@@ -254,6 +254,108 @@ fn rebind(context: &mut Value) {
     }).collect());
 }
 
+fn invalid_local_recipe_fields() -> [(&'static str, Value); 4] {
+    [
+        ("/reused_inputs/0/planned_reheats", json!(2)),
+        (
+            "/components/0/production/data/completion_prep_id",
+            json!(128),
+        ),
+        (
+            "/reused_inputs/0/evidence_ids",
+            json!(["ev_00000000000000000000000000000999"]),
+        ),
+        ("/reused_inputs/0/step_ids", json!([256])),
+    ]
+}
+
+#[test]
+fn fcr_r1_direct_context_checks_recipe_children_before_cross_record_validation() {
+    let good = catalogue(vec![
+        fixture("recipe"),
+        fixture("wire-addition-only-recipe"),
+    ]);
+    let typed: PlanningContext = parse(&good).unwrap();
+    validate_context(&typed).unwrap();
+    let mut accepted = Vec::new();
+    for (path, value) in invalid_local_recipe_fields() {
+        let mut bad = good.clone();
+        *bad["recipes"][1].pointer_mut(path).unwrap() = value;
+        rebind(&mut bad);
+        let typed: PlanningContext = serde_json::from_value(bad.clone()).unwrap();
+        for (recipe, reference) in typed.recipes.iter().zip(typed.stamp.recipe_refs.iter()) {
+            assert_eq!(recipe_digest(recipe).unwrap(), reference.digest);
+        }
+        let child_errors = typed.recipes.validate_shape().unwrap_err();
+        assert!(parse::<PlanningContext>(&bad).is_err(), "{path}");
+        match validate_context(&typed) {
+            Ok(()) => accepted.push(path),
+            Err(errors) => assert_eq!(errors, child_errors, "{path}"),
+        }
+    }
+    assert!(
+        accepted.is_empty(),
+        "direct context accepted invalid recipes: {accepted:?}"
+    );
+}
+
+fn bind_catalogue_request(request: &mut Value) {
+    request["context_stamp"]["recipe_refs"] = Value::Array(request["payload"]["data"]["public_recipes"].as_array().unwrap().iter().map(|recipe| {
+        json!({"recipe_id":recipe["recipe_id"],"revision":recipe["revision"],"digest":canonical_digest(recipe).unwrap().0})
+    }).collect());
+    let typed: JobRequestV1 = serde_json::from_value(request.clone()).unwrap();
+    request["input_digest"] = json!(input_digest(&RequestMaterial::from(&typed)).unwrap().0);
+}
+
+#[test]
+fn fcr_r1_direct_catalogue_request_checks_recipe_children_before_hashing() {
+    let mut good: Value = serde_json::from_slice(
+        &std::fs::read(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/contracts/ruling004-current--job-request.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    good["payload"]["data"]["public_recipes"] =
+        json!([fixture("recipe"), fixture("wire-addition-only-recipe")]);
+    bind_catalogue_request(&mut good);
+    let valid: JobRequestV1 = parse(&good).unwrap();
+    validate_request_shape(&valid).unwrap();
+    let mut accepted = Vec::new();
+    for (path, value) in invalid_local_recipe_fields() {
+        let mut bad = good.clone();
+        *bad["payload"]["data"]["public_recipes"][1]
+            .pointer_mut(path)
+            .unwrap() = value;
+        bind_catalogue_request(&mut bad);
+        let typed: JobRequestV1 = serde_json::from_value(bad.clone()).unwrap();
+        assert_eq!(
+            typed.input_digest,
+            input_digest(&RequestMaterial::from(&typed)).unwrap()
+        );
+        let JobPayload::GenericCatalogue { public_recipes, .. } = &typed.payload else {
+            panic!("catalogue fixture")
+        };
+        for (recipe, reference) in public_recipes
+            .iter()
+            .zip(typed.context_stamp.recipe_refs.iter())
+        {
+            assert_eq!(recipe_digest(recipe).unwrap(), reference.digest);
+        }
+        let child_errors = public_recipes.validate_shape().unwrap_err();
+        assert!(parse::<JobRequestV1>(&bad).is_err(), "{path}");
+        match validate_request_shape(&typed) {
+            Ok(()) => accepted.push(path),
+            Err(error) => assert_eq!(error.issues.0, child_errors, "{path}"),
+        }
+    }
+    assert!(
+        accepted.is_empty(),
+        "direct catalogue accepted invalid recipes: {accepted:?}"
+    );
+}
+
 #[test]
 fn catalogue_resolves_exact_sources_components_and_dependency_closure() {
     let base = catalogue(vec![
