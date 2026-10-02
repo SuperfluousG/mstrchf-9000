@@ -1,7 +1,8 @@
 {
-  "source_manifest_sha256": "f615a735aeb60b35794308f93045d366346226609d445ddd6cf23054f215c36a",
-  "source": "loop/001/food-supplement-vectors/native-v3",
-  "status": "Wire-only reference bytes. Independent reviewer found omitted skipped-slot rows in v3 PlanningContexts; full v3 semantic acceptance is blocked pending corrected pack. These copies do not claim valid complete contexts or native derivation acceptance.",
+  "source_manifest_sha256": "ba41e5af3fab492d243696082f4826b165a5f72fe0dcb1069f71abe4b53ebede",
+  "source": "loop/001/food-supplement-vectors/native-v4",
+  "acceptance": "loop/001/food-vector-review/acceptance-v4.md",
+  "status": "Root accepted independent expected-vector evidence after clean same-reviewer R2; synthetic premises remain synthetic. This replaces only the working copy of v3 wire fixtures; original v3 remains historical and unaccepted.",
   "vectors": [
     {
       "id": "recipe",
@@ -15,6 +16,17 @@
       "preimage": "recipe.canonical.json"
     },
     {
+      "id": "prior-saved-basis",
+      "type": "SavedFoodBasis",
+      "classification": "positive_synthetic_premise",
+      "domain": "mstrchf-saved-food-basis-r3",
+      "omit_outer_field": null,
+      "sha256": "46c3679ae65f730c6b75837b7c61df78d278d791005566bfa4a0d2b5c2eea3f9",
+      "bytes": 28407,
+      "input": "prior-saved-basis.input.json",
+      "preimage": "prior-saved-basis.canonical.json"
+    },
+    {
       "id": "subject-plan-input",
       "type": "PlanInputMaterial",
       "classification": "positive_synthetic_premise",
@@ -26,12 +38,23 @@
       "preimage": "subject-plan-input.canonical.json"
     },
     {
+      "id": "subject-saved-basis",
+      "type": "SavedFoodBasis",
+      "classification": "positive_synthetic_premise",
+      "domain": "mstrchf-saved-food-basis-r3",
+      "omit_outer_field": null,
+      "sha256": "437408a9ac8581b1d92e28292a0fc256587d27e5e2bdb4b93a81c6fc5c222caf",
+      "bytes": 35723,
+      "input": "subject-saved-basis.input.json",
+      "preimage": "subject-saved-basis.canonical.json"
+    },
+    {
       "id": "subject-derived",
       "type": "DerivedMaterial",
       "classification": "positive_synthetic_premise",
       "domain": null,
       "omit_outer_field": null,
-      "sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
       "bytes": 6620,
       "input": "subject-derived.input.json",
       "preimage": "subject-derived.canonical.json"
@@ -53,7 +76,7 @@
       "classification": "positive_synthetic_premise",
       "domain": null,
       "omit_outer_field": "digest",
-      "sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
       "bytes": 6620,
       "input": "wire-derived-plan.input.json",
       "preimage": "wire-derived-plan.canonical.json"

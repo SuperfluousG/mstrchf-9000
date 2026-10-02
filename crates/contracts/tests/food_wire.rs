@@ -5,7 +5,7 @@ fn fixture(id: &str) -> Value {
     serde_json::from_slice::<Value>(
         &std::fs::read(
             std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/contracts/ruling004-v3")
+                .join("../../tests/fixtures/contracts/ruling004-v4")
                 .join(format!("{id}.input.json")),
         )
         .unwrap(),
@@ -36,8 +36,44 @@ fn complete_independent_wire_vectors_decode_and_hash() {
     assert_eq!(DerivedMaterial::from(&plan), material);
     assert_eq!(
         derived_digest(&material).unwrap().0,
-        "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3"
+        "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff"
     );
+}
+
+#[test]
+fn accepted_v4_historical_contexts_are_complete_and_omissions_refuse() {
+    for (id, active) in [("prior-saved-basis", 1), ("subject-saved-basis", 2)] {
+        // Exact accepted R3 fields: no compatibility stripping, repair or rehashing.
+        let context = fixture(id)["context"].clone();
+        let complete: PlanningContext = parse(&context).unwrap();
+        assert_eq!(complete.requirements.len(), 21);
+        assert_eq!(
+            complete.requirements.iter().filter(|r| r.enabled).count(),
+            active
+        );
+        assert!(
+            complete
+                .requirements
+                .iter()
+                .filter(|r| !r.enabled)
+                .all(|r| r.eat_by.0.is_none())
+        );
+        validate_context(&complete).unwrap();
+        let mut omitted = context;
+        omitted["requirements"]
+            .as_array_mut()
+            .unwrap()
+            .retain(|r| r["enabled"] == true);
+        let error = parse::<PlanningContext>(&omitted).unwrap_err();
+        assert!(error.issues.iter().any(
+            |issue| issue.code == ErrorCode::MissingReference && issue.path == "/requirements"
+        ));
+        let omitted: PlanningContext = serde_json::from_value(omitted).unwrap();
+        let issues = validate_context(&omitted).unwrap_err();
+        assert!(issues.iter().any(
+            |issue| issue.code == ErrorCode::MissingReference && issue.path == "/requirements"
+        ));
+    }
 }
 
 #[test]
@@ -343,13 +379,13 @@ fn independent_preimages_and_original_fixture_bytes_remain_pinned() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../");
     let fixtures = root.join("tests/fixtures/contracts");
     let manifest: Value = serde_json::from_slice(
-        &std::fs::read(fixtures.join("ruling004-v3/provenance.json")).unwrap(),
+        &std::fs::read(fixtures.join("ruling004-v4/provenance.json")).unwrap(),
     )
     .unwrap();
     for row in manifest["vectors"].as_array().unwrap() {
         let bytes = std::fs::read(
             fixtures
-                .join("ruling004-v3")
+                .join("ruling004-v4")
                 .join(row["preimage"].as_str().unwrap()),
         )
         .unwrap();
@@ -358,6 +394,9 @@ fn independent_preimages_and_original_fixture_bytes_remain_pinned() {
         let mut material = value;
         if let Some(key) = row["omit_outer_field"].as_str() {
             material.as_object_mut().unwrap().remove(key);
+        }
+        if let Some(domain) = row["domain"].as_str() {
+            material = json!({"domain":domain,"material":material});
         }
         assert_eq!(canonical_bytes(&material).unwrap(), bytes);
     }
