@@ -348,6 +348,14 @@ pub(crate) fn occurrences(
                 .attendees
                 .0
                 .retain(|a| extra.recipients.iter().any(|v| v.person == a.person));
+            let mut union = std::collections::BTreeMap::new();
+            for attendee in &extra_meal.attendees.0 {
+                for requirement in &attendee.hard_requirements.0 {
+                    union.insert(canonical_bytes(requirement)?, requirement.clone());
+                }
+            }
+            crate::eligibility::bound(union.len(), 0, 64, "/extra/requirements")?;
+            extra_meal.shared_hard_requirements = BoundedVec(union.into_values().collect());
             let mut overrides = s.meal_overrides.clone();
             overrides
                 .portions
