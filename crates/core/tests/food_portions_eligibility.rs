@@ -16,7 +16,7 @@ fn reference(r: &RecipeRevision) -> RecipeRef {
 }
 fn recipe() -> RecipeRevision {
     let mut r: RecipeRevision = parse_document(include_bytes!(
-        "../../../tests/fixtures/food/admission/complete-synthetic.json"
+        "../../../tests/fixtures/food/admission/ruling004-current--complete-synthetic.json"
     ))
     .unwrap();
     r.scaling = ScalingPolicy::Linear {

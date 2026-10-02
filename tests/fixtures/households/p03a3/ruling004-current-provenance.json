@@ -1,0 +1,11 @@
+{
+  "source": "selected-week.json",
+  "source_sha256": "f8234269fc0c95bf8356ad5830345dd1042e45a85d6c8d49a65e8f48ddd97b51",
+  "current": "ruling004-current--selected-week.json",
+  "current_sha256": "c16d3a69fada0efe17c452f343f5e32e8ef1a82299a6101b16589ca4df169f9d",
+  "change": "One explicit production_servings=2/1 commitment for two selected 1/1 diners; every existing JSON value unchanged.",
+  "authority": "Root ruling004 synthetic consumer reconciliation, not a production default.",
+  "source_lf_sha256": "0013f115d027938548c093abd452705f0d7c9606284da5356b658ecf0af6654a",
+  "current_lf_sha256": "c16d3a69fada0efe17c452f343f5e32e8ef1a82299a6101b16589ca4df169f9d",
+  "hash_scope": "Raw hashes capture authoring bytes; LF-normalised hashes support Git checkout newline conversion without changing JSON meaning."
+}

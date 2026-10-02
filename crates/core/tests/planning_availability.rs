@@ -61,7 +61,7 @@ fn error<T: std::fmt::Debug>(r: Result<T, DomainError>, code: ErrorCode) -> Doma
 }
 fn selection(w: &Week, index: usize) -> MealSelection {
     let c: Week = parse_document(include_bytes!(
-        "../../../tests/fixtures/contracts/week-disabled-retained.json"
+        "../../../tests/fixtures/contracts/ruling004-current--week-disabled-retained.json"
     ))
     .unwrap();
     let mut s = c.plan.selections[0].clone();
@@ -76,6 +76,15 @@ fn selection(w: &Week, index: usize) -> MealSelection {
         diner_id: profile().diners[1].diner_id.clone(),
     };
     s.servings = BoundedVec(vec![s.servings[0].clone(), second]);
+    if let BatchUse::NewBatch {
+        production_servings,
+        ..
+    } = &mut s.batch_use
+    {
+        *production_servings = PositiveRational::new(2, 1).unwrap();
+    } else {
+        panic!("the selected synthetic fixture must commit a new batch");
+    }
     s.extras = BoundedVec(vec![]);
     s.meal_overrides = MealOverrides {
         portions: BoundedVec(vec![]),
@@ -85,7 +94,7 @@ fn selection(w: &Week, index: usize) -> MealSelection {
 }
 fn selected() -> Week {
     parse_document(include_bytes!(
-        "../../../tests/fixtures/households/p03a3/selected-week.json"
+        "../../../tests/fixtures/households/p03a3/ruling004-current--selected-week.json"
     ))
     .unwrap()
 }
@@ -1173,7 +1182,7 @@ fn literal_time_vectors() {
 #[test]
 fn complete_context_refuses_unconfirmed_guests_all_modes() {
     let mut context: PlanningContext = parse_document(include_bytes!(
-        "../../../tests/fixtures/contracts/planning-context.json"
+        "../../../tests/fixtures/contracts/ruling004-current--planning-context.json"
     ))
     .unwrap();
     context.household = profile();
@@ -1204,7 +1213,7 @@ fn complete_context_refuses_unconfirmed_guests_all_modes() {
 fn retained_approval_order_links_and_overrides_are_byte_equal() {
     let mut w = selected();
     let c: PlanningContext = parse_document(include_bytes!(
-        "../../../tests/fixtures/contracts/planning-context.json"
+        "../../../tests/fixtures/contracts/ruling004-current--planning-context.json"
     ))
     .unwrap();
     let a = ApprovedPlan {
