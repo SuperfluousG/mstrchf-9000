@@ -68,6 +68,12 @@ pub(super) fn asset_source_sql() -> String {
     format!("{}{}", migrate::SQL, ASSET_FIXTURE_SQL)
 }
 #[cfg(test)]
+pub(super) const FK_FIXTURE_SQL: &str = "CREATE TABLE fixture_parent(id INTEGER PRIMARY KEY) STRICT;\nCREATE TABLE fixture_child(id INTEGER PRIMARY KEY,parent_id INTEGER NOT NULL REFERENCES fixture_parent(id)) STRICT;\n";
+#[cfg(test)]
+pub(super) fn fk_source_sql() -> String {
+    format!("{}{}", migrate::SQL, FK_FIXTURE_SQL)
+}
+#[cfg(test)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(super) enum FixtureVersion {
     V1,
@@ -81,6 +87,8 @@ enum Catalogue {
     Fixture(FixtureVersion),
     #[cfg(test)]
     AssetFixture,
+    #[cfg(test)]
+    FkFixture,
 }
 impl Catalogue {
     fn version(self) -> u32 {
@@ -92,6 +100,8 @@ impl Catalogue {
             Self::Fixture(FixtureVersion::V2) => 2,
             #[cfg(test)]
             Self::AssetFixture => 1,
+            #[cfg(test)]
+            Self::FkFixture => 1,
         }
     }
     fn expected(self) -> Result<Connection, DomainError> {
@@ -108,6 +118,10 @@ impl Catalogue {
         if let Self::AssetFixture = self {
             c.execute_batch(ASSET_FIXTURE_SQL).map_err(storage)?;
         }
+        #[cfg(test)]
+        if let Self::FkFixture = self {
+            c.execute_batch(FK_FIXTURE_SQL).map_err(storage)?;
+        }
         Ok(c)
     }
     fn checksums(self) -> Vec<Digest> {
@@ -123,6 +137,8 @@ impl Catalogue {
             }
             #[cfg(test)]
             Self::AssetFixture => vec![bytes_digest(asset_source_sql().as_bytes())],
+            #[cfg(test)]
+            Self::FkFixture => vec![bytes_digest(fk_source_sql().as_bytes())],
         }
     }
     fn closure(self) -> &'static str {
@@ -149,6 +165,11 @@ pub(super) fn audit_fixture(
 #[cfg(test)]
 pub(super) fn audit_asset_fixture(c: &Connection) -> Result<AuditedRows, DomainError> {
     audit(c, Catalogue::AssetFixture)
+}
+
+#[cfg(test)]
+pub(super) fn audit_fk_fixture(c: &Connection) -> Result<AuditedRows, DomainError> {
+    audit(c, Catalogue::FkFixture)
 }
 
 fn fail() -> DomainError {
@@ -352,12 +373,30 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
                         length: 21,
                     });
                 }
+                #[cfg(test)]
+                "fixture_parent" => {
+                    if count != 1 || integer(row, 0)? != 1 {
+                        return Err(fail());
+                    }
+                }
+                #[cfg(test)]
+                "fixture_child" => {
+                    if count != 1 || integer(row, 0)? != 1 || integer(row, 1)? != 1 {
+                        return Err(fail());
+                    }
+                }
                 _ => return Err(closure()),
             }
         }
         if matches!(
             table,
-            "app_meta" | "household" | "fixture_probe" | "fixture_added" | "fixture_assets"
+            "app_meta"
+                | "household"
+                | "fixture_probe"
+                | "fixture_added"
+                | "fixture_assets"
+                | "fixture_parent"
+                | "fixture_child"
         ) && count != 1
         {
             return Err(fail());
@@ -444,6 +483,19 @@ fn table_queries(catalogue: Catalogue) -> Vec<TableQuery> {
             "fixture_assets",
             "SELECT digest,extension,length FROM fixture_assets ORDER BY digest",
             3,
+        ));
+    }
+    #[cfg(test)]
+    if let Catalogue::FkFixture = catalogue {
+        tables.push((
+            "fixture_parent",
+            "SELECT id FROM fixture_parent ORDER BY id",
+            1,
+        ));
+        tables.push((
+            "fixture_child",
+            "SELECT id,parent_id FROM fixture_child ORDER BY id",
+            2,
         ));
     }
     tables.sort_by_key(|t| t.0);
@@ -762,6 +814,84 @@ mod tests {
         }
         c.pragma_update(None, "user_version", 1).unwrap();
         c
+    }
+
+    fn fk_source(include_parent: bool) -> Connection {
+        let c = Connection::open_in_memory().unwrap();
+        // The deliberately incomplete case is a synthetic fixture constructed
+        // from literals, never an edit to household or receipt state.
+        c.pragma_update(None, "foreign_keys", false).unwrap();
+        c.execute_batch(&fk_source_sql()).unwrap();
+        c.execute(
+            "INSERT INTO schema_migrations VALUES(1,?1,'2026-10-02T00:00:00Z')",
+            [bytes_digest(fk_source_sql().as_bytes()).0],
+        )
+        .unwrap();
+        c.execute(
+            "INSERT INTO app_meta VALUES(1,'00000000000000000000000000000001','1','1','1','1')",
+            [],
+        )
+        .unwrap();
+        let initial = records::initial(HouseholdId("hh_00000000000000000000000000000001".into()));
+        c.execute(
+            "INSERT INTO household VALUES(1,?1,'1',?2,'1',?3,NULL,NULL)",
+            rusqlite::params![
+                initial.household_draft.household_id.0,
+                canonical_bytes(&initial.household_draft).unwrap(),
+                canonical_bytes(&initial.privacy).unwrap(),
+            ],
+        )
+        .unwrap();
+        if include_parent {
+            c.execute("INSERT INTO fixture_parent VALUES(1)", [])
+                .unwrap();
+        }
+        c.execute("INSERT INTO fixture_child VALUES(1,1)", [])
+            .unwrap();
+        c.pragma_update(None, "user_version", 1).unwrap();
+        c.pragma_update(None, "foreign_keys", true).unwrap();
+        c
+    }
+
+    #[test]
+    fn closed_fk_fixture_audits_parent_and_child_and_refuses_missing_parent() {
+        let valid = fk_source(true);
+        let audited = audit_fk_fixture(&valid).unwrap();
+        assert!(audited.asset_refs.is_empty());
+        assert_eq!(
+            audited.ledger[0].sql_sha256,
+            bytes_digest(fk_source_sql().as_bytes())
+        );
+        assert_eq!(
+            audited.row_counts.iter().find(|r| r.0 == "fixture_parent"),
+            Some(&("fixture_parent", 1))
+        );
+        assert_eq!(
+            audited.row_counts.iter().find(|r| r.0 == "fixture_child"),
+            Some(&("fixture_child", 1))
+        );
+        assert_eq!(
+            audit_b1(&valid).unwrap_err().code,
+            ErrorCode::StorageFailure
+        );
+        let missing = fk_source(false);
+        let integrity_result: String = missing
+            .query_row("PRAGMA integrity_check", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(integrity_result, "ok");
+        let broken_reference: (String, i64, String, i64) = missing
+            .query_row("PRAGMA foreign_key_check", [], |r| {
+                Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?))
+            })
+            .unwrap();
+        assert_eq!(
+            broken_reference,
+            ("fixture_child".into(), 1, "fixture_parent".into(), 0)
+        );
+        assert_eq!(
+            audit_fk_fixture(&missing).unwrap_err().code,
+            ErrorCode::StorageFailure
+        );
     }
 
     #[test]

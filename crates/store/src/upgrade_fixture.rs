@@ -84,6 +84,10 @@ pub(crate) fn apply(
         _backup: backup,
     };
     let simulated_before = fault("commit_before_error");
+    let recovery_unreadable = fault("recovery_unreadable");
+    let recovery_mismatch = fault("recovery_mismatch");
+    let recovery_lost_identity = fault("recovery_lost_identity");
+    let recovery_lost_lock = fault("recovery_lost_lock");
     let commit = if simulated_before {
         tx.rollback()
             .map_err(storage)
@@ -91,18 +95,40 @@ pub(crate) fn apply(
     } else {
         tx.commit().map_err(storage)
     };
-    let uncertain = commit.is_err() || fault("commit_after_error");
+    let uncertain = commit.is_err()
+        || fault("commit_after_error")
+        || recovery_unreadable
+        || recovery_mismatch
+        || recovery_lost_identity
+        || recovery_lost_lock;
     if !uncertain {
         point("ug_after_commit")?;
     }
     m.poison();
+    if recovery_lost_identity {
+        m.database.live.invalidate_identity_for_test();
+    }
+    if recovery_lost_lock {
+        m.database.invalidate_lock_for_test();
+    }
     m.database.verify_owner()?;
+    if recovery_mismatch {
+        // A valid ordinary fixture row changes after commit. Reopened data is
+        // readable but equals neither captured old nor intended new contents.
+        m.database
+            .connection
+            .execute(
+                "UPDATE app_meta SET snapshot_revision='4' WHERE singleton=1",
+                [],
+            )
+            .map_err(storage)?;
+    }
     let old = std::mem::replace(
         &mut m.database.connection,
         Connection::open_in_memory().map_err(storage)?,
     );
     old.close().map_err(|(_, e)| storage(e))?;
-    if fault("reopen_unavailable") {
+    if recovery_unreadable || fault("reopen_unavailable") {
         return Err(storage("recovery unavailable"));
     }
     m.database.connection = startup::writable_query_only(&m.database.path)?;

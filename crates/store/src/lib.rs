@@ -20,6 +20,9 @@ mod windows_fs;
 #[cfg(test)]
 #[path = "../tests/backup_upgrade_tests.rs"]
 mod backup_upgrade_tests;
+#[cfg(all(test, windows))]
+#[path = "../tests/barrier_evidence.rs"]
+mod barrier_evidence;
 #[cfg(test)]
 mod upgrade_fixture;
 #[cfg(all(test, windows))]

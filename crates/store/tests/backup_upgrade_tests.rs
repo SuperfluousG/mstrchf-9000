@@ -466,7 +466,15 @@ fn backup_and_upgrade_kill_matrix() {
             tx.commit().unwrap();
             c.close().unwrap();
         }
+        let source = rusqlite::Connection::open_with_flags(
+            p.join("planner.sqlite"),
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )
+        .unwrap();
+        let expected = audit::audit_fixture(&source, audit::FixtureVersion::V1).unwrap();
+        source.close().unwrap();
         kill_at(&p, mode, at);
+        let evidence = barrier_evidence::capture(&p, at, startup::Catalogue::Fixture, &expected);
         let physical = [
             "planner.sqlite-wal",
             "planner.sqlite-shm",
@@ -487,6 +495,7 @@ fn backup_and_upgrade_kill_matrix() {
         } else {
             verify_child(&p, "verify-new");
         }
+        evidence.assert_preserved();
     }
     // Positive no-kill child paths, distinct from the killed and verifier processes.
     let p = root("no kill backup");
@@ -497,7 +506,20 @@ fn backup_and_upgrade_kill_matrix() {
     verify_child(&p, "verify-new");
     let p = root("asset kill");
     asset_fixture(&p);
+    let source = rusqlite::Connection::open_with_flags(
+        p.join("planner.sqlite"),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .unwrap();
+    let expected = audit::audit_asset_fixture(&source).unwrap();
+    source.close().unwrap();
     kill_at(&p, "asset-backup", "bu_after_asset_copy");
+    let evidence = barrier_evidence::capture(
+        &p,
+        "bu_after_asset_copy",
+        startup::Catalogue::AssetFixture,
+        &expected,
+    );
     println!(
         "CLASS barrier=bu_after_asset_copy WAL/SHM/journal={:?} expected=asset-source-old",
         [
@@ -508,6 +530,7 @@ fn backup_and_upgrade_kill_matrix() {
         .map(|n| p.join(n).exists())
     );
     verify_child(&p, "asset-backup");
+    evidence.assert_preserved();
 }
 
 fn asset_fixture(p: &Path) {
@@ -562,6 +585,13 @@ fn upgrade_requires_successful_backup() {
         "bu_after_closure",
         "bu_after_manifest_write",
         "bu_after_verified",
+        "backup_deadline",
+        "destination_close_error",
+        "custody_rng_error",
+        "custody_manifest_short_write",
+        "custody_manifest_enospc",
+        "custody_manifest_flush",
+        "custody_reserved_flush",
     ] {
         let p = root(at);
         fixture(&p);
@@ -599,6 +629,207 @@ fn backup_source_commit_invalidates_custody() {
             .unwrap(),
         1
     );
+}
+
+#[test]
+fn backup_source_commit_after_snapshot_refuses_receipt() {
+    let p = root("commit after snapshot");
+    fixture(&p);
+    let mut db = database::Database::open_catalogue(&p, startup::Catalogue::Fixture).unwrap();
+    let mut m = backup::Maintenance::begin(&mut db, startup::Catalogue::Fixture).unwrap();
+    FAULT.with(|f| f.set("source_commit_after_snapshot"));
+    EXECUTIONS.with(|n| n.set(0));
+    assert!(m.backup().is_err());
+    assert_eq!(EXECUTIONS.with(|n| n.get()), 0);
+    assert_eq!(
+        m.database
+            .connection
+            .query_row("SELECT value FROM fixture_probe", [], |r| r
+                .get::<_, i64>(0))
+            .unwrap(),
+        8
+    );
+    assert_eq!(
+        m.database
+            .connection
+            .pragma_query_value(None, "user_version", |r| r.get::<_, i64>(0))
+            .unwrap(),
+        1
+    );
+    assert!(
+        !std::fs::read_dir(p.join("private-backups"))
+            .unwrap()
+            .next()
+            .unwrap()
+            .unwrap()
+            .path()
+            .join("verified.json")
+            .exists()
+    );
+}
+
+#[test]
+fn backup_copied_missing_fk_parent_refuses_receipt() {
+    let p = root("copied missing FK parent");
+    let mut db = database::Database::open(&p).unwrap();
+    two_commands(&mut db);
+    db.connection.execute_batch(audit::FK_FIXTURE_SQL).unwrap();
+    db.connection
+        .execute_batch(
+            "INSERT INTO fixture_parent VALUES(1); INSERT INTO fixture_child VALUES(1,1);",
+        )
+        .unwrap();
+    db.connection
+        .execute(
+            "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
+            [bytes_digest(audit::fk_source_sql().as_bytes()).0],
+        )
+        .unwrap();
+    let before = audit::audit_fk_fixture(&db.connection).unwrap();
+    {
+        let mut healthy =
+            backup::Maintenance::begin(&mut db, startup::Catalogue::FkFixture).unwrap();
+        let receipt = healthy.backup().unwrap();
+        let copy = rusqlite::Connection::open_with_flags(
+            receipt.path(),
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )
+        .unwrap();
+        assert_eq!(audit::audit_fk_fixture(&copy).unwrap(), before);
+        copy.close().unwrap();
+    }
+    let mut m = backup::Maintenance::begin(&mut db, startup::Catalogue::FkFixture).unwrap();
+    FAULT.with(|f| f.set("copied_missing_fk_parent"));
+    EXECUTIONS.with(|n| n.set(0));
+    assert!(m.backup().is_err());
+    assert_eq!(EXECUTIONS.with(|n| n.get()), 0);
+    assert_eq!(
+        audit::audit_fk_fixture(&m.database.connection).unwrap(),
+        before
+    );
+    let attempt = std::fs::read_dir(p.join("private-backups"))
+        .unwrap()
+        .map(|e| e.unwrap().path())
+        .find(|p| !p.join("verified.json").exists())
+        .unwrap();
+    assert!(!attempt.join("verified.json").exists());
+    let copy = rusqlite::Connection::open_with_flags(
+        attempt.join("database.sqlite"),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .unwrap();
+    assert_eq!(
+        copy.query_row("PRAGMA integrity_check", [], |r| r.get::<_, String>(0))
+            .unwrap(),
+        "ok"
+    );
+    assert_eq!(
+        copy.query_row("PRAGMA foreign_key_check", [], |r| r.get::<_, String>(0))
+            .unwrap(),
+        "fixture_child"
+    );
+    copy.close().unwrap();
+}
+
+#[test]
+fn upgrade_uncertain_commit_unavailable_mismatch_and_lost_custody_stay_recovery_only() {
+    for at in [
+        "recovery_unreadable",
+        "recovery_mismatch",
+        "recovery_lost_identity",
+        "recovery_lost_lock",
+    ] {
+        let p = root(at);
+        fixture(&p);
+        let mut db = database::Database::open_catalogue(&p, startup::Catalogue::Fixture).unwrap();
+        let mut m = backup::Maintenance::begin(&mut db, startup::Catalogue::Fixture).unwrap();
+        let receipt = m.backup().unwrap();
+        let saved = receipt.path().to_owned();
+        FAULT.with(|f| f.set(at));
+        assert!(upgrade_fixture::apply(&mut m, receipt).is_err(), "{at}");
+        assert!(m.database.recovery_only);
+        let cmd = policy(0x13, 3, true);
+        assert!(
+            m.database
+                .dispatch(&cmd, &canonical_bytes(&cmd).unwrap())
+                .is_err()
+        );
+        let c = rusqlite::Connection::open_with_flags(
+            saved,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )
+        .unwrap();
+        oracle(&c, 1);
+        c.close().unwrap();
+        if at == "recovery_mismatch" {
+            assert_eq!(
+                m.catalogue
+                    .audit(&m.database.connection)
+                    .unwrap()
+                    .counters
+                    .snapshot,
+                Revision(4)
+            );
+        }
+    }
+}
+
+#[test]
+fn backup_asset_missing_reparse_and_unreferenced_preservation() {
+    const NAME: &str = "7d51503664b77f2147ce760635926a8a4ec49a926b6115a3fed5b4feed3002f4.png";
+    for mode in ["unreferenced", "missing", "reparse"] {
+        let p = root(mode);
+        asset_fixture(&p);
+        let sentinel = p.join("assets/unreferenced.bin");
+        std::fs::write(&sentinel, b"unreferenced preserve exact").unwrap();
+        let preserved = p.join("preserved-assets");
+        if mode == "missing" {
+            std::fs::rename(p.join("assets").join(NAME), p.join("preserved-source.png")).unwrap();
+        } else if mode == "reparse" {
+            std::fs::rename(p.join("assets"), &preserved).unwrap();
+            let out = std::process::Command::new("cmd.exe")
+                .args(["/d", "/c", "mklink", "/J"])
+                .arg(p.join("assets"))
+                .arg(&preserved)
+                .output()
+                .unwrap();
+            assert!(
+                out.status.success(),
+                "{}",
+                String::from_utf8_lossy(&out.stderr)
+            );
+        }
+        let mut db =
+            database::Database::open_catalogue(&p, startup::Catalogue::AssetFixture).unwrap();
+        let before = audit::audit_asset_fixture(&db.connection).unwrap();
+        let mut m = backup::Maintenance::begin(&mut db, startup::Catalogue::AssetFixture).unwrap();
+        EXECUTIONS.with(|n| n.set(0));
+        let result = m.backup();
+        if mode == "unreferenced" {
+            let receipt = result.unwrap();
+            let files = std::fs::read_dir(receipt.path().parent().unwrap().join("assets"))
+                .unwrap()
+                .map(|e| e.unwrap().file_name())
+                .collect::<Vec<_>>();
+            assert_eq!(files, vec![std::ffi::OsString::from(NAME)]);
+        } else {
+            assert!(result.is_err(), "{mode}");
+        }
+        assert_eq!(EXECUTIONS.with(|n| n.get()), 0);
+        assert_eq!(
+            audit::audit_asset_fixture(&m.database.connection).unwrap(),
+            before
+        );
+        assert_eq!(
+            std::fs::read(if mode == "reparse" {
+                preserved.join("unreferenced.bin")
+            } else {
+                sentinel
+            })
+            .unwrap(),
+            b"unreferenced preserve exact"
+        );
+    }
 }
 #[test]
 fn startup_partial_sidecars_and_future_closed_refuse_unchanged() {
@@ -680,6 +911,37 @@ fn backup_receipt_rejects_another_maintenance_and_source() {
     let _receipt2 = m2.backup().unwrap();
     assert!(upgrade_fixture::apply(&mut m2, receipt1).is_err());
     oracle(&m2.database.connection, 1);
+}
+
+#[test]
+fn backup_receipt_saved_bindings_and_seals_refuse_before_migration() {
+    for field in [
+        "root",
+        "live",
+        "maintenance",
+        "data_version",
+        "intent",
+        "source",
+        "identity",
+        "length",
+        "hash",
+        "manifest_hash",
+    ] {
+        let p = root(field);
+        fixture(&p);
+        let mut db = database::Database::open_catalogue(&p, startup::Catalogue::Fixture).unwrap();
+        let before = audit::audit_fixture(&db.connection, audit::FixtureVersion::V1).unwrap();
+        let mut m = backup::Maintenance::begin(&mut db, startup::Catalogue::Fixture).unwrap();
+        let mut receipt = m.backup().unwrap();
+        let path = receipt.path().to_owned();
+        let bytes = std::fs::read(&path).unwrap();
+        receipt.invalidate_saved_for_test(field);
+        EXECUTIONS.with(|n| n.set(0));
+        assert!(upgrade_fixture::apply(&mut m, receipt).is_err(), "{field}");
+        assert_eq!(EXECUTIONS.with(|n| n.get()), 0);
+        assert_eq!(m.catalogue.audit(&m.database.connection).unwrap(), before);
+        assert_eq!(std::fs::read(path).unwrap(), bytes);
+    }
 }
 #[test]
 fn backup_copied_corruption_prevents_receipt_and_upgrade() {

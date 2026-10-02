@@ -18,6 +18,118 @@ const MANIFEST_LIMIT: u64 = 2_097_152;
 const BUFFER: usize = 65_536;
 const BUDGET: Duration = Duration::from_secs(120);
 
+#[cfg(test)]
+mod injection {
+    use std::{
+        cell::{Cell, RefCell},
+        collections::VecDeque,
+    };
+    type IdScript = VecDeque<Result<[u8; 16], ()>>;
+    thread_local! {
+        static IO_FAULT: Cell<&'static str> = const { Cell::new("") };
+        static IDS: RefCell<Option<IdScript>> = const { RefCell::new(None) };
+        static CALLS: Cell<usize> = const { Cell::new(0) };
+    }
+    pub(super) struct Reset;
+    impl Drop for Reset {
+        fn drop(&mut self) {
+            IO_FAULT.with(|f| f.set(""));
+            IDS.with(|ids| *ids.borrow_mut() = None);
+        }
+    }
+    pub(super) fn arm(name: &'static str) -> Reset {
+        IO_FAULT.with(|f| f.set(name));
+        Reset
+    }
+    pub(super) fn ids(ids: Vec<Result<[u8; 16], ()>>) -> Reset {
+        IDS.with(|q| *q.borrow_mut() = Some(ids.into()));
+        CALLS.with(|c| c.set(0));
+        Reset
+    }
+    pub(super) fn calls() -> usize {
+        CALLS.with(Cell::get)
+    }
+    pub(super) fn id() -> Option<Result<[u8; 16], ()>> {
+        IDS.with(|q| {
+            q.borrow_mut().as_mut().map(|q| {
+                CALLS.with(|c| c.set(c.get() + 1));
+                q.pop_front().unwrap_or(Err(()))
+            })
+        })
+    }
+    pub(super) fn fault(name: &str) -> bool {
+        let local = IO_FAULT.with(|f| {
+            if f.get() == name {
+                f.set("");
+                true
+            } else {
+                false
+            }
+        });
+        local || crate::backup_upgrade_tests::fault(name)
+    }
+}
+
+fn random_attempt_id() -> Result<[u8; 16], DomainError> {
+    #[cfg(test)]
+    if crate::backup_upgrade_tests::fault("custody_rng_error") {
+        return Err(storage("injected RNG failure"));
+    }
+    #[cfg(test)]
+    if let Some(result) = injection::id() {
+        return result.map_err(|_| storage("injected RNG failure"));
+    }
+    let mut bytes = [0; 16];
+    getrandom::fill(&mut bytes).map_err(storage)?;
+    Ok(bytes)
+}
+
+fn write_manifest_bytes(file: &mut File, bytes: &[u8]) -> std::io::Result<()> {
+    #[cfg(test)]
+    {
+        // Exercise write_all against a real partial file followed by a simulated
+        // device failure. No test fills the volume or modifies sealed content.
+        struct FaultyWriter<'a> {
+            file: &'a mut File,
+            first: bool,
+            full: bool,
+        }
+        impl Write for FaultyWriter<'_> {
+            fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+                if self.first {
+                    self.first = false;
+                    return self.file.write(&bytes[..bytes.len().min(3)]);
+                }
+                if self.full {
+                    Err(std::io::Error::from_raw_os_error(112))
+                } else {
+                    Ok(0)
+                }
+            }
+            fn flush(&mut self) -> std::io::Result<()> {
+                self.file.flush()
+            }
+        }
+        if injection::fault("custody_manifest_short_write") {
+            return FaultyWriter {
+                file,
+                first: true,
+                full: false,
+            }
+            .write_all(bytes);
+        }
+        if injection::fault("custody_manifest_enospc") {
+            return FaultyWriter {
+                file,
+                first: true,
+                full: true,
+            }
+            .write_all(bytes);
+        }
+    }
+    file.write_all(bytes)
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) struct FileIdentity {
     pub(super) volume_serial: u64,
@@ -164,6 +276,12 @@ fn identity(file: &File) -> Result<FileIdentity, DomainError> {
         volume_serial: info.VolumeSerialNumber,
         file_id: info.FileId.Identifier,
     })
+}
+
+/// Diagnostic identity only: never authorises reuse or creates custody.
+#[cfg(test)]
+pub(super) fn identity_for_test(path: &Path, directory: bool) -> FileIdentity {
+    identity(&options(false, false, directory).open(path).unwrap()).unwrap()
 }
 fn final_path(file: &File) -> Result<PathBuf, DomainError> {
     let mut buffer = vec![0u16; 512];
@@ -447,8 +565,7 @@ impl TrustedStoreRoot {
     fn attempt(&self, name: &str) -> Result<PrivateBackupDir, DomainError> {
         let parent = child(&self.directory, name, false)?;
         for _ in 0..3 {
-            let mut bytes = [0u8; 16];
-            getrandom::fill(&mut bytes).map_err(storage)?;
+            let bytes = random_attempt_id()?;
             if bytes.iter().all(|b| *b == 0) {
                 continue;
             }
@@ -470,6 +587,10 @@ impl TrustedStoreRoot {
 }
 
 impl StoreLock {
+    #[cfg(test)]
+    pub(super) fn invalidate_identity_for_test(&mut self) {
+        self.identity.file_id[0] ^= 1;
+    }
     pub(super) fn verify_for(&self, root: &TrustedStoreRoot) -> Result<(), DomainError> {
         self.reverify()?;
         if self.directory.identity != root.identity() {
@@ -491,10 +612,20 @@ impl StoreLock {
     }
 }
 fn guard(directory: &Rc<Directory>, name: &str) -> Result<GuardedLive, DomainError> {
+    guard_matching(directory, name, None)
+}
+fn guard_matching(
+    directory: &Rc<Directory>,
+    name: &str,
+    expected: Option<FileIdentity>,
+) -> Result<GuardedLive, DomainError> {
     component(name)?;
     let path = directory.path.join(name);
     let file = options(false, false, false).open(&path).map_err(storage)?;
     let identity = checked(&file, &path, false, Some(directory.identity.volume_serial))?;
+    if expected.is_some_and(|expected| expected != identity) {
+        return Err(storage("guard identity changed"));
+    }
     Ok(GuardedLive {
         path,
         identity,
@@ -503,6 +634,10 @@ fn guard(directory: &Rc<Directory>, name: &str) -> Result<GuardedLive, DomainErr
     })
 }
 impl GuardedLive {
+    #[cfg(test)]
+    pub(super) fn invalidate_identity_for_test(&mut self) {
+        self.identity.file_id[0] ^= 1;
+    }
     pub(super) fn path(&self) -> &Path {
         &self.path
     }
@@ -577,13 +712,17 @@ impl PrivateBackupDir {
         }
         let reserved = self.reserve("verified.json", MANIFEST_LIMIT)?;
         let mut writer = reserved.writer()?;
-        writer.write_all(bytes).map_err(storage)?;
+        write_manifest_bytes(&mut writer, bytes).map_err(storage)?;
         #[cfg(test)]
         {
             crate::backup_upgrade_tests::barrier("bu_after_manifest_write");
             if crate::backup_upgrade_tests::fault("bu_after_manifest_write") {
                 return Err(storage("injected manifest IO failure"));
             }
+        }
+        #[cfg(test)]
+        if injection::fault("custody_manifest_flush") {
+            return Err(storage(std::io::Error::from_raw_os_error(1117)));
         }
         writer.sync_all().map_err(storage)?;
         drop(writer);
@@ -607,6 +746,10 @@ impl ReservedFile {
         // The write handle closes before deny-write acquisition; the overlapping
         // reservation handle continuously prevents deletion and replacement.
         let writer = self.writer()?;
+        #[cfg(test)]
+        if injection::fault("custody_reserved_flush") {
+            return Err(storage(std::io::Error::from_raw_os_error(1117)));
+        }
         writer.sync_all().map_err(storage)?;
         drop(writer);
         #[cfg(test)]
@@ -689,6 +832,15 @@ fn seal(
     })
 }
 impl SealedFile {
+    #[cfg(test)]
+    pub(super) fn invalidate_saved_for_test(&mut self, field: &str) {
+        match field {
+            "identity" => self.identity.file_id[0] ^= 1,
+            "length" => self.length += 1,
+            "hash" => self.sha256 = "0".repeat(64),
+            _ => panic!("unknown saved field"),
+        }
+    }
     pub(super) fn path(&self) -> &Path {
         &self.path
     }
@@ -732,11 +884,7 @@ impl SealedFile {
             .file_name()
             .and_then(|s| s.to_str())
             .ok_or_else(|| storage("leaf name"))?;
-        let g = guard(&self.directory, name)?;
-        if g.identity != self.identity {
-            return Err(storage("guard identity changed"));
-        }
-        Ok(g)
+        guard_matching(&self.directory, name, Some(self.identity))
     }
     pub(super) fn copy_to(&mut self, destination: ReservedFile) -> Result<SealedFile, DomainError> {
         let start = Instant::now();
@@ -996,5 +1144,166 @@ mod tests {
         )
         .unwrap();
         assert!(root.seal_asset(&wrong, "jpg").is_err());
+    }
+
+    #[test]
+    fn attempt_actual_three_retry_path_collision_zero_and_rng_failure() {
+        let root = TrustedStoreRoot::open_or_create(&root()).unwrap();
+        let parent = child(&root.directory, "private-backups", false).unwrap();
+        let collision = [0x11u8; 16];
+        let fresh = [0x22u8; 16];
+        let collision_name = "11".repeat(16);
+        std::fs::create_dir(parent.path.join(&collision_name)).unwrap();
+        let sentinel = parent.path.join(&collision_name).join("sentinel");
+        std::fs::write(&sentinel, b"never adopted").unwrap();
+        {
+            let _reset = injection::ids(vec![Ok(collision), Ok(collision), Ok(fresh)]);
+            let attempt = root.create_backup_dir().unwrap();
+            assert_eq!(attempt.id(), "22".repeat(16));
+            assert_eq!(injection::calls(), 3);
+        }
+        for script in [vec![Ok(collision); 4], vec![Ok([0; 16]); 4]] {
+            let _reset = injection::ids(script);
+            assert!(root.create_backup_dir().is_err());
+            assert_eq!(
+                injection::calls(),
+                3,
+                "fourth candidate must never be requested"
+            );
+        }
+        {
+            let _reset = injection::ids(vec![Err(()), Ok([0x33; 16])]);
+            assert!(root.create_backup_dir().is_err());
+            assert_eq!(
+                injection::calls(),
+                1,
+                "RNG failure must not retry or fall back"
+            );
+        }
+        assert_eq!(std::fs::read(&sentinel).unwrap(), b"never adopted");
+        assert_eq!(std::fs::read_dir(&parent.path).unwrap().count(), 2);
+    }
+
+    #[test]
+    fn saved_seal_identity_hash_length_and_live_identity_mismatches_refuse() {
+        let root = TrustedStoreRoot::open_or_create(&root()).unwrap();
+        let bytes = b"ordinary preserved source";
+        std::fs::write(root.path().join("planner.sqlite"), bytes).unwrap();
+        let mut seal = root.seal_live().unwrap();
+        seal.identity.file_id[0] ^= 1;
+        assert!(seal.reverify().is_err());
+        seal.identity.file_id[0] ^= 1;
+        let digest = seal.sha256.clone();
+        seal.sha256 = "0".repeat(64);
+        assert!(seal.reverify().is_err());
+        seal.sha256 = digest;
+        seal.length += 1;
+        assert!(seal.reverify().is_err());
+        seal.length -= 1;
+        seal.reverify().unwrap();
+        let mut live = seal.permissive_guard().unwrap();
+        live.invalidate_identity_for_test();
+        assert!(live.reverify().is_err());
+        assert_eq!(std::fs::read(seal.path()).unwrap(), bytes);
+    }
+
+    #[test]
+    fn substitution_before_first_guard_refuses_saved_identity() {
+        let root = TrustedStoreRoot::open_or_create(&root()).unwrap();
+        let path = root.path().join("planner.sqlite");
+        std::fs::write(&path, b"original ordinary fixture").unwrap();
+        let observed = File::open(&path).unwrap();
+        let expected = identity(&observed).unwrap();
+        drop(observed);
+        // There is deliberately no leaf custody yet. Preserve the original and
+        // introduce an ordinary replacement before the first protective guard.
+        let preserved = root.path().join("preserved-original.bin");
+        std::fs::rename(&path, &preserved).unwrap();
+        std::fs::write(&path, b"replacement ordinary fixture").unwrap();
+        assert!(guard_matching(&root.directory, "planner.sqlite", Some(expected)).is_err());
+        let current = guard(&root.directory, "planner.sqlite").unwrap();
+        assert_ne!(current.identity(), expected);
+        assert_eq!(
+            std::fs::read(preserved).unwrap(),
+            b"original ordinary fixture"
+        );
+        assert_eq!(
+            std::fs::read(path).unwrap(),
+            b"replacement ordinary fixture"
+        );
+    }
+
+    #[test]
+    fn manifest_exact_limit_and_plus_one_use_real_chain() {
+        let root = TrustedStoreRoot::open_or_create(&root()).unwrap();
+        let mut bytes = vec![b'x'; MANIFEST_LIMIT as usize];
+        bytes[0] = b'"';
+        bytes[MANIFEST_LIMIT as usize - 1] = b'"';
+        let exact = root.create_backup_dir().unwrap();
+        let mut sealed = exact.write_manifest(&bytes).unwrap();
+        assert_eq!(sealed.length(), MANIFEST_LIMIT);
+        sealed.reverify().unwrap();
+        bytes.push(b' ');
+        let too_large = root.create_backup_dir().unwrap();
+        assert!(too_large.write_manifest(&bytes).is_err());
+        assert_eq!(std::fs::read_dir(too_large.path()).unwrap().count(), 0);
+    }
+
+    #[test]
+    fn manifest_short_write_flush_and_disk_full_injections_preserve_partial_files() {
+        let root = TrustedStoreRoot::open_or_create(&root()).unwrap();
+        let bytes = br#"{"ordinary":"synthetic manifest"}"#;
+        for (name, expected_length) in [
+            ("custody_manifest_short_write", 3),
+            ("custody_manifest_enospc", 3),
+            ("custody_manifest_flush", bytes.len()),
+            ("custody_reserved_flush", bytes.len()),
+        ] {
+            let attempt = root.create_backup_dir().unwrap();
+            let _reset = injection::arm(name);
+            assert!(attempt.write_manifest(bytes).is_err(), "{name}");
+            let retained = std::fs::read(attempt.path().join("verified.json")).unwrap();
+            assert_eq!(retained.len(), expected_length, "{name}");
+            assert_eq!(retained, bytes[..expected_length], "{name}");
+            assert_eq!(std::fs::read_dir(attempt.path()).unwrap().count(), 1);
+        }
+    }
+
+    #[test]
+    fn missing_and_reparse_asset_sources_and_destinations_preserve_sentinel() {
+        let base = root();
+        std::fs::create_dir(&base).unwrap();
+        let target = base.join("synthetic-sentinel");
+        std::fs::create_dir(&target).unwrap();
+        let bytes = b"ordinary protected asset";
+        let digest: String = Sha256::digest(bytes)
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect();
+        let filename = format!("{digest}.png");
+        std::fs::write(target.join(&filename), bytes).unwrap();
+        let root = TrustedStoreRoot::open_or_create(&base.join("store")).unwrap();
+        assert!(root.seal_asset(&digest, "png").is_err());
+        assert!(!root.path().join("assets").exists());
+        let make_junction = |link: &Path| {
+            let output = std::process::Command::new("cmd.exe")
+                .args(["/d", "/c", "mklink", "/J"])
+                .arg(link)
+                .arg(&target)
+                .output()
+                .unwrap();
+            assert!(
+                output.status.success(),
+                "{}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+        };
+        make_junction(&root.path().join("assets"));
+        assert!(root.seal_asset(&digest, "png").is_err());
+        let attempt = root.create_backup_dir().unwrap();
+        make_junction(&attempt.path().join("assets"));
+        assert!(attempt.reserve_asset(&digest, "png").is_err());
+        assert_eq!(std::fs::read_dir(&target).unwrap().count(), 1);
+        assert_eq!(std::fs::read(target.join(&filename)).unwrap(), bytes);
     }
 }

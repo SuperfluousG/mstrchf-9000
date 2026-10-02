@@ -17,6 +17,10 @@ pub(crate) struct Database {
     pub(crate) recovery_only: bool,
 }
 impl Database {
+    #[cfg(test)]
+    pub(crate) fn invalidate_lock_for_test(&mut self) {
+        self._lock.invalidate_identity_for_test();
+    }
     pub(crate) fn verify_owner(&self) -> Result<(), DomainError> {
         self._lock.reverify()?;
         self.live.reverify()

@@ -23,6 +23,8 @@ pub(crate) enum Catalogue {
     ReaderUnavailable,
     #[cfg(test)]
     AssetFixture,
+    #[cfg(test)]
+    FkFixture,
 }
 impl Catalogue {
     pub(crate) fn audit(self, c: &Connection) -> Result<AuditedRows, DomainError> {
@@ -52,6 +54,8 @@ impl Catalogue {
             )),
             #[cfg(test)]
             Self::AssetFixture => audit::audit_asset_fixture(c),
+            #[cfg(test)]
+            Self::FkFixture => audit::audit_fk_fixture(c),
         }
     }
 }

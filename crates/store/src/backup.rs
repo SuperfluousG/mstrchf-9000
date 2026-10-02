@@ -102,6 +102,8 @@ impl<'db> Maintenance<'db> {
             Catalogue::ReaderUnavailable => return Err(storage("reader unavailable")),
             #[cfg(test)]
             Catalogue::AssetFixture => 1,
+            #[cfg(test)]
+            Catalogue::FkFixture => 1,
         };
         let catalogue_sha256 = catalogue_digest(catalogue)?;
         let data_version = data_version(&database.connection)?;
@@ -201,6 +203,19 @@ pub(crate) struct VerifiedBackupReceipt {
 }
 impl VerifiedBackupReceipt {
     #[cfg(test)]
+    pub(crate) fn invalidate_saved_for_test(&mut self, field: &str) {
+        match field {
+            "root" => self.root_identity.file_id[0] ^= 1,
+            "live" => self.live_identity.file_id[0] ^= 1,
+            "maintenance" => self.maintenance_id.push('0'),
+            "data_version" => self.data_version += 1,
+            "intent" => self.intent.target += 1,
+            "source" => self.source.contents_sha256.0 = "0".repeat(64),
+            "manifest_hash" => self.manifest.invalidate_saved_for_test("hash"),
+            field => self.database.invalidate_saved_for_test(field),
+        }
+    }
+    #[cfg(test)]
     pub(crate) fn path(&self) -> &std::path::Path {
         self.database.path()
     }
@@ -247,6 +262,13 @@ fn catalogue_digest(catalogue: Catalogue) -> Result<String, DomainError> {
             sql_sha256: bytes_digest(crate::audit::asset_source_sql().as_bytes()).0,
             reader: "b1-contracts003",
             closure: "test-fixture-single-asset",
+        }],
+        #[cfg(test)]
+        Catalogue::FkFixture => vec![Entry {
+            version: 1,
+            sql_sha256: bytes_digest(crate::audit::fk_source_sql().as_bytes()).0,
+            reader: "b1-contracts003",
+            closure: "test-fixture-foreign-key",
         }],
     };
     Ok(bytes_digest(&canonical_bytes(&entries)?).0)
@@ -323,11 +345,23 @@ fn create(m: &mut Maintenance<'_>) -> Result<VerifiedBackupReceipt, DomainError>
         if captured != m.source {
             return Err(storage("snapshot source changed"));
         }
+        #[cfg(test)]
+        if crate::backup_upgrade_tests::fault("source_commit_after_snapshot") {
+            let other = Connection::open(&m.database.path).map_err(storage)?;
+            other
+                .execute("UPDATE fixture_probe SET value=8 WHERE id=1", [])
+                .map_err(storage)?;
+            other.close().map_err(|(_, e)| storage(e))?;
+        }
         {
             let backup = Backup::new(&tx, &mut destination).map_err(storage)?;
             let mut policy = StepPolicy::default();
             let mut first = true;
             loop {
+                #[cfg(test)]
+                if crate::backup_upgrade_tests::fault("backup_deadline") {
+                    return Err(storage("backup deadline"));
+                }
                 if began.elapsed() > Duration::from_secs(120) {
                     return Err(storage("backup deadline"));
                 }
@@ -379,7 +413,18 @@ fn create(m: &mut Maintenance<'_>) -> Result<VerifiedBackupReceipt, DomainError>
     if mode != "delete" {
         return Err(storage("destination journal mode"));
     }
+    #[cfg(test)]
+    if crate::backup_upgrade_tests::fault("copied_missing_fk_parent") {
+        destination
+            .execute_batch("PRAGMA foreign_keys=OFF; DELETE FROM fixture_parent;")
+            .map_err(storage)?;
+    }
     destination.close().map_err(|(_, e)| storage(e))?;
+    // Model a close result whose outcome cannot be trusted, after releasing SQLite.
+    #[cfg(test)]
+    if crate::backup_upgrade_tests::fault("destination_close_error") {
+        return Err(storage("injected destination close error"));
+    }
     #[cfg(test)]
     if crate::backup_upgrade_tests::fault("corrupt_destination") {
         use std::io::Write;

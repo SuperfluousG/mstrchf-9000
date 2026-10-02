@@ -160,3 +160,52 @@ fn downstream_consumers_cannot_reach_internal_mutation_or_test_modules() {
         "upgrade_fixture",
     );
 }
+
+#[test]
+fn normal_consumer_binary_refuses_closed_fixture_v2_without_changing_source() {
+    // This integration executable links the ordinary library (cfg(test) is off
+    // for that library). It cannot select the private fixture catalogue.
+    let root = unique_temp_root();
+    drop(
+        mstrchf_store::Store::open(mstrchf_store::StoreConfig {
+            app_data_root: root.clone(),
+        })
+        .unwrap(),
+    );
+    let path = root.join("planner.sqlite");
+    let c = rusqlite::Connection::open(&path).unwrap();
+    c.execute_batch("CREATE TABLE fixture_probe(id INTEGER PRIMARY KEY CHECK(id=1), value INTEGER NOT NULL) STRICT; INSERT INTO fixture_probe VALUES(1,7);").unwrap();
+    c.execute(
+        "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
+        [
+            mstrchf_contracts::bytes_digest(include_bytes!(
+                "fixtures/backup-upgrade/fixture_v1.sql"
+            ))
+            .0,
+        ],
+    )
+    .unwrap();
+    let sql = include_str!("fixtures/backup-upgrade/fixture_v1_to_v2.sql");
+    c.execute_batch(sql).unwrap();
+    c.execute(
+        "INSERT INTO schema_migrations VALUES(2,?1,'2026-10-02T00:00:00Z')",
+        [mstrchf_contracts::bytes_digest(sql.as_bytes()).0],
+    )
+    .unwrap();
+    c.pragma_update(None, "user_version", 2).unwrap();
+    c.close().unwrap();
+    let before = fs::read(&path).unwrap();
+    assert_eq!(
+        mstrchf_store::Store::open(mstrchf_store::StoreConfig {
+            app_data_root: root.clone()
+        })
+        .unwrap_err()
+        .code,
+        mstrchf_contracts::ErrorCode::UnsupportedVersion
+    );
+    assert_eq!(fs::read(&path).unwrap(), before);
+    for suffix in ["-wal", "-shm", "-journal"] {
+        assert!(!root.join(format!("planner.sqlite{suffix}")).exists());
+    }
+    assert!(!root.join("private-backups").exists());
+}
