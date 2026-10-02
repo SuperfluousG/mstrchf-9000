@@ -1,0 +1,140 @@
+{
+  "scope": "A1/A2 only; no A3 or store acceptance",
+  "cases": [
+    {
+      "case_id": "H01",
+      "target": "planning_household",
+      "test_prefix": "h01_"
+    },
+    {
+      "case_id": "H02",
+      "target": "planning_household",
+      "test_prefix": "h02_"
+    },
+    {
+      "case_id": "H03",
+      "target": "planning_household",
+      "test_prefix": "h03_"
+    },
+    {
+      "case_id": "H04",
+      "target": "planning_household",
+      "test_prefix": "h04_"
+    },
+    {
+      "case_id": "H05",
+      "target": "planning_household",
+      "test_prefix": "h05_"
+    },
+    {
+      "case_id": "H06",
+      "target": "planning_household",
+      "test_prefix": "h06_"
+    },
+    {
+      "case_id": "H07",
+      "target": "planning_household",
+      "test_prefix": "h07_"
+    },
+    {
+      "case_id": "H08",
+      "target": "planning_household",
+      "test_prefix": "h08_"
+    },
+    {
+      "case_id": "H09",
+      "target": "planning_household",
+      "test_prefix": "h09_"
+    },
+    {
+      "case_id": "H10",
+      "target": "planning_household",
+      "test_prefix": "h10_"
+    },
+    {
+      "case_id": "H11",
+      "target": "planning_household",
+      "test_prefix": "h11_"
+    },
+    {
+      "case_id": "H12",
+      "target": "planning_household",
+      "test_prefix": "h12_"
+    },
+    {
+      "case_id": "H13",
+      "target": "planning_household",
+      "test_prefix": "h13_"
+    },
+    {
+      "case_id": "H14",
+      "target": "planning_household",
+      "test_prefix": "h14_"
+    },
+    {
+      "case_id": "R05",
+      "target": "planning_household",
+      "test_prefix": "r05_"
+    },
+    {
+      "case_id": "W01",
+      "target": "planning_weeks",
+      "test_prefix": "w01_"
+    },
+    {
+      "case_id": "W02",
+      "target": "planning_weeks",
+      "test_prefix": "w02_"
+    },
+    {
+      "case_id": "W03",
+      "target": "planning_weeks",
+      "test_prefix": "w03_"
+    },
+    {
+      "case_id": "W04",
+      "target": "planning_weeks",
+      "test_prefix": "w04_"
+    },
+    {
+      "case_id": "W05",
+      "target": "planning_weeks",
+      "test_prefix": "w05_"
+    },
+    {
+      "case_id": "W06",
+      "target": "planning_weeks",
+      "test_prefix": "w06_"
+    },
+    {
+      "case_id": "W07",
+      "target": "planning_weeks",
+      "test_prefix": "w07_"
+    },
+    {
+      "case_id": "W08",
+      "target": "planning_weeks",
+      "test_prefix": "w08_"
+    },
+    {
+      "case_id": "W09",
+      "target": "planning_weeks",
+      "test_prefix": "w09_"
+    },
+    {
+      "case_id": "W10",
+      "target": "planning_weeks",
+      "test_prefix": "w10_"
+    },
+    {
+      "case_id": "W11",
+      "target": "planning_weeks",
+      "test_prefix": "w11_"
+    },
+    {
+      "case_id": "W12",
+      "target": "planning_weeks",
+      "test_prefix": "w12_"
+    }
+  ]
+}
