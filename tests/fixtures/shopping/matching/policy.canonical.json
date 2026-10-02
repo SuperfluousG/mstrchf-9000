@@ -1,0 +1,1 @@
+{"domain":"mstrchf-product-match-policy-v1","material":{"rules":[{"required_fields":[{"kind":"ingredients"},{"kind":"allergens"}],"requirement":{"data":{"code":"gluten_free"},"kind":"diet"},"review":{"digest":"0000000000000000000000000000000000000000000000000000000000000064","evidence_id":"ev_00000000000000000000000000000064","revision":"1"}}],"version":"1"}}
