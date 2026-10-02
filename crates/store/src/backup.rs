@@ -1,4 +1,4 @@
-//! Private foundation. No production successor is allocated; no public maintenance API.
+//! Private backup custody for the allocated compatibility transition; no public maintenance API.
 #![allow(dead_code)]
 use crate::{
     audit::AuditedRows, custody::*, database::Database, records::storage, startup::Catalogue,
@@ -101,7 +101,7 @@ impl<'db> Maintenance<'db> {
             .pragma_query_value(None, "user_version", |r| r.get(0))
             .map_err(storage)?;
         let target = match catalogue {
-            Catalogue::B1 => 1,
+            Catalogue::B1 => 2,
             #[cfg(test)]
             Catalogue::Fixture => 2,
             #[cfg(test)]
@@ -239,12 +239,20 @@ fn catalogue_digest(catalogue: Catalogue) -> Result<String, DomainError> {
         closure: &'static str,
     }
     let entries = match catalogue {
-        Catalogue::B1 => vec![Entry {
-            version: 1,
-            sql_sha256: bytes_digest(crate::migrate::SQL.as_bytes()).0,
-            reader: "b1-contracts003",
-            closure: "b1-v1-no-assets",
-        }],
+        Catalogue::B1 => vec![
+            Entry {
+                version: 1,
+                sql_sha256: bytes_digest(crate::migrate::SQL.as_bytes()).0,
+                reader: "B1RetainedV1",
+                closure: "b1-v1-no-assets",
+            },
+            Entry {
+                version: 2,
+                sql_sha256: bytes_digest(crate::migrate::SQL_002.as_bytes()).0,
+                reader: "B1Draft005",
+                closure: "b1-v1-no-assets",
+            },
+        ],
         #[cfg(test)]
         Catalogue::Fixture => vec![
             Entry {
@@ -277,7 +285,20 @@ fn catalogue_digest(catalogue: Catalogue) -> Result<String, DomainError> {
             closure: "test-fixture-foreign-key",
         }],
     };
-    Ok(bytes_digest(&canonical_bytes(&entries)?).0)
+    let transform = match catalogue {
+        Catalogue::B1 => Some((
+            bytes_digest(include_bytes!("upgrade.rs")),
+            bytes_digest(include_bytes!("compat/b1_v1.rs")),
+        )),
+        #[cfg(test)]
+        _ => None,
+    };
+    Ok(bytes_digest(&if let Some(transform) = transform {
+        canonical_bytes(&(entries, Some(transform)))?
+    } else {
+        canonical_bytes(&entries)?
+    })
+    .0)
 }
 
 #[derive(Serialize, Deserialize)]

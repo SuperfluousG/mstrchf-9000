@@ -1,14 +1,17 @@
-use crate::{records::*, snapshot};
+use crate::records::*;
 use mstrchf_contracts::*;
 use rusqlite::{Connection, params};
 pub(crate) const SQL: &str = include_str!("../migrations/001_initial.sql");
+pub(crate) const SQL_002: &str = include_str!("../migrations/002_draft005_compatibility.sql");
 // GLOB treats '_' literally and is case-sensitive. SQLite-generated internal
 // objects use the reserved lowercase sqlite_ prefix.
+#[cfg(test)]
 const INTERNAL_SCHEMA_GLOB: &str = "sqlite_*";
 
 pub(crate) fn initialise(c: &mut Connection, lineage: &str) -> Result<(), DomainError> {
     let tx = c.transaction().map_err(storage)?;
     tx.execute_batch(SQL).map_err(storage)?;
+    tx.execute_batch(SQL_002).map_err(storage)?;
     let s = initial(HouseholdId(format!("hh_{}", random_id()?)));
     tx.execute(
         "INSERT INTO schema_migrations VALUES(1,?1,strftime('%Y-%m-%dT%H:%M:%SZ','now'))",
@@ -29,13 +32,21 @@ pub(crate) fn initialise(c: &mut Connection, lineage: &str) -> Result<(), Domain
         ],
     )
     .map_err(storage)?;
-    tx.pragma_update(None, "user_version", 1).map_err(storage)?;
-    snapshot::load(&tx)?;
+    tx.execute(
+        "INSERT INTO schema_migrations VALUES(2,?1,strftime('%Y-%m-%dT%H:%M:%SZ','now'))",
+        [bytes_digest(SQL_002.as_bytes()).0],
+    )
+    .map_err(storage)?;
+    tx.execute("INSERT INTO store_format VALUES(1,'B1Draft005')", [])
+        .map_err(storage)?;
+    tx.pragma_update(None, "user_version", 2).map_err(storage)?;
+    crate::audit::audit_b1(&tx)?;
     #[cfg(test)]
     crate::tests::barrier("init_before_commit");
     tx.commit().map_err(storage)
 }
 
+#[cfg(test)]
 fn schema(c: &Connection) -> Result<Vec<(String, String, String)>, DomainError> {
     let mut s = c
         .prepare(
@@ -50,47 +61,7 @@ fn schema(c: &Connection) -> Result<Vec<(String, String, String)>, DomainError> 
     .map_err(storage)
 }
 pub(crate) fn verify(c: &Connection) -> Result<(), DomainError> {
-    let version: i64 = c
-        .pragma_query_value(None, "user_version", |r| r.get(0))
-        .map_err(storage)?;
-    if version > 1 {
-        return Err(DomainError::new(
-            ErrorCode::UnsupportedVersion,
-            "/storage_version",
-        ));
-    }
-    if version != 1 {
-        return Err(storage("backup required or unknown database"));
-    }
-    let expected = Connection::open_in_memory().map_err(storage)?;
-    expected.execute_batch(SQL).map_err(storage)?;
-    if schema(c)? != schema(&expected)? {
-        return Err(storage("schema mismatch"));
-    }
-    let mut q = c
-        .prepare("SELECT version,checksum FROM schema_migrations ORDER BY version")
-        .map_err(storage)?;
-    let rows = q
-        .query_map([], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?)))
-        .map_err(storage)?
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(storage)?;
-    if rows != vec![(1, bytes_digest(SQL.as_bytes()).0)] {
-        return Err(storage("migration ledger"));
-    }
-    let integrity: String = c
-        .query_row("PRAGMA integrity_check", [], |r| r.get(0))
-        .map_err(storage)?;
-    let fk: bool = c
-        .prepare("PRAGMA foreign_key_check")
-        .map_err(storage)?
-        .exists([])
-        .map_err(storage)?;
-    if integrity != "ok" || fk {
-        return Err(storage("integrity"));
-    }
-    snapshot::load(c)?;
-    Ok(())
+    crate::audit::audit_b1(c).map(|_| ())
 }
 
 #[cfg(test)]

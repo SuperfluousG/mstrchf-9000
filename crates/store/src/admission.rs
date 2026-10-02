@@ -21,40 +21,14 @@ pub(crate) fn prepare(
             draft,
             restriction_issue_edits,
         } => {
-            // Temporary ruling005 boundary: native transition/readiness helpers
-            // are not yet integrated. Never discard stored text or ignore edits.
-            if !s.household_draft.unresolved_restrictions.is_empty()
-                || !draft.unresolved_restrictions.is_empty()
-                || !restriction_issue_edits.is_empty()
-            {
-                return Err(unsupported());
-            }
-            if draft.household_id != s.household_draft.household_id {
-                return Err(DomainError::new(
-                    ErrorCode::IdentityMismatch,
-                    "/command/data/draft/household_id",
-                ));
-            }
-            if draft.revision != s.household_draft.revision {
-                return Err(stale("/command/data/draft/revision"));
-            }
-            if let Some(connections) = &draft.connections.0
-                && connections.privacy != s.privacy
-            {
-                return Err(stale("/command/data/draft/connections/privacy"));
-            }
-            if let Some(usual) = &draft.usual_week.0 {
-                for cell in usual.cells.iter() {
-                    for id in cell.attendee_ids.iter() {
-                        if !draft.diners.iter().any(|d| &d.diner_id == id) {
-                            return Err(DomainError::new(
-                                ErrorCode::ForeignReference,
-                                "/command/data/draft/usual_week/cells/attendee_ids",
-                            ));
-                        }
-                    }
-                }
-            }
+            let evaluated_at = writer_time(c)?;
+            mstrchf_core::setup::validate_setup_draft_transition(
+                &s.household_draft,
+                draft,
+                restriction_issue_edits,
+                &s.privacy,
+                &evaluated_at,
+            )?;
             let mut next = draft.clone();
             if next != s.household_draft {
                 next.revision = next.revision.checked_increment()?;
@@ -189,4 +163,17 @@ pub(crate) fn commit_mutation(
         }
     }
     Ok(())
+}
+
+fn writer_time(c: &Connection) -> Result<Instant, DomainError> {
+    #[cfg(test)]
+    if let Some(t) = crate::compatibility_tests::clock() {
+        return Instant::try_from(t);
+    }
+    let text: String = c
+        .query_row("SELECT strftime('%Y-%m-%dT%H:%M:%SZ','now')", [], |r| {
+            r.get(0)
+        })
+        .map_err(storage)?;
+    Instant::try_from(text.as_str())
 }

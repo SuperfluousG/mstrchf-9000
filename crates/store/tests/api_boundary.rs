@@ -48,10 +48,18 @@ fn write_downstream_fixture(temp_root: &Path, source_override: Option<&str>) -> 
         fs::read_to_string(fixture_path("Cargo.toml")).unwrap()
     );
 
+    let contracts_path = source_root
+        .join("../contracts")
+        .to_string_lossy()
+        .replace('\\', "/");
     let source_main = fs::read_to_string(fixture_path("src/main.rs")).unwrap();
     assert!(!source_main.trim().is_empty());
     fs::create_dir_all(temp_root.join("src")).unwrap();
-    fs::write(temp_root.join("Cargo.toml"), fixture_manifest).unwrap();
+    fs::write(
+        temp_root.join("Cargo.toml"),
+        format!("{fixture_manifest}\nserde = \"=1.0.229\"\nmstrchf-contracts = {{ path = \"{contracts_path}\" }}\n"),
+    )
+    .unwrap();
     fs::write(
         temp_root.join("src/main.rs"),
         source_override.unwrap_or(&source_main),
@@ -159,6 +167,32 @@ fn downstream_consumers_cannot_reach_internal_mutation_or_test_modules() {
         "E0433",
         "upgrade_fixture",
     );
+    let manifest = write_downstream_fixture(
+        &temp_root.join("consumer"),
+        Some(
+            r#"
+fn decode<T:serde::de::DeserializeOwned>(){}
+fn main(){ decode::<mstrchf_store::UiCommandOutcome>(); decode::<mstrchf_store::HistoricalB1Snapshot>(); decode::<mstrchf_store::Draft005ReceiptSnapshot>(); }
+"#,
+        ),
+    );
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0277", "Deserialize");
+    let manifest = write_downstream_fixture(
+        &temp_root.join("consumer"),
+        Some(
+            r#"
+fn current<T: Into<mstrchf_contracts::Snapshot>>() {}
+fn main() { current::<mstrchf_store::HistoricalB1Snapshot>(); current::<mstrchf_store::Draft005ReceiptSnapshot>(); }
+"#,
+        ),
+    );
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0277", "From");
+
+    let manifest = write_downstream_fixture(
+        &temp_root.join("consumer"),
+        Some("fn main(){ let _: Option<mstrchf_store::upgrade::UpgradeOutcome> = None; }"),
+    );
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0603", "private");
 }
 
 #[test]
@@ -166,17 +200,13 @@ fn normal_consumer_binary_refuses_closed_fixture_v2_without_changing_source() {
     // This integration executable links the ordinary library (cfg(test) is off
     // for that library). It cannot select the private fixture catalogue.
     let root = unique_temp_root();
-    drop(
-        mstrchf_store::Store::open(mstrchf_store::StoreConfig {
-            app_data_root: root.clone(),
-        })
-        .unwrap(),
-    );
+    fs::create_dir_all(&root).unwrap();
     let path = root.join("planner.sqlite");
     let c = rusqlite::Connection::open(&path).unwrap();
-    c.execute_batch("CREATE TABLE fixture_probe(id INTEGER PRIMARY KEY CHECK(id=1), value INTEGER NOT NULL) STRICT; INSERT INTO fixture_probe VALUES(1,7);").unwrap();
+    c.execute_batch(&include_str!("fixtures/backup-upgrade/fixture_v1.sql").replace("\r\n", "\n"))
+        .unwrap();
     c.execute(
-        "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
+        "INSERT INTO schema_migrations VALUES(1,?1,'2026-10-02T00:00:00Z')",
         [
             mstrchf_contracts::bytes_digest(include_bytes!(
                 "fixtures/backup-upgrade/fixture_v1.sql"
@@ -201,7 +231,7 @@ fn normal_consumer_binary_refuses_closed_fixture_v2_without_changing_source() {
         })
         .unwrap_err()
         .code,
-        mstrchf_contracts::ErrorCode::UnsupportedVersion
+        mstrchf_contracts::ErrorCode::StorageFailure
     );
     assert_eq!(fs::read(&path).unwrap(), before);
     for suffix in ["-wal", "-shm", "-journal"] {

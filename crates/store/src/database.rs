@@ -23,7 +23,6 @@ impl Database {
     pub(crate) fn has_upgrade_backup(&self) -> bool {
         self.upgrade_backup.is_some()
     }
-    #[cfg(test)]
     pub(crate) fn retain_upgrade_backup(
         &mut self,
         receipt: crate::backup::VerifiedBackupReceipt,
@@ -34,9 +33,8 @@ impl Database {
         self.upgrade_backup = Some(receipt);
         Ok(())
     }
-    #[cfg(test)]
     pub(crate) fn release_resolved_upgrade(&mut self) {
-        // Only the closed fixture runner calls this, after exact target audit,
+        // Only a closed upgrade runner calls this, after exact target audit,
         // normal configuration and its final fallible ready barrier.
         self.upgrade_backup = None;
         self.recovery_only = false;
@@ -50,7 +48,13 @@ impl Database {
         self.live.reverify()
     }
     pub(crate) fn open(path: &Path) -> Result<Self, DomainError> {
-        Self::open_catalogue(path, Catalogue::B1)
+        let mut db = Self::open_catalogue(path, Catalogue::B1)?;
+        if crate::audit::audit_b1(&db.connection)?.version == 1 {
+            let mut m = crate::backup::Maintenance::begin(&mut db, Catalogue::B1)?;
+            let receipt = m.backup()?;
+            crate::upgrade::apply(&mut m, receipt)?;
+        }
+        Ok(db)
     }
     pub(crate) fn open_catalogue(path: &Path, catalogue: Catalogue) -> Result<Self, DomainError> {
         let root = TrustedStoreRoot::open_or_create(path)?;
@@ -77,15 +81,15 @@ impl Database {
         }
         snapshot::read(&mut self.connection)
     }
-    pub(crate) fn dispatch(
+    pub(crate) fn dispatch_outcome(
         &mut self,
         command: &AppCommandV1,
         bytes: &[u8],
-    ) -> Result<Vec<u8>, DomainError> {
+    ) -> Result<crate::UiCommandOutcome, DomainError> {
         if self.recovery_only {
             return Err(storage("recovery required"));
         }
-        let result = crate::commands::execute(&mut self.connection, command, bytes);
+        let result = crate::commands::execute_outcome(&mut self.connection, command, bytes);
         if result
             .as_ref()
             .is_err_and(|e| e.code == ErrorCode::StorageFailure)
@@ -95,7 +99,10 @@ impl Database {
             self.recovery_only = true;
             let placeholder = Connection::open_in_memory().map_err(storage)?;
             let old = std::mem::replace(&mut self.connection, placeholder);
-            old.close().map_err(|(_, e)| storage(e))?;
+            if let Err((old, error)) = old.close() {
+                self.connection = old;
+                return Err(storage(error));
+            }
             #[cfg(test)]
             if crate::tests::recovery_unavailable() {
                 return Err(storage("injected reopen failure"));
@@ -113,5 +120,26 @@ impl Database {
             }
         }
         result
+    }
+    pub(crate) fn replay(
+        &mut self,
+        id: &str,
+        bytes: &[u8],
+    ) -> Result<crate::UiCommandOutcome, DomainError> {
+        if self.recovery_only {
+            return Err(storage("recovery required"));
+        }
+        let tx = self.connection.transaction().map_err(storage)?;
+        crate::receipts::lookup_id(&tx, id, bytes)?
+            .ok_or_else(|| DomainError::new(ErrorCode::MissingReference, "/command_id"))
+    }
+    #[cfg(test)]
+    pub(crate) fn dispatch(
+        &mut self,
+        command: &AppCommandV1,
+        bytes: &[u8],
+    ) -> Result<Vec<u8>, DomainError> {
+        self.dispatch_outcome(command, bytes)
+            .map(|o| o.original_response_bytes().to_vec())
     }
 }

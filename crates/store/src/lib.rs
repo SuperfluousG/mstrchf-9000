@@ -7,8 +7,11 @@ mod admission;
 mod audit;
 mod backup;
 mod commands;
-mod custody;
 mod compat;
+mod custody;
+pub use compat::b1_v1::B1RetainedV1 as HistoricalB1Snapshot;
+pub use compat::draft005::B1Draft005 as Draft005ReceiptSnapshot;
+pub use compat::{CommandDisposition, ReceiptSnapshot, UiCommandOutcome};
 mod database;
 mod migrate;
 mod receipts;
@@ -16,6 +19,7 @@ mod records;
 mod recovery;
 mod snapshot;
 mod startup;
+mod upgrade;
 mod windows_fs;
 
 #[cfg(test)]
@@ -44,7 +48,12 @@ enum Request {
     Command(
         Box<AppCommandV1>,
         Vec<u8>,
-        SyncSender<Result<Vec<u8>, DomainError>>,
+        SyncSender<Result<UiCommandOutcome, DomainError>>,
+    ),
+    Replay(
+        String,
+        Vec<u8>,
+        SyncSender<Result<UiCommandOutcome, DomainError>>,
     ),
     Stop,
     #[cfg(test)]
@@ -73,7 +82,10 @@ impl Store {
                             let _ = reply.send(db.snapshot());
                         }
                         Request::Command(command, bytes, reply) => {
-                            let _ = reply.send(db.dispatch(&command, &bytes));
+                            let _ = reply.send(db.dispatch_outcome(&command, &bytes));
+                        }
+                        Request::Replay(id, bytes, reply) => {
+                            let _ = reply.send(db.replay(&id, &bytes));
                         }
                         Request::Stop => break,
                         #[cfg(test)]
@@ -103,7 +115,7 @@ impl Store {
             .map_err(records::storage)?;
         receive.recv().map_err(records::storage)?
     }
-    pub fn dispatch_ui(&self, command: AppCommandV1) -> Result<Snapshot, DomainError> {
+    pub fn dispatch_ui(&self, command: AppCommandV1) -> Result<UiCommandOutcome, DomainError> {
         let bytes = canonical_bytes(&command)?;
         let command: AppCommandV1 = parse_document(&bytes)?;
         authorize_command(command.command.kind(), CallerClass::LocalUi)?;
@@ -111,7 +123,18 @@ impl Store {
         self.sender
             .try_send(Request::Command(Box::new(command), bytes, reply))
             .map_err(records::storage)?;
-        parse_document(&receive.recv().map_err(records::storage)??)
+        receive.recv().map_err(records::storage)?
+    }
+    pub fn replay_ui(
+        &self,
+        original_command_bytes: &[u8],
+    ) -> Result<UiCommandOutcome, DomainError> {
+        let id = compat::envelope(original_command_bytes)?;
+        let (reply, receive) = mpsc::sync_channel(1);
+        self.sender
+            .try_send(Request::Replay(id, original_command_bytes.to_vec(), reply))
+            .map_err(records::storage)?;
+        receive.recv().map_err(records::storage)?
     }
     pub fn import_result(&self, bytes: &[u8]) -> ImportOutcome {
         let error = match parse_document::<JobResultV1>(bytes) {
@@ -133,3 +156,11 @@ impl Drop for Store {
 #[cfg(test)]
 #[path = "../tests/mechanisms.rs"]
 mod tests;
+
+#[cfg(test)]
+#[path = "../tests/compatibility.rs"]
+mod compatibility_tests;
+
+#[cfg(all(test, windows))]
+#[path = "../tests/compatibility_cleanup.rs"]
+mod compatibility_cleanup_tests;

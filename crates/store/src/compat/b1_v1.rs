@@ -3,9 +3,9 @@
 //! Mechanical schema projection; semantic decoding is private and mandatory.
 use super::{Error, ReceiptBinding, codec};
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-enum Never {}
+pub enum Never {}
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum Action {
+pub enum Action {
     #[serde(rename = "setup")]
     Setup,
     #[serde(rename = "plan")]
@@ -20,7 +20,7 @@ pub(super) enum Action {
     CheckBooking,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum AgeBand {
+pub enum AgeBand {
     #[serde(rename = "adult")]
     Adult,
     #[serde(rename = "teen")]
@@ -35,7 +35,7 @@ pub(super) enum AgeBand {
     Child1112,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum AllergenCode {
+pub enum AllergenCode {
     #[serde(rename = "celery")]
     Celery,
     #[serde(rename = "cereals_containing_gluten")]
@@ -67,7 +67,9 @@ pub(super) enum AllergenCode {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "kind", content = "data", deny_unknown_fields)]
-pub(super) enum AppCommand {
+// Preserve the independently reviewed frozen value representation.
+#[allow(clippy::large_enum_variant)]
+pub enum AppCommand {
     #[serde(rename = "save_household_draft")]
     SaveHouseholdDraft { draft: HouseholdDraft },
     #[serde(rename = "set_privacy")]
@@ -80,7 +82,7 @@ pub(super) enum AppCommand {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct AppCommandV1 {
+pub struct AppCommandV1 {
     command: AppCommand,
     command_id: CommandId,
     expected_snapshot_revision: Revision,
@@ -104,10 +106,10 @@ type Array_ReminderPrompt_0_2 = Vec<ReminderPrompt>;
 type Array_boolean_7_7 = Vec<bool>;
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct CalendarDestinationId(String);
+pub struct CalendarDestinationId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct CellDefault {
+pub struct CellDefault {
     attendee_ids: Array_DinerId_0_64,
     choice: MealLocation,
     meal_type: MealType,
@@ -115,10 +117,10 @@ pub(super) struct CellDefault {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct CommandId(String);
+pub struct CommandId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct Connections {
+pub struct Connections {
     calendar_destination: Nullable_CalendarDestinationId,
     delivery_preferences: Array_DeliveryPreference_0_7,
     harness: Nullable_Provider,
@@ -129,13 +131,13 @@ pub(super) struct Connections {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct DeliveryPreference {
+pub struct DeliveryPreference {
     earliest: LocalTime,
     latest: LocalTime,
     weekday: Weekday,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum DietCode {
+pub enum DietCode {
     #[serde(rename = "vegetarian")]
     Vegetarian,
     #[serde(rename = "vegan")]
@@ -145,7 +147,7 @@ pub(super) enum DietCode {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct Diner {
+pub struct Diner {
     age_band: AgeBand,
     diner_id: DinerId,
     dislikes: Array_IngredientId_0_256,
@@ -155,9 +157,9 @@ pub(super) struct Diner {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct DinerId(String);
+pub struct DinerId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum EquipmentCode {
+pub enum EquipmentCode {
     #[serde(rename = "hob")]
     Hob,
     #[serde(rename = "oven")]
@@ -178,7 +180,7 @@ pub(super) enum EquipmentCode {
     PressureCooker,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum ErrorCode {
+pub enum ErrorCode {
     #[serde(rename = "malformed_json")]
     MalformedJson,
     #[serde(rename = "duplicate_key")]
@@ -230,7 +232,7 @@ pub(super) enum ErrorCode {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "kind", content = "data", deny_unknown_fields)]
-pub(super) enum HardRequirement {
+pub enum HardRequirement {
     #[serde(rename = "allergen_exclusion")]
     AllergenExclusion { code: AllergenCode },
     #[serde(rename = "diet")]
@@ -240,7 +242,7 @@ pub(super) enum HardRequirement {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct HouseholdDraft {
+pub struct HouseholdDraft {
     completed_stages: Array_HouseholdStage_0_4,
     connections: Nullable_Connections,
     diners: Array_Diner_0_64,
@@ -252,10 +254,10 @@ pub(super) struct HouseholdDraft {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct HouseholdId(String);
+pub struct HouseholdId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct HouseholdProfile {
+pub struct HouseholdProfile {
     connections: Connections,
     diners: Array_Diner_1_64,
     household_id: HouseholdId,
@@ -265,7 +267,7 @@ pub(super) struct HouseholdProfile {
     usual_week: UsualWeek,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum HouseholdStage {
+pub enum HouseholdStage {
     #[serde(rename = "household")]
     Household,
     #[serde(rename = "food_preferences")]
@@ -277,15 +279,15 @@ pub(super) enum HouseholdStage {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct IngredientId(String);
+pub struct IngredientId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct Instant(String);
+pub struct Instant(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct JobId(String);
+pub struct JobId(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum JobState {
+pub enum JobState {
     #[serde(rename = "prepared")]
     Prepared,
     #[serde(rename = "awaiting_user")]
@@ -303,7 +305,7 @@ pub(super) enum JobState {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct JobSummary {
+pub struct JobSummary {
     action: Action,
     job_id: JobId,
     next_action: Nullable_RequiredAction,
@@ -312,9 +314,9 @@ pub(super) struct JobSummary {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct LocalTime(String);
+pub struct LocalTime(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum LoyaltyStatus {
+pub enum LoyaltyStatus {
     #[serde(rename = "confirmed_member")]
     ConfirmedMember,
     #[serde(rename = "not_member")]
@@ -323,7 +325,7 @@ pub(super) enum LoyaltyStatus {
     Unknown,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum MealLocation {
+pub enum MealLocation {
     #[serde(rename = "at_home")]
     AtHome,
     #[serde(rename = "on_the_move")]
@@ -333,19 +335,19 @@ pub(super) enum MealLocation {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct MealPortionOverride {
+pub struct MealPortionOverride {
     adjustment: PositiveRational,
     meal_type: MealType,
     preset: PortionPresetName,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct MealTime {
+pub struct MealTime {
     meal_type: MealType,
     time: LocalTime,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum MealType {
+pub enum MealType {
     #[serde(rename = "breakfast")]
     Breakfast,
     #[serde(rename = "lunch")]
@@ -355,13 +357,13 @@ pub(super) enum MealType {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct Mobility {
+pub struct Mobility {
     cold_storage: bool,
     reheating: bool,
     temperature: MobilityTemperature,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum MobilityTemperature {
+pub enum MobilityTemperature {
     #[serde(rename = "hot")]
     Hot,
     #[serde(rename = "cold")]
@@ -371,7 +373,7 @@ pub(super) enum MobilityTemperature {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct NameText(String);
+pub struct NameText(String);
 type Nullable_CalendarDestinationId = Option<CalendarDestinationId>;
 type Nullable_Connections = Option<Connections>;
 type Nullable_ErrorCode = Option<ErrorCode>;
@@ -385,13 +387,13 @@ type Nullable_Retailer = Option<Retailer>;
 type Nullable_UsualWeek = Option<UsualWeek>;
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct PortionPreference {
+pub struct PortionPreference {
     adjustment: PositiveRational,
     meal_overrides: Array_MealPortionOverride_0_3,
     preset: PortionPresetName,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum PortionPresetName {
+pub enum PortionPresetName {
     #[serde(rename = "smaller")]
     Smaller,
     #[serde(rename = "regular")]
@@ -401,13 +403,13 @@ pub(super) enum PortionPresetName {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct PositiveRational {
+pub struct PositiveRational {
     denominator: String,
     numerator: String,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct Preferences {
+pub struct Preferences {
     dislikes: Array_IngredientId_0_256,
     equipment: Array_EquipmentCode_0_9,
     higher_protein: bool,
@@ -421,28 +423,28 @@ pub(super) struct Preferences {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct PrivacyPolicy {
+pub struct PrivacyPolicy {
     confirmed_at: Nullable_Instant,
     include_household_requirements: bool,
     revision: Revision,
     use_ai_features: bool,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum Provider {
+pub enum Provider {
     #[serde(rename = "codex_local")]
     CodexLocal,
     #[serde(rename = "claude_cowork")]
     ClaudeCowork,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum ReminderChannel {
+pub enum ReminderChannel {
     #[serde(rename = "local")]
     Local,
     #[serde(rename = "calendar")]
     Calendar,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum ReminderPrompt {
+pub enum ReminderPrompt {
     #[serde(rename = "unfinished_plan")]
     UnfinishedPlan,
     #[serde(rename = "booking_opportunity")]
@@ -450,13 +452,13 @@ pub(super) enum ReminderPrompt {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct ReminderSettings {
+pub struct ReminderSettings {
     channels: Array_ReminderChannel_0_2,
     enabled: bool,
     prompts: Array_ReminderPrompt_0_2,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum RequiredAction {
+pub enum RequiredAction {
     #[serde(rename = "choose_alternative")]
     ChooseAlternative,
     #[serde(rename = "inspect_product")]
@@ -476,7 +478,7 @@ pub(super) enum RequiredAction {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "kind", content = "data", deny_unknown_fields)]
-pub(super) enum RestrictionDeclaration {
+pub enum RestrictionDeclaration {
     #[serde(rename = "unconfirmed")]
     Unconfirmed {},
     #[serde(rename = "confirmed_none")]
@@ -488,16 +490,16 @@ pub(super) enum RestrictionDeclaration {
     },
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum Retailer {
+pub enum Retailer {
     #[serde(rename = "tesco")]
     Tesco,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct Revision(String);
+pub struct Revision(String);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct SchemaVersion(u64);
+pub struct SchemaVersion(u64);
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Snapshot {
@@ -513,26 +515,35 @@ struct Snapshot {
 /// Immutable inspected view; deliberately has no Deserialize constructor.
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize)]
 #[serde(transparent)]
-pub(super) struct B1RetainedV1(Snapshot);
+pub struct B1RetainedV1(Snapshot);
 impl B1RetainedV1 {
-    pub(super) fn household_draft(&self) -> &HouseholdDraft {
+    pub fn schema_version(&self) -> &SchemaVersion {
+        &self.0.schema_version
+    }
+    pub fn weeks(&self) -> &[Never] {
+        &self.0.weeks
+    }
+    pub fn conflicts(&self) -> &[Never] {
+        &self.0.conflicts
+    }
+    pub fn household_draft(&self) -> &HouseholdDraft {
         &self.0.household_draft
     }
-    pub(super) fn privacy(&self) -> &PrivacyPolicy {
+    pub fn privacy(&self) -> &PrivacyPolicy {
         &self.0.privacy
     }
-    pub(super) fn profile(&self) -> Option<&HouseholdProfile> {
+    pub fn profile(&self) -> Option<&HouseholdProfile> {
         self.0.profile.as_ref()
     }
-    pub(super) fn jobs(&self) -> &[JobSummary] {
+    pub fn jobs(&self) -> &[JobSummary] {
         &self.0.jobs
     }
-    pub(super) fn snapshot_revision(&self) -> &Revision {
+    pub fn snapshot_revision(&self) -> &Revision {
         &self.0.snapshot_revision
     }
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum SpendingStyle {
+pub enum SpendingStyle {
     #[serde(rename = "value")]
     Value,
     #[serde(rename = "balanced")]
@@ -542,7 +553,7 @@ pub(super) enum SpendingStyle {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
-pub(super) struct UsualWeek {
+pub struct UsualWeek {
     cells: Array_CellDefault_21_21,
     day_enabled: Array_boolean_7_7,
     enabled_meal_types: Array_MealType_0_3,
@@ -550,7 +561,7 @@ pub(super) struct UsualWeek {
     zone: ZoneId,
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-pub(super) enum Weekday {
+pub enum Weekday {
     #[serde(rename = "monday")]
     Monday,
     #[serde(rename = "tuesday")]
@@ -568,8 +579,8 @@ pub(super) enum Weekday {
 }
 #[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(transparent)]
-pub(super) struct ZoneId(String);
-const SCHEMA: &str = include_str!("b1_v1.schema.json");
+pub struct ZoneId(String);
+pub(super) const SCHEMA: &str = include_str!("b1_v1.schema.json");
 pub(super) fn snapshot(bytes: &[u8]) -> Result<B1RetainedV1, Error> {
     codec::decode(bytes, SCHEMA, "Snapshot").map(B1RetainedV1)
 }
@@ -591,7 +602,7 @@ pub(super) fn job(bytes: &[u8]) -> Result<JobSummary, Error> {
 
 /// A pure pair inspection, not a catalogue/DB audit or replay authority.
 #[derive(Debug)]
-pub(super) struct Receipt {
+pub struct Receipt {
     command: AppCommandV1,
     response: B1RetainedV1,
     command_bytes: Vec<u8>,
@@ -633,5 +644,373 @@ pub(super) fn receipt(
         response_bytes: response_bytes.to_vec(),
         command_digest: binding.command_digest.into(),
         response_digest: binding.response_digest.into(),
+    })
+}
+
+// Read-only navigation of the frozen receipt graph.
+impl AppCommandV1 {
+    pub fn command(&self) -> &AppCommand {
+        &self.command
+    }
+    pub fn command_id(&self) -> &CommandId {
+        &self.command_id
+    }
+    pub fn expected_snapshot_revision(&self) -> &Revision {
+        &self.expected_snapshot_revision
+    }
+    pub fn schema_version(&self) -> &SchemaVersion {
+        &self.schema_version
+    }
+}
+impl CellDefault {
+    pub fn attendee_ids(&self) -> &Array_DinerId_0_64 {
+        &self.attendee_ids
+    }
+    pub fn choice(&self) -> &MealLocation {
+        &self.choice
+    }
+    pub fn meal_type(&self) -> &MealType {
+        &self.meal_type
+    }
+    pub fn weekday(&self) -> &Weekday {
+        &self.weekday
+    }
+}
+impl Connections {
+    pub fn calendar_destination(&self) -> &Nullable_CalendarDestinationId {
+        &self.calendar_destination
+    }
+    pub fn delivery_preferences(&self) -> &Array_DeliveryPreference_0_7 {
+        &self.delivery_preferences
+    }
+    pub fn harness(&self) -> &Nullable_Provider {
+        &self.harness
+    }
+    pub fn loyalty(&self) -> &LoyaltyStatus {
+        &self.loyalty
+    }
+    pub fn privacy(&self) -> &PrivacyPolicy {
+        &self.privacy
+    }
+    pub fn reminders(&self) -> &ReminderSettings {
+        &self.reminders
+    }
+    pub fn retailer(&self) -> &Nullable_Retailer {
+        &self.retailer
+    }
+}
+impl DeliveryPreference {
+    pub fn earliest(&self) -> &LocalTime {
+        &self.earliest
+    }
+    pub fn latest(&self) -> &LocalTime {
+        &self.latest
+    }
+    pub fn weekday(&self) -> &Weekday {
+        &self.weekday
+    }
+}
+impl Diner {
+    pub fn age_band(&self) -> &AgeBand {
+        &self.age_band
+    }
+    pub fn diner_id(&self) -> &DinerId {
+        &self.diner_id
+    }
+    pub fn dislikes(&self) -> &Array_IngredientId_0_256 {
+        &self.dislikes
+    }
+    pub fn display_name(&self) -> &Nullable_NameText {
+        &self.display_name
+    }
+    pub fn portions(&self) -> &PortionPreference {
+        &self.portions
+    }
+    pub fn restrictions(&self) -> &RestrictionDeclaration {
+        &self.restrictions
+    }
+}
+impl HouseholdDraft {
+    pub fn completed_stages(&self) -> &Array_HouseholdStage_0_4 {
+        &self.completed_stages
+    }
+    pub fn connections(&self) -> &Nullable_Connections {
+        &self.connections
+    }
+    pub fn diners(&self) -> &Array_Diner_0_64 {
+        &self.diners
+    }
+    pub fn household_id(&self) -> &HouseholdId {
+        &self.household_id
+    }
+    pub fn preferences(&self) -> &Nullable_Preferences {
+        &self.preferences
+    }
+    pub fn revision(&self) -> &Revision {
+        &self.revision
+    }
+    pub fn schema_version(&self) -> &SchemaVersion {
+        &self.schema_version
+    }
+    pub fn usual_week(&self) -> &Nullable_UsualWeek {
+        &self.usual_week
+    }
+}
+impl HouseholdProfile {
+    pub fn connections(&self) -> &Connections {
+        &self.connections
+    }
+    pub fn diners(&self) -> &Array_Diner_1_64 {
+        &self.diners
+    }
+    pub fn household_id(&self) -> &HouseholdId {
+        &self.household_id
+    }
+    pub fn preferences(&self) -> &Preferences {
+        &self.preferences
+    }
+    pub fn revision(&self) -> &Revision {
+        &self.revision
+    }
+    pub fn schema_version(&self) -> &SchemaVersion {
+        &self.schema_version
+    }
+    pub fn usual_week(&self) -> &UsualWeek {
+        &self.usual_week
+    }
+}
+impl JobSummary {
+    pub fn action(&self) -> &Action {
+        &self.action
+    }
+    pub fn job_id(&self) -> &JobId {
+        &self.job_id
+    }
+    pub fn next_action(&self) -> &Nullable_RequiredAction {
+        &self.next_action
+    }
+    pub fn reason(&self) -> &Nullable_ErrorCode {
+        &self.reason
+    }
+    pub fn state(&self) -> &JobState {
+        &self.state
+    }
+}
+impl MealPortionOverride {
+    pub fn adjustment(&self) -> &PositiveRational {
+        &self.adjustment
+    }
+    pub fn meal_type(&self) -> &MealType {
+        &self.meal_type
+    }
+    pub fn preset(&self) -> &PortionPresetName {
+        &self.preset
+    }
+}
+impl MealTime {
+    pub fn meal_type(&self) -> &MealType {
+        &self.meal_type
+    }
+    pub fn time(&self) -> &LocalTime {
+        &self.time
+    }
+}
+impl Mobility {
+    pub fn cold_storage(&self) -> &bool {
+        &self.cold_storage
+    }
+    pub fn reheating(&self) -> &bool {
+        &self.reheating
+    }
+    pub fn temperature(&self) -> &MobilityTemperature {
+        &self.temperature
+    }
+}
+impl PortionPreference {
+    pub fn adjustment(&self) -> &PositiveRational {
+        &self.adjustment
+    }
+    pub fn meal_overrides(&self) -> &Array_MealPortionOverride_0_3 {
+        &self.meal_overrides
+    }
+    pub fn preset(&self) -> &PortionPresetName {
+        &self.preset
+    }
+}
+impl PositiveRational {
+    pub fn denominator(&self) -> &String {
+        &self.denominator
+    }
+    pub fn numerator(&self) -> &String {
+        &self.numerator
+    }
+}
+impl Preferences {
+    pub fn dislikes(&self) -> &Array_IngredientId_0_256 {
+        &self.dislikes
+    }
+    pub fn equipment(&self) -> &Array_EquipmentCode_0_9 {
+        &self.equipment
+    }
+    pub fn higher_protein(&self) -> &bool {
+        &self.higher_protein
+    }
+    pub fn meal_times(&self) -> &Array_MealTime_3_3 {
+        &self.meal_times
+    }
+    pub fn mobility(&self) -> &Mobility {
+        &self.mobility
+    }
+    pub fn more_variety(&self) -> &bool {
+        &self.more_variety
+    }
+    pub fn preferred_hands_on_minutes(&self) -> &u64 {
+        &self.preferred_hands_on_minutes
+    }
+    pub fn quick_meals(&self) -> &bool {
+        &self.quick_meals
+    }
+    pub fn spending_style(&self) -> &SpendingStyle {
+        &self.spending_style
+    }
+    pub fn whole_food_preference(&self) -> &bool {
+        &self.whole_food_preference
+    }
+}
+impl PrivacyPolicy {
+    pub fn confirmed_at(&self) -> &Nullable_Instant {
+        &self.confirmed_at
+    }
+    pub fn include_household_requirements(&self) -> &bool {
+        &self.include_household_requirements
+    }
+    pub fn revision(&self) -> &Revision {
+        &self.revision
+    }
+    pub fn use_ai_features(&self) -> &bool {
+        &self.use_ai_features
+    }
+}
+impl ReminderSettings {
+    pub fn channels(&self) -> &Array_ReminderChannel_0_2 {
+        &self.channels
+    }
+    pub fn enabled(&self) -> &bool {
+        &self.enabled
+    }
+    pub fn prompts(&self) -> &Array_ReminderPrompt_0_2 {
+        &self.prompts
+    }
+}
+impl UsualWeek {
+    pub fn cells(&self) -> &Array_CellDefault_21_21 {
+        &self.cells
+    }
+    pub fn day_enabled(&self) -> &Array_boolean_7_7 {
+        &self.day_enabled
+    }
+    pub fn enabled_meal_types(&self) -> &Array_MealType_0_3 {
+        &self.enabled_meal_types
+    }
+    pub fn suggest_leftovers(&self) -> &bool {
+        &self.suggest_leftovers
+    }
+    pub fn zone(&self) -> &ZoneId {
+        &self.zone
+    }
+}
+impl CalendarDestinationId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl CommandId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl DinerId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl HouseholdId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl IngredientId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl Instant {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl JobId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl LocalTime {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl NameText {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl Revision {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+impl SchemaVersion {
+    pub fn value(&self) -> &u64 {
+        &self.0
+    }
+}
+impl ZoneId {
+    pub fn value(&self) -> &String {
+        &self.0
+    }
+}
+
+/// Explicit native field-copy transition; not a historical response conversion.
+pub(super) fn transition_draft(bytes: &[u8]) -> Result<Vec<u8>, Error> {
+    let d = draft(bytes)?;
+    let n = d
+        .revision
+        .0
+        .parse::<u64>()
+        .map_err(|_| Error::new(super::Code::Integrity, ""))?
+        .checked_add(1)
+        .ok_or_else(|| Error::new(super::Code::ArithmeticOverflow, "/revision"))?;
+    #[derive(serde::Serialize)]
+    struct Target<'a> {
+        schema_version: &'a SchemaVersion,
+        household_id: &'a HouseholdId,
+        revision: String,
+        completed_stages: &'a Array_HouseholdStage_0_4,
+        diners: &'a Array_Diner_0_64,
+        preferences: &'a Nullable_Preferences,
+        usual_week: &'a Nullable_UsualWeek,
+        connections: &'a Nullable_Connections,
+        unresolved_restrictions: [(); 0],
+    }
+    codec::canonical(&Target {
+        schema_version: &d.schema_version,
+        household_id: &d.household_id,
+        revision: n.to_string(),
+        completed_stages: &d.completed_stages,
+        diners: &d.diners,
+        preferences: &d.preferences,
+        usual_week: &d.usual_week,
+        connections: &d.connections,
+        unresolved_restrictions: [],
     })
 }

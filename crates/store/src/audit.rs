@@ -1,11 +1,17 @@
 //! Closed, read-only B1 custody audit. Callers retain a stable SQLite snapshot
 //! (or native deny-write custody) for the whole call. Nothing here grants custody.
-use crate::{migrate, records::storage, records::terminal, snapshot};
+#[cfg(test)]
+use crate::snapshot;
+use crate::{
+    compat::{self, Profile},
+    migrate,
+    records::storage,
+};
 use mstrchf_contracts::*;
 use rusqlite::{Connection, Row, types::ValueRef};
 use serde::Serialize;
 use sha2::{Digest as ShaDigest, Sha256};
-use std::{collections::BTreeSet, time::Instant as Clock};
+use std::time::Instant as Clock;
 
 const MAX_DB_BYTES: u64 = 1_073_741_824;
 const AUDIT_SECONDS: u64 = 120;
@@ -83,6 +89,7 @@ pub(super) enum FixtureVersion {
 #[derive(Clone, Copy)]
 enum Catalogue {
     B1,
+    Draft005,
     #[cfg(test)]
     Fixture(FixtureVersion),
     #[cfg(test)]
@@ -94,6 +101,7 @@ impl Catalogue {
     fn version(self) -> u32 {
         match self {
             Self::B1 => 1,
+            Self::Draft005 => 2,
             #[cfg(test)]
             Self::Fixture(FixtureVersion::V1) => 1,
             #[cfg(test)]
@@ -107,6 +115,9 @@ impl Catalogue {
     fn expected(self) -> Result<Connection, DomainError> {
         let c = Connection::open_in_memory().map_err(storage)?;
         c.execute_batch(migrate::SQL).map_err(storage)?;
+        if let Self::Draft005 = self {
+            c.execute_batch(migrate::SQL_002).map_err(storage)?;
+        }
         #[cfg(test)]
         if let Self::Fixture(version) = self {
             c.execute_batch(FIXTURE_PROBE_SQL).map_err(storage)?;
@@ -127,6 +138,10 @@ impl Catalogue {
     fn checksums(self) -> Vec<Digest> {
         match self {
             Self::B1 => vec![bytes_digest(migrate::SQL.as_bytes())],
+            Self::Draft005 => vec![
+                bytes_digest(migrate::SQL.as_bytes()),
+                bytes_digest(migrate::SQL_002.as_bytes()),
+            ],
             #[cfg(test)]
             Self::Fixture(version) => {
                 let mut out = vec![bytes_digest(fixture_source_sql().as_bytes())];
@@ -151,7 +166,17 @@ impl Catalogue {
 }
 
 pub(super) fn audit_b1(c: &Connection) -> Result<AuditedRows, DomainError> {
-    audit(c, Catalogue::B1)
+    let version: i64 = c
+        .pragma_query_value(None, "user_version", |r| r.get(0))
+        .map_err(storage)?;
+    match version {
+        1 => audit(c, Catalogue::B1),
+        2 => audit(c, Catalogue::Draft005),
+        _ => Err(DomainError::new(
+            ErrorCode::UnsupportedVersion,
+            "/storage_version",
+        )),
+    }
 }
 
 #[cfg(test)]
@@ -245,6 +270,11 @@ fn integrity(c: &Connection) -> Result<(), DomainError> {
 
 fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainError> {
     let started = Clock::now();
+    let profile = if matches!(catalogue, Catalogue::B1) {
+        Profile::Old
+    } else {
+        Profile::Current
+    };
     let version: i64 = c
         .pragma_query_value(None, "user_version", |r| r.get(0))
         .map_err(storage)?;
@@ -269,6 +299,9 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
         return Err(fail());
     }
     integrity(c)?;
+    if matches!(catalogue, Catalogue::Draft005) {
+        metadata(c)?;
+    }
     budget(started)?;
 
     let (counters, lineage) = meta(c)?;
@@ -279,7 +312,7 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
             |r| r.get(0),
         )
         .map_err(storage)?;
-    scalar::<HouseholdId>(&household_id)?;
+    compat::scalar("HouseholdId", &household_id)?;
     let mut hasher = Sha256::new();
     hasher.update(b"MSTRCHF9000-STORE-CONTENTS-v1");
     let mut ledger = Vec::new();
@@ -305,28 +338,53 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
                         return Err(fail());
                     }
                 }
-                "household" => audit_household(row, &household_id, &counters)?,
-                "jobs" => audit_job_row(
+                "household" => audit_household_frozen(row, &household_id, &counters, profile)?,
+                "jobs" => audit_job_frozen(
+                    profile,
                     text(row, 0)?,
                     integer(row, 1)?,
                     integer(row, 2)?,
                     blob(row, 3)?,
                 )?,
-                "command_receipts" => audit_receipt(
-                    text(row, 0)?,
-                    text(row, 1)?,
-                    blob(row, 2)?,
-                    blob(row, 3)?,
-                    text(row, 4)?,
-                    text(row, 5)?,
-                    &household_id,
-                    counters.snapshot,
-                )?,
+                "command_receipts" => {
+                    let bound = if matches!(catalogue, Catalogue::Draft005) {
+                        let tag: String = c
+                            .query_row(
+                                "SELECT profile FROM receipt_formats WHERE command_id=?1",
+                                [text(row, 0)?],
+                                |r| r.get(0),
+                            )
+                            .map_err(storage)?;
+                        Profile::bound(&tag)?
+                    } else {
+                        profile
+                    };
+                    compat::receipt(
+                        bound,
+                        text(row, 0)?,
+                        &household_id,
+                        text(row, 5)?,
+                        &counters.snapshot.0.to_string(),
+                        text(row, 1)?,
+                        text(row, 4)?,
+                        blob(row, 2)?,
+                        blob(row, 3)?,
+                    )?;
+                }
+                "store_format" => {
+                    if count != 1 || integer(row, 0)? != 1 || text(row, 1)? != "B1Draft005" {
+                        return Err(fail());
+                    }
+                }
+                "receipt_formats" => {
+                    compat::scalar("CommandId", text(row, 0)?)?;
+                    Profile::bound(text(row, 1)?)?;
+                }
                 "resource_quarantine" => {
                     // B1 has no resource producer and no filesystem resolver.
                     // The opaque key participates in the exact raw digest only.
-                    let _ = text(row, 0)?;
-                    scalar::<JobId>(text(row, 1)?)?;
+                    let _ = opaque_text(row, 0)?;
+                    compat::scalar("JobId", text(row, 1)?)?;
                     flag(integer(row, 2)?)?;
                 }
                 "schema_migrations" => {
@@ -338,7 +396,7 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
                         return Err(fail());
                     }
                     let timestamp = text(row, 2)?;
-                    Instant::try_from(timestamp).map_err(|_| fail())?;
+                    compat::scalar("Instant", timestamp)?;
                     ledger.push(LedgerEntry {
                         version: u32::try_from(index + 1).map_err(|_| limit())?,
                         sql_sha256: checksums[index].clone(),
@@ -391,6 +449,7 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
         if matches!(
             table,
             "app_meta"
+                | "store_format"
                 | "household"
                 | "fixture_probe"
                 | "fixture_added"
@@ -409,19 +468,18 @@ fn audit(c: &Connection, catalogue: Catalogue) -> Result<AuditedRows, DomainErro
         return Err(fail());
     }
     // This bounded public projection is an additional check, never the history audit.
-    let current = snapshot::load(c).map_err(|_| fail())?;
-    audit_snapshot(&current, &household_id, counters.snapshot)?;
+    let current = frozen_snapshot(c, profile)?;
     budget(started)?;
     Ok(AuditedRows {
         version: catalogue.version(),
-        reader: "b1-contracts003",
+        reader: profile.name(),
         closure: catalogue.closure(),
         counters,
         lineage,
         ledger,
         schema_sha256: canonical_digest(&actual_schema).map_err(|_| fail())?,
         contents_sha256: finish(hasher),
-        snapshot_sha256: canonical_digest(&current).map_err(|_| fail())?,
+        snapshot_sha256: bytes_digest(&current),
         asset_refs,
         row_counts: counts,
     })
@@ -461,7 +519,18 @@ fn table_queries(catalogue: Catalogue) -> Vec<TableQuery> {
             3,
         ),
     ];
-    let _ = catalogue;
+    if matches!(catalogue, Catalogue::Draft005) {
+        tables.push((
+            "receipt_formats",
+            "SELECT command_id,profile FROM receipt_formats ORDER BY command_id COLLATE BINARY",
+            2,
+        ));
+        tables.push((
+            "store_format",
+            "SELECT singleton,live_profile FROM store_format ORDER BY singleton",
+            2,
+        ));
+    }
     #[cfg(test)]
     if let Catalogue::Fixture(version) = catalogue {
         tables.push((
@@ -522,10 +591,7 @@ fn meta(c: &Connection) -> Result<(Counters, String), DomainError> {
         history: revision(text(row, 4)?)?,
         catalogue: revision(text(row, 5)?)?,
     };
-    if counters.history != Revision(1)
-        || counters.catalogue != Revision(1)
-        || counters.settings.0 > counters.snapshot.0
-    {
+    if counters.history != Revision(1) || counters.catalogue != Revision(1) {
         return Err(fail());
     }
     let lineage = lineage.to_owned();
@@ -535,32 +601,75 @@ fn meta(c: &Connection) -> Result<(Counters, String), DomainError> {
     Ok((counters, lineage))
 }
 
-fn audit_household(row: &Row<'_>, id: &str, counters: &Counters) -> Result<(), DomainError> {
-    let draft: HouseholdDraft = document(blob(row, 3)?)?;
-    let privacy: PrivacyPolicy = document(blob(row, 5)?)?;
+pub(crate) fn metadata(c: &Connection) -> Result<(), DomainError> {
+    let mut q = c
+        .prepare("SELECT singleton,live_profile FROM store_format ORDER BY singleton")
+        .map_err(storage)?;
+    let rows = q
+        .query_map([], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?)))
+        .map_err(storage)?
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(storage)?;
+    if rows != vec![(1, "B1Draft005".into())] {
+        return Err(fail());
+    }
+    for sql in [
+        "SELECT r.command_id FROM command_receipts AS r LEFT JOIN receipt_formats AS f ON f.command_id=r.command_id WHERE f.command_id IS NULL LIMIT 1",
+        "SELECT f.command_id FROM receipt_formats AS f LEFT JOIN command_receipts AS r ON r.command_id=f.command_id WHERE r.command_id IS NULL LIMIT 1",
+    ] {
+        if c.prepare(sql)
+            .map_err(storage)?
+            .exists([])
+            .map_err(storage)?
+        {
+            return Err(fail());
+        }
+    }
+    Ok(())
+}
+fn audit_household_frozen(
+    row: &Row<'_>,
+    id: &str,
+    counters: &Counters,
+    p: Profile,
+) -> Result<(), DomainError> {
+    let raw = blob(row, 3)?;
+    // A field which the exact old grammar cannot represent denotes unavailable
+    // interpretation, never a route to the current decoder.
+    if p == Profile::Old
+        && serde_json::from_slice::<serde_json::Value>(raw)
+            .ok()
+            .is_some_and(|v| v.get("unresolved_restrictions").is_some())
+    {
+        return Err(DomainError::new(
+            ErrorCode::UnsupportedVersion,
+            "/storage_reader",
+        ));
+    }
+    let d = compat::value(p, "draft", raw)?;
+    let policy = compat::value(p, "privacy", blob(row, 5)?)?;
     if integer(row, 0)? != 1
         || text(row, 1)? != id
-        || draft.household_id.0 != id
-        || revision(text(row, 2)?)? != draft.revision
-        || revision(text(row, 4)?)? != privacy.revision
-        || draft.revision.0 > counters.snapshot.0
-        || privacy.revision != counters.settings
+        || d["household_id"] != id
+        || d["revision"] != text(row, 2)?
+        || policy["revision"] != text(row, 4)?
+        || revision(text(row, 4)?)? != counters.settings
     {
         return Err(fail());
     }
-    draft_links(&draft, &privacy)?;
+    if !d["connections"].is_null() && d["connections"]["privacy"] != policy {
+        return Err(fail());
+    }
     match (
         row.get_ref(6).map_err(storage)?,
         row.get_ref(7).map_err(storage)?,
     ) {
-        (ValueRef::Null, ValueRef::Null) => {}
-        (ValueRef::Text(rev), ValueRef::Blob(bytes)) => {
-            let profile: HouseholdProfile = document(bytes)?;
-            let rev = std::str::from_utf8(rev).map_err(|_| fail())?;
-            if revision(rev)? != profile.revision
-                || profile.household_id.0 != id
-                || profile.revision.0 > counters.snapshot.0
-                || profile.connections.privacy != privacy
+        (ValueRef::Null, ValueRef::Null) => (),
+        (ValueRef::Text(rev), ValueRef::Blob(b)) => {
+            let v = compat::value(p, "profile", b)?;
+            if v["revision"] != std::str::from_utf8(rev).map_err(storage)?
+                || v["household_id"] != id
+                || v["connections"]["privacy"] != policy
             {
                 return Err(fail());
             }
@@ -569,125 +678,72 @@ fn audit_household(row: &Row<'_>, id: &str, counters: &Counters) -> Result<(), D
     }
     Ok(())
 }
-
-fn draft_links(draft: &HouseholdDraft, privacy: &PrivacyPolicy) -> Result<(), DomainError> {
-    if draft
-        .connections
-        .0
-        .as_ref()
-        .is_some_and(|v| &v.privacy != privacy)
-    {
-        return Err(fail());
-    }
-    if let Some(usual) = &draft.usual_week.0 {
-        for cell in usual.cells.iter() {
-            for id in cell.attendee_ids.iter() {
-                if !draft.diners.iter().any(|d| &d.diner_id == id) {
-                    return Err(fail());
-                }
-            }
-        }
-    }
-    Ok(())
-}
-
-fn audit_snapshot(s: &Snapshot, id: &str, maximum: Revision) -> Result<(), DomainError> {
-    if !s.weeks.is_empty() || !s.conflicts.is_empty() {
-        return Err(closure());
-    }
-    if s.snapshot_revision.0 > maximum.0
-        || s.household_draft.household_id.0 != id
-        || s.household_draft.revision.0 > s.snapshot_revision.0
-        || s.privacy.revision.0 > s.snapshot_revision.0
-    {
-        return Err(fail());
-    }
-    draft_links(&s.household_draft, &s.privacy)?;
-    if let Some(profile) = &s.profile.0
-        && (profile.household_id.0 != id
-            || profile.revision.0 > s.snapshot_revision.0
-            || profile.connections.privacy != s.privacy)
-    {
-        return Err(fail());
-    }
-    let mut ids = BTreeSet::new();
-    for job in s.jobs.iter() {
-        if !ids.insert(&job.job_id.0) {
-            return Err(fail());
-        }
-    }
-    Ok(())
-}
-
-fn audit_job_row(
+fn audit_job_frozen(
+    p: Profile,
     id: &str,
     sequence: i64,
     is_terminal: i64,
     bytes: &[u8],
 ) -> Result<(), DomainError> {
-    let job: JobSummary = document(bytes)?;
-    if sequence <= 0 || job.job_id.0 != id || terminal(job.state) != flag(is_terminal)? {
+    let v = compat::value(p, "job", bytes)?;
+    let terminal = matches!(
+        v["state"].as_str(),
+        Some("needs_user" | "succeeded" | "failed" | "cancelled")
+    );
+    if sequence <= 0 || v["job_id"] != id || terminal != flag(is_terminal)? {
         return Err(fail());
     }
     Ok(())
 }
-
+pub(crate) fn frozen_snapshot(c: &Connection, p: Profile) -> Result<Vec<u8>, DomainError> {
+    let (rev,d,policy,profile):(String,Vec<u8>,Vec<u8>,Option<Vec<u8>>)=c.query_row("SELECT snapshot_revision,draft,privacy,profile FROM app_meta JOIN household USING(singleton)",[],|r|Ok((r.get(0)?,r.get(1)?,r.get(2)?,r.get(3)?))).map_err(storage)?;
+    let live: i64 = c
+        .query_row("SELECT count(*) FROM jobs WHERE terminal=0", [], |r| {
+            r.get(0)
+        })
+        .map_err(storage)?;
+    if live > 1024 {
+        return Err(DomainError::new(ErrorCode::LimitExceeded, "/jobs"));
+    }
+    let mut q=c.prepare("SELECT summary FROM jobs ORDER BY terminal ASC,creation_sequence DESC,job_id ASC LIMIT 1024").map_err(storage)?;
+    let mut rows = q.query([]).map_err(storage)?;
+    let mut jobs = Vec::new();
+    while let Some(row) = rows.next().map_err(storage)? {
+        jobs.push(compat::value(p, "job", blob(row, 0)?)?);
+    }
+    let v = serde_json::json!({"schema_version":1,"snapshot_revision":rev,"household_draft":compat::value(p,"draft",&d)?,"privacy":compat::value(p,"privacy",&policy)?,"profile":profile.map(|b|compat::value(p,"profile",&b)).transpose()?,"jobs":jobs,"weeks":[],"conflicts":[]});
+    let bytes = canonical_bytes(&v)?;
+    compat::value(p, "snapshot", &bytes)?;
+    Ok(bytes)
+}
+#[cfg(test)]
+fn audit_job_row(id: &str, sequence: i64, t: i64, b: &[u8]) -> Result<(), DomainError> {
+    audit_job_frozen(Profile::Current, id, sequence, t, b)
+}
+#[cfg(test)]
 #[allow(clippy::too_many_arguments)]
 fn audit_receipt(
     id: &str,
-    command_digest: &str,
-    command: &[u8],
-    response: &[u8],
-    response_digest: &str,
-    stored_revision: &str,
-    household_id: &str,
-    maximum: Revision,
+    cd: &str,
+    a: &[u8],
+    b: &[u8],
+    rd: &str,
+    rev: &str,
+    hh: &str,
+    max: Revision,
 ) -> Result<(), DomainError> {
-    if bytes_digest(command).0 != command_digest || bytes_digest(response).0 != response_digest {
-        return Err(fail());
-    }
-    let command: AppCommandV1 = document(command)?;
-    let response: Snapshot = document(response)?;
-    if command.command_id.0 != id
-        || revision(stored_revision)? != response.snapshot_revision
-        || command.expected_snapshot_revision.0.checked_add(1) != Some(response.snapshot_revision.0)
-    {
-        return Err(fail());
-    }
-    match &command.command {
-        AppCommand::SaveHouseholdDraft { draft } => {
-            if draft.household_id.0 != household_id {
-                return Err(fail());
-            }
-        }
-        AppCommand::SetPrivacy {
-            policy,
-            expected_policy_revision,
-        } => {
-            if policy.revision != *expected_policy_revision {
-                return Err(fail());
-            }
-        }
-        AppCommand::CancelJob { .. } => {}
-        _ => return Err(closure()),
-    }
-    audit_snapshot(&response, household_id, maximum)
-}
-
-fn document<T: serde::de::DeserializeOwned + ValidateShape>(
-    bytes: &[u8],
-) -> Result<T, DomainError> {
-    if bytes.len() > MAX_DOCUMENT_BYTES {
-        return Err(limit());
-    }
-    let result = parse_document::<T>(bytes).map_err(|_| fail())?;
-    if canonical_bytes(&result).map_err(|_| fail())? != bytes {
-        return Err(fail());
-    }
-    Ok(result)
-}
-fn scalar<T: serde::de::DeserializeOwned + ValidateShape>(value: &str) -> Result<T, DomainError> {
-    parse_document(&canonical_bytes(&value).map_err(|_| fail())?).map_err(|_| fail())
+    compat::receipt(
+        Profile::Current,
+        id,
+        hh,
+        rev,
+        &max.0.to_string(),
+        cd,
+        rd,
+        a,
+        b,
+    )
+    .map(|_| ())
 }
 fn revision(value: &str) -> Result<Revision, DomainError> {
     let parsed = value.parse::<u64>().map_err(|_| fail())?;
@@ -706,6 +762,15 @@ fn flag(value: i64) -> Result<bool, DomainError> {
 fn text<'r>(row: &'r Row<'_>, index: usize) -> Result<&'r str, DomainError> {
     match row.get_ref(index).map_err(storage)? {
         ValueRef::Text(bytes) if bytes.len() <= MAX_DOCUMENT_BYTES => {
+            std::str::from_utf8(bytes).map_err(|_| fail())
+        }
+        ValueRef::Text(_) => Err(limit()),
+        _ => Err(fail()),
+    }
+}
+fn opaque_text<'r>(row: &'r Row<'_>, index: usize) -> Result<&'r str, DomainError> {
+    match row.get_ref(index).map_err(storage)? {
+        ValueRef::Text(bytes) if bytes.len() as u64 <= MAX_DB_BYTES => {
             std::str::from_utf8(bytes).map_err(|_| fail())
         }
         ValueRef::Text(_) => Err(limit()),
@@ -742,7 +807,7 @@ fn hash_value(hasher: &mut Sha256, value: ValueRef<'_>) -> Result<(), DomainErro
             hasher.update(n.to_be_bytes());
         }
         ValueRef::Text(bytes) => {
-            if bytes.len() > MAX_DOCUMENT_BYTES {
+            if bytes.len() as u64 > MAX_DB_BYTES {
                 return Err(limit());
             }
             std::str::from_utf8(bytes).map_err(|_| fail())?;
@@ -768,6 +833,21 @@ fn finish(hasher: Sha256) -> Digest {
             .map(|b| format!("{b:02x}"))
             .collect(),
     )
+}
+
+// Canonical raw SQLite cell encoding, including every original receipt column.
+pub(crate) fn receipt_contents(c: &Connection) -> Result<Digest, DomainError> {
+    let mut h = Sha256::new();
+    h.update(b"MSTRCHF9000-RECEIPT-CUSTODY-v1");
+    let mut q=c.prepare("SELECT command_id,command_digest,command,response,response_digest,snapshot_revision FROM command_receipts ORDER BY command_id COLLATE BINARY").map_err(storage)?;
+    let mut rows = q.query([]).map_err(storage)?;
+    while let Some(row) = rows.next().map_err(storage)? {
+        h.update([0x52]);
+        for i in 0..6 {
+            hash_value(&mut h, row.get_ref(i).map_err(storage)?)?;
+        }
+    }
+    Ok(finish(h))
 }
 
 #[cfg(test)]
@@ -995,8 +1075,10 @@ mod tests {
                 ("command_receipts", 0),
                 ("household", 1),
                 ("jobs", 0),
+                ("receipt_formats", 0),
                 ("resource_quarantine", 0),
-                ("schema_migrations", 1)
+                ("schema_migrations", 2),
+                ("store_format", 1)
             ]
         );
         let initial = snapshot::load(&c).unwrap();

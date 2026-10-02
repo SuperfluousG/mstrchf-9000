@@ -23,7 +23,7 @@ pub(crate) fn fault(name: &str) -> bool {
         }
     })
 }
-fn inject(name: &'static str) {
+pub(crate) fn inject(name: &'static str) {
     FAULT.with(|f| f.set(name));
 }
 
@@ -141,7 +141,9 @@ fn child() {
         return;
     }
     if mode == "command" {
-        let s = store.dispatch_ui(policy_command(1, 1, 1)).unwrap();
+        let s = store
+            .dispatch_current_fixture(policy_command(1, 1, 1))
+            .unwrap();
         assert_eq!(s.snapshot_revision, Revision(2));
     }
     if mode == "verify-seeded" {
@@ -151,7 +153,9 @@ fn child() {
         assert_eq!(actual, expected);
         if actual.snapshot_revision == Revision(2) {
             assert_eq!(
-                store.dispatch_ui(policy_command(1, 1, 1)).unwrap(),
+                store
+                    .dispatch_current_fixture(policy_command(1, 1, 1))
+                    .unwrap(),
                 expected
             );
         }
@@ -207,7 +211,9 @@ fn child() {
         assert!(s.household_draft.connections.0.is_none());
         assert!(s.profile.0.is_none());
         if rev == 2 {
-            let replay = store.dispatch_ui(policy_command(1, 1, 1)).unwrap();
+            let replay = store
+                .dispatch_current_fixture(policy_command(1, 1, 1))
+                .unwrap();
             assert_eq!(replay, s);
         }
         drop(store);
@@ -339,10 +345,10 @@ fn migration_ledger_and_future_version_refuse_unchanged() {
     for sql in [
         "UPDATE schema_migrations SET checksum='altered'",
         "DELETE FROM schema_migrations",
-        "PRAGMA user_version=2",
+        "PRAGMA user_version=3",
         "PRAGMA user_version=0",
         "CREATE TABLE unexpected(x TEXT)",
-        "UPDATE schema_migrations SET version=2",
+        "UPDATE schema_migrations SET version=3 WHERE version=2",
     ] {
         let p = root("ledger");
         drop(open(&p));
@@ -413,7 +419,7 @@ fn full_u64_counters_overflow_and_sql_grammar() {
         let store = open(&p);
         let before = store.snapshot().unwrap();
         assert_eq!(before.snapshot_revision, Revision(value));
-        let outcome = store.dispatch_ui(policy_command(1, value, 1));
+        let outcome = store.dispatch_current_fixture(policy_command(1, value, 1));
         if value == u64::MAX {
             assert_eq!(outcome.unwrap_err().code, ErrorCode::ArithmeticOverflow);
             assert_eq!(store.snapshot().unwrap(), before);
@@ -479,7 +485,7 @@ fn local_cancellation_preserves_terminal_and_quarantines_live() {
                 job_id: JobId(format!("jb_{:032x}", 1)),
             },
         };
-        let after = store.dispatch_ui(command).unwrap();
+        let after = store.dispatch_current_fixture(command).unwrap();
         assert_eq!(after.snapshot_revision, Revision(2));
         if state == JobState::Running {
             assert_eq!(after.jobs[0].state, JobState::Cancelled);
@@ -513,7 +519,9 @@ fn privacy_quarantines_live_without_releasing_resource() {
     .unwrap();
     drop(c);
     let store = open(&p);
-    let s = store.dispatch_ui(policy_command(1, 1, 1)).unwrap();
+    let s = store
+        .dispatch_current_fixture(policy_command(1, 1, 1))
+        .unwrap();
     assert_eq!(s.jobs[0].reason.0, Some(ErrorCode::PrivacyDenied));
     drop(store);
     let c = Connection::open(p.join("planner.sqlite")).unwrap();
@@ -650,7 +658,7 @@ fn detached_snapshot_and_competing_cas_are_coherent() {
     let threads: Vec<_> = (1..=2)
         .map(|id| {
             let s = store.clone();
-            std::thread::spawn(move || s.dispatch_ui(policy_command(id, 1, 1)))
+            std::thread::spawn(move || s.dispatch_current_fixture(policy_command(id, 1, 1)))
         })
         .collect();
     let results: Vec<_> = threads.into_iter().map(|t| t.join().unwrap()).collect();
@@ -748,7 +756,9 @@ fn sqlite_read_transaction_holds_coherent_old_state() {
     .unwrap();
     let tx = reader.transaction().unwrap();
     let old = snapshot::load(&tx).unwrap();
-    let updated = store.dispatch_ui(policy_command(1, 1, 1)).unwrap();
+    let updated = store
+        .dispatch_current_fixture(policy_command(1, 1, 1))
+        .unwrap();
     assert_eq!(snapshot::load(&tx).unwrap(), old);
     tx.commit().unwrap();
     assert_eq!(snapshot::read(&mut reader).unwrap(), updated);
@@ -821,7 +831,7 @@ fn bounded_queue_refuses_overload_and_recovers_without_mutation() {
         store.sender.try_send(Request::Snapshot(send)).unwrap();
         replies.push(recv);
     }
-    let outcome = store.dispatch_ui(policy_command(1, 1, 1));
+    let outcome = store.dispatch_current_fixture(policy_command(1, 1, 1));
     resume.send(()).unwrap();
     assert_eq!(outcome.unwrap_err().code, ErrorCode::StorageFailure);
     for reply in replies {
@@ -837,7 +847,7 @@ fn bounded_queue_refuses_overload_and_recovers_without_mutation() {
     assert_eq!(store.snapshot().unwrap().snapshot_revision, Revision(1));
     assert_eq!(
         store
-            .dispatch_ui(policy_command(1, 1, 1))
+            .dispatch_current_fixture(policy_command(1, 1, 1))
             .unwrap()
             .snapshot_revision,
         Revision(2)
@@ -978,12 +988,14 @@ fn cancellation_validates_job_projection_outside_visible_history() {
             .code,
         ErrorCode::StorageFailure
     );
-    assert_eq!(db.snapshot().unwrap(), before);
+    assert!(db.snapshot().is_err());
+    assert!(db.recovery_only);
+    assert_eq!(snapshot::load(&db.connection).unwrap(), before);
 }
 
-// Ruling005 wire-only boundary. This proves refusal, not issue transition support.
+// Integrated005 boundary: unchanged/new issues persist; invalid edits still refuse.
 #[test]
-fn ruling005_issue_inputs_refuse_without_mutation_or_receipt() {
+fn ruling005_issue_inputs_obey_exact_edit_semantics() {
     for (old_issue, new_issue, submitted_edit) in [
         (false, true, false),
         (false, false, true),
@@ -1034,17 +1046,33 @@ fn ruling005_issue_inputs_refuse_without_mutation_or_receipt() {
             draft: proposed,
             restriction_issue_edits: BoundedVec(if submitted_edit {
                 vec![SetupRestrictionEdit::Resolve {
-                    diner_id: issue.diner_id,
+                    diner_id: issue.diner_id.clone(),
                 }]
             } else {
                 vec![]
             }),
         };
         command.validate_shape().unwrap();
+        if !submitted_edit && new_issue {
+            let response = db
+                .dispatch(&command, &canonical_bytes(&command).unwrap())
+                .unwrap();
+            let saved: Snapshot = parse_document(&response).unwrap();
+            assert_eq!(
+                saved.household_draft.unresolved_restrictions,
+                BoundedVec(vec![issue])
+            );
+            assert_eq!(saved.snapshot_revision, Revision(2));
+            assert_eq!(
+                saved.household_draft.revision,
+                Revision(if old_issue { 1 } else { 2 })
+            );
+            continue;
+        }
         let error = db
             .dispatch(&command, &canonical_bytes(&command).unwrap())
             .unwrap_err();
-        assert_eq!(error.code, ErrorCode::UnsupportedCapability);
+        assert_eq!(error.code, ErrorCode::InvalidValue);
         assert!(
             !String::from_utf8(canonical_bytes(&error).unwrap())
                 .unwrap()
@@ -1070,5 +1098,20 @@ fn ruling005_issue_inputs_refuse_without_mutation_or_receipt() {
         drop(db);
         let mut reopened = database::Database::open(&p).unwrap();
         assert_eq!(reopened.snapshot().unwrap(), before);
+    }
+}
+
+// Existing current-fixture assertions retain Snapshot comparison semantics.
+trait CurrentFixtureDispatch {
+    fn dispatch_current_fixture(&self, c: AppCommandV1) -> Result<Snapshot, DomainError>;
+}
+impl CurrentFixtureDispatch for Store {
+    fn dispatch_current_fixture(&self, c: AppCommandV1) -> Result<Snapshot, DomainError> {
+        let o = self.dispatch_ui(c)?;
+        assert!(matches!(
+            o.response(),
+            crate::ReceiptSnapshot::B1Draft005(_)
+        ));
+        parse_document(o.original_response_bytes())
     }
 }

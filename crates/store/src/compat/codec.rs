@@ -144,13 +144,10 @@ fn walk_schema(
             if !name.is_empty()
                 && let Err(e) = validate_named(name, v)
             {
-                for mut i in [ValidationIssue {
-                    path: e.path,
+                out.push(ValidationIssue {
+                    path: format!("{path}{}", e.path),
                     code: e.code,
-                }] {
-                    i.path = format!("{path}{}", i.path);
-                    out.push(i);
-                }
+                });
             }
             return;
         }
@@ -161,13 +158,10 @@ fn walk_schema(
                 if !name.is_empty()
                     && let Err(e) = validate_named(name, v)
                 {
-                    for mut i in [ValidationIssue {
-                        path: e.path,
+                    out.push(ValidationIssue {
+                        path: format!("{path}{}", e.path),
                         code: e.code,
-                    }] {
-                        i.path = format!("{path}{}", i.path);
-                        out.push(i);
-                    }
+                    });
                 }
                 return;
             }
@@ -297,13 +291,10 @@ fn walk_schema(
     if out.len() == before
         && let Err(e) = validate_named(name, v)
     {
-        for mut i in [ValidationIssue {
-            path: e.path,
+        out.push(ValidationIssue {
+            path: format!("{path}{}", e.path),
             code: e.code,
-        }] {
-            i.path = format!("{path}{}", i.path);
-            out.push(i);
-        }
+        });
     }
 }
 fn parse_value_with_bounds(bytes: &[u8], bounds: &CollectionBounds) -> Result<Value, Error> {
@@ -584,7 +575,7 @@ fn valid_instant(s: &str) -> bool {
     let y: u32 = s[..4].parse().unwrap();
     let m: usize = s[5..7].parse().unwrap();
     let d: u32 = s[8..10].parse().unwrap();
-    let leap = y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
+    let leap = y.is_multiple_of(4) && (!y.is_multiple_of(100) || y.is_multiple_of(400));
     let days = [
         31,
         if leap { 29 } else { 28 },
@@ -872,63 +863,6 @@ fn terminal(job: &Value) -> bool {
     )
 }
 
-#[cfg(test)]
-mod parser_limits {
-    use super::*;
-    #[test]
-    fn byte_depth_object_and_global_array_boundaries() {
-        let bounds = CollectionBounds::default();
-        let mut exact = b"null".to_vec();
-        exact.resize(MAX_DOCUMENT_BYTES, b' ');
-        assert!(parse_value_with_bounds(&exact, &bounds).is_ok());
-        exact.push(b' ');
-        assert_eq!(
-            parse_value_with_bounds(&exact, &bounds).unwrap_err().code,
-            Code::LimitExceeded
-        );
-        for (n, want) in [(32, true), (33, false)] {
-            let s = format!("{}0{}", "[".repeat(n), "]".repeat(n));
-            assert_eq!(parse_value_with_bounds(s.as_bytes(), &bounds).is_ok(), want);
-        }
-        for (n, want) in [(256, true), (257, false)] {
-            let s = format!(
-                "{{{}}}",
-                (0..n)
-                    .map(|i| format!("\"k{i}\":null"))
-                    .collect::<Vec<_>>()
-                    .join(",")
-            );
-            assert_eq!(parse_value_with_bounds(s.as_bytes(), &bounds).is_ok(), want);
-        }
-        let a = format!("[{}]", vec!["null"; 4096].join(","));
-        assert!(parse_value_with_bounds(a.as_bytes(), &bounds).is_ok());
-        let bad = format!("[{},{{broken", vec!["null"; 4096].join(","));
-        assert_eq!(
-            parse_value_with_bounds(bad.as_bytes(), &bounds)
-                .unwrap_err()
-                .code,
-            Code::LimitExceeded
-        );
-    }
-    #[test]
-    fn duplicate_keys_and_noninteger_tokens_refuse_without_losing_nested_keys() {
-        let bounds = CollectionBounds::default();
-        for s in [r#"{"x":{"a":1,"\u0061":2}}"#, r#"{"x":null,"x":null}"#] {
-            assert_eq!(
-                parse_value_with_bounds(s.as_bytes(), &bounds)
-                    .unwrap_err()
-                    .code,
-                Code::DuplicateKey
-            );
-        }
-        for s in ["1.0", "1e0", "null false", "{", "[NaN]", "\"\\ud800\""] {
-            assert!(
-                parse_value_with_bounds(s.as_bytes(), &bounds).is_err(),
-                "{s}"
-            );
-        }
-    }
-}
 pub(super) fn receipt_predicates<C: Serialize, R: Serialize>(
     command: &C,
     response: &R,
@@ -1047,4 +981,105 @@ pub(super) fn receipt_predicates<C: Serialize, R: Serialize>(
         _ => return Err(Error::new(Code::UnknownClosure, "/command")),
     }
     Ok(())
+}
+
+// Envelope-only routing: duplicate/depth/size checks apply to the entire body;
+// body interpretation belongs exclusively to the stored receipt binding.
+pub(super) fn envelope(bytes: &[u8]) -> Result<String, Error> {
+    let v = parse_value_with_bounds(bytes, &CollectionBounds::default())?;
+    let object = v
+        .as_object()
+        .ok_or_else(|| Error::new(Code::InvalidValue, ""))?;
+    if object.len() != 4
+        || ![
+            "schema_version",
+            "command_id",
+            "expected_snapshot_revision",
+            "command",
+        ]
+        .iter()
+        .all(|k| object.contains_key(*k))
+    {
+        return Err(Error::new(Code::InvalidValue, ""));
+    }
+    if v["schema_version"] != 1 || !v["command"].is_object() {
+        return Err(Error::new(Code::InvalidValue, ""));
+    }
+    let cmd = v["command"].as_object().unwrap();
+    if cmd.len() != 2
+        || !cmd.get("kind").is_some_and(Value::is_string)
+        || !cmd.get("data").is_some_and(Value::is_object)
+    {
+        return Err(Error::new(Code::InvalidValue, "/command"));
+    }
+    let id = v["command_id"]
+        .as_str()
+        .ok_or_else(|| Error::new(Code::InvalidValue, "/command_id"))?;
+    if !valid_id(id, "cm_") {
+        return Err(Error::new(Code::InvalidValue, "/command_id"));
+    }
+    positive(
+        v["expected_snapshot_revision"]
+            .as_str()
+            .ok_or_else(|| Error::new(Code::InvalidValue, "/expected_snapshot_revision"))?,
+    )?;
+    Ok(id.into())
+}
+
+#[cfg(test)]
+mod parser_limits {
+    use super::*;
+    #[test]
+    fn byte_depth_object_and_global_array_boundaries() {
+        let bounds = CollectionBounds::default();
+        let mut exact = b"null".to_vec();
+        exact.resize(MAX_DOCUMENT_BYTES, b' ');
+        assert!(parse_value_with_bounds(&exact, &bounds).is_ok());
+        exact.push(b' ');
+        assert_eq!(
+            parse_value_with_bounds(&exact, &bounds).unwrap_err().code,
+            Code::LimitExceeded
+        );
+        for (n, want) in [(32, true), (33, false)] {
+            let s = format!("{}0{}", "[".repeat(n), "]".repeat(n));
+            assert_eq!(parse_value_with_bounds(s.as_bytes(), &bounds).is_ok(), want);
+        }
+        for (n, want) in [(256, true), (257, false)] {
+            let s = format!(
+                "{{{}}}",
+                (0..n)
+                    .map(|i| format!("\"k{i}\":null"))
+                    .collect::<Vec<_>>()
+                    .join(",")
+            );
+            assert_eq!(parse_value_with_bounds(s.as_bytes(), &bounds).is_ok(), want);
+        }
+        let a = format!("[{}]", vec!["null"; 4096].join(","));
+        assert!(parse_value_with_bounds(a.as_bytes(), &bounds).is_ok());
+        let bad = format!("[{},{{broken", vec!["null"; 4096].join(","));
+        assert_eq!(
+            parse_value_with_bounds(bad.as_bytes(), &bounds)
+                .unwrap_err()
+                .code,
+            Code::LimitExceeded
+        );
+    }
+    #[test]
+    fn duplicate_keys_and_noninteger_tokens_refuse_without_losing_nested_keys() {
+        let bounds = CollectionBounds::default();
+        for s in [r#"{"x":{"a":1,"\u0061":2}}"#, r#"{"x":null,"x":null}"#] {
+            assert_eq!(
+                parse_value_with_bounds(s.as_bytes(), &bounds)
+                    .unwrap_err()
+                    .code,
+                Code::DuplicateKey
+            );
+        }
+        for s in ["1.0", "1e0", "null false", "{", "[NaN]", "\"\\ud800\""] {
+            assert!(
+                parse_value_with_bounds(s.as_bytes(), &bounds).is_err(),
+                "{s}"
+            );
+        }
+    }
 }

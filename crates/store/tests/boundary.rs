@@ -26,7 +26,30 @@ fn fixture(name: &str) -> Value {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/contracts")
         .join(name);
-    serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap()
+    // Runtime admission now uses trusted writer time. Clone fixture bytes into
+    // an explicitly past synthetic admission case; original fixture stays unchanged.
+    let mut v: Value = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+    fn past(v: &mut Value) {
+        match v {
+            Value::Object(o) => {
+                for (k, x) in o {
+                    if k == "confirmed_at" && x.is_string() {
+                        *x = json!("2026-01-01T12:00:00Z");
+                    } else {
+                        past(x);
+                    }
+                }
+            }
+            Value::Array(a) => {
+                for x in a {
+                    past(x);
+                }
+            }
+            _ => (),
+        }
+    }
+    past(&mut v);
+    v
 }
 
 fn command(command_id: u64, expected_snapshot_revision: u64, command: AppCommand) -> AppCommandV1 {
@@ -101,7 +124,7 @@ fn household_connections_copy_authoritative_privacy_and_follow_revision_changes(
     let store = store();
     let base = store.snapshot().unwrap();
     let saved = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             1,
             base.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
@@ -129,7 +152,7 @@ fn household_connections_copy_authoritative_privacy_and_follow_revision_changes(
         confirmed_at: Nullable(Some(Instant::try_from("2026-12-28T12:00:00Z").unwrap())),
     };
     let updated = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             2,
             saved.snapshot_revision.0,
             AppCommand::SetPrivacy {
@@ -174,7 +197,7 @@ fn null_privacy_copy_survives_revision_two_reopen_and_revision_three_update() {
     draft["household_id"] = serde_json::to_value(&initial.household_draft.household_id).unwrap();
     let partial: HouseholdDraft = serde_json::from_value(draft).unwrap();
     let saved = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             30,
             initial.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
@@ -193,7 +216,7 @@ fn null_privacy_copy_survives_revision_two_reopen_and_revision_three_update() {
         confirmed_at: Nullable(Some(Instant::try_from("2026-12-28T12:00:00Z").unwrap())),
     };
     let at_revision_two = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             31,
             saved.snapshot_revision.0,
             AppCommand::SetPrivacy {
@@ -218,7 +241,7 @@ fn null_privacy_copy_survives_revision_two_reopen_and_revision_three_update() {
         confirmed_at: Nullable(Some(Instant::try_from("2026-12-28T12:01:00Z").unwrap())),
     };
     let at_revision_three = reopened
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             32,
             at_revision_two.snapshot_revision.0,
             AppCommand::SetPrivacy {
@@ -240,7 +263,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
         draft_with_connections(&before.privacy, &before.household_draft.household_id);
     foreign_draft.household_id = HouseholdId("hh_00000000000000000000000000000002".into());
     let error = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             1,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
@@ -253,7 +276,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
     assert_eq!(store.snapshot().unwrap(), before);
 
     let error = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             2,
             before.snapshot_revision.0 + 1,
             AppCommand::SaveHouseholdDraft {
@@ -272,7 +295,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
         draft_with_connections(&before.privacy, &before.household_draft.household_id);
     invalid_draft.revision = Revision(0);
     let error = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             3,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
@@ -287,7 +310,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
     let mut injected_policy = before.privacy.clone();
     injected_policy.use_ai_features = true;
     let error = store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             4,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
@@ -301,8 +324,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
         .unwrap_err();
     assert_eq!(error.code, ErrorCode::ContextStale);
     assert!(error.issues.iter().any(|issue| {
-        issue.path == "/command/data/draft/connections/privacy"
-            && issue.code == ErrorCode::ContextStale
+        issue.path == "/connections/privacy" && issue.code == ErrorCode::ContextStale
     }));
     assert_eq!(store.snapshot().unwrap(), before);
 }
@@ -324,7 +346,9 @@ fn exact_replay_returns_original_response_after_intervening_state_change() {
             },
         },
     );
-    let first_response = store.dispatch_ui(first_command.clone()).unwrap();
+    let first_response = store
+        .dispatch_current_fixture(first_command.clone())
+        .unwrap();
 
     let policy = PrivacyPolicy {
         revision: Revision(1),
@@ -333,7 +357,7 @@ fn exact_replay_returns_original_response_after_intervening_state_change() {
         confirmed_at: Nullable(Some(Instant::try_from("2026-12-28T12:00:00Z").unwrap())),
     };
     store
-        .dispatch_ui(command(
+        .dispatch_current_fixture(command(
             11,
             first_response.snapshot_revision.0,
             AppCommand::SetPrivacy {
@@ -343,7 +367,10 @@ fn exact_replay_returns_original_response_after_intervening_state_change() {
         ))
         .unwrap();
 
-    assert_eq!(store.dispatch_ui(first_command).unwrap(), first_response);
+    assert_eq!(
+        store.dispatch_current_fixture(first_command).unwrap(),
+        first_response
+    );
     assert_ne!(store.snapshot().unwrap(), first_response);
 }
 
@@ -364,7 +391,7 @@ fn command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict(
             },
         },
     );
-    let response = store.dispatch_ui(original.clone()).unwrap();
+    let response = store.dispatch_current_fixture(original.clone()).unwrap();
 
     let mut changed_draft_value = fixture("ruling005-current--household-draft.json");
     changed_draft_value["household_id"] =
@@ -379,12 +406,14 @@ fn command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict(
             draft: changed_draft,
         },
     );
-    let error = store.dispatch_ui(changed_data).unwrap_err();
+    let error = store.dispatch_current_fixture(changed_data).unwrap_err();
     assert_eq!(error.code, ErrorCode::ReplayConflict);
     assert_eq!(store.snapshot().unwrap(), response);
 
     let changed_expected_revision = command(20, initial.snapshot_revision.0 + 1, original.command);
-    let error = store.dispatch_ui(changed_expected_revision).unwrap_err();
+    let error = store
+        .dispatch_current_fixture(changed_expected_revision)
+        .unwrap_err();
     assert_eq!(error.code, ErrorCode::ReplayConflict);
     assert_eq!(store.snapshot().unwrap(), response);
 }
@@ -533,7 +562,7 @@ fn nine_unsupported_ui_commands_are_rejected_without_state_changes() {
     {
         assert_eq!(ui_command.kind(), expected_kind);
         let error = store
-            .dispatch_ui(command(
+            .dispatch_current_fixture(command(
                 (index + 100) as u64,
                 before.snapshot_revision.0,
                 ui_command,
@@ -610,7 +639,7 @@ fn every_partial_onboarding_stage_persists_without_profile_promotion() {
             _ => unreachable!(),
         }
         let result = store
-            .dispatch_ui(command(
+            .dispatch_current_fixture(command(
                 step + 1,
                 before.snapshot_revision.0,
                 AppCommand::SaveHouseholdDraft {
@@ -646,7 +675,7 @@ fn invalid_stage_flags_and_imported_command_cannot_mutate() {
         },
     );
     assert_eq!(
-        store.dispatch_ui(c).unwrap_err().code,
+        store.dispatch_current_fixture(c).unwrap_err().code,
         ErrorCode::InvalidValue
     );
     let c = command(
@@ -665,52 +694,79 @@ fn invalid_stage_flags_and_imported_command_cannot_mutate() {
 }
 
 #[test]
-fn ruling005_public_save_refuses_new_issues_and_edits_and_preserves_state() {
+fn ruling005_public_save_preserves_issues_and_refuses_spurious_resolution() {
     let store = store();
     let before = store.snapshot().unwrap();
     let profile: HouseholdProfile =
         serde_json::from_value(fixture("household-profile-confirmed-none.json")).unwrap();
-    for issue_present in [true, false] {
-        let mut draft = before.household_draft.clone();
-        let mut diner = profile.diners[0].clone();
-        diner.restrictions = RestrictionDeclaration::Unconfirmed {};
-        let id = diner.diner_id.clone();
-        draft.diners = BoundedVec(vec![diner]);
-        if issue_present {
-            draft.unresolved_restrictions = BoundedVec(vec![SetupRestrictionIssue {
+    let mut draft = before.household_draft.clone();
+    let mut diner = profile.diners[0].clone();
+    diner.restrictions = RestrictionDeclaration::Unconfirmed {};
+    let id = diner.diner_id.clone();
+    draft.diners = BoundedVec(vec![diner]);
+    let invalid = command(
+        1,
+        1,
+        AppCommand::SaveHouseholdDraft {
+            draft: draft.clone(),
+            restriction_issue_edits: BoundedVec(vec![SetupRestrictionEdit::Resolve {
                 diner_id: id.clone(),
-                supplied_text: Text("synthetic public boundary marker".into()),
-            }]);
-        }
-        let edit = if issue_present {
-            vec![]
-        } else {
-            vec![SetupRestrictionEdit::Resolve { diner_id: id }]
-        };
-        let error = store
-            .dispatch_ui(command(
-                1,
-                1,
-                AppCommand::SaveHouseholdDraft {
-                    draft,
-                    restriction_issue_edits: BoundedVec(edit),
-                },
-            ))
-            .unwrap_err();
-        assert_eq!(error.code, ErrorCode::UnsupportedCapability);
-        assert_eq!(store.snapshot().unwrap(), before);
-    }
-    // Reusing the refused ID for an empty-to-empty save proves no success receipt was retained.
-    let saved = store
-        .dispatch_ui(command(
-            1,
-            1,
-            AppCommand::SaveHouseholdDraft {
-                draft: before.household_draft.clone(),
-                restriction_issue_edits: BoundedVec(vec![]),
-            },
-        ))
-        .unwrap();
+            }]),
+        },
+    );
+    assert_eq!(
+        store.dispatch_current_fixture(invalid).unwrap_err().code,
+        ErrorCode::InvalidValue
+    );
+    assert_eq!(store.snapshot().unwrap(), before);
+    draft.unresolved_restrictions = BoundedVec(vec![SetupRestrictionIssue {
+        diner_id: id,
+        supplied_text: Text("synthetic public boundary marker".into()),
+    }]);
+    // Same ID after refusal proves no receipt survived. New issue is supported.
+    let c = command(
+        1,
+        1,
+        AppCommand::SaveHouseholdDraft {
+            draft: draft.clone(),
+            restriction_issue_edits: BoundedVec(vec![]),
+        },
+    );
+    let saved = store.dispatch_current_fixture(c.clone()).unwrap();
     assert_eq!(saved.snapshot_revision, Revision(2));
-    assert_eq!(saved.household_draft, before.household_draft);
+    draft.revision = Revision(2);
+    assert_eq!(saved.household_draft, draft);
+    assert_eq!(store.dispatch_current_fixture(c).unwrap(), saved);
+    let mut dropped = saved.household_draft.clone();
+    dropped.unresolved_restrictions = BoundedVec(vec![]);
+    assert_eq!(
+        store
+            .dispatch_current_fixture(command(
+                2,
+                2,
+                AppCommand::SaveHouseholdDraft {
+                    draft: dropped,
+                    restriction_issue_edits: BoundedVec(vec![])
+                }
+            ))
+            .unwrap_err()
+            .code,
+        ErrorCode::InvalidValue
+    );
+    assert_eq!(store.snapshot().unwrap(), saved);
+}
+
+// Existing current-fixture assertions retain Snapshot comparison semantics.
+trait CurrentFixtureDispatch {
+    fn dispatch_current_fixture(&self, c: AppCommandV1) -> Result<Snapshot, DomainError>;
+}
+impl CurrentFixtureDispatch for Store {
+    fn dispatch_current_fixture(&self, c: AppCommandV1) -> Result<Snapshot, DomainError> {
+        let o = self.dispatch_ui(c)?;
+        assert!(matches!(
+            o.response(),
+            mstrchf_store::ReceiptSnapshot::B1Draft005(_)
+        ));
+        parse_document(o.original_response_bytes())
+    }
 }

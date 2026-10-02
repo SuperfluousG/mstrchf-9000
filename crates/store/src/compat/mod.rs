@@ -1,8 +1,8 @@
-//! Pure frozen readers. No database, filesystem, startup, migration or replay authority.
-#![allow(dead_code)] // Inert preparation; integration and catalogue binding are separate gates.
-mod b1_v1;
+//! Frozen checked representations and private store adapters; no filesystem authority.
+#![allow(dead_code)] // Preserve the full frozen graph and its independent inspection surface.
+pub(crate) mod b1_v1;
 mod codec;
-mod draft005;
+pub(crate) mod draft005;
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Code {
     MalformedJson,
@@ -68,3 +68,7 @@ struct ReceiptBinding<'a> {
 }
 #[cfg(test)]
 mod tests;
+
+mod integrated;
+pub(crate) use integrated::*;
+pub use integrated::{CommandDisposition, ReceiptSnapshot, UiCommandOutcome};

@@ -165,6 +165,14 @@ fn file_record(name: &str, items: &Inventory) -> Value {
 }
 
 fn intent(catalogue: startup::Catalogue, from: u32) -> Value {
+    if matches!(catalogue, startup::Catalogue::B1) {
+        let entries = json!([{"version":1,"sql_sha256":bytes_digest(crate::migrate::SQL.as_bytes()).0,"reader":"B1RetainedV1","closure":"b1-v1-no-assets"},{"version":2,"sql_sha256":bytes_digest(crate::migrate::SQL_002.as_bytes()).0,"reader":"B1Draft005","closure":"b1-v1-no-assets"}]);
+        let transform = Some((
+            bytes_digest(include_bytes!("../src/upgrade.rs")),
+            bytes_digest(include_bytes!("../src/compat/b1_v1.rs")),
+        ));
+        return json!({"from":from,"target":2,"catalogue_sha256":bytes_digest(&canonical_bytes(&(entries,transform)).unwrap()).0});
+    }
     let entry = |version: u32, sql: &str, closure: &str| {
         json!({
             "version":version,"sql_sha256":bytes_digest(sql.as_bytes()).0,

@@ -5,7 +5,7 @@ include!("upgrade_cleanup_tests.rs");
 use super::*;
 use std::path::{Path, PathBuf};
 
-thread_local! { static FAULT: std::cell::Cell<&'static str> = const { std::cell::Cell::new("") }; }
+thread_local! { pub(crate) static FAULT: std::cell::Cell<&'static str> = const { std::cell::Cell::new("") }; }
 thread_local! { static EXECUTIONS: std::cell::Cell<u32> = const { std::cell::Cell::new(0) }; }
 pub(crate) fn count_migration() {
     EXECUTIONS.with(|n| n.set(n.get() + 1));
@@ -121,23 +121,45 @@ fn backup_live_wal_is_complete() {
     );
 }
 
+// The original private upgrade SQL stays byte-identical. This explicit test-only
+// catalogue uses current synthetic documents, never the production bare001 reader.
+fn fixture_base(p: &Path, sql: &str) -> rusqlite::Connection {
+    std::fs::create_dir_all(p).unwrap();
+    let c = rusqlite::Connection::open(p.join("planner.sqlite")).unwrap();
+    c.execute_batch(&sql.replace("\r\n", "\n")).unwrap();
+    c.execute(
+        "INSERT INTO schema_migrations VALUES(1,?1,'2026-10-02T00:00:00Z')",
+        [bytes_digest(sql.as_bytes()).0],
+    )
+    .unwrap();
+    c.execute(
+        "INSERT INTO app_meta VALUES(1,'00000000000000000000000000000001','1','1','1','1')",
+        [],
+    )
+    .unwrap();
+    let i = records::initial(HouseholdId("hh_00000000000000000000000000000001".into()));
+    c.execute(
+        "INSERT INTO household VALUES(1,?1,'1',?2,'1',?3,NULL,NULL)",
+        rusqlite::params![
+            i.household_draft.household_id.0,
+            canonical_bytes(&i.household_draft).unwrap(),
+            canonical_bytes(&i.privacy).unwrap()
+        ],
+    )
+    .unwrap();
+    c.pragma_update(None, "user_version", 1).unwrap();
+    c
+}
 fn fixture(p: &Path) {
-    let mut db = database::Database::open(p).unwrap();
+    let c = fixture_base(p, &audit::fixture_source_sql());
+    c.execute("INSERT INTO fixture_probe VALUES(1,7)", [])
+        .unwrap();
+    c.close().unwrap();
+    let mut db = database::Database::open_catalogue(p, startup::Catalogue::Fixture).unwrap();
     two_commands(&mut db);
-    db.connection
-        .execute_batch(audit::FIXTURE_PROBE_SQL)
-        .unwrap();
-    db.connection
-        .execute("INSERT INTO fixture_probe VALUES(1,7)", [])
-        .unwrap();
-    db.connection
-        .execute(
-            "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
-            [bytes_digest(audit::fixture_source_sql().as_bytes()).0],
-        )
-        .unwrap();
     audit::audit_fixture(&db.connection, audit::FixtureVersion::V1).unwrap();
 }
+
 fn oracle(c: &rusqlite::Connection, want: u32) {
     assert_eq!(
         c.pragma_query_value(None, "user_version", |r| r.get::<_, u32>(0))
@@ -537,30 +559,23 @@ fn backup_and_upgrade_kill_matrix() {
 }
 
 fn asset_fixture(p: &Path) {
-    let mut db = database::Database::open(p).unwrap();
-    two_commands(&mut db);
-    db.connection
-        .execute_batch(audit::ASSET_FIXTURE_SQL)
-        .unwrap();
-    db.connection
-        .execute(
-            "INSERT INTO fixture_assets VALUES(?1,'png',21)",
-            ["7d51503664b77f2147ce760635926a8a4ec49a926b6115a3fed5b4feed3002f4"],
-        )
-        .unwrap();
-    db.connection
-        .execute(
-            "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
-            [bytes_digest(audit::asset_source_sql().as_bytes()).0],
-        )
-        .unwrap();
+    let c = fixture_base(p, &audit::asset_source_sql());
+    c.execute(
+        "INSERT INTO fixture_assets VALUES(?1,'png',21)",
+        ["7d51503664b77f2147ce760635926a8a4ec49a926b6115a3fed5b4feed3002f4"],
+    )
+    .unwrap();
+    c.close().unwrap();
     std::fs::create_dir(p.join("assets")).unwrap();
     std::fs::write(
         p.join("assets/7d51503664b77f2147ce760635926a8a4ec49a926b6115a3fed5b4feed3002f4.png"),
         b"backup-asset-fixture\n",
     )
     .unwrap();
+    let mut db = database::Database::open_catalogue(p, startup::Catalogue::AssetFixture).unwrap();
+    two_commands(&mut db);
 }
+
 #[test]
 fn backup_known_fixture_asset_closure_and_mismatch_refusal() {
     let p = root("asset positive");
@@ -674,20 +689,12 @@ fn backup_source_commit_after_snapshot_refuses_receipt() {
 #[test]
 fn backup_copied_missing_fk_parent_refuses_receipt() {
     let p = root("copied missing FK parent");
-    let mut db = database::Database::open(&p).unwrap();
+    let c = fixture_base(&p, &audit::fk_source_sql());
+    c.execute_batch("INSERT INTO fixture_parent VALUES(1); INSERT INTO fixture_child VALUES(1,1);")
+        .unwrap();
+    c.close().unwrap();
+    let mut db = database::Database::open_catalogue(&p, startup::Catalogue::FkFixture).unwrap();
     two_commands(&mut db);
-    db.connection.execute_batch(audit::FK_FIXTURE_SQL).unwrap();
-    db.connection
-        .execute_batch(
-            "INSERT INTO fixture_parent VALUES(1); INSERT INTO fixture_child VALUES(1,1);",
-        )
-        .unwrap();
-    db.connection
-        .execute(
-            "UPDATE schema_migrations SET checksum=?1 WHERE version=1",
-            [bytes_digest(audit::fk_source_sql().as_bytes()).0],
-        )
-        .unwrap();
     let before = audit::audit_fk_fixture(&db.connection).unwrap();
     {
         let mut healthy =
