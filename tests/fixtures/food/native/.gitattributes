@@ -1,0 +1,2 @@
+# Independent native-v4 evidence is pinned by literal-byte SHA-256.
+*.json -text

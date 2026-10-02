@@ -1,0 +1,360 @@
+{
+  "type": "DerivedPlan",
+  "classification": "positive_synthetic_premise",
+  "domain": null,
+  "omit_outer_field": "digest",
+  "value": {
+    "schema_version": 1,
+    "week_id": "wk_00000000000000000000000000000001",
+    "plan_revision": "2",
+    "input_plan_digest": "14af92c078a6a90e4dcdbb2de0b2319cbc9f8eb4704feb3cdde51efdefb6e14a",
+    "food_inputs_digest": "5b3c51d7581c5f8944c463f9124b74362537aa7c4fa0b30313940cbcb0398eb1",
+    "context_stamp": {
+      "household_revision": "1",
+      "settings_revision": "1",
+      "privacy_revision": "1",
+      "history_revision": "1",
+      "catalogue_revision": "1",
+      "ranking_policy_version": "1",
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        }
+      ],
+      "read_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "2"
+        }
+      ],
+      "write_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "2"
+        }
+      ]
+    },
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_0000000000000000000000000000012d",
+        "revision": "1",
+        "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+      }
+    ],
+    "batches": [
+      {
+        "batch_id": "ba_00000000000000000000000000000001",
+        "recipe": {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        },
+        "source_slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "lunch"
+        },
+        "components": [
+          {
+            "component_id": "co_0000000000000000000000000000012d",
+            "produced": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "cooked"
+            },
+            "allocated": {
+              "amount": {
+                "numerator": "400",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "cooked"
+            },
+            "unallocated": {
+              "amount": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "cooked"
+            },
+            "original_production": {
+              "kind": "cooked",
+              "data": {
+                "completed_at": {
+                  "local_date": "2026-12-28",
+                  "local_time": "12:10:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T12:10:00Z"
+                }
+              }
+            },
+            "storage_rule": {
+              "evidence_id": "ev_0000000000000000000000000000012d",
+              "component_id": "co_0000000000000000000000000000012d",
+              "max_chilled_seconds": 172800,
+              "cooling_instruction": "Synthetic admitted premise: cool promptly and refrigerate.",
+              "reheating_instruction": "Synthetic admitted premise: one reheating phase.",
+              "max_reheats": 1,
+              "source": {
+                "url": null,
+                "source_revision": null,
+                "retrieved_at": "2026-12-27T09:00:00Z",
+                "authors": [],
+                "adaptation_notice": null,
+                "origin": "user_authored"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "allocations": [
+      {
+        "allocation_id": "al_00000000000000000000000000000001",
+        "batch_id": "ba_00000000000000000000000000000001",
+        "component_id": "co_0000000000000000000000000000012d",
+        "target_slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "lunch"
+        },
+        "person": {
+          "kind": "diner",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000001"
+          }
+        },
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "quantity": {
+          "amount": {
+            "numerator": "200",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "cooked"
+        },
+        "use_at": {
+          "local_date": "2026-12-28",
+          "local_time": "12:10:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:10:00Z"
+        },
+        "planned_reheats": 0,
+        "remix_recipe": null
+      },
+      {
+        "allocation_id": "al_00000000000000000000000000000002",
+        "batch_id": "ba_00000000000000000000000000000001",
+        "component_id": "co_0000000000000000000000000000012d",
+        "target_slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "dinner"
+        },
+        "person": {
+          "kind": "diner",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000001"
+          }
+        },
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "quantity": {
+          "amount": {
+            "numerator": "200",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "cooked"
+        },
+        "use_at": {
+          "local_date": "2026-12-28",
+          "local_time": "18:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T18:00:00Z"
+        },
+        "planned_reheats": 1,
+        "remix_recipe": null
+      }
+    ],
+    "prep_sessions": [
+      {
+        "session_id": "ps_00000000000000000000000000000001",
+        "week_id": "wk_00000000000000000000000000000001",
+        "linked_slots": [
+          {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          }
+        ],
+        "attached_to": null,
+        "start": {
+          "local_date": "2026-12-28",
+          "local_time": "12:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:00:00Z"
+        },
+        "end": {
+          "local_date": "2026-12-28",
+          "local_time": "18:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T18:00:00Z"
+        },
+        "ingredient_needed_at": {
+          "local_date": "2026-12-28",
+          "local_time": "12:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:00:00Z"
+        },
+        "tasks": [
+          {
+            "task_id": 1,
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+            },
+            "prep_id": 1,
+            "depends_on": [],
+            "active_intervals": [
+              {
+                "start": {
+                  "local_date": "2026-12-28",
+                  "local_time": "12:00:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T12:00:00Z"
+                },
+                "end": {
+                  "local_date": "2026-12-28",
+                  "local_time": "12:10:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T12:10:00Z"
+                }
+              }
+            ],
+            "elapsed": {
+              "start": {
+                "local_date": "2026-12-28",
+                "local_time": "12:00:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T12:00:00Z"
+              },
+              "end": {
+                "local_date": "2026-12-28",
+                "local_time": "12:10:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T12:10:00Z"
+              }
+            }
+          },
+          {
+            "task_id": 2,
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+            },
+            "prep_id": 2,
+            "depends_on": [
+              {
+                "session_id": "ps_00000000000000000000000000000001",
+                "task_id": 1
+              }
+            ],
+            "active_intervals": [
+              {
+                "start": {
+                  "local_date": "2026-12-28",
+                  "local_time": "17:50:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T17:50:00Z"
+                },
+                "end": {
+                  "local_date": "2026-12-28",
+                  "local_time": "18:00:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T18:00:00Z"
+                }
+              }
+            ],
+            "elapsed": {
+              "start": {
+                "local_date": "2026-12-28",
+                "local_time": "17:50:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T17:50:00Z"
+              },
+              "end": {
+                "local_date": "2026-12-28",
+                "local_time": "18:00:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T18:00:00Z"
+              }
+            }
+          }
+        ],
+        "ingredient_ids": [
+          "ig_0000000000000000000000000000012d"
+        ]
+      }
+    ],
+    "demand": {
+      "input_plan_digest": "14af92c078a6a90e4dcdbb2de0b2319cbc9f8eb4704feb3cdde51efdefb6e14a",
+      "lines": [
+        {
+          "line_id": "dl_00000000000000000000000000000001",
+          "ingredient_id": "ig_0000000000000000000000000000012d",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          },
+          "origin_batches": [
+            "ba_00000000000000000000000000000001"
+          ],
+          "origin_extras": [],
+          "essential": false,
+          "conversion_evidence_ids": []
+        }
+      ],
+      "digest": "400269145e7ce537686daea33ede3b64e6832ec28baf9802eeef1cdb4f80d707"
+    },
+    "warnings": [],
+    "derivation_policy_version": "1",
+    "digest": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff"
+  }
+}

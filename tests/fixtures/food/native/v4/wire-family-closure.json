@@ -1,0 +1,29 @@
+{
+  "plain_jcs_only": true,
+  "source_recipe": {
+    "recipe_id": "rc_0000000000000000000000000000012d",
+    "revision": "1",
+    "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+  },
+  "source_recipe_file": "recipe.input.json",
+  "remix_recipe": {
+    "recipe_id": "rc_0000000000000000000000000000012f",
+    "revision": "1",
+    "digest": "ddcd57fd2454400a3ba8ff9bcd601a2d8e07b84d9492c8f9b068f2414b540090"
+  },
+  "remix_recipe_file": "wire-addition-only-recipe.input.json",
+  "remix_evidence_pin": {
+    "evidence_id": "ev_0000000000000000000000000000012f",
+    "revision": "1",
+    "digest": "79bd851f1b5966aab57176d15acd492f59d62cdde16090f944ebdcd97ddc7519"
+  },
+  "remix_attestation_file": "remix-attestation.canonical.json",
+  "derived_batch_file": "wire-derived-batch.input.json",
+  "derived_material_file": "subject-derived.input.json",
+  "derived_plan_file": "wire-derived-plan.input.json",
+  "expected_derived_digest": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+  "food_inputs_digest": "5b3c51d7581c5f8944c463f9124b74362537aa7c4fa0b30313940cbcb0398eb1",
+  "own_digest_excluded_only": true,
+  "old_original_cook_key_absent": true,
+  "no_production_computation": true
+}

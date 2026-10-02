@@ -1,0 +1,80 @@
+{
+  "type": "LiveSourceMaterial",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-r3-live_source",
+  "omit_outer_field": null,
+  "value": {
+    "source": {
+      "kind": "order"
+    },
+    "revision": "1",
+    "valid_until": null,
+    "values": {
+      "order_id": "or_00000000000000000000000000000001",
+      "confirmation": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "approval_id": "au_00000000000000000000000000000001",
+        "delivery_start": {
+          "local_date": "2026-12-28",
+          "local_time": "11:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T11:00:00Z"
+        },
+        "delivery_end": {
+          "local_date": "2026-12-28",
+          "local_time": "11:30:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T11:30:00Z"
+        },
+        "confirmed_at": "2026-12-28T10:00:00Z",
+        "source": {
+          "kind": "user_confirmation",
+          "data": {}
+        }
+      },
+      "approved_plan": {
+        "approval_id": "au_00000000000000000000000000000001",
+        "week_id": "wk_00000000000000000000000000000001",
+        "plan_revision": "2",
+        "derived_digest": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+        "context_stamp": {
+          "household_revision": "1",
+          "settings_revision": "1",
+          "privacy_revision": "1",
+          "history_revision": "1",
+          "catalogue_revision": "1",
+          "ranking_policy_version": "1",
+          "recipe_refs": [
+            {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+            }
+          ],
+          "read_weeks": [
+            {
+              "week_id": "wk_00000000000000000000000000000001",
+              "revision": "2"
+            }
+          ],
+          "write_weeks": [
+            {
+              "week_id": "wk_00000000000000000000000000000001",
+              "revision": "2"
+            }
+          ]
+        },
+        "approved_at": "2026-12-28T09:00:00Z"
+      },
+      "ordered_recipe_refs": [
+        {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        }
+      ]
+    }
+  }
+}

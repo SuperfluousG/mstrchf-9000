@@ -1,0 +1,13 @@
+{
+  "type": "LiveFoodPolicy",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-r3-live_food_policy",
+  "omit_outer_field": "digest",
+  "value": {
+    "version": "1",
+    "general_seconds": 172800,
+    "rice_seconds": 86400,
+    "maximum_reheats": 1,
+    "digest": "0991c5bc579fef7cea9abf8abb67d8fb559bc1a8980d0928813ec1b265b30c7d"
+  }
+}

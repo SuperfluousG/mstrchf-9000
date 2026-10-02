@@ -1,0 +1,156 @@
+{
+  "type": "FeasibilityReport",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-feasibility-report-r3",
+  "omit_outer_field": "digest",
+  "value": {
+    "derived_digest": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+    "inputs_digest": "a65f884bfbb3ecf70739a0ef6c56c101e3dcf4a7468cb14fc2a2298dc6255f2c",
+    "uses": [
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "consumption",
+          "data": {
+            "occurrence": {
+              "slot": {
+                "week_id": "wk_00000000000000000000000000000001",
+                "date": "2026-12-28",
+                "meal_type": "lunch"
+              },
+              "extra_id": null,
+              "recipe": {
+                "recipe_id": "rc_0000000000000000000000000000012d",
+                "revision": "1",
+                "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+              }
+            },
+            "component_id": "co_0000000000000000000000000000012d",
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            }
+          }
+        },
+        "assessment": {
+          "kind": "within_known_limit"
+        },
+        "issues": []
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "consumption",
+          "data": {
+            "occurrence": {
+              "slot": {
+                "week_id": "wk_00000000000000000000000000000001",
+                "date": "2026-12-28",
+                "meal_type": "dinner"
+              },
+              "extra_id": null,
+              "recipe": {
+                "recipe_id": "rc_0000000000000000000000000000012d",
+                "revision": "1",
+                "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+              }
+            },
+            "component_id": "co_0000000000000000000000000000012d",
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            }
+          }
+        },
+        "assessment": {
+          "kind": "conflicting_known_limit"
+        },
+        "issues": [
+          {
+            "kind": "shorter_deadline_conflict"
+          }
+        ]
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "preparation",
+          "data": {
+            "phase": {
+              "occurrence": {
+                "slot": {
+                  "week_id": "wk_00000000000000000000000000000001",
+                  "date": "2026-12-28",
+                  "meal_type": "lunch"
+                },
+                "extra_id": null,
+                "recipe": {
+                  "recipe_id": "rc_0000000000000000000000000000012d",
+                  "revision": "1",
+                  "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+                }
+              },
+              "prep_id": 1
+            }
+          }
+        },
+        "assessment": {
+          "kind": "within_known_limit"
+        },
+        "issues": []
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "preparation",
+          "data": {
+            "phase": {
+              "occurrence": {
+                "slot": {
+                  "week_id": "wk_00000000000000000000000000000001",
+                  "date": "2026-12-28",
+                  "meal_type": "dinner"
+                },
+                "extra_id": null,
+                "recipe": {
+                  "recipe_id": "rc_0000000000000000000000000000012d",
+                  "revision": "1",
+                  "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+                }
+              },
+              "prep_id": 2
+            }
+          }
+        },
+        "assessment": {
+          "kind": "within_known_limit"
+        },
+        "issues": []
+      }
+    ],
+    "other_checks": [],
+    "warnings": [],
+    "blocking": [
+      {
+        "kind": {
+          "kind": "blocking_checks"
+        },
+        "conflict": {
+          "code": "domain_conflict",
+          "week_ids": [
+            "wk_00000000000000000000000000000001"
+          ],
+          "slot_ids": [],
+          "recipe_refs": [],
+          "evidence_ids": [],
+          "blocking": true
+        }
+      }
+    ],
+    "digest": "11c3cc4d86b43552c3fc5504c5c453685a0a8c3033f06e58446fff00c82b0c39"
+  }
+}

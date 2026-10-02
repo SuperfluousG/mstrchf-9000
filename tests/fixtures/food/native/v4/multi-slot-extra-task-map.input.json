@@ -1,0 +1,96 @@
+{
+  "type": "TaskBinding[]",
+  "classification": "positive_selected_plan_task_mapping_subcase",
+  "domain": null,
+  "omit_outer_field": null,
+  "value": [
+    {
+      "phase": {
+        "occurrence": {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "extra_id": null,
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012e",
+            "revision": "1",
+            "digest": "a3927ec08cf51d57f16e74183d43978b7bcb68c5839d6a95f884f3ca090af3e2"
+          }
+        },
+        "prep_id": 1
+      },
+      "task": {
+        "session_id": "ps_00000000000000000000000000000136",
+        "task_id": 1
+      }
+    },
+    {
+      "phase": {
+        "occurrence": {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "extra_id": "ex_0000000000000000000000000000012d",
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          }
+        },
+        "prep_id": 1
+      },
+      "task": {
+        "session_id": "ps_00000000000000000000000000000136",
+        "task_id": 2
+      }
+    },
+    {
+      "phase": {
+        "occurrence": {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          },
+          "extra_id": null,
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012e",
+            "revision": "1",
+            "digest": "a3927ec08cf51d57f16e74183d43978b7bcb68c5839d6a95f884f3ca090af3e2"
+          }
+        },
+        "prep_id": 1
+      },
+      "task": {
+        "session_id": "ps_00000000000000000000000000000136",
+        "task_id": 3
+      }
+    },
+    {
+      "phase": {
+        "occurrence": {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          },
+          "extra_id": "ex_0000000000000000000000000000012d",
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          }
+        },
+        "prep_id": 1
+      },
+      "task": {
+        "session_id": "ps_00000000000000000000000000000136",
+        "task_id": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "type": "FoodIdentities",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-r3-food_identities",
+  "omit_outer_field": "digest",
+  "value": {
+    "revision": "1",
+    "allocations": [
+      [
+        {
+          "batch_id": "ba_00000000000000000000000000000001",
+          "component_id": "co_0000000000000000000000000000012d",
+          "target_slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "person": {
+            "kind": "diner",
+            "data": {
+              "diner_id": "dn_00000000000000000000000000000001"
+            }
+          }
+        },
+        "al_00000000000000000000000000000001"
+      ],
+      [
+        {
+          "batch_id": "ba_00000000000000000000000000000001",
+          "component_id": "co_0000000000000000000000000000012d",
+          "target_slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          },
+          "person": {
+            "kind": "diner",
+            "data": {
+              "diner_id": "dn_00000000000000000000000000000001"
+            }
+          }
+        },
+        "al_00000000000000000000000000000002"
+      ]
+    ],
+    "sessions": [
+      [
+        {
+          "anchor_slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "role": {
+            "kind": "cooking"
+          },
+          "ordinal": 1
+        },
+        "ps_00000000000000000000000000000001"
+      ]
+    ],
+    "demand_lines": [
+      [
+        {
+          "ingredient_id": "ig_0000000000000000000000000000012d",
+          "unit": "g",
+          "form": "raw"
+        },
+        "dl_00000000000000000000000000000001"
+      ]
+    ],
+    "digest": "0a23c6730e15eaf510d2a0cf15c2b4479c4787b0943ed97a832f02faf8ec0431"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "positive_main_chain": "Complete subject and prior saved bases, exact recipes, declared native attestation bytes, owner projections, order and four-use graph retained.",
+  "conservation": {
+    "produced_g": 400,
+    "allocated_g": [
+      200,
+      200
+    ],
+    "unallocated_g": 0,
+    "raw_demand_g": 400,
+    "source_servings": 2,
+    "reuse_age_seconds": 21000,
+    "planned_reheats": [
+      0,
+      1
+    ]
+  },
+  "main_task_ids": [
+    1,
+    2
+  ],
+  "multi_slot_extra_task_ids": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "seven_sources": [
+    "essentials",
+    "food_policy",
+    "occupancy",
+    "order",
+    "product_evidence",
+    "recipe_evidence",
+    "requirements"
+  ],
+  "product_use_count_per_report": 4,
+  "known_all_pass": true,
+  "unknown_nonblocking": true,
+  "opening_lower_exclusive_blocks_preparation_only": true,
+  "upper_exclusive_blocks_dinner_consumption_only": true,
+  "retained_unknown_and_known_conflict": true,
+  "nested_digest_controls": true,
+  "negative_controls": 12,
+  "source_authority": "Explicit synthetic assumption; not inferred from hash equality",
+  "historical_requirements_each_context": 21,
+  "selected_live_requirements_each_branch": 2,
+  "actual_validator_log": "validator-results.log",
+  "actual_context_validator_controls": 4,
+  "production_food_api_tests_executed": 0
+}

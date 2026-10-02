@@ -1,0 +1,36 @@
+{
+  "type": "(SessionKey,PrepSessionId)[]",
+  "classification": "positive_ordering_subcase",
+  "domain": null,
+  "omit_outer_field": null,
+  "value": [
+    [
+      {
+        "anchor_slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "lunch"
+        },
+        "role": {
+          "kind": "cooking"
+        },
+        "ordinal": 1
+      },
+      "ps_000000000000000000000000000001f4"
+    ],
+    [
+      {
+        "anchor_slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "dinner"
+        },
+        "role": {
+          "kind": "cooking"
+        },
+        "ordinal": 1
+      },
+      "ps_00000000000000000000000000000190"
+    ]
+  ]
+}

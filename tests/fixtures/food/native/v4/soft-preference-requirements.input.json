@@ -1,0 +1,107 @@
+{
+  "type": "LiveRequirements",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-r3-live_requirements",
+  "omit_outer_field": "digest",
+  "value": {
+    "revision": "2",
+    "meals": [
+      {
+        "slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "lunch"
+        },
+        "enabled": true,
+        "location": "at_home",
+        "attendees": [
+          {
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            },
+            "age_band": "adult",
+            "hard_requirements": [],
+            "portion": {
+              "preset": "regular",
+              "adjustment": {
+                "numerator": "3",
+                "denominator": "2"
+              },
+              "meal_overrides": []
+            }
+          }
+        ],
+        "shared_hard_requirements": [],
+        "equipment": [
+          "hob"
+        ],
+        "mobility": {
+          "reheating": true,
+          "cold_storage": true,
+          "temperature": "either"
+        },
+        "eat_by": {
+          "local_date": "2026-12-28",
+          "local_time": "12:10:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:10:00Z"
+        },
+        "preferred_hands_on_minutes": 5,
+        "leftovers_allowed": true
+      },
+      {
+        "slot": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "dinner"
+        },
+        "enabled": true,
+        "location": "at_home",
+        "attendees": [
+          {
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            },
+            "age_band": "adult",
+            "hard_requirements": [],
+            "portion": {
+              "preset": "regular",
+              "adjustment": {
+                "numerator": "3",
+                "denominator": "2"
+              },
+              "meal_overrides": []
+            }
+          }
+        ],
+        "shared_hard_requirements": [],
+        "equipment": [
+          "hob"
+        ],
+        "mobility": {
+          "reheating": true,
+          "cold_storage": true,
+          "temperature": "either"
+        },
+        "eat_by": {
+          "local_date": "2026-12-28",
+          "local_time": "18:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T18:00:00Z"
+        },
+        "preferred_hands_on_minutes": 5,
+        "leftovers_allowed": true
+      }
+    ],
+    "unconfirmed": [],
+    "digest": "741f9f40533d9dd1217fe412f14ca28650496b08c5370b164fb361d5630ce9d8"
+  }
+}

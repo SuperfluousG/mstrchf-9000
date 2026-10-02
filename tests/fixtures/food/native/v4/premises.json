@@ -1,0 +1,16 @@
+{
+  "authority": "Synthetic native fixture premises, not real evidence admission or human validation.",
+  "recipe_pin": {
+    "evidence_id": "ev_0000000000000000000000000000012d",
+    "revision": "1",
+    "digest": "f63d2f754c0a4a62d34ebf1b6d0b1b52b237d5129b502b9fca4e3fd06bd502ce"
+  },
+  "recipe_attestation_file": "recipe-attestation.canonical.json",
+  "prior_reservation": "prior saved basis/derived/order is an authenticated retained active reservation at revision1; subject revision2 does not exclude it. Both full snapshots retained.",
+  "occupancy_completeness": "Assume these are the complete indexed owners for subject horizon12:00..18:00; there are no other active cook or hob reservations. Prior query12:30..12:40 was complete/empty when captured before subject. Store transaction/completeness is a supplied synthetic premise, not proved by hashes.",
+  "feed_validity": "Every current projection is authenticated, captured consistently at evaluated19:00, no declared admission expiry; actual validity is an explicit premise.",
+  "conservation": "Recipe yield1:200g raw->200g cooked. Subject production2:400g input/output; two disjoint200g allocations, remainder0, once-only demand400g. Prior independent production1:200g.",
+  "time": "Subject original cook completes12:10. Dinner use18:00 age21000 seconds, one reheat17:50..18:00; no clock reset. Prior active12:30..12:40 is free of subject active/hob intervals.",
+  "recipe_method": "Production uses prep1 only; Reuse uses prep2 only with count1. Method facts explicitly distinguish the alternative phase sets; source recipe instructions contain both reviewed method sections.",
+  "no_external_actions": true
+}

@@ -1,0 +1,115 @@
+{
+  "type": "OccupiedOwner",
+  "classification": "positive_synthetic_premise",
+  "domain": "mstrchf-r3-occupied_owner",
+  "omit_outer_field": "projection_digest",
+  "value": {
+    "pin": {
+      "week": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      },
+      "derived_digest": "57358803613f4e932a35fec6bbd65277d1ceed85159b2bf3ecbcd02dca0198a5",
+      "basis_digest": "46c3679ae65f730c6b75837b7c61df78d278d791005566bfa4a0d2b5c2eea3f9"
+    },
+    "sessions": [
+      {
+        "session_id": "ps_0000000000000000000000000000005a",
+        "week_id": "wk_00000000000000000000000000000001",
+        "linked_slots": [
+          {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          }
+        ],
+        "attached_to": null,
+        "start": {
+          "local_date": "2026-12-28",
+          "local_time": "12:30:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:30:00Z"
+        },
+        "end": {
+          "local_date": "2026-12-28",
+          "local_time": "12:40:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:40:00Z"
+        },
+        "ingredient_needed_at": {
+          "local_date": "2026-12-28",
+          "local_time": "12:30:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:30:00Z"
+        },
+        "tasks": [
+          {
+            "task_id": 1,
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+            },
+            "prep_id": 1,
+            "depends_on": [],
+            "active_intervals": [
+              {
+                "start": {
+                  "local_date": "2026-12-28",
+                  "local_time": "12:30:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T12:30:00Z"
+                },
+                "end": {
+                  "local_date": "2026-12-28",
+                  "local_time": "12:40:00",
+                  "zone": "Europe/London",
+                  "resolution": "unambiguous",
+                  "instant": "2026-12-28T12:40:00Z"
+                }
+              }
+            ],
+            "elapsed": {
+              "start": {
+                "local_date": "2026-12-28",
+                "local_time": "12:30:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T12:30:00Z"
+              },
+              "end": {
+                "local_date": "2026-12-28",
+                "local_time": "12:40:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T12:40:00Z"
+              }
+            }
+          }
+        ],
+        "ingredient_ids": [
+          "ig_0000000000000000000000000000012d"
+        ]
+      }
+    ],
+    "task_resources": [
+      {
+        "task": {
+          "session_id": "ps_0000000000000000000000000000005a",
+          "task_id": 1
+        },
+        "equipment": [
+          "hob"
+        ],
+        "evidence_ids": [
+          "ev_0000000000000000000000000000012d"
+        ]
+      }
+    ],
+    "projection_digest": "0acd659af9d497592cd198706314078f89c5c15a9910272c212d9b5557831573"
+  }
+}

@@ -1,0 +1,427 @@
+{
+  "reason": "Only complete historical requirement rows changed; all child/parent effects independently regenerated. Existing v3 files are untouched.",
+  "changed_count": 70,
+  "unchanged_count": 68,
+  "changed": [
+    {
+      "id": "prior-saved-basis",
+      "v3_sha256": "66055dd895c11c1ef26cf0bbe7ce1f4e9d171b49b71c380264aab238e966808c",
+      "v4_sha256": "46c3679ae65f730c6b75837b7c61df78d278d791005566bfa4a0d2b5c2eea3f9"
+    },
+    {
+      "id": "prior-owner-projection",
+      "v3_sha256": "3a4681dfb3826c67a504a1ff479b421d7f3cad3b42e4a4db51f0b8879047f0c7",
+      "v4_sha256": "0acd659af9d497592cd198706314078f89c5c15a9910272c212d9b5557831573"
+    },
+    {
+      "id": "subject-occupancy",
+      "v3_sha256": "114f35003dcfd7169cb372aaea7a780725b2669b5bc60756a9c81d7fc92fb882",
+      "v4_sha256": "fa58fe49df196829071b6798adcb804b1de7ad011cb2861974788981b5fad2e7"
+    },
+    {
+      "id": "subject-food-inputs",
+      "v3_sha256": "030b0b1affad372858ee7f754a3b63a89905f638b37c7c51e3e1e2db23b6f0fe",
+      "v4_sha256": "5b3c51d7581c5f8944c463f9124b74362537aa7c4fa0b30313940cbcb0398eb1"
+    },
+    {
+      "id": "subject-saved-basis",
+      "v3_sha256": "424607295c66837065f46767719a67a7dfc9b7a8b09a9e87990ab87c124d556f",
+      "v4_sha256": "437408a9ac8581b1d92e28292a0fc256587d27e5e2bdb4b93a81c6fc5c222caf"
+    },
+    {
+      "id": "subject-derived",
+      "v3_sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "v4_sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff"
+    },
+    {
+      "id": "subject-owner-projection",
+      "v3_sha256": "1c2848af2d0e2bd12d5330d3ab487b19acfadccf1bb6fc50d5aadfd6a8f10113",
+      "v4_sha256": "0c362cd85d0e8a7839b60ce9a25972c3bbea116b07628c18f71ba3a7ab6aa644"
+    },
+    {
+      "id": "subject-approved",
+      "v3_sha256": "a511ac11ecfde727e3b1291e6f0736d2f2635302f3ac837b398d21a647b0f197",
+      "v4_sha256": "89e04e4e1e0d4501abeda4692d75f0797a831010e8cf2d772cee651b9cc714d1"
+    },
+    {
+      "id": "subject-order",
+      "v3_sha256": "6300c82631969f522de36e04990f26ed873e3ce99a319675181feb9ed9cd6aa4",
+      "v4_sha256": "3f17d2acee70d3d9f09f218f59f406fab72e9813063fbd80a5904c018a670946"
+    },
+    {
+      "id": "subject-use-graph",
+      "v3_sha256": "c5ee9d97e33c2e81c110b76af99c2629a89278111fd8980942b2aea7cb0208e1",
+      "v4_sha256": "8d42be9b54e0dc5462793d2baec59ad500acdd11f24a20e333d8e1aafc82c36d"
+    },
+    {
+      "id": "known-feasibility-inputs",
+      "v3_sha256": "e4a3e33d1b8d01ed157c2d163e461d9109f470f153fcb594a8257665ba165385",
+      "v4_sha256": "5e4027363cd2ab94c5eeeac591f810f6f44b85f1d05924eee111482edaffede0"
+    },
+    {
+      "id": "known-feasibility-report",
+      "v3_sha256": "818756357eaddca46b04b7005ad065d7be6bab692ca48b18169d0bed23f59513",
+      "v4_sha256": "9d34b4cf66dad254306d7a5d705e633e5c64050c787c81b3116cb5d6b6b0714e"
+    },
+    {
+      "id": "known-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "known-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "known-continuation-inputs",
+      "v3_sha256": "9c9afbcc95960e01ee261ac077fd288cc56724a688f0323ef7922220222f02e4",
+      "v4_sha256": "90a90f5edc90c961847cb28303b017d0f9fb8fbb0a50340a66a54804ea391e9e"
+    },
+    {
+      "id": "known-continuation-report",
+      "v3_sha256": "7c30f844c28162448690e54c2a3fa7e8204e9e10198188836cb5c51175ae841e",
+      "v4_sha256": "28dbff1ee57ba5d8fcc88a7ea6fcd2791bc41cd3f91f5a9732a5f462d0d0c6e8"
+    },
+    {
+      "id": "unknown-feasibility-inputs",
+      "v3_sha256": "dc4acf1c4633d8f727e2fedb3ca11b63719b5532325ca99f79e41ac588f727aa",
+      "v4_sha256": "b3cbb9162671ddb227b4f39eb083f0761b6f89a32c8ba8827e19fa93fae38f3d"
+    },
+    {
+      "id": "unknown-feasibility-report",
+      "v3_sha256": "462a880df2bb37186ad31e2d6550912a9cb0e7df4b1a30a34357eba1445d3db3",
+      "v4_sha256": "3aac5247d2a5ef63122b13237b793db7341f01075461c7de1b25eb594f4260dd"
+    },
+    {
+      "id": "unknown-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "unknown-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "unknown-continuation-inputs",
+      "v3_sha256": "6c8593ddc689df920c59488220f60532a0ad5858222218595a75b7d7facaab80",
+      "v4_sha256": "637d0e0f5650629f372cb9948225dd0ce7c46f5a3f8b02c7e338ca508f51df69"
+    },
+    {
+      "id": "unknown-continuation-report",
+      "v3_sha256": "d21cb4d6f71ee43a102d7bc00aec4813d4bf17d10e8d24b1e1dc1f949aa46040",
+      "v4_sha256": "7a7f68a36d3c07fabef7784834756c5943b328fa99c5819284d28032282436c3"
+    },
+    {
+      "id": "lower-exclusive-feasibility-inputs",
+      "v3_sha256": "39ea45a0c9c0ca1f97dcbdf02abe16a3943ea6a9ad9a5c678f8cf764a1e84656",
+      "v4_sha256": "ee7e5e5a4bcb1f4a3a61ebb3a49880b310058fc0f3b2c07c55b2697d4dd0faf7"
+    },
+    {
+      "id": "lower-exclusive-feasibility-report",
+      "v3_sha256": "0d062c3e41932d1193f419dfe88bd8304d5870ea936f74bf5c7d7821e3edba9f",
+      "v4_sha256": "d4ae2c94308d62667e26b66f2a21744cf4f3e5d4351f3b3470b27290fee9d93b"
+    },
+    {
+      "id": "lower-exclusive-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "lower-exclusive-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "lower-exclusive-continuation-inputs",
+      "v3_sha256": "c638b0fca73a9c67629022b696a6873433ae37fc86c93146dff5ae4a84744728",
+      "v4_sha256": "3c2f614b4721095a3fc9d67fa0f5a5a4071fa5b4745b7d24ac2ef8c52804caee"
+    },
+    {
+      "id": "lower-exclusive-continuation-report",
+      "v3_sha256": "c95d0e203fb57fa588d7d90d8e9771f40cad15b179bf942c3dc259a5c7d342a4",
+      "v4_sha256": "e415aa288184ac1d84e40b0e7167eb8c2bf05b84ad488705162f9fc02ec73322"
+    },
+    {
+      "id": "lower-exclusive-blocked",
+      "v3_sha256": "4a4588ccc32a84ffce1794d2865358fd78f538249dd0a0fed25ff8121b37618f",
+      "v4_sha256": "f02538f0939eb57d0fa97fd207d2447cde3e2c1613d6264b1d51e197d617e20a"
+    },
+    {
+      "id": "opening-late-feasibility-inputs",
+      "v3_sha256": "a27b57c4df38280f176a2b4d25de12c67b792595ae591119b92e9817e1a57644",
+      "v4_sha256": "6e18622044eb0d01a352f53decc09695c01fb54186bc6a3b072fcb1fc820b89d"
+    },
+    {
+      "id": "opening-late-feasibility-report",
+      "v3_sha256": "4348617a1caf7c8a20a3febac07bae58db6506c43afafd7c6269fee5fc33a1c1",
+      "v4_sha256": "905332f0094a5b1624e21f916c57e69f487f80ef083af7d55b26b5f373f8d115"
+    },
+    {
+      "id": "opening-late-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "opening-late-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "opening-late-continuation-inputs",
+      "v3_sha256": "250025f79c1045844eda32d02d7ffea4918598d8b851071e1977a93789b4e407",
+      "v4_sha256": "af813d048abce640887680241ce6ab7de965b4ed52068fd9197dfbd24b5a9cda"
+    },
+    {
+      "id": "opening-late-continuation-report",
+      "v3_sha256": "973679cb9bb7bf3ecb27b65cf8f0203c620be1b33cb9d1eb96b4c7b9d951e857",
+      "v4_sha256": "263c1e8213c3bcb5c15eab93813a9e9a30b4ade4d4f175dd18c3cc814c36aaf3"
+    },
+    {
+      "id": "opening-late-blocked",
+      "v3_sha256": "1ca67f60b1b42c22654bfbbade69705988e084d7390134ed7a527281359cf1fd",
+      "v4_sha256": "c49d974f75e40a80c174f8605b5c035bee16bc57f78878cdca65c696619a7604"
+    },
+    {
+      "id": "upper-inclusive-feasibility-inputs",
+      "v3_sha256": "50c26a761df72e7f0836247d5248a66196e356977ad1f40516a598c540c2021a",
+      "v4_sha256": "f9ccc16b1cb850136d3a7bb2e9b477a930648e3f59edd5594ac9f196b43fdf55"
+    },
+    {
+      "id": "upper-inclusive-feasibility-report",
+      "v3_sha256": "79193d92cae775c699cbdfccd14da5a9fa9258a08d1abe441217d48a0ace8993",
+      "v4_sha256": "2b7d9943950d39f5288f058f9e1d94388aa425dd22d3c03d5936941435cea4ce"
+    },
+    {
+      "id": "upper-inclusive-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "upper-inclusive-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "upper-inclusive-continuation-inputs",
+      "v3_sha256": "5fdc6c2925c9b1af30f2444c97ade8ea2a102b008169a5d7fc5d07bea0a8adb9",
+      "v4_sha256": "3272920d6489a09d80a71e221cd59012196993928c2de3a3e1e8b3c39e57fa5b"
+    },
+    {
+      "id": "upper-inclusive-continuation-report",
+      "v3_sha256": "fcb9bad18159d1a861bc9e3aa93cfe85363a68d00db57808dd4a496067f609d7",
+      "v4_sha256": "a9f67f74a7a4e8a1ba160c5db439609aafe68dcc428d01377c3843b9bffa3dbe"
+    },
+    {
+      "id": "upper-exclusive-feasibility-inputs",
+      "v3_sha256": "31d6caa6de134f3808ffb76af832802f8773d2547896bbed6d541e8eacbc6b7c",
+      "v4_sha256": "a65f884bfbb3ecf70739a0ef6c56c101e3dcf4a7468cb14fc2a2298dc6255f2c"
+    },
+    {
+      "id": "upper-exclusive-feasibility-report",
+      "v3_sha256": "f661e4cafdede57155c8154a2e34fe43442ba9eecb37c9ccbd00ee2a93b77495",
+      "v4_sha256": "11c3cc4d86b43552c3fc5504c5c453685a0a8c3033f06e58446fff00c82b0c39"
+    },
+    {
+      "id": "upper-exclusive-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "upper-exclusive-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "upper-exclusive-continuation-inputs",
+      "v3_sha256": "c94946f334396a77b90313e8a300646151105498f760a68afdb75cd33e52d664",
+      "v4_sha256": "082c2b8baa96ca3dbb41624abe473f2835cad485f5c190832d21c091a96a8d01"
+    },
+    {
+      "id": "upper-exclusive-continuation-report",
+      "v3_sha256": "b67af5192777a4b686287f5cce6933c1dee10649502d70eb3a0ef9bd908b4009",
+      "v4_sha256": "b6c240177a26b0f05018241bd96250eff38eaf4e4dccb6fc0cec582fa51c03b2"
+    },
+    {
+      "id": "upper-exclusive-blocked",
+      "v3_sha256": "740a12182a675cc2b995aa742a72a874688fe62325da448eab7f0658e2253edd",
+      "v4_sha256": "ebdd3725330ecdc0591375560e780fdc556e862dd8f0f8760b9bd6655bc694c7"
+    },
+    {
+      "id": "planned-feasibility-inputs",
+      "v3_sha256": "d1bef2a0c3ccb9a485c1c7d83ee946d97337a5936b31ce695c496019f48f65cc",
+      "v4_sha256": "dd7cec51bc57c797f61567da1494fc14b94435a4db4ae973b9612a96e7609eee"
+    },
+    {
+      "id": "planned-feasibility-report",
+      "v3_sha256": "ec27f71a1277d377dce19a528b9d2783db643b05ebc49205f5125a9da2438073",
+      "v4_sha256": "515b19a72503b3b16c9b3d8c9a0fac405432a9180512101ac5117d3f5e14e27c"
+    },
+    {
+      "id": "planned-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "planned-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "planned-continuation-inputs",
+      "v3_sha256": "0f7da7c0f22b554b2ab6156d92ca7ff67e13effc06c8b4e09bd071ce4654b8c3",
+      "v4_sha256": "18dfbfcaafafa44fade575b8602bf6ad1ae03b3e0e3f648557a05a495c598faf"
+    },
+    {
+      "id": "planned-continuation-report",
+      "v3_sha256": "8264a8b60fbf0ff7192d7a968a014ad0816815c7aabf932dd134c214c2f29316",
+      "v4_sha256": "5ed42576a5fd3e1c1868e841b67d448d2ebabab4cd43be8bdd917e354326c3c3"
+    },
+    {
+      "id": "soft-preference-feasibility-inputs",
+      "v3_sha256": "e4a3e33d1b8d01ed157c2d163e461d9109f470f153fcb594a8257665ba165385",
+      "v4_sha256": "5e4027363cd2ab94c5eeeac591f810f6f44b85f1d05924eee111482edaffede0"
+    },
+    {
+      "id": "soft-preference-feasibility-report",
+      "v3_sha256": "818756357eaddca46b04b7005ad065d7be6bab692ca48b18169d0bed23f59513",
+      "v4_sha256": "9d34b4cf66dad254306d7a5d705e633e5c64050c787c81b3116cb5d6b6b0714e"
+    },
+    {
+      "id": "soft-preference-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "soft-preference-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "soft-preference-continuation-inputs",
+      "v3_sha256": "c6ced109064e93b7e5ef429559d35d4ae36844afa5eb032143528bd680260d35",
+      "v4_sha256": "deaab331a43ed64661c4a17ad6d62e70b881b831651117b35caf6b94c4cb5f43"
+    },
+    {
+      "id": "soft-preference-continuation-report",
+      "v3_sha256": "3b6aea36c6db6e95c989a5d03e4bc1c3e9f1b629f598f89bd801506002481089",
+      "v4_sha256": "6827a4145d68487c199e14103e1b184d7147b98b9c7a29fdd6f1a106f75eec25"
+    },
+    {
+      "id": "unrelated-catalogue-feasibility-inputs",
+      "v3_sha256": "e4a3e33d1b8d01ed157c2d163e461d9109f470f153fcb594a8257665ba165385",
+      "v4_sha256": "5e4027363cd2ab94c5eeeac591f810f6f44b85f1d05924eee111482edaffede0"
+    },
+    {
+      "id": "unrelated-catalogue-feasibility-report",
+      "v3_sha256": "818756357eaddca46b04b7005ad065d7be6bab692ca48b18169d0bed23f59513",
+      "v4_sha256": "9d34b4cf66dad254306d7a5d705e633e5c64050c787c81b3116cb5d6b6b0714e"
+    },
+    {
+      "id": "unrelated-catalogue-occupancy",
+      "v3_sha256": "7e482330e1429cbc7becc68faa31ae2ee91566c77e6f22a16577a9aa9cd7fff8",
+      "v4_sha256": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8"
+    },
+    {
+      "id": "unrelated-catalogue-order-source",
+      "v3_sha256": "0055831ff8a1440b8ecf4923737e7b6bfd4e5ab8a99282f0166ed571c3563587",
+      "v4_sha256": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59"
+    },
+    {
+      "id": "unrelated-catalogue-continuation-inputs",
+      "v3_sha256": "4b97bab12ac72655bce7fd50526f6b65c96043a0c90a9f215cac58c2019adb1e",
+      "v4_sha256": "24a6d36ae9a7919d89e53463d8eb28c07ddd3c521c8f4f3ff7b540d0f3edd77f"
+    },
+    {
+      "id": "unrelated-catalogue-continuation-report",
+      "v3_sha256": "8dae8559febc59ab4a5b9eb90ae9eb1f2fd2c37a8959b77c9cb3483b0ee94bff",
+      "v4_sha256": "1e07b159f34e1bf6c745cc5f5dc5aa9310ff2b0a05d2dbb2314058a2b3134f62"
+    },
+    {
+      "id": "draft-pending-blocked-report",
+      "v3_sha256": "59df8e62d850a370955263fe6e51bd9ce2589b8ffc9d9d581b699a130d682fab",
+      "v4_sha256": "2691be1cf5c11df818a21c99eda20259183e64d4562291be43e66332a0df3cba"
+    },
+    {
+      "id": "draft-pending-blocked-failure",
+      "v3_sha256": "705bcb18807f39d3c0a85894f50707082ad614fb380a1b9e4ef5bf32562d44a0",
+      "v4_sha256": "fea36ff26d46bc3befbab074d361f579c89fc4986bc866a3e150a0775bdcacf4"
+    },
+    {
+      "id": "wire-derived-plan",
+      "v3_sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "v4_sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff"
+    }
+  ],
+  "unchanged": [
+    "recipe",
+    "prior-plan-input",
+    "prior-evidence",
+    "prior-identities",
+    "prior-occupancy",
+    "prior-food-inputs",
+    "prior-demand",
+    "prior-derived",
+    "prior-task-map",
+    "prior-approved",
+    "prior-order",
+    "prior-use-graph",
+    "subject-plan-input",
+    "subject-evidence",
+    "subject-identities",
+    "subject-demand",
+    "subject-task-map",
+    "known-products",
+    "known-requirements",
+    "known-live-evidence",
+    "known-policy",
+    "known-essentials-source",
+    "unknown-products",
+    "unknown-requirements",
+    "unknown-live-evidence",
+    "unknown-policy",
+    "unknown-essentials-source",
+    "lower-exclusive-products",
+    "lower-exclusive-requirements",
+    "lower-exclusive-live-evidence",
+    "lower-exclusive-policy",
+    "lower-exclusive-essentials-source",
+    "opening-late-products",
+    "opening-late-requirements",
+    "opening-late-live-evidence",
+    "opening-late-policy",
+    "opening-late-essentials-source",
+    "upper-inclusive-products",
+    "upper-inclusive-requirements",
+    "upper-inclusive-live-evidence",
+    "upper-inclusive-policy",
+    "upper-inclusive-essentials-source",
+    "upper-exclusive-products",
+    "upper-exclusive-requirements",
+    "upper-exclusive-live-evidence",
+    "upper-exclusive-policy",
+    "upper-exclusive-essentials-source",
+    "planned-products",
+    "planned-requirements",
+    "planned-live-evidence",
+    "planned-policy",
+    "planned-essentials-source",
+    "soft-preference-products",
+    "soft-preference-requirements",
+    "soft-preference-live-evidence",
+    "soft-preference-policy",
+    "soft-preference-essentials-source",
+    "unrelated-catalogue-products",
+    "unrelated-catalogue-requirements",
+    "unrelated-catalogue-live-evidence",
+    "unrelated-catalogue-policy",
+    "unrelated-catalogue-essentials-source",
+    "draft-pending-blocked-inputs",
+    "wire-derived-batch",
+    "wire-addition-only-recipe",
+    "mapping-base-recipe",
+    "multi-slot-extra-task-map",
+    "ordered-session-tuples"
+  ]
+}
