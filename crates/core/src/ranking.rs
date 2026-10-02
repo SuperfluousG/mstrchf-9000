@@ -460,7 +460,7 @@ fn check_evidence(
 fn fact<'a>(e: &'a RankingEvidence, r: &RecipeRef) -> Option<&'a RecipeRankFacts> {
     e.recipes.iter().find(|f| f.recipe == *r)
 }
-fn active<'a>(c: &'a PlanningContext) -> Vec<&'a MealSelection> {
+fn active(c: &PlanningContext) -> Vec<&MealSelection> {
     c.weeks
         .iter()
         .flat_map(|w| w.plan.selections.iter())
@@ -920,16 +920,14 @@ pub fn rank_candidates(
             if r.metrics[k].value.is_none() {
                 causes[0].insert(r.choice_digest.clone());
             }
-            if k < 2 {
-                if let Some(p) = e
+            if k < 2
+                && let Some(p) = e
                     .purchase
                     .iter()
                     .find(|p| p.choice_digest == r.choice_digest)
-                {
-                    if at.0 > p.valid_until.0 {
-                        causes[1].insert(r.choice_digest.clone());
-                    }
-                }
+                && at.0 > p.valid_until.0
+            {
+                causes[1].insert(r.choice_digest.clone());
             }
         }
         if k < 2 {
@@ -942,15 +940,14 @@ pub fn rank_candidates(
                         .find(|p| p.choice_digest == r.choice_digest)
                 })
                 .collect();
-            if let Some(first) = quotes.first() {
-                if quotes
+            if let Some(first) = quotes.first()
+                && quotes
                     .iter()
                     .any(|p| p.comparison_key != first.comparison_key || p.kind != first.kind)
-                {
-                    for r in &out.ranked {
-                        if quotes.iter().any(|q| q.choice_digest == r.choice_digest) {
-                            causes[2].insert(r.choice_digest.clone());
-                        }
+            {
+                for r in &out.ranked {
+                    if quotes.iter().any(|q| q.choice_digest == r.choice_digest) {
+                        causes[2].insert(r.choice_digest.clone());
                     }
                 }
             }

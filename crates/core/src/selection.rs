@@ -37,6 +37,8 @@ pub struct ChoiceSpec {
     pub batch_use: BatchUse,
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
+// The adopted native API carries MealSelection directly; boxing changes that signature.
+#[allow(clippy::large_enum_variant)]
 pub enum ChoiceAssessment {
     Suitable(MealSelection),
     Ineligible(Vec<Conflict>),
@@ -344,13 +346,13 @@ fn food_choice(
             ));
         }
     }
-    if let Some(t) = &choice.meal_overrides.eat_by.0 {
-        if t.local_date != slot.date || t.zone != w.range.zone {
-            return Err(error(
-                ErrorCode::IdentityMismatch,
-                "/choice/meal_overrides/eat_by",
-            ));
-        }
+    if let Some(t) = &choice.meal_overrides.eat_by.0
+        && (t.local_date != slot.date || t.zone != w.range.zone)
+    {
+        return Err(error(
+            ErrorCode::IdentityMismatch,
+            "/choice/meal_overrides/eat_by",
+        ));
     }
     if let Some(result) = outcome(eligible(base, meal)?) {
         return Ok(result);
@@ -590,16 +592,14 @@ pub fn prepare_selection_patch(
     }
     shape(&candidate, "")?;
     let mut conflicts = Vec::new();
-    for slot in &changed {
-        if let Some(s) = candidate
-            .weeks
-            .iter()
-            .flat_map(|w| w.plan.selections.iter())
-            .find(|s| &s.slot == slot)
-        {
+    // Structural shape and A3 attendance are necessary but do not establish food
+    // eligibility or exact portions. Rebuild every active choice, including retained
+    // ones; inactive choices remain untouched and outside this food assessment.
+    for week in &candidate.weeks.0 {
+        for s in active_selections(week) {
             match food_choice(
                 &candidate,
-                slot,
+                &s.slot,
                 &spec(s),
                 s.origin,
                 s.repeat_authorised,
@@ -621,7 +621,9 @@ pub fn prepare_selection_patch(
                     conflicts.append(&mut e);
                 }
             }
-            if repeat_needs_permission(&candidate, s)? {
+            // Retained repeats are not new actions. Food rechecking must not widen
+            // the repeat-permission policy beyond changed/new non-null targets.
+            if changed.contains(&s.slot) && repeat_needs_permission(&candidate, s)? {
                 conflicts.push(repeat_conflict(s));
                 bound(conflicts.len(), 0, 100, "/conflicts")?;
             }

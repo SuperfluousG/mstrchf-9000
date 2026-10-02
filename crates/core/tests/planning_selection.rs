@@ -1327,3 +1327,228 @@ fn sr05_simultaneous_cross_week_repeat_is_checked_on_complete_candidate() {
     assert_eq!(patched.changed_slots.len(), 2);
     assert_eq!(patched.context.stamp, c.stamp);
 }
+// Reviewer-owned probes; original implementation and expected fixtures unchanged.
+
+#[test]
+fn review_untouched_active_portions_must_match_real_food_b() {
+    let r = recipe();
+    let (b, k) = inputs(&r);
+    let reviewed = vec![assess_revision(&r, &b, &k).unwrap()];
+    let mut c = context(vec![r.clone()], 1);
+    let mut old = build(
+        &c,
+        &c.weeks[0].cells[5].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Fixed,
+    );
+    old.servings[0].servings = p(3, 2); // no matching override: structurally valid, wrong Food B quantity
+    c.weeks[0].plan.selections.0.push(old.clone());
+    c.validate_shape().unwrap();
+    let replacement = build(
+        &c,
+        &c.weeks[0].cells[2].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Suggested,
+    );
+    let result = prepare_selection_patch(
+        &c,
+        &intent(&c, PlanMode::FillOpen),
+        &proposal(&c, vec![Some(replacement)]),
+        &reviewed,
+        &[],
+    );
+    assert!(
+        result.is_err(),
+        "untouched invalid native serving survived complete candidate checks"
+    );
+}
+
+#[test]
+fn review_untouched_active_hard_conflict_must_block_complete_candidate() {
+    let r = recipe();
+    let (b, k) = inputs(&r);
+    let reviewed = vec![assess_revision(&r, &b, &k).unwrap()];
+    let mut c = context(vec![r.clone()], 1);
+    let old = build(
+        &c,
+        &c.weeks[0].cells[5].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Fixed,
+    );
+    c.weeks[0].plan.selections.0.push(old);
+    c.household.diners[0].restrictions = RestrictionDeclaration::Confirmed {
+        confirmed_at: Instant("2026-12-01T12:00:00Z".into()),
+        requirements: BoundedVec(vec![HardRequirement::IngredientExclusion {
+            ingredient_id: r.ingredients[0].ingredient_id.clone(),
+        }]),
+    };
+    // The target is attended only by the unrestricted diner; the retained other meal remains unsafe.
+    c.weeks[0].cells[2].attendee_ids.0.remove(0);
+    reproject(&mut c);
+    c.validate_shape().unwrap();
+    assert!(matches!(
+        assess_choice(
+            &c,
+            &c.weeks[0].cells[5].slot,
+            &choice(&r),
+            SelectionOrigin::Fixed,
+            false,
+            &reviewed
+        )
+        .unwrap(),
+        ChoiceAssessment::Ineligible(_)
+    ));
+    let replacement = build(
+        &c,
+        &c.weeks[0].cells[2].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Suggested,
+    );
+    let result = prepare_selection_patch(
+        &c,
+        &intent(&c, PlanMode::FillOpen),
+        &proposal(&c, vec![Some(replacement)]),
+        &reviewed,
+        &[],
+    );
+    assert!(
+        result.is_err(),
+        "untouched known hard conflict survived complete candidate checks"
+    );
+}
+
+#[test]
+fn review_disabled_retained_bad_portion_does_not_block_unrelated_active_patch() {
+    let r = recipe();
+    let (b, k) = inputs(&r);
+    let reviewed = vec![assess_revision(&r, &b, &k).unwrap()];
+    let mut c = context(vec![r.clone()], 1);
+    let mut old = build(
+        &c,
+        &c.weeks[0].cells[5].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Fixed,
+    );
+    old.servings[0].servings = p(3, 2);
+    c.weeks[0].plan.selections.0.push(old.clone());
+    c.weeks[0].day_enabled[1] = false;
+    reproject(&mut c);
+    let replacement = build(
+        &c,
+        &c.weeks[0].cells[2].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Suggested,
+    );
+    let patch = prepare_selection_patch(
+        &c,
+        &intent(&c, PlanMode::FillOpen),
+        &proposal(&c, vec![Some(replacement)]),
+        &reviewed,
+        &[],
+    )
+    .unwrap();
+    assert_eq!(patch.context.weeks[0].plan.selections[0], old);
+}
+
+#[test]
+fn r2_retained_repeats_are_rechecked_for_food_without_new_repeat_permission() {
+    let r = recipe();
+    let (b, k) = inputs(&r);
+    let reviewed = vec![assess_revision(&r, &b, &k).unwrap()];
+    let mut c = context(vec![r.clone()], 2);
+    for index in 0..2 {
+        let retained = build(
+            &c,
+            &c.weeks[index].cells[5].slot,
+            &choice(&r),
+            &reviewed,
+            SelectionOrigin::Fixed,
+        );
+        assert!(!retained.repeat_authorised);
+        c.weeks[index].plan.selections.0.push(retained);
+    }
+    let mut replacement = build(
+        &c,
+        &c.weeks[0].cells[2].slot,
+        &choice(&r),
+        &reviewed,
+        SelectionOrigin::Suggested,
+    );
+    replacement.repeat_authorised = true;
+    let mut action = intent(&c, PlanMode::FillOpen);
+    action.repeat_permissions.push(RepeatPermission {
+        slot: replacement.slot.clone(),
+        recipe: replacement.recipe.clone(),
+    });
+    let mut patch = proposal(&c, vec![Some(replacement), None]);
+    patch.changes[1].replace_slots.0.clear();
+    let result = prepare_selection_patch(&c, &action, &patch, &reviewed, &[]).unwrap();
+    assert_eq!(result.changed_slots, vec![c.weeks[0].cells[2].slot.clone()]);
+    for index in 0..2 {
+        assert_eq!(
+            result.context.weeks[index].plan.selections[0],
+            c.weeks[index].plan.selections[0]
+        );
+    }
+}
+
+#[test]
+fn r2_retained_extra_portions_and_source_closure_are_checked() {
+    let mut base = recipe();
+    let mut extra = recipe();
+    extra.recipe_id = RecipeId(format!("rc_{:032x}", 2));
+    base.extras.0.push(ExtraSpec {
+        extra_id: ExtraId(format!("ex_{:032x}", 1)),
+        title: Title("Synthetic extra".into()),
+        recipe: reference(&extra),
+        eligible_person_requirements: BoundedVec(vec![]),
+        supported_with: BoundedVec(vec![base.components[0].component_id.clone()]),
+    });
+    let (b, bc) = inputs(&base);
+    let (e, ec) = inputs(&extra);
+    let reviewed = vec![
+        assess_revision(&base, &b, &bc).unwrap(),
+        assess_revision(&extra, &e, &ec).unwrap(),
+    ];
+    let mut c = context(vec![base.clone(), extra.clone()], 1);
+    let mut configured = choice(&base);
+    configured.extras.push(ExtraChoice {
+        extra_id: base.extras[0].extra_id.clone(),
+        recipe: reference(&extra),
+        recipients: vec![PersonRef::Diner {
+            diner_id: c.household.diners[0].diner_id.clone(),
+        }],
+    });
+    let retained = build(
+        &c,
+        &c.weeks[0].cells[5].slot,
+        &configured,
+        &reviewed,
+        SelectionOrigin::Fixed,
+    );
+    c.weeks[0].plan.selections.0.push(retained);
+    let replacement = build(
+        &c,
+        &c.weeks[0].cells[2].slot,
+        &choice(&base),
+        &reviewed,
+        SelectionOrigin::Suggested,
+    );
+    let patch = proposal(&c, vec![Some(replacement)]);
+    let action = intent(&c, PlanMode::FillOpen);
+    assert!(prepare_selection_patch(&c, &action, &patch, &reviewed, &[]).is_ok());
+    assert!(
+        matches!(prepare_selection_patch(&c, &action, &patch, &reviewed[..1], &[]), Err(SelectionFailure::Invalid(e)) if e.code == ErrorCode::MissingReference)
+    );
+    c.weeks[0].plan.selections[0].extras[0].recipients[0].servings = p(3, 2);
+    c.validate_shape().unwrap();
+    assert!(
+        matches!(prepare_selection_patch(&c, &action, &patch, &reviewed, &[]), Err(SelectionFailure::Invalid(e)) if e.code == ErrorCode::IdentityMismatch)
+    );
+}

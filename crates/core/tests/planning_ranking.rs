@@ -913,3 +913,158 @@ fn occupied_scenario_keeps_unrelated_selection_order() {
     let result = run(&ctx, &i, &ch[1..2], &e, &at).unwrap();
     assert_eq!(result.ranked.len(), 1);
 }
+// Reviewer-owned assertions. Reuse literal fixture/admission readers only.
+
+#[test]
+fn review_all_24_raw_permutations_bind_same_pool_and_refusal_locator() {
+    let (ctx, i, ch, e, at) = base();
+    let expected = run(&ctx, &i, &ch, &e, &at).unwrap();
+    let mut count = 0;
+    for a in 0..4 {
+        for b in 0..4 {
+            for c in 0..4 {
+                for d in 0..4 {
+                    let indices = [a, b, c, d];
+                    if indices
+                        .iter()
+                        .collect::<std::collections::BTreeSet<_>>()
+                        .len()
+                        != 4
+                    {
+                        continue;
+                    }
+                    let perm: Vec<_> = indices.iter().map(|j| ch[*j].clone()).collect();
+                    let out = run(&ctx, &i, &perm, &e, &at).unwrap();
+                    assert_eq!(out.pool_digest, expected.pool_digest);
+                    assert_eq!(out.ranked, expected.ranked);
+                    assert_eq!(
+                        out.refused[0].index as usize,
+                        indices.iter().position(|j| *j == 3).unwrap()
+                    );
+                    count += 1;
+                }
+            }
+        }
+    }
+    assert_eq!(count, 24);
+}
+
+#[test]
+fn review_intent_permutation_keeps_readings_but_changes_exact_pool_binding() {
+    let (ctx, mut i, ch, e, at) = base();
+    let expected = run(&ctx, &i, &ch, &e, &at).unwrap();
+    let slot = i.slots[0].clone();
+    i.slots.reverse();
+    let (b, k) = admitted(&load("inputs/admission.json"));
+    let reviewed: Vec<_> = ctx
+        .recipes
+        .iter()
+        .map(|r| {
+            let j = b
+                .iter()
+                .position(|x| x.recipe.recipe_id == r.recipe_id && x.recipe.revision == r.revision)
+                .unwrap();
+            assess_revision(r, &b[j], &k[j]).unwrap()
+        })
+        .collect();
+    let actual = rank_candidates(&ctx, &slot, &i, &ch, &reviewed, &e, &at).unwrap();
+    assert_eq!(actual.ranked, expected.ranked);
+    assert_ne!(actual.pool_digest, expected.pool_digest);
+}
+
+#[test]
+fn review_all_authoritative_purchase_and_registry_permutations_refuse() {
+    let (ctx, i, ch, original, at) = base();
+    let mut ev = original.clone();
+    ev.purchase.reverse();
+    rehash(&mut ev);
+    assert_eq!(
+        run(&ctx, &i, &ch, &ev, &at).unwrap_err().code,
+        ErrorCode::NoncanonicalValue
+    );
+    let mut ev = original;
+    let reg = ev.categories.as_mut().unwrap();
+    reg.keys.push(reg.keys[0].clone());
+    reg.digest =
+        canonical_digest(&serde_json::json!({"revision":reg.revision,"keys":reg.keys})).unwrap();
+    rehash(&mut ev);
+    assert_eq!(
+        run(&ctx, &i, &ch, &ev, &at).unwrap_err().code,
+        ErrorCode::NoncanonicalValue
+    );
+}
+
+#[test]
+fn review_mixed_purchase_kinds_mark_entire_ranked_quote_cohort() {
+    let (ctx, i, ch, mut ev, at) = base();
+    ev.purchase[0].kind = PurchaseKind::ObservedPurchase;
+    rehash(&mut ev);
+    let out = run(&ctx, &i, &ch, &ev, &at).unwrap();
+    let mut digests: Vec<_> = out.ranked.iter().map(|r| r.choice_digest.clone()).collect();
+    digests.sort();
+    for metric in [RankMetric::PurchaseCost, RankMetric::UnusedPurchaseValue] {
+        let u = out.unavailable.iter().find(|u| u.metric == metric).unwrap();
+        assert_eq!(u.causes.len(), 1);
+        assert_eq!(
+            u.causes[0].reason,
+            MetricUnavailableReason::NoncomparableEvidence
+        );
+        assert_eq!(u.causes[0].choices, digests);
+    }
+}
+
+#[test]
+fn review_public_malformed_choice_primitives_refuse_without_panic() {
+    let (ctx, i, ch, mut ev, at) = base();
+    ev.purchase.clear();
+    rehash(&mut ev);
+    for field in 0..4 {
+        let mut mutated = ch[0].clone();
+        match field {
+            0 => mutated.recipe.revision = Revision(0),
+            1 => mutated.recipe.recipe_id = RecipeId("invalid".into()),
+            2 => {
+                if let BatchUse::NewBatch {
+                    production_servings,
+                    ..
+                } = &mut mutated.batch_use
+                {
+                    production_servings.0.denominator = DecimalU64(0)
+                }
+            }
+            _ => {
+                if let BatchUse::NewBatch {
+                    production_servings,
+                    ..
+                } = &mut mutated.batch_use
+                {
+                    production_servings.0 = Rational {
+                        numerator: DecimalU64(2),
+                        denominator: DecimalU64(4),
+                    }
+                }
+            }
+        }
+        assert!(run(&ctx, &i, &[mutated], &ev, &at).is_err());
+    }
+}
+
+#[test]
+fn review_native_null_key_and_public_collection_bounds() {
+    let (_, _, _, mut ev, _) = base();
+    ev.purchase[0].unused_purchase_value_pence = None;
+    let material = ranking_evidence_material(&ev).unwrap();
+    assert!(
+        material["purchase"][0]
+            .as_object()
+            .unwrap()
+            .contains_key("unused_purchase_value_pence")
+    );
+    assert!(material["purchase"][0]["unused_purchase_value_pence"].is_null());
+    let rf = ev.purchase[0].context_stamp.recipe_refs[0].clone();
+    ev.purchase[0].context_stamp.recipe_refs.0.resize(513, rf);
+    assert_eq!(
+        ranking_evidence_material(&ev).unwrap_err().code,
+        ErrorCode::LimitExceeded
+    );
+}
