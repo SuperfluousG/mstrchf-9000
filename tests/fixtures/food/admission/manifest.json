@@ -15,7 +15,7 @@
       "test": "food_f53_reference_preservation"
     }
   ],
-  "test_count": 35,
+  "test_count": 37,
   "cases": [
     {
       "test": "food_f52_incomplete_candidate",
@@ -232,16 +232,31 @@
     },
     {
       "test": "food_class_missing_rule_links_and_instruction_shape",
-      "error_paths": [],
-      "premise": "Synthetic fixture or explicit mutation; public API exercised"
+      "error_paths": [
+        "/components/0/storage_rule_ids"
+      ],
+      "premise": "R1 correction: extant rule with empty link set rejects; invalid cooling/reheating instruction shape still rejects"
+    },
+    {
+      "test": "food_r1_partial_storage_links_reject_both_orders_and_claims",
+      "error_paths": [
+        "/components/0/storage_rule_ids"
+      ],
+      "premise": "Two admitted same-component rules, restrictive rule unlinked; both rule orders, both capability claims, General/Unknown/missing class;12 rejection controls and immutable bytes"
+    },
+    {
+      "test": "food_r1_complete_storage_links_preserve_reheat_and_cold_controls",
+      "error_paths": [
+        "/capabilities"
+      ],
+      "premise": "Both rule orders with complete links: required reheat disabled, incorrect enabled claim rejects, zero-reheat cold reuse supported"
     }
   ],
   "positive_missing_evidence_controls": [
     "food_class_missing_preserves_fresh",
     "food_multiple_components_require_every_class",
     "food_missing_image_or_rights_only_disables_distribution",
-    "food_missing_quantity_review_disables_shopping",
-    "food_class_missing_rule_links_and_instruction_shape"
+    "food_missing_quantity_review_disables_shopping"
   ],
   "not_tested": [
     "B eligibility/servings/scaling",

@@ -943,9 +943,11 @@ fn food_class_missing_rule_links_and_instruction_shape() {
     r.components[0].storage_rule_ids.0.clear();
     r.capabilities.leftovers = false;
     let (b, c) = inputs(&r, Some(ComponentClass::General));
-    let v = assess_revision(&r, &b, &c).unwrap();
-    assert!(v.assessment().capabilities.shopping);
-    assert!(!v.assessment().capabilities.leftovers);
+    error(
+        assess_revision(&r, &b, &c),
+        ErrorCode::DomainConflict,
+        "/components/0/storage_rule_ids",
+    );
     for field in 0..2 {
         let mut r = recipe();
         if field == 0 {
@@ -955,5 +957,88 @@ fn food_class_missing_rule_links_and_instruction_shape() {
         }
         let (b, c) = inputs(&r, Some(ComponentClass::General));
         assert!(assess_revision(&r, &b, &c).is_err());
+    }
+}
+
+fn two_storage_rules(reverse: bool) -> RecipeRevision {
+    let mut r = recipe();
+    r.portability.reheating_required = true;
+    r.portability.evidence_ids = BoundedVec(vec![eid(10)]);
+    let mut strict = r.storage[0].clone();
+    strict.evidence_id = eid(9);
+    strict.max_reheats = 0;
+    strict.max_chilled_seconds = 64800;
+    r.storage.0.push(strict);
+    if reverse {
+        r.storage.0.reverse();
+    }
+    r
+}
+
+fn two_storage_inputs(
+    r: &RecipeRevision,
+    class: Option<ComponentClass>,
+) -> (EvidenceBasis, ComponentClassView) {
+    let (mut basis, classes) = inputs(r, class);
+    basis.admitted.extend((9..=10).map(|n| EvidencePin {
+        evidence_id: eid(n),
+        revision: Revision(1),
+        digest: Digest(format!("{n:064x}")),
+    }));
+    (basis, classes)
+}
+
+#[test]
+fn food_r1_partial_storage_links_reject_both_orders_and_claims() {
+    for reverse in [false, true] {
+        for claimed_leftovers in [true, false] {
+            for class in [
+                Some(ComponentClass::General),
+                Some(ComponentClass::Unknown),
+                None,
+            ] {
+                let mut r = two_storage_rules(reverse);
+                r.capabilities.leftovers = claimed_leftovers;
+                let before = serde_json::to_vec(&r).unwrap();
+                let (basis, classes) = two_storage_inputs(&r, class);
+                error(
+                    assess_revision(&r, &basis, &classes),
+                    ErrorCode::DomainConflict,
+                    "/components/0/storage_rule_ids",
+                );
+                assert_eq!(before, serde_json::to_vec(&r).unwrap());
+            }
+        }
+    }
+}
+
+#[test]
+fn food_r1_complete_storage_links_preserve_reheat_and_cold_controls() {
+    for reverse in [false, true] {
+        let mut r = two_storage_rules(reverse);
+        r.components[0].storage_rule_ids.0.push(eid(9));
+        r.capabilities.leftovers = false;
+        let before = serde_json::to_vec(&r).unwrap();
+        let (basis, classes) = two_storage_inputs(&r, Some(ComponentClass::General));
+        let reviewed = assess_revision(&r, &basis, &classes).unwrap();
+        assert!(reviewed.assessment().capabilities.shopping);
+        assert!(!reviewed.assessment().capabilities.leftovers);
+        assert_eq!(before, serde_json::to_vec(&r).unwrap());
+
+        r.capabilities.leftovers = true;
+        let (basis, classes) = two_storage_inputs(&r, Some(ComponentClass::General));
+        error(
+            assess_revision(&r, &basis, &classes),
+            ErrorCode::DomainConflict,
+            "/capabilities",
+        );
+
+        r.portability.reheating_required = false;
+        r.portability.cold_suitable = true;
+        let (basis, classes) = two_storage_inputs(&r, Some(ComponentClass::General));
+        let reviewed = assess_revision(&r, &basis, &classes).unwrap();
+        assert!(reviewed.assessment().capabilities.shopping);
+        assert!(reviewed.assessment().capabilities.leftovers);
+        assert_eq!(reviewed.recipe().storage.len(), 2);
     }
 }

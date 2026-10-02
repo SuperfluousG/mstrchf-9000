@@ -253,6 +253,23 @@ pub fn assess_revision<'a>(
         },
     };
     evidence_closure(reviewed.recipe, reviewed.basis)?;
+    for (i, component) in recipe.components.iter().enumerate() {
+        let applicable: BTreeSet<_> = recipe
+            .storage
+            .iter()
+            .filter(|rule| rule.component_id == component.component_id)
+            .map(|rule| &rule.evidence_id)
+            .collect();
+        let linked: BTreeSet<_> = component.storage_rule_ids.iter().collect();
+        // A rule's component binding establishes applicability. The recipe's
+        // link list cannot select away any of those admitted restrictions.
+        if linked != applicable {
+            return Err(DomainError::new(
+                ErrorCode::DomainConflict,
+                &format!("/components/{i}/storage_rule_ids"),
+            ));
+        }
+    }
     let mut missing = Vec::new();
     let quantity_review = recipe
         .reviews
@@ -289,10 +306,7 @@ pub fn assess_revision<'a>(
         let rules: Vec<_> = recipe
             .storage
             .iter()
-            .filter(|s| {
-                s.component_id == component.component_id
-                    && component.storage_rule_ids.contains(&s.evidence_id)
-            })
+            .filter(|s| s.component_id == component.component_id)
             .collect();
         // Every applicable admitted rule may shorten the ceiling. A's boolean
         // means supported reuse exists; C must check the actual elapsed use.
