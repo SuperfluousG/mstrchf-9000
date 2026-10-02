@@ -2,15 +2,19 @@ use crate::{admission, receipts, records::storage, snapshot};
 use mstrchf_contracts::*;
 use rusqlite::{Connection, TransactionBehavior};
 
-pub(crate) fn execute(
+pub(crate) fn execute_outcome(
     c: &mut Connection,
     command: &AppCommandV1,
     bytes: &[u8],
-) -> Result<Vec<u8>, DomainError> {
+) -> Result<crate::UiCommandOutcome, DomainError> {
     let tx = c
         .transaction_with_behavior(TransactionBehavior::Immediate)
         .map_err(storage)?;
     if let Some(response) = receipts::lookup(&tx, command, bytes)? {
+        #[cfg(test)]
+        if crate::tests::fault("replay_return_error") {
+            return Err(storage("injected replay return error"));
+        }
         return Ok(response);
     }
     let state = snapshot::load(&tx)?;
@@ -52,6 +56,9 @@ pub(crate) fn execute(
     if crate::tests::fault("before_commit_error") {
         return Err(storage("injected precommit error"));
     }
+    let outcome = receipts::lookup(&tx, command, bytes)?
+        .ok_or_else(|| storage("new receipt unavailable"))?
+        .applied();
     tx.commit().map_err(storage)?;
     #[cfg(test)]
     if crate::tests::fault("after_commit_error") {
@@ -59,5 +66,14 @@ pub(crate) fn execute(
     }
     #[cfg(test)]
     crate::tests::barrier("command_after_commit");
-    Ok(response)
+    Ok(outcome)
+}
+
+#[cfg(test)]
+pub(crate) fn execute(
+    c: &mut Connection,
+    command: &AppCommandV1,
+    bytes: &[u8],
+) -> Result<Vec<u8>, DomainError> {
+    execute_outcome(c, command, bytes).map(|o| o.original_response_bytes().to_vec())
 }

@@ -1,0 +1,322 @@
+// Ordinary downstream compile-only traversal: no decoder or JSON inspection.
+#![allow(dead_code, non_snake_case)]
+use mstrchf_store::__PROFILE__::*;
+fn visit_Action(v: &Action) {
+    match v {
+        Action::Setup => (),
+        Action::Plan => (),
+        Action::AddAdaptRecipe => (),
+        Action::PrepareShop => (),
+        Action::FinishWeek => (),
+        Action::CheckBooking => (),
+    }
+}
+fn visit_AgeBand(v: &AgeBand) {
+    match v {
+        AgeBand::Adult => (),
+        AgeBand::Teen => (),
+        AgeBand::Child13 => (),
+        AgeBand::Child46 => (),
+        AgeBand::Child710 => (),
+        AgeBand::Child1112 => (),
+    }
+}
+fn visit_AllergenCode(v: &AllergenCode) {
+    match v {
+        AllergenCode::Celery => (),
+        AllergenCode::CerealsContainingGluten => (),
+        AllergenCode::Crustaceans => (),
+        AllergenCode::Eggs => (),
+        AllergenCode::Fish => (),
+        AllergenCode::Lupin => (),
+        AllergenCode::Milk => (),
+        AllergenCode::Molluscs => (),
+        AllergenCode::Mustard => (),
+        AllergenCode::Peanuts => (),
+        AllergenCode::Sesame => (),
+        AllergenCode::Soybeans => (),
+        AllergenCode::SulphurDioxideSulphites => (),
+        AllergenCode::TreeNuts => (),
+    }
+}
+fn visit_DietCode(v: &DietCode) {
+    match v {
+        DietCode::Vegetarian => (),
+        DietCode::Vegan => (),
+        DietCode::GlutenFree => (),
+    }
+}
+fn visit_EquipmentCode(v: &EquipmentCode) {
+    match v {
+        EquipmentCode::Hob => (),
+        EquipmentCode::Oven => (),
+        EquipmentCode::Microwave => (),
+        EquipmentCode::Fridge => (),
+        EquipmentCode::Kettle => (),
+        EquipmentCode::Toaster => (),
+        EquipmentCode::Blender => (),
+        EquipmentCode::SlowCooker => (),
+        EquipmentCode::PressureCooker => (),
+    }
+}
+fn visit_ErrorCode(v: &ErrorCode) {
+    match v {
+        ErrorCode::MalformedJson => (),
+        ErrorCode::DuplicateKey => (),
+        ErrorCode::LimitExceeded => (),
+        ErrorCode::UnsupportedVersion => (),
+        ErrorCode::UnknownField => (),
+        ErrorCode::MissingField => (),
+        ErrorCode::InvalidValue => (),
+        ErrorCode::MissingReference => (),
+        ErrorCode::ForeignReference => (),
+        ErrorCode::NoncanonicalValue => (),
+        ErrorCode::ArithmeticOverflow => (),
+        ErrorCode::ContextStale => (),
+        ErrorCode::IdentityMismatch => (),
+        ErrorCode::DigestMismatch => (),
+        ErrorCode::ReplayConflict => (),
+        ErrorCode::ScopeViolation => (),
+        ErrorCode::PrivacyDenied => (),
+        ErrorCode::AuthorityDenied => (),
+        ErrorCode::UnsupportedCapability => (),
+        ErrorCode::DomainConflict => (),
+        ErrorCode::WorkerNotStopped => (),
+        ErrorCode::ReconciliationRequired => (),
+        ErrorCode::OperationUncertain => (),
+        ErrorCode::StorageFailure => (),
+    }
+}
+fn visit_HouseholdStage(v: &HouseholdStage) {
+    match v {
+        HouseholdStage::Household => (),
+        HouseholdStage::FoodPreferences => (),
+        HouseholdStage::UsualWeek => (),
+        HouseholdStage::Connections => (),
+    }
+}
+fn visit_JobState(v: &JobState) {
+    match v {
+        JobState::Prepared => (),
+        JobState::AwaitingUser => (),
+        JobState::Running => (),
+        JobState::NeedsUser => (),
+        JobState::Succeeded => (),
+        JobState::Failed => (),
+        JobState::Cancelled => (),
+    }
+}
+fn visit_LoyaltyStatus(v: &LoyaltyStatus) {
+    match v {
+        LoyaltyStatus::ConfirmedMember => (),
+        LoyaltyStatus::NotMember => (),
+        LoyaltyStatus::Unknown => (),
+    }
+}
+fn visit_MealLocation(v: &MealLocation) {
+    match v {
+        MealLocation::AtHome => (),
+        MealLocation::OnTheMove => (),
+        MealLocation::Skip => (),
+    }
+}
+fn visit_MealType(v: &MealType) {
+    match v {
+        MealType::Breakfast => (),
+        MealType::Lunch => (),
+        MealType::Dinner => (),
+    }
+}
+fn visit_MobilityTemperature(v: &MobilityTemperature) {
+    match v {
+        MobilityTemperature::Hot => (),
+        MobilityTemperature::Cold => (),
+        MobilityTemperature::Either => (),
+    }
+}
+fn visit_never(v: &Never) {
+    match *v {}
+}
+fn visit_PortionPresetName(v: &PortionPresetName) {
+    match v {
+        PortionPresetName::Smaller => (),
+        PortionPresetName::Regular => (),
+        PortionPresetName::Larger => (),
+    }
+}
+fn visit_Provider(v: &Provider) {
+    match v {
+        Provider::CodexLocal => (),
+        Provider::ClaudeCowork => (),
+    }
+}
+fn visit_ReminderChannel(v: &ReminderChannel) {
+    match v {
+        ReminderChannel::Local => (),
+        ReminderChannel::Calendar => (),
+    }
+}
+fn visit_ReminderPrompt(v: &ReminderPrompt) {
+    match v {
+        ReminderPrompt::UnfinishedPlan => (),
+        ReminderPrompt::BookingOpportunity => (),
+    }
+}
+fn visit_RequiredAction(v: &RequiredAction) {
+    match v {
+        RequiredAction::ChooseAlternative => (),
+        RequiredAction::InspectProduct => (),
+        RequiredAction::SignIn => (),
+        RequiredAction::StopWorker => (),
+        RequiredAction::Reconcile => (),
+        RequiredAction::RetryRead => (),
+        RequiredAction::ManualExport => (),
+        RequiredAction::ReviewCandidate => (),
+    }
+}
+fn visit_Retailer(v: &Retailer) {
+    match v {
+        Retailer::Tesco => (),
+    }
+}
+fn visit_SpendingStyle(v: &SpendingStyle) {
+    match v {
+        SpendingStyle::Value => (),
+        SpendingStyle::Balanced => (),
+        SpendingStyle::Flexible => (),
+    }
+}
+fn visit_Weekday(v: &Weekday) {
+    match v {
+        Weekday::Monday => (),
+        Weekday::Tuesday => (),
+        Weekday::Wednesday => (),
+        Weekday::Thursday => (),
+        Weekday::Friday => (),
+        Weekday::Saturday => (),
+        Weekday::Sunday => (),
+    }
+}
+fn visit_HardRequirement(v: &HardRequirement) {
+    match v {
+        HardRequirement::AllergenExclusion { code } => visit_AllergenCode(code),
+        HardRequirement::Diet { code } => visit_DietCode(code),
+        HardRequirement::IngredientExclusion { ingredient_id } => {
+            let _: &str = ingredient_id.value();
+        }
+    }
+}
+fn visit_RestrictionDeclaration(v: &RestrictionDeclaration) {
+    match v {
+        RestrictionDeclaration::Unconfirmed {} => (),
+        RestrictionDeclaration::ConfirmedNone { confirmed_at } => {
+            let _: &str = confirmed_at.value();
+        }
+        RestrictionDeclaration::Confirmed {
+            confirmed_at,
+            requirements,
+        } => {
+            let _: &str = confirmed_at.value();
+            for requirement in requirements {
+                visit_HardRequirement(requirement);
+            }
+        }
+    }
+}
+macro_rules! diners {
+    ($diners:expr) => {
+        for diner in $diners {
+            visit_AgeBand(diner.age_band());
+            visit_RestrictionDeclaration(diner.restrictions());
+            visit_PortionPresetName(diner.portions().preset());
+            for meal in diner.portions().meal_overrides() {
+                visit_MealType(meal.meal_type());
+                visit_PortionPresetName(meal.preset());
+            }
+        }
+    };
+}
+macro_rules! preferences {
+    ($p:expr) => {{
+        let p = $p;
+        for e in p.equipment() {
+            visit_EquipmentCode(e);
+        }
+        for meal in p.meal_times() {
+            visit_MealType(meal.meal_type());
+        }
+        visit_MobilityTemperature(p.mobility().temperature());
+        visit_SpendingStyle(p.spending_style());
+    }};
+}
+macro_rules! connections {
+    ($c:expr) => {{
+        let c = $c;
+        for delivery in c.delivery_preferences() {
+            visit_Weekday(delivery.weekday());
+        }
+        if let Some(provider) = c.harness() {
+            visit_Provider(provider);
+        }
+        visit_LoyaltyStatus(c.loyalty());
+        for channel in c.reminders().channels() {
+            visit_ReminderChannel(channel);
+        }
+        for prompt in c.reminders().prompts() {
+            visit_ReminderPrompt(prompt);
+        }
+        if let Some(retailer) = c.retailer() {
+            visit_Retailer(retailer);
+        }
+    }};
+}
+macro_rules! usual_week {
+    ($w:expr) => {{
+        let w = $w;
+        for cell in w.cells() {
+            visit_MealLocation(cell.choice());
+            visit_MealType(cell.meal_type());
+            visit_Weekday(cell.weekday());
+        }
+        for meal in w.enabled_meal_types() {
+            visit_MealType(meal);
+        }
+    }};
+}
+pub fn inspect(s: &mstrchf_store::__SNAPSHOT__) {
+    let _: &[Never] = s.weeks();
+    let _: &[Never] = s.conflicts();
+    for v in s.weeks().iter().chain(s.conflicts()) {
+        visit_never(v);
+    }
+    for job in s.jobs() {
+        visit_Action(job.action());
+        visit_JobState(job.state());
+        if let Some(reason) = job.reason() {
+            visit_ErrorCode(reason);
+        }
+        if let Some(action) = job.next_action() {
+            visit_RequiredAction(action);
+        }
+    }
+    let draft = s.household_draft();
+    for stage in draft.completed_stages() {
+        visit_HouseholdStage(stage);
+    }
+    diners!(draft.diners());
+    if let Some(p) = draft.preferences() {
+        preferences!(p);
+    }
+    if let Some(c) = draft.connections() {
+        connections!(c);
+    }
+    if let Some(w) = draft.usual_week() {
+        usual_week!(w);
+    }
+    if let Some(profile) = s.profile() {
+        diners!(profile.diners());
+        preferences!(profile.preferences());
+        connections!(profile.connections());
+        usual_week!(profile.usual_week());
+    }
+}
