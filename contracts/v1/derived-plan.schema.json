@@ -1,0 +1,1088 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "Allocation": {
+      "additionalProperties": false,
+      "properties": {
+        "allocation_id": {
+          "$ref": "#/$defs/AllocationId"
+        },
+        "batch_id": {
+          "$ref": "#/$defs/BatchId"
+        },
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "person": {
+          "$ref": "#/$defs/PersonRef"
+        },
+        "planned_reheats": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "remix_recipe": {
+          "$ref": "#/$defs/Nullable_RecipeRef"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "target_slot": {
+          "$ref": "#/$defs/SlotId"
+        },
+        "use_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "allocation_id",
+        "batch_id",
+        "component_id",
+        "target_slot",
+        "person",
+        "servings",
+        "quantity",
+        "use_at",
+        "planned_reheats",
+        "remix_recipe"
+      ],
+      "type": "object"
+    },
+    "AllocationId": {
+      "pattern": "^al_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Array_Allocation_0_4096": {
+      "items": {
+        "$ref": "#/$defs/Allocation"
+      },
+      "maxItems": 4096,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_BatchId_0_256": {
+      "items": {
+        "$ref": "#/$defs/BatchId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Conflict_0_100": {
+      "items": {
+        "$ref": "#/$defs/Conflict"
+      },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DemandLine_0_4096": {
+      "items": {
+        "$ref": "#/$defs/DemandLine"
+      },
+      "maxItems": 4096,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DerivedBatch_0_256": {
+      "items": {
+        "$ref": "#/$defs/DerivedBatch"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DerivedComponent_1_128": {
+      "items": {
+        "$ref": "#/$defs/DerivedComponent"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_EvidenceId_0_256": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ExtraId_0_64": {
+      "items": {
+        "$ref": "#/$defs/ExtraId"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_IngredientId_0_256": {
+      "items": {
+        "$ref": "#/$defs/IngredientId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_PrepSession_0_256": {
+      "items": {
+        "$ref": "#/$defs/PrepSession"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_PrepTaskRef_0_256": {
+      "items": {
+        "$ref": "#/$defs/PrepTaskRef"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_RecipeRef_0_512": {
+      "items": {
+        "$ref": "#/$defs/RecipeRef"
+      },
+      "maxItems": 512,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ScheduledPrepTask_1_256": {
+      "items": {
+        "$ref": "#/$defs/ScheduledPrepTask"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_SlotId_0_84": {
+      "items": {
+        "$ref": "#/$defs/SlotId"
+      },
+      "maxItems": 84,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_SlotId_1_21": {
+      "items": {
+        "$ref": "#/$defs/SlotId"
+      },
+      "maxItems": 21,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_Text_0_64": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_TimeInterval_0_256": {
+      "items": {
+        "$ref": "#/$defs/TimeInterval"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_WeekId_0_4": {
+      "items": {
+        "$ref": "#/$defs/WeekId"
+      },
+      "maxItems": 4,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_WeekRevision_0_4": {
+      "items": {
+        "$ref": "#/$defs/WeekRevision"
+      },
+      "maxItems": 4,
+      "minItems": 0,
+      "type": "array"
+    },
+    "BatchId": {
+      "pattern": "^ba_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ComponentId": {
+      "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Conflict": {
+      "additionalProperties": false,
+      "properties": {
+        "blocking": {
+          "type": "boolean"
+        },
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "recipe_refs": {
+          "$ref": "#/$defs/Array_RecipeRef_0_512"
+        },
+        "slot_ids": {
+          "$ref": "#/$defs/Array_SlotId_0_84"
+        },
+        "week_ids": {
+          "$ref": "#/$defs/Array_WeekId_0_4"
+        }
+      },
+      "required": [
+        "code",
+        "week_ids",
+        "slot_ids",
+        "recipe_refs",
+        "evidence_ids",
+        "blocking"
+      ],
+      "type": "object"
+    },
+    "ContextStamp": {
+      "additionalProperties": false,
+      "properties": {
+        "catalogue_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "history_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "household_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "privacy_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "ranking_policy_version": {
+          "$ref": "#/$defs/Revision"
+        },
+        "read_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        },
+        "recipe_refs": {
+          "$ref": "#/$defs/Array_RecipeRef_0_512"
+        },
+        "settings_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "write_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        }
+      },
+      "required": [
+        "household_revision",
+        "settings_revision",
+        "privacy_revision",
+        "history_revision",
+        "catalogue_revision",
+        "ranking_policy_version",
+        "recipe_refs",
+        "read_weeks",
+        "write_weeks"
+      ],
+      "type": "object"
+    },
+    "DemandDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "DemandLine": {
+      "additionalProperties": false,
+      "properties": {
+        "conversion_evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "essential": {
+          "type": "boolean"
+        },
+        "ingredient_id": {
+          "$ref": "#/$defs/IngredientId"
+        },
+        "line_id": {
+          "$ref": "#/$defs/DemandLineId"
+        },
+        "origin_batches": {
+          "$ref": "#/$defs/Array_BatchId_0_256"
+        },
+        "origin_extras": {
+          "$ref": "#/$defs/Array_ExtraId_0_64"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "line_id",
+        "ingredient_id",
+        "quantity",
+        "origin_batches",
+        "origin_extras",
+        "essential",
+        "conversion_evidence_ids"
+      ],
+      "type": "object"
+    },
+    "DemandLineId": {
+      "pattern": "^dl_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "DemandSet": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/DemandDigest"
+        },
+        "input_plan_digest": {
+          "$ref": "#/$defs/PlanInputDigest"
+        },
+        "lines": {
+          "$ref": "#/$defs/Array_DemandLine_0_4096"
+        }
+      },
+      "required": [
+        "input_plan_digest",
+        "lines",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "DerivedBatch": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_id": {
+          "$ref": "#/$defs/BatchId"
+        },
+        "components": {
+          "$ref": "#/$defs/Array_DerivedComponent_1_128"
+        },
+        "original_cook": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "source_slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "batch_id",
+        "recipe",
+        "source_slot",
+        "original_cook",
+        "components"
+      ],
+      "type": "object"
+    },
+    "DerivedComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "allocated": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "produced": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "storage_rule": {
+          "$ref": "#/$defs/StorageRule"
+        },
+        "unallocated": {
+          "$ref": "#/$defs/NonnegativeQuantity"
+        }
+      },
+      "required": [
+        "component_id",
+        "produced",
+        "allocated",
+        "unallocated",
+        "storage_rule"
+      ],
+      "type": "object"
+    },
+    "DinerId": {
+      "pattern": "^dn_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ErrorCode": {
+      "enum": [
+        "malformed_json",
+        "duplicate_key",
+        "limit_exceeded",
+        "unsupported_version",
+        "unknown_field",
+        "missing_field",
+        "invalid_value",
+        "missing_reference",
+        "foreign_reference",
+        "noncanonical_value",
+        "arithmetic_overflow",
+        "context_stale",
+        "identity_mismatch",
+        "digest_mismatch",
+        "replay_conflict",
+        "scope_violation",
+        "privacy_denied",
+        "authority_denied",
+        "unsupported_capability",
+        "domain_conflict",
+        "worker_not_stopped",
+        "reconciliation_required",
+        "operation_uncertain",
+        "storage_failure"
+      ],
+      "type": "string"
+    },
+    "EvidenceId": {
+      "pattern": "^ev_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExtraId": {
+      "pattern": "^ex_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "GuestId": {
+      "pattern": "^gu_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "HttpUrl": {
+      "maxLength": 2048,
+      "pattern": "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
+      "type": "string"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "IngredientId": {
+      "pattern": "^ig_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "LocalDate": {
+      "description": "Gregorian date 1900-01-01 through 2199-12-31",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+      "type": "string"
+    },
+    "LocalTime": {
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+      "type": "string"
+    },
+    "MealType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "type": "string"
+    },
+    "NonnegativeQuantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/Rational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "Nullable_HttpUrl": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HttpUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_PrepSessionId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PrepSessionId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_RecipeRef": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "OccasionId": {
+      "pattern": "^oc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "PayloadDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "PersonRef": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "diner",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "guest_id": {
+                  "$ref": "#/$defs/GuestId"
+                },
+                "occasion_id": {
+                  "$ref": "#/$defs/OccasionId"
+                }
+              },
+              "required": [
+                "occasion_id",
+                "guest_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "guest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "PlanInputDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "PrepSession": {
+      "additionalProperties": false,
+      "properties": {
+        "attached_to": {
+          "$ref": "#/$defs/Nullable_PrepSessionId"
+        },
+        "end": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "ingredient_needed_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "linked_slots": {
+          "$ref": "#/$defs/Array_SlotId_1_21"
+        },
+        "session_id": {
+          "$ref": "#/$defs/PrepSessionId"
+        },
+        "start": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "tasks": {
+          "$ref": "#/$defs/Array_ScheduledPrepTask_1_256"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "session_id",
+        "week_id",
+        "linked_slots",
+        "attached_to",
+        "start",
+        "end",
+        "ingredient_needed_at",
+        "tasks",
+        "ingredient_ids"
+      ],
+      "type": "object"
+    },
+    "PrepSessionId": {
+      "pattern": "^ps_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "PrepTaskRef": {
+      "additionalProperties": false,
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/PrepSessionId"
+        },
+        "task_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "session_id",
+        "task_id"
+      ],
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "Rational": {
+      "additionalProperties": false,
+      "description": "Reduced rational; gcd must equal 1 and zero must be 0/1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^(0|[1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "RecipeDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "RecipeId": {
+      "pattern": "^rc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "RecipeRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/RecipeDigest"
+        },
+        "recipe_id": {
+          "$ref": "#/$defs/RecipeId"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        }
+      },
+      "required": [
+        "recipe_id",
+        "revision",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "RecipeSourceOrigin": {
+      "enum": [
+        "published",
+        "user_authored",
+        "adapted"
+      ],
+      "type": "string"
+    },
+    "Resolution": {
+      "enum": [
+        "unambiguous",
+        "earlier",
+        "later"
+      ],
+      "type": "string"
+    },
+    "Revision": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "ScheduledPrepTask": {
+      "additionalProperties": false,
+      "properties": {
+        "active_intervals": {
+          "$ref": "#/$defs/Array_TimeInterval_0_256"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/Array_PrepTaskRef_0_256"
+        },
+        "elapsed": {
+          "$ref": "#/$defs/TimeInterval"
+        },
+        "prep_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "task_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "task_id",
+        "recipe",
+        "prep_id",
+        "depends_on",
+        "active_intervals",
+        "elapsed"
+      ],
+      "type": "object"
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SlotId": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "date",
+        "meal_type"
+      ],
+      "type": "object"
+    },
+    "SourceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_notice": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "authors": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "origin": {
+          "$ref": "#/$defs/RecipeSourceOrigin"
+        },
+        "retrieved_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "source_revision": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "url",
+        "source_revision",
+        "retrieved_at",
+        "authors",
+        "adaptation_notice",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "StorageRule": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "cooling_instruction": {
+          "$ref": "#/$defs/Text"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "max_chilled_seconds": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "max_reheats": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reheating_instruction": {
+          "$ref": "#/$defs/Text"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "component_id",
+        "max_chilled_seconds",
+        "cooling_instruction",
+        "reheating_instruction",
+        "max_reheats",
+        "source"
+      ],
+      "type": "object"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "TimeInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "start": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "type": "object"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "WeekId": {
+      "pattern": "^wk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "WeekRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "ZoneId": {
+      "description": "Case-sensitive IANA timezone accepted by pinned chrono-tz",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*$",
+      "type": "string"
+    },
+    "ZonedMoment": {
+      "additionalProperties": false,
+      "properties": {
+        "instant": {
+          "$ref": "#/$defs/Instant"
+        },
+        "local_date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "local_time": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "zone": {
+          "$ref": "#/$defs/ZoneId"
+        }
+      },
+      "required": [
+        "local_date",
+        "local_time",
+        "zone",
+        "resolution",
+        "instant"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:derived-plan",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allocations": {
+      "$ref": "#/$defs/Array_Allocation_0_4096"
+    },
+    "batches": {
+      "$ref": "#/$defs/Array_DerivedBatch_0_256"
+    },
+    "context_stamp": {
+      "$ref": "#/$defs/ContextStamp"
+    },
+    "demand": {
+      "$ref": "#/$defs/DemandSet"
+    },
+    "derivation_policy_version": {
+      "$ref": "#/$defs/Revision"
+    },
+    "digest": {
+      "$ref": "#/$defs/PayloadDigest"
+    },
+    "input_plan_digest": {
+      "$ref": "#/$defs/PlanInputDigest"
+    },
+    "plan_revision": {
+      "$ref": "#/$defs/Revision"
+    },
+    "prep_sessions": {
+      "$ref": "#/$defs/Array_PrepSession_0_256"
+    },
+    "recipe_refs": {
+      "$ref": "#/$defs/Array_RecipeRef_0_512"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    },
+    "warnings": {
+      "$ref": "#/$defs/Array_Conflict_0_100"
+    },
+    "week_id": {
+      "$ref": "#/$defs/WeekId"
+    }
+  },
+  "required": [
+    "schema_version",
+    "week_id",
+    "plan_revision",
+    "input_plan_digest",
+    "context_stamp",
+    "recipe_refs",
+    "batches",
+    "allocations",
+    "prep_sessions",
+    "demand",
+    "warnings",
+    "derivation_policy_version",
+    "digest"
+  ],
+  "title": "DerivedPlan",
+  "type": "object"
+}

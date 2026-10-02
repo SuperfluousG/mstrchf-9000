@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_00000000000000000000000000000011",
+  "action": "check_booking",
+  "week_id": "wk_00000000000000000000000000000001",
+  "base_plan_revision": "1",
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "1",
+        "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+      },
+      {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1",
+        "digest": "43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017"
+      }
+    ],
+    "read_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      }
+    ],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "setup_check",
+    "data": {
+      "provider": "codex_local",
+      "requested_capabilities": [
+        "scoped_file_read"
+      ]
+    }
+  },
+  "scope": {
+    "kind": "booking",
+    "data": {
+      "week_ids": [
+        "wk_00000000000000000000000000000001"
+      ],
+      "read_scope": {
+        "read_id": "rd_00000000000000000000000000000004",
+        "resource": {
+          "kind": "basket",
+          "data": {
+            "key": {
+              "retailer": "tesco",
+              "account_ref": "synthetic-account-1",
+              "basket_id": "bk_00000000000000000000000000000001"
+            }
+          }
+        },
+        "purpose": "slot_discovery",
+        "allowed_kinds": [
+          "slots"
+        ],
+        "products": [],
+        "event_ids": [],
+        "not_before": "2026-12-28T10:00:00Z",
+        "expires_at": "2026-12-28T20:00:00Z"
+      }
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "c442263bde9dffb28ecfb15c21475a508be05319ffe5d6367b951ad27c7df1a4"
+}

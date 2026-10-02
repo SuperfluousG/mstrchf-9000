@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "observation_id": "ob_00000000000000000000000000000001",
+  "read_id": "rd_00000000000000000000000000000001",
+  "job_id": "jb_0000000000000000000000000000000f",
+  "input_digest": "8531f643adc196dc1f84a2a7d24922267f4294d2112a8724b34f882109bc435c",
+  "reader": {
+    "provider": "codex_local",
+    "native_task_ref": "synthetic-task-1"
+  },
+  "resource": {
+    "kind": "basket",
+    "data": {
+      "key": {
+        "retailer": "tesco",
+        "account_ref": "synthetic-account-1",
+        "basket_id": "bk_00000000000000000000000000000001"
+      }
+    }
+  },
+  "observed_at": "2026-12-28T12:00:00Z",
+  "body": {
+    "kind": "products",
+    "data": {
+      "delivery_context": {
+        "retailer": "tesco",
+        "account_ref": "synthetic-account-1",
+        "context_ref": "synthetic-context-1",
+        "delivery_date": "2026-12-30",
+        "slot_ref": null
+      },
+      "items": [
+        {
+          "product": {
+            "retailer": "tesco",
+            "product_id": "synthetic-product-1",
+            "variant_id": null
+          },
+          "url": "https://example.invalid/synthetic-product",
+          "title": "Synthetic product fixture",
+          "pack": {
+            "count": {
+              "kind": "known",
+              "data": {
+                "value": 1
+              }
+            },
+            "net": {
+              "kind": "known",
+              "data": {
+                "value": {
+                  "amount": {
+                    "numerator": "400",
+                    "denominator": "1"
+                  },
+                  "unit": "g",
+                  "form": "raw"
+                }
+              }
+            },
+            "drained": {
+              "kind": "known",
+              "data": {
+                "value": {
+                  "amount": {
+                    "numerator": "240",
+                    "denominator": "1"
+                  },
+                  "unit": "g",
+                  "form": "drained"
+                }
+              }
+            }
+          },
+          "price": {
+            "kind": "observed",
+            "data": {
+              "pence": "299",
+              "currency": "GBP"
+            }
+          },
+          "offers": [],
+          "availability": "in_stock",
+          "ingredients": {
+            "kind": "known",
+            "data": {
+              "value": "Synthetic ingredient label"
+            }
+          },
+          "allergens": {
+            "kind": "unknown",
+            "data": {
+              "reason": "not_exposed"
+            }
+          },
+          "storage": {
+            "kind": "unknown",
+            "data": {
+              "reason": "not_exposed"
+            }
+          },
+          "delivery_context": {
+            "retailer": "tesco",
+            "account_ref": "synthetic-account-1",
+            "context_ref": "synthetic-context-1",
+            "delivery_date": "2026-12-30",
+            "slot_ref": null
+          },
+          "observed_at": "2026-12-28T11:00:00Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2804 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "Action": {
+      "enum": [
+        "setup",
+        "plan",
+        "add_adapt_recipe",
+        "prepare_shop",
+        "finish_week",
+        "check_booking"
+      ],
+      "type": "string"
+    },
+    "AgeBand": {
+      "enum": [
+        "adult",
+        "teen",
+        "child_1_3",
+        "child_4_6",
+        "child_7_10",
+        "child_11_12"
+      ],
+      "type": "string"
+    },
+    "Array_BasketLine_0_512": {
+      "items": {
+        "$ref": "#/$defs/BasketLine"
+      },
+      "maxItems": 512,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_BoundedCount_2_8": {
+      "items": {
+        "$ref": "#/$defs/BoundedCount"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Array_CalendarObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/CalendarObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_CandidateIngredient_0_256": {
+      "items": {
+        "$ref": "#/$defs/CandidateIngredient"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_CandidateIssue_0_256": {
+      "items": {
+        "$ref": "#/$defs/CandidateIssue"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_CapabilityClaim_1_8": {
+      "items": {
+        "$ref": "#/$defs/CapabilityClaim"
+      },
+      "maxItems": 8,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ComponentId_0_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ComponentId_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ComponentYield_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentYield"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_DinerServing_1_64": {
+      "items": {
+        "$ref": "#/$defs/DinerServing"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_EvidenceId_0_256": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ExtraSelection_0_64": {
+      "items": {
+        "$ref": "#/$defs/ExtraSelection"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_IngredientId_0_256": {
+      "items": {
+        "$ref": "#/$defs/IngredientId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_InstructionStep_0_256": {
+      "items": {
+        "$ref": "#/$defs/InstructionStep"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_OfferObservation_0_64": {
+      "items": {
+        "$ref": "#/$defs/OfferObservation"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_PersonPortionOverride_0_64": {
+      "items": {
+        "$ref": "#/$defs/PersonPortionOverride"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ProductObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/ProductObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ProposedSelection_0_21": {
+      "items": {
+        "$ref": "#/$defs/ProposedSelection"
+      },
+      "maxItems": 21,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Quantity_2_8": {
+      "items": {
+        "$ref": "#/$defs/Quantity"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Array_RecipeRef_0_512": {
+      "items": {
+        "$ref": "#/$defs/RecipeRef"
+      },
+      "maxItems": 512,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_RecipeRef_1_512": {
+      "items": {
+        "$ref": "#/$defs/RecipeRef"
+      },
+      "maxItems": 512,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ResultObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/ResultObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_SlotObservation_0_256": {
+      "items": {
+        "$ref": "#/$defs/SlotObservation"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Text_0_64": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Text_2_8": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Array_UnresolvedLine_0_256": {
+      "items": {
+        "$ref": "#/$defs/UnresolvedLine"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ValidationIssue_0_100": {
+      "items": {
+        "$ref": "#/$defs/ValidationIssue"
+      },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_WeekChange_1_4": {
+      "items": {
+        "$ref": "#/$defs/WeekChange"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_WeekRevision_0_4": {
+      "items": {
+        "$ref": "#/$defs/WeekRevision"
+      },
+      "maxItems": 4,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_0_256": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "AssetDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "AssetId": {
+      "pattern": "^as_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Availability": {
+      "enum": [
+        "in_stock",
+        "out_of_stock",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "BasketId": {
+      "pattern": "^bk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "BasketKey": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "basket_id": {
+          "$ref": "#/$defs/BasketId"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        }
+      },
+      "required": [
+        "retailer",
+        "account_ref",
+        "basket_id"
+      ],
+      "type": "object"
+    },
+    "BasketLine": {
+      "additionalProperties": false,
+      "properties": {
+        "product": {
+          "$ref": "#/$defs/ProductRef"
+        },
+        "quantity": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unit_price": {
+          "$ref": "#/$defs/Price"
+        }
+      },
+      "required": [
+        "product",
+        "quantity",
+        "unit_price"
+      ],
+      "type": "object"
+    },
+    "BasketSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "delivery_charge": {
+          "$ref": "#/$defs/Price"
+        },
+        "delivery_context": {
+          "$ref": "#/$defs/RetailerDeliveryContext"
+        },
+        "key": {
+          "$ref": "#/$defs/BasketKey"
+        },
+        "lines": {
+          "$ref": "#/$defs/Array_BasketLine_0_512"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        }
+      },
+      "required": [
+        "key",
+        "delivery_context",
+        "observed_at",
+        "lines",
+        "delivery_charge"
+      ],
+      "type": "object"
+    },
+    "BatchId": {
+      "pattern": "^ba_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "BatchUse": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "batch_id": {
+                  "$ref": "#/$defs/BatchId"
+                }
+              },
+              "required": [
+                "batch_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "new_batch",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "batch_id": {
+                  "$ref": "#/$defs/BatchId"
+                },
+                "component_ids": {
+                  "$ref": "#/$defs/Array_ComponentId_1_128"
+                }
+              },
+              "required": [
+                "batch_id",
+                "component_ids"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "leftover",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "BoundedCount": {
+      "maximum": 10000,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "CalendarDestinationId": {
+      "pattern": "^cd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CalendarEventId": {
+      "pattern": "^ce_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CalendarObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/CalendarEventId"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "observed_payload_digest": {
+          "$ref": "#/$defs/Nullable_Digest"
+        },
+        "provider_event_ref": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "state": {
+          "$ref": "#/$defs/CalendarObservationState"
+        },
+        "user_changed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "event_id",
+        "provider_event_ref",
+        "observed_payload_digest",
+        "state",
+        "observed_at",
+        "user_changed"
+      ],
+      "type": "object"
+    },
+    "CalendarObservationState": {
+      "enum": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "CandidateIngredient": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/Nullable_ComponentId"
+        },
+        "ingredient_id": {
+          "$ref": "#/$defs/Nullable_IngredientId"
+        },
+        "name": {
+          "$ref": "#/$defs/Text"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Nullable_Quantity"
+        },
+        "source_text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "ingredient_id",
+        "name",
+        "quantity",
+        "component_id",
+        "source_text"
+      ],
+      "type": "object"
+    },
+    "CandidateIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/CandidateIssueCode"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "path": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "CandidateIssueCode": {
+      "enum": [
+        "missing_quantity",
+        "missing_yield",
+        "missing_rights",
+        "missing_image",
+        "missing_storage",
+        "missing_portion_evidence",
+        "unresolved_ingredient",
+        "inconsistent_instructions",
+        "unsupported_requirement"
+      ],
+      "type": "string"
+    },
+    "Capability": {
+      "enum": [
+        "scoped_file_read",
+        "atomic_result_write",
+        "native_launch",
+        "browser_read",
+        "browser_mutate",
+        "calendar_read",
+        "calendar_write",
+        "worker_stop"
+      ],
+      "type": "string"
+    },
+    "CapabilityClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "capability": {
+          "$ref": "#/$defs/Capability"
+        },
+        "claimed_available": {
+          "type": "boolean"
+        },
+        "detail_code": {
+          "$ref": "#/$defs/CapabilityDetail"
+        }
+      },
+      "required": [
+        "capability",
+        "claimed_available",
+        "detail_code"
+      ],
+      "type": "object"
+    },
+    "CapabilityDetail": {
+      "enum": [
+        "available",
+        "unavailable",
+        "permission_needed",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "ComponentId": {
+      "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ComponentYield": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity"
+      ],
+      "type": "object"
+    },
+    "ContextStamp": {
+      "additionalProperties": false,
+      "properties": {
+        "catalogue_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "history_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "household_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "privacy_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "ranking_policy_version": {
+          "$ref": "#/$defs/Revision"
+        },
+        "read_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        },
+        "recipe_refs": {
+          "$ref": "#/$defs/Array_RecipeRef_0_512"
+        },
+        "settings_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "write_weeks": {
+          "$ref": "#/$defs/Array_WeekRevision_0_4"
+        }
+      },
+      "required": [
+        "household_revision",
+        "settings_revision",
+        "privacy_revision",
+        "history_revision",
+        "catalogue_revision",
+        "ranking_policy_version",
+        "recipe_refs",
+        "read_weeks",
+        "write_weeks"
+      ],
+      "type": "object"
+    },
+    "Currency": {
+      "enum": [
+        "GBP"
+      ],
+      "type": "string"
+    },
+    "DecimalU64": {
+      "description": "Canonical decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "DeliveryApplicable": {
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "DemandLineId": {
+      "pattern": "^dl_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "DinerId": {
+      "pattern": "^dn_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "DinerServing": {
+      "additionalProperties": false,
+      "properties": {
+        "person": {
+          "$ref": "#/$defs/PersonRef"
+        },
+        "preset_ref": {
+          "$ref": "#/$defs/PortionPresetRef"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "person",
+        "preset_ref",
+        "servings"
+      ],
+      "type": "object"
+    },
+    "DomainError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "issues": {
+          "$ref": "#/$defs/Array_ValidationIssue_0_100"
+        },
+        "retry": {
+          "$ref": "#/$defs/Retry"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "issues",
+        "retry",
+        "truncated"
+      ],
+      "type": "object"
+    },
+    "ErrorCode": {
+      "enum": [
+        "malformed_json",
+        "duplicate_key",
+        "limit_exceeded",
+        "unsupported_version",
+        "unknown_field",
+        "missing_field",
+        "invalid_value",
+        "missing_reference",
+        "foreign_reference",
+        "noncanonical_value",
+        "arithmetic_overflow",
+        "context_stale",
+        "identity_mismatch",
+        "digest_mismatch",
+        "replay_conflict",
+        "scope_violation",
+        "privacy_denied",
+        "authority_denied",
+        "unsupported_capability",
+        "domain_conflict",
+        "worker_not_stopped",
+        "reconciliation_required",
+        "operation_uncertain",
+        "storage_failure"
+      ],
+      "type": "string"
+    },
+    "EvidenceId": {
+      "pattern": "^ev_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExternalResource": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "key": {
+                  "$ref": "#/$defs/BasketKey"
+                }
+              },
+              "required": [
+                "key"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "basket",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "destination_id": {
+                  "$ref": "#/$defs/CalendarDestinationId"
+                }
+              },
+              "required": [
+                "destination_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ExtraId": {
+      "pattern": "^ex_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExtraSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "extra_id": {
+          "$ref": "#/$defs/ExtraId"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "recipients": {
+          "$ref": "#/$defs/Array_DinerServing_1_64"
+        }
+      },
+      "required": [
+        "extra_id",
+        "recipe",
+        "recipients"
+      ],
+      "type": "object"
+    },
+    "Fact": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/BoundedCount"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_BoundedCount_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fact2": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/Quantity"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_Quantity_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Fact3": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/Text"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "known",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "values": {
+                  "$ref": "#/$defs/Array_Text_2_8"
+                }
+              },
+              "required": [
+                "values"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "conflicting",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "FinancialCommitment": {
+      "enum": [
+        "none",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "GuestId": {
+      "pattern": "^gu_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "HttpUrl": {
+      "maxLength": 2048,
+      "pattern": "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
+      "type": "string"
+    },
+    "ImageRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "alt_text": {
+          "$ref": "#/$defs/Text"
+        },
+        "asset_id": {
+          "$ref": "#/$defs/AssetId"
+        },
+        "digest": {
+          "$ref": "#/$defs/AssetDigest"
+        },
+        "kind": {
+          "$ref": "#/$defs/RecipeImageKind"
+        },
+        "media_type": {
+          "$ref": "#/$defs/RecipeImageMediaType"
+        },
+        "modified": {
+          "type": "boolean"
+        },
+        "rights": {
+          "$ref": "#/$defs/RightsRecord"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "asset_id",
+        "digest",
+        "media_type",
+        "alt_text",
+        "kind",
+        "source",
+        "rights",
+        "modified"
+      ],
+      "type": "object"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "IngredientId": {
+      "pattern": "^ig_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "InputDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "InstructionStep": {
+      "additionalProperties": false,
+      "properties": {
+        "active_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "component_ids": {
+          "$ref": "#/$defs/Array_ComponentId_0_128"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/Array_uint16_0_256"
+        },
+        "elapsed_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "step_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "step_id",
+        "text",
+        "ingredient_ids",
+        "component_ids",
+        "active_minutes",
+        "elapsed_minutes",
+        "depends_on"
+      ],
+      "type": "object"
+    },
+    "JobId": {
+      "pattern": "^jb_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "LocalDate": {
+      "description": "Gregorian date 1900-01-01 through 2199-12-31",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+      "type": "string"
+    },
+    "LocalTime": {
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+      "type": "string"
+    },
+    "MealOverrides": {
+      "additionalProperties": false,
+      "properties": {
+        "eat_by": {
+          "$ref": "#/$defs/Nullable_ZonedMoment"
+        },
+        "portions": {
+          "$ref": "#/$defs/Array_PersonPortionOverride_0_64"
+        }
+      },
+      "required": [
+        "portions",
+        "eat_by"
+      ],
+      "type": "object"
+    },
+    "MealSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_use": {
+          "$ref": "#/$defs/BatchUse"
+        },
+        "extras": {
+          "$ref": "#/$defs/Array_ExtraSelection_0_64"
+        },
+        "meal_overrides": {
+          "$ref": "#/$defs/MealOverrides"
+        },
+        "origin": {
+          "$ref": "#/$defs/SelectionOrigin"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "repeat_authorised": {
+          "type": "boolean"
+        },
+        "servings": {
+          "$ref": "#/$defs/Array_DinerServing_1_64"
+        },
+        "slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "slot",
+        "recipe",
+        "origin",
+        "repeat_authorised",
+        "servings",
+        "extras",
+        "batch_use",
+        "meal_overrides"
+      ],
+      "type": "object"
+    },
+    "MealType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "type": "string"
+    },
+    "Nullable_ComponentId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_DemandLineId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DemandLineId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Digest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_DomainError": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DomainError"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_HttpUrl": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HttpUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ImageRecord": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImageRecord"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_IngredientId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IngredientId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Instant": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Instant"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_LocalDate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LocalDate"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_MealSelection": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MealSelection"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Quantity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Quantity"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Revision": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Revision"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_WeekId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WeekId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_YieldSpec": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/YieldSpec"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ZonedMoment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ObservationRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/Digest"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/OperationId"
+        }
+      },
+      "required": [
+        "operation_id",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "OccasionId": {
+      "pattern": "^oc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "OfferKind": {
+      "enum": [
+        "unit_price",
+        "multibuy"
+      ],
+      "type": "string"
+    },
+    "OfferObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "delivery_applicable": {
+          "$ref": "#/$defs/DeliveryApplicable"
+        },
+        "kind": {
+          "$ref": "#/$defs/OfferKind"
+        },
+        "loyalty_required": {
+          "type": "boolean"
+        },
+        "minimum_packs": {
+          "$ref": "#/$defs/BoundedCount"
+        },
+        "offer_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "total_pence": {
+          "$ref": "#/$defs/DecimalU64"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "valid_to": {
+          "$ref": "#/$defs/LocalDate"
+        }
+      },
+      "required": [
+        "offer_ref",
+        "kind",
+        "minimum_packs",
+        "total_pence",
+        "loyalty_required",
+        "valid_from",
+        "valid_to",
+        "delivery_applicable"
+      ],
+      "type": "object"
+    },
+    "OperationId": {
+      "pattern": "^op_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "PackObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "$ref": "#/$defs/Fact"
+        },
+        "drained": {
+          "$ref": "#/$defs/Fact2"
+        },
+        "net": {
+          "$ref": "#/$defs/Fact2"
+        }
+      },
+      "required": [
+        "count",
+        "net",
+        "drained"
+      ],
+      "type": "object"
+    },
+    "PersonPortionOverride": {
+      "additionalProperties": false,
+      "properties": {
+        "adjustment": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "person": {
+          "$ref": "#/$defs/PersonRef"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        }
+      },
+      "required": [
+        "person",
+        "preset",
+        "adjustment"
+      ],
+      "type": "object"
+    },
+    "PersonRef": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "diner",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "guest_id": {
+                  "$ref": "#/$defs/GuestId"
+                },
+                "occasion_id": {
+                  "$ref": "#/$defs/OccasionId"
+                }
+              },
+              "required": [
+                "occasion_id",
+                "guest_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "guest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "PlanProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "changes": {
+          "$ref": "#/$defs/Array_WeekChange_1_4"
+        }
+      },
+      "required": [
+        "changes"
+      ],
+      "type": "object"
+    },
+    "PortionPresetName": {
+      "enum": [
+        "smaller",
+        "regular",
+        "larger"
+      ],
+      "type": "string"
+    },
+    "PortionPresetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "age_band": {
+          "$ref": "#/$defs/AgeBand"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        }
+      },
+      "required": [
+        "recipe",
+        "preset",
+        "age_band",
+        "meal_type"
+      ],
+      "type": "object"
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "Price": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "currency": {
+                  "$ref": "#/$defs/Currency"
+                },
+                "pence": {
+                  "$ref": "#/$defs/DecimalU64"
+                }
+              },
+              "required": [
+                "pence",
+                "currency"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "observed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "basis": {
+                  "$ref": "#/$defs/Text"
+                },
+                "currency": {
+                  "$ref": "#/$defs/Currency"
+                },
+                "pence": {
+                  "$ref": "#/$defs/DecimalU64"
+                }
+              },
+              "required": [
+                "pence",
+                "currency",
+                "basis"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "estimated",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "$ref": "#/$defs/UnknownReason"
+                }
+              },
+              "required": [
+                "reason"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unknown",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ProductObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "allergens": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "availability": {
+          "$ref": "#/$defs/Availability"
+        },
+        "delivery_context": {
+          "$ref": "#/$defs/RetailerDeliveryContext"
+        },
+        "ingredients": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "offers": {
+          "$ref": "#/$defs/Array_OfferObservation_0_64"
+        },
+        "pack": {
+          "$ref": "#/$defs/PackObservation"
+        },
+        "price": {
+          "$ref": "#/$defs/Price"
+        },
+        "product": {
+          "$ref": "#/$defs/ProductRef"
+        },
+        "storage": {
+          "$ref": "#/$defs/Fact3"
+        },
+        "title": {
+          "$ref": "#/$defs/Text"
+        },
+        "url": {
+          "$ref": "#/$defs/HttpUrl"
+        }
+      },
+      "required": [
+        "product",
+        "url",
+        "title",
+        "pack",
+        "price",
+        "offers",
+        "availability",
+        "ingredients",
+        "allergens",
+        "storage",
+        "delivery_context",
+        "observed_at"
+      ],
+      "type": "object"
+    },
+    "ProductRef": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        },
+        "variant_id": {
+          "$ref": "#/$defs/Nullable_Text"
+        }
+      },
+      "required": [
+        "retailer",
+        "product_id",
+        "variant_id"
+      ],
+      "type": "object"
+    },
+    "ProposedSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "selection": {
+          "$ref": "#/$defs/Nullable_MealSelection"
+        },
+        "slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "slot",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "Provider": {
+      "enum": [
+        "codex_local",
+        "claude_cowork"
+      ],
+      "type": "string"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "ReadActor": {
+      "additionalProperties": false,
+      "properties": {
+        "native_task_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "provider": {
+          "$ref": "#/$defs/Provider"
+        }
+      },
+      "required": [
+        "provider",
+        "native_task_ref"
+      ],
+      "type": "object"
+    },
+    "ReadBody": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "delivery_context": {
+                  "$ref": "#/$defs/RetailerDeliveryContext"
+                },
+                "items": {
+                  "$ref": "#/$defs/Array_ProductObservation_0_256"
+                }
+              },
+              "required": [
+                "delivery_context",
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "products",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "snapshot": {
+                  "$ref": "#/$defs/BasketSnapshot"
+                }
+              },
+              "required": [
+                "snapshot"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "basket",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "items": {
+                  "$ref": "#/$defs/Array_CalendarObservation_0_256"
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "calendar_events",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "delivery_context": {
+                  "$ref": "#/$defs/RetailerDeliveryContext"
+                },
+                "items": {
+                  "$ref": "#/$defs/Array_SlotObservation_0_256"
+                }
+              },
+              "required": [
+                "delivery_context",
+                "items"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "slots",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ReadId": {
+      "pattern": "^rd_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ReadObservationId": {
+      "pattern": "^ob_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ReadObservationV1": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/ReadBody"
+        },
+        "input_digest": {
+          "$ref": "#/$defs/InputDigest"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        },
+        "observation_id": {
+          "$ref": "#/$defs/ReadObservationId"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "read_id": {
+          "$ref": "#/$defs/ReadId"
+        },
+        "reader": {
+          "$ref": "#/$defs/ReadActor"
+        },
+        "resource": {
+          "$ref": "#/$defs/ExternalResource"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        }
+      },
+      "required": [
+        "schema_version",
+        "observation_id",
+        "read_id",
+        "job_id",
+        "input_digest",
+        "reader",
+        "resource",
+        "observed_at",
+        "body"
+      ],
+      "type": "object"
+    },
+    "RecipeCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "$ref": "#/$defs/RecipeId"
+        },
+        "image": {
+          "$ref": "#/$defs/Nullable_ImageRecord"
+        },
+        "ingredients": {
+          "$ref": "#/$defs/Array_CandidateIngredient_0_256"
+        },
+        "proposed_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        },
+        "steps": {
+          "$ref": "#/$defs/Array_InstructionStep_0_256"
+        },
+        "title": {
+          "$ref": "#/$defs/Title"
+        },
+        "unresolved": {
+          "$ref": "#/$defs/Array_CandidateIssue_0_256"
+        },
+        "yield": {
+          "$ref": "#/$defs/Nullable_YieldSpec"
+        }
+      },
+      "required": [
+        "schema_version",
+        "candidate_id",
+        "proposed_revision",
+        "title",
+        "source",
+        "ingredients",
+        "yield",
+        "steps",
+        "unresolved",
+        "image"
+      ],
+      "type": "object"
+    },
+    "RecipeDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "RecipeId": {
+      "pattern": "^rc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "RecipeImageKind": {
+      "enum": [
+        "photograph",
+        "illustration",
+        "generated_illustration"
+      ],
+      "type": "string"
+    },
+    "RecipeImageMediaType": {
+      "enum": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ],
+      "type": "string"
+    },
+    "RecipeRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/RecipeDigest"
+        },
+        "recipe_id": {
+          "$ref": "#/$defs/RecipeId"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        }
+      },
+      "required": [
+        "recipe_id",
+        "revision",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "RecipeSourceOrigin": {
+      "enum": [
+        "published",
+        "user_authored",
+        "adapted"
+      ],
+      "type": "string"
+    },
+    "RequiredAction": {
+      "enum": [
+        "choose_alternative",
+        "inspect_product",
+        "sign_in",
+        "stop_worker",
+        "reconcile",
+        "retry_read",
+        "manual_export",
+        "review_candidate"
+      ],
+      "type": "string"
+    },
+    "Resolution": {
+      "enum": [
+        "unambiguous",
+        "earlier",
+        "later"
+      ],
+      "type": "string"
+    },
+    "ResultId": {
+      "pattern": "^rs_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ResultObservation": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "observation": {
+                  "$ref": "#/$defs/ReadObservationV1"
+                }
+              },
+              "required": [
+                "observation"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "read",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "reference": {
+                  "$ref": "#/$defs/ObservationRef"
+                }
+              },
+              "required": [
+                "reference"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "operation",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ResultProposal": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "kind": {
+              "const": "none",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "proposal": {
+                  "$ref": "#/$defs/PlanProposal"
+                }
+              },
+              "required": [
+                "proposal"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "plan",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "candidate": {
+                  "$ref": "#/$defs/RecipeCandidate"
+                }
+              },
+              "required": [
+                "candidate"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "recipe",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "recipe_refs": {
+                  "$ref": "#/$defs/Array_RecipeRef_1_512"
+                }
+              },
+              "required": [
+                "recipe_refs"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "catalogue",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "capabilities": {
+                  "$ref": "#/$defs/Array_CapabilityClaim_1_8"
+                }
+              },
+              "required": [
+                "capabilities"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "setup",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ResultStatus": {
+      "enum": [
+        "complete",
+        "needs_user",
+        "failed",
+        "cancelled"
+      ],
+      "type": "string"
+    },
+    "Retailer": {
+      "enum": [
+        "tesco"
+      ],
+      "type": "string"
+    },
+    "RetailerDeliveryContext": {
+      "additionalProperties": false,
+      "properties": {
+        "account_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "context_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "delivery_date": {
+          "$ref": "#/$defs/Nullable_LocalDate"
+        },
+        "retailer": {
+          "$ref": "#/$defs/Retailer"
+        },
+        "slot_ref": {
+          "$ref": "#/$defs/Nullable_Text"
+        }
+      },
+      "required": [
+        "retailer",
+        "account_ref",
+        "context_ref",
+        "delivery_date",
+        "slot_ref"
+      ],
+      "type": "object"
+    },
+    "Retry": {
+      "enum": [
+        "never",
+        "after_refresh",
+        "after_user_action",
+        "read_backoff"
+      ],
+      "type": "string"
+    },
+    "Revision": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "RightsDistribution": {
+      "enum": [
+        "permitted",
+        "personal_only",
+        "unresolved"
+      ],
+      "type": "string"
+    },
+    "RightsRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptations": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "attribution": {
+          "$ref": "#/$defs/Text"
+        },
+        "distribution": {
+          "$ref": "#/$defs/RightsDistribution"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "licence_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "licence_url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "licence_id",
+        "licence_url",
+        "attribution",
+        "adaptations",
+        "distribution",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SelectionOrigin": {
+      "enum": [
+        "fixed",
+        "suggested"
+      ],
+      "type": "string"
+    },
+    "SlotId": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "date",
+        "meal_type"
+      ],
+      "type": "object"
+    },
+    "SlotObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "charge": {
+          "$ref": "#/$defs/Price"
+        },
+        "end": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "financial_commitment": {
+          "$ref": "#/$defs/FinancialCommitment"
+        },
+        "hold_expires_at": {
+          "$ref": "#/$defs/Nullable_Instant"
+        },
+        "slot_ref": {
+          "$ref": "#/$defs/Text"
+        },
+        "start": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "slot_ref",
+        "start",
+        "end",
+        "available",
+        "charge",
+        "hold_expires_at",
+        "financial_commitment"
+      ],
+      "type": "object"
+    },
+    "SourceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_notice": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "authors": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "origin": {
+          "$ref": "#/$defs/RecipeSourceOrigin"
+        },
+        "retrieved_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "source_revision": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "url",
+        "source_revision",
+        "retrieved_at",
+        "authors",
+        "adaptation_notice",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Title": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "UnknownReason": {
+      "enum": [
+        "missing",
+        "unreadable",
+        "not_exposed"
+      ],
+      "type": "string"
+    },
+    "UnresolvedLine": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "line_id": {
+          "$ref": "#/$defs/Nullable_DemandLineId"
+        },
+        "required_action": {
+          "$ref": "#/$defs/RequiredAction"
+        }
+      },
+      "required": [
+        "line_id",
+        "code",
+        "required_action"
+      ],
+      "type": "object"
+    },
+    "ValidationIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "entity_id": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "code",
+        "entity_id"
+      ],
+      "type": "object"
+    },
+    "WeekChange": {
+      "additionalProperties": false,
+      "properties": {
+        "base_revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "replace_slots": {
+          "$ref": "#/$defs/Array_ProposedSelection_0_21"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "base_revision",
+        "replace_slots"
+      ],
+      "type": "object"
+    },
+    "WeekId": {
+      "pattern": "^wk_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "WeekRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "YieldSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "$ref": "#/$defs/Text"
+        },
+        "components": {
+          "$ref": "#/$defs/Array_ComponentYield_1_128"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "servings",
+        "basis",
+        "components"
+      ],
+      "type": "object"
+    },
+    "ZoneId": {
+      "description": "Case-sensitive IANA timezone accepted by pinned chrono-tz",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*$",
+      "type": "string"
+    },
+    "ZonedMoment": {
+      "additionalProperties": false,
+      "properties": {
+        "instant": {
+          "$ref": "#/$defs/Instant"
+        },
+        "local_date": {
+          "$ref": "#/$defs/LocalDate"
+        },
+        "local_time": {
+          "$ref": "#/$defs/LocalTime"
+        },
+        "resolution": {
+          "$ref": "#/$defs/Resolution"
+        },
+        "zone": {
+          "$ref": "#/$defs/ZoneId"
+        }
+      },
+      "required": [
+        "local_date",
+        "local_time",
+        "zone",
+        "resolution",
+        "instant"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:job-result",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "$ref": "#/$defs/Action"
+    },
+    "base_plan_revision": {
+      "$ref": "#/$defs/Nullable_Revision"
+    },
+    "completed_at": {
+      "$ref": "#/$defs/Instant"
+    },
+    "context_stamp": {
+      "$ref": "#/$defs/ContextStamp"
+    },
+    "error": {
+      "$ref": "#/$defs/Nullable_DomainError"
+    },
+    "input_digest": {
+      "$ref": "#/$defs/InputDigest"
+    },
+    "job_id": {
+      "$ref": "#/$defs/JobId"
+    },
+    "observations": {
+      "$ref": "#/$defs/Array_ResultObservation_0_256"
+    },
+    "privacy_policy_revision": {
+      "$ref": "#/$defs/Revision"
+    },
+    "proposal": {
+      "$ref": "#/$defs/ResultProposal"
+    },
+    "result_id": {
+      "$ref": "#/$defs/ResultId"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    },
+    "status": {
+      "$ref": "#/$defs/ResultStatus"
+    },
+    "unresolved": {
+      "$ref": "#/$defs/Array_UnresolvedLine_0_256"
+    },
+    "week_id": {
+      "$ref": "#/$defs/Nullable_WeekId"
+    }
+  },
+  "required": [
+    "schema_version",
+    "result_id",
+    "job_id",
+    "action",
+    "week_id",
+    "base_plan_revision",
+    "input_digest",
+    "context_stamp",
+    "privacy_policy_revision",
+    "status",
+    "proposal",
+    "observations",
+    "unresolved",
+    "error",
+    "completed_at"
+  ],
+  "title": "JobResultV1",
+  "type": "object"
+}

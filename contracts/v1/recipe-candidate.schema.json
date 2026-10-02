@@ -1,0 +1,589 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "Array_CandidateIngredient_0_256": {
+      "items": {
+        "$ref": "#/$defs/CandidateIngredient"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_CandidateIssue_0_256": {
+      "items": {
+        "$ref": "#/$defs/CandidateIssue"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ComponentId_0_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ComponentYield_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentYield"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_EvidenceId_0_256": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_IngredientId_0_256": {
+      "items": {
+        "$ref": "#/$defs/IngredientId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_InstructionStep_0_256": {
+      "items": {
+        "$ref": "#/$defs/InstructionStep"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Text_0_64": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_0_256": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "AssetDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "AssetId": {
+      "pattern": "^as_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CandidateIngredient": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/Nullable_ComponentId"
+        },
+        "ingredient_id": {
+          "$ref": "#/$defs/Nullable_IngredientId"
+        },
+        "name": {
+          "$ref": "#/$defs/Text"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Nullable_Quantity"
+        },
+        "source_text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "ingredient_id",
+        "name",
+        "quantity",
+        "component_id",
+        "source_text"
+      ],
+      "type": "object"
+    },
+    "CandidateIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/CandidateIssueCode"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "path": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "CandidateIssueCode": {
+      "enum": [
+        "missing_quantity",
+        "missing_yield",
+        "missing_rights",
+        "missing_image",
+        "missing_storage",
+        "missing_portion_evidence",
+        "unresolved_ingredient",
+        "inconsistent_instructions",
+        "unsupported_requirement"
+      ],
+      "type": "string"
+    },
+    "ComponentId": {
+      "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ComponentYield": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity"
+      ],
+      "type": "object"
+    },
+    "EvidenceId": {
+      "pattern": "^ev_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "HttpUrl": {
+      "maxLength": 2048,
+      "pattern": "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
+      "type": "string"
+    },
+    "ImageRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "alt_text": {
+          "$ref": "#/$defs/Text"
+        },
+        "asset_id": {
+          "$ref": "#/$defs/AssetId"
+        },
+        "digest": {
+          "$ref": "#/$defs/AssetDigest"
+        },
+        "kind": {
+          "$ref": "#/$defs/RecipeImageKind"
+        },
+        "media_type": {
+          "$ref": "#/$defs/RecipeImageMediaType"
+        },
+        "modified": {
+          "type": "boolean"
+        },
+        "rights": {
+          "$ref": "#/$defs/RightsRecord"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "asset_id",
+        "digest",
+        "media_type",
+        "alt_text",
+        "kind",
+        "source",
+        "rights",
+        "modified"
+      ],
+      "type": "object"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "IngredientId": {
+      "pattern": "^ig_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "InstructionStep": {
+      "additionalProperties": false,
+      "properties": {
+        "active_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "component_ids": {
+          "$ref": "#/$defs/Array_ComponentId_0_128"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/Array_uint16_0_256"
+        },
+        "elapsed_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "step_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "step_id",
+        "text",
+        "ingredient_ids",
+        "component_ids",
+        "active_minutes",
+        "elapsed_minutes",
+        "depends_on"
+      ],
+      "type": "object"
+    },
+    "Nullable_ComponentId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_HttpUrl": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HttpUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ImageRecord": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImageRecord"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_IngredientId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IngredientId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Quantity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Quantity"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_YieldSpec": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/YieldSpec"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "RecipeId": {
+      "pattern": "^rc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "RecipeImageKind": {
+      "enum": [
+        "photograph",
+        "illustration",
+        "generated_illustration"
+      ],
+      "type": "string"
+    },
+    "RecipeImageMediaType": {
+      "enum": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ],
+      "type": "string"
+    },
+    "RecipeSourceOrigin": {
+      "enum": [
+        "published",
+        "user_authored",
+        "adapted"
+      ],
+      "type": "string"
+    },
+    "Revision": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "RightsDistribution": {
+      "enum": [
+        "permitted",
+        "personal_only",
+        "unresolved"
+      ],
+      "type": "string"
+    },
+    "RightsRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptations": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "attribution": {
+          "$ref": "#/$defs/Text"
+        },
+        "distribution": {
+          "$ref": "#/$defs/RightsDistribution"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "licence_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "licence_url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "licence_id",
+        "licence_url",
+        "attribution",
+        "adaptations",
+        "distribution",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SourceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_notice": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "authors": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "origin": {
+          "$ref": "#/$defs/RecipeSourceOrigin"
+        },
+        "retrieved_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "source_revision": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "url",
+        "source_revision",
+        "retrieved_at",
+        "authors",
+        "adaptation_notice",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Title": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "YieldSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "$ref": "#/$defs/Text"
+        },
+        "components": {
+          "$ref": "#/$defs/Array_ComponentYield_1_128"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "servings",
+        "basis",
+        "components"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:recipe-candidate",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {
+      "$ref": "#/$defs/RecipeId"
+    },
+    "image": {
+      "$ref": "#/$defs/Nullable_ImageRecord"
+    },
+    "ingredients": {
+      "$ref": "#/$defs/Array_CandidateIngredient_0_256"
+    },
+    "proposed_revision": {
+      "$ref": "#/$defs/Revision"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    },
+    "source": {
+      "$ref": "#/$defs/SourceRecord"
+    },
+    "steps": {
+      "$ref": "#/$defs/Array_InstructionStep_0_256"
+    },
+    "title": {
+      "$ref": "#/$defs/Title"
+    },
+    "unresolved": {
+      "$ref": "#/$defs/Array_CandidateIssue_0_256"
+    },
+    "yield": {
+      "$ref": "#/$defs/Nullable_YieldSpec"
+    }
+  },
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "proposed_revision",
+    "title",
+    "source",
+    "ingredients",
+    "yield",
+    "steps",
+    "unresolved",
+    "image"
+  ],
+  "title": "RecipeCandidate",
+  "type": "object"
+}

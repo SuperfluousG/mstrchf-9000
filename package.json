@@ -1,0 +1,10 @@
+{
+  "name": "mstrchf-9000",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "check:contracts": "node scripts/check-contracts.mjs",
+    "test:contract-types": "tsc --project tests/contracts/tsconfig.json --noEmit"
+  },
+  "devDependencies": { "typescript": "5.9.3" }
+}

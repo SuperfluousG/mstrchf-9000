@@ -1,0 +1,1420 @@
+{
+  "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
+  "$defs": {
+    "AgeBand": {
+      "enum": [
+        "adult",
+        "teen",
+        "child_1_3",
+        "child_4_6",
+        "child_7_10",
+        "child_11_12"
+      ],
+      "type": "string"
+    },
+    "AllergenCode": {
+      "enum": [
+        "celery",
+        "cereals_containing_gluten",
+        "crustaceans",
+        "eggs",
+        "fish",
+        "lupin",
+        "milk",
+        "molluscs",
+        "mustard",
+        "peanuts",
+        "sesame",
+        "soybeans",
+        "sulphur_dioxide_sulphites",
+        "tree_nuts"
+      ],
+      "type": "string"
+    },
+    "Array_CandidateIssue_0_256": {
+      "items": {
+        "$ref": "#/$defs/CandidateIssue"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ComponentId_0_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ComponentId_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ComponentSpec_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentSpec"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ComponentYield_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentYield"
+      },
+      "maxItems": 128,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ConversionEvidence_0_64": {
+      "items": {
+        "$ref": "#/$defs/ConversionEvidence"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_DietaryEvidence_0_256": {
+      "items": {
+        "$ref": "#/$defs/DietaryEvidence"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_EquipmentCode_0_9": {
+      "items": {
+        "$ref": "#/$defs/EquipmentCode"
+      },
+      "maxItems": 9,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_EvidenceId_0_256": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_ExtraSpec_0_64": {
+      "items": {
+        "$ref": "#/$defs/ExtraSpec"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_HardRequirement_0_64": {
+      "items": {
+        "$ref": "#/$defs/HardRequirement"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_IngredientId_0_256": {
+      "items": {
+        "$ref": "#/$defs/IngredientId"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_InstructionStep_1_256": {
+      "items": {
+        "$ref": "#/$defs/InstructionStep"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_MealType_1_3": {
+      "items": {
+        "$ref": "#/$defs/MealType"
+      },
+      "maxItems": 3,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_PortionPreset_1_192": {
+      "items": {
+        "$ref": "#/$defs/PortionPreset"
+      },
+      "maxItems": 192,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_PrepSpec_0_128": {
+      "items": {
+        "$ref": "#/$defs/PrepSpec"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_RecipeIngredient_1_256": {
+      "items": {
+        "$ref": "#/$defs/RecipeIngredient"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Array_ReviewRecord_0_256": {
+      "items": {
+        "$ref": "#/$defs/ReviewRecord"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_StorageRule_0_128": {
+      "items": {
+        "$ref": "#/$defs/StorageRule"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_Text_0_64": {
+      "items": {
+        "$ref": "#/$defs/Text"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_0_128": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 128,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_0_256": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_1_256": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
+    "AssetDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "AssetId": {
+      "pattern": "^as_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "CandidateIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/CandidateIssueCode"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "path": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "code",
+        "path",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "CandidateIssueCode": {
+      "enum": [
+        "missing_quantity",
+        "missing_yield",
+        "missing_rights",
+        "missing_image",
+        "missing_storage",
+        "missing_portion_evidence",
+        "unresolved_ingredient",
+        "inconsistent_instructions",
+        "unsupported_requirement"
+      ],
+      "type": "string"
+    },
+    "ComponentId": {
+      "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ComponentSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "storage_rule_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "title": {
+          "$ref": "#/$defs/Title"
+        }
+      },
+      "required": [
+        "component_id",
+        "title",
+        "ingredient_ids",
+        "storage_rule_ids"
+      ],
+      "type": "object"
+    },
+    "ComponentYield": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity"
+      ],
+      "type": "object"
+    },
+    "ConversionEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "factor": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "from_form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "from_unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "ingredient_id": {
+          "$ref": "#/$defs/IngredientId"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        },
+        "to_form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "to_unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "ingredient_id",
+        "from_form",
+        "to_form",
+        "from_unit",
+        "to_unit",
+        "factor",
+        "source"
+      ],
+      "type": "object"
+    },
+    "DietCode": {
+      "enum": [
+        "vegetarian",
+        "vegan",
+        "gluten_free"
+      ],
+      "type": "string"
+    },
+    "DietaryEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "requirement": {
+          "$ref": "#/$defs/HardRequirement"
+        },
+        "review_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        },
+        "verdict": {
+          "$ref": "#/$defs/DietaryVerdict"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "requirement",
+        "verdict",
+        "source",
+        "review_id"
+      ],
+      "type": "object"
+    },
+    "DietaryVerdict": {
+      "enum": [
+        "supported",
+        "conflicting",
+        "unknown"
+      ],
+      "type": "string"
+    },
+    "EquipmentCode": {
+      "enum": [
+        "hob",
+        "oven",
+        "microwave",
+        "fridge",
+        "kettle",
+        "toaster",
+        "blender",
+        "slow_cooker",
+        "pressure_cooker"
+      ],
+      "type": "string"
+    },
+    "EvidenceId": {
+      "pattern": "^ev_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExtraId": {
+      "pattern": "^ex_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "ExtraSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "eligible_person_requirements": {
+          "$ref": "#/$defs/Array_HardRequirement_0_64"
+        },
+        "extra_id": {
+          "$ref": "#/$defs/ExtraId"
+        },
+        "recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "supported_with": {
+          "$ref": "#/$defs/Array_ComponentId_1_128"
+        },
+        "title": {
+          "$ref": "#/$defs/Title"
+        }
+      },
+      "required": [
+        "extra_id",
+        "title",
+        "recipe",
+        "eligible_person_requirements",
+        "supported_with"
+      ],
+      "type": "object"
+    },
+    "HardRequirement": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "$ref": "#/$defs/AllergenCode"
+                }
+              },
+              "required": [
+                "code"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "allergen_exclusion",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "$ref": "#/$defs/DietCode"
+                }
+              },
+              "required": [
+                "code"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "diet",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "ingredient_id": {
+                  "$ref": "#/$defs/IngredientId"
+                }
+              },
+              "required": [
+                "ingredient_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "ingredient_exclusion",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "HttpUrl": {
+      "maxLength": 2048,
+      "pattern": "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
+      "type": "string"
+    },
+    "ImageRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "alt_text": {
+          "$ref": "#/$defs/Text"
+        },
+        "asset_id": {
+          "$ref": "#/$defs/AssetId"
+        },
+        "digest": {
+          "$ref": "#/$defs/AssetDigest"
+        },
+        "kind": {
+          "$ref": "#/$defs/RecipeImageKind"
+        },
+        "media_type": {
+          "$ref": "#/$defs/RecipeImageMediaType"
+        },
+        "modified": {
+          "type": "boolean"
+        },
+        "rights": {
+          "$ref": "#/$defs/RightsRecord"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "asset_id",
+        "digest",
+        "media_type",
+        "alt_text",
+        "kind",
+        "source",
+        "rights",
+        "modified"
+      ],
+      "type": "object"
+    },
+    "IngredientForm": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "drained",
+        "whole",
+        "prepared"
+      ],
+      "type": "string"
+    },
+    "IngredientId": {
+      "pattern": "^ig_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "Instant": {
+      "description": "Exact UTC timestamp with whole seconds",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]Z$",
+      "type": "string"
+    },
+    "InstructionStep": {
+      "additionalProperties": false,
+      "properties": {
+        "active_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "component_ids": {
+          "$ref": "#/$defs/Array_ComponentId_0_128"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/Array_uint16_0_256"
+        },
+        "elapsed_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "step_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "step_id",
+        "text",
+        "ingredient_ids",
+        "component_ids",
+        "active_minutes",
+        "elapsed_minutes",
+        "depends_on"
+      ],
+      "type": "object"
+    },
+    "MealType": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "type": "string"
+    },
+    "NameText": {
+      "maxLength": 80,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Nullable_HttpUrl": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HttpUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ImageRecord": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ImageRecord"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_NutritionEvidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NutritionEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Quantity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Quantity"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Rational": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Rational"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_Text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "NutritionEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "energy_kcal": {
+          "$ref": "#/$defs/Nullable_Rational"
+        },
+        "estimated": {
+          "type": "boolean"
+        },
+        "per_servings": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "protein_g": {
+          "$ref": "#/$defs/Nullable_Rational"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "source",
+        "per_servings",
+        "protein_g",
+        "energy_kcal",
+        "estimated"
+      ],
+      "type": "object"
+    },
+    "PortabilityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "cold_storage_required": {
+          "type": "boolean"
+        },
+        "cold_suitable": {
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "reheating_required": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "cold_suitable",
+        "reheating_required",
+        "cold_storage_required",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "PortionPreset": {
+      "additionalProperties": false,
+      "properties": {
+        "age_band": {
+          "$ref": "#/$defs/AgeBand"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "meal_type": {
+          "$ref": "#/$defs/MealType"
+        },
+        "preset": {
+          "$ref": "#/$defs/PortionPresetName"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "preset",
+        "age_band",
+        "meal_type",
+        "servings",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "PortionPresetName": {
+      "enum": [
+        "smaller",
+        "regular",
+        "larger"
+      ],
+      "type": "string"
+    },
+    "PositiveRational": {
+      "additionalProperties": false,
+      "description": "Positive reduced rational; gcd must equal 1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^([1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "PrepSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "active_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "can_attach_to_prior_session": {
+          "type": "boolean"
+        },
+        "depends_on": {
+          "$ref": "#/$defs/Array_uint16_0_128"
+        },
+        "earliest_offset_seconds": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "elapsed_minutes": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "ingredient_ids": {
+          "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "latest_offset_seconds": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "prep_id": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "step_ids": {
+          "$ref": "#/$defs/Array_uint16_1_256"
+        },
+        "title": {
+          "$ref": "#/$defs/Title"
+        }
+      },
+      "required": [
+        "prep_id",
+        "title",
+        "step_ids",
+        "depends_on",
+        "active_minutes",
+        "elapsed_minutes",
+        "earliest_offset_seconds",
+        "latest_offset_seconds",
+        "ingredient_ids",
+        "can_attach_to_prior_session"
+      ],
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/PositiveRational"
+        },
+        "form": {
+          "$ref": "#/$defs/IngredientForm"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "amount",
+        "unit",
+        "form"
+      ],
+      "type": "object"
+    },
+    "Rational": {
+      "additionalProperties": false,
+      "description": "Reduced rational; gcd must equal 1 and zero must be 0/1.",
+      "properties": {
+        "denominator": {
+          "pattern": "^([1-9][0-9]{0,5}|1000000)$",
+          "type": "string"
+        },
+        "numerator": {
+          "pattern": "^(0|[1-9][0-9]{0,11}|1000000000000)$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "type": "object"
+    },
+    "RecipeCapabilities": {
+      "additionalProperties": false,
+      "properties": {
+        "blocking_issues": {
+          "$ref": "#/$defs/Array_CandidateIssue_0_256"
+        },
+        "leftovers": {
+          "type": "boolean"
+        },
+        "local_display": {
+          "type": "boolean"
+        },
+        "shopping": {
+          "type": "boolean"
+        },
+        "starter_distribution": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "local_display",
+        "shopping",
+        "leftovers",
+        "starter_distribution",
+        "blocking_issues"
+      ],
+      "type": "object"
+    },
+    "RecipeDigest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "RecipeId": {
+      "pattern": "^rc_(?!0{32}$)[0-9a-f]{32}$",
+      "type": "string"
+    },
+    "RecipeImageKind": {
+      "enum": [
+        "photograph",
+        "illustration",
+        "generated_illustration"
+      ],
+      "type": "string"
+    },
+    "RecipeImageMediaType": {
+      "enum": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ],
+      "type": "string"
+    },
+    "RecipeIngredient": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "conversion_evidence": {
+          "$ref": "#/$defs/Array_ConversionEvidence_0_64"
+        },
+        "discrete": {
+          "type": "boolean"
+        },
+        "ingredient_id": {
+          "$ref": "#/$defs/IngredientId"
+        },
+        "name": {
+          "$ref": "#/$defs/NameText"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Nullable_Quantity"
+        },
+        "step_ids": {
+          "$ref": "#/$defs/Array_uint16_1_256"
+        }
+      },
+      "required": [
+        "ingredient_id",
+        "name",
+        "quantity",
+        "discrete",
+        "conversion_evidence",
+        "component_id",
+        "step_ids"
+      ],
+      "type": "object"
+    },
+    "RecipeRef": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/RecipeDigest"
+        },
+        "recipe_id": {
+          "$ref": "#/$defs/RecipeId"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        }
+      },
+      "required": [
+        "recipe_id",
+        "revision",
+        "digest"
+      ],
+      "type": "object"
+    },
+    "RecipeSourceOrigin": {
+      "enum": [
+        "published",
+        "user_authored",
+        "adapted"
+      ],
+      "type": "string"
+    },
+    "ReviewActor": {
+      "enum": [
+        "human",
+        "automated"
+      ],
+      "type": "string"
+    },
+    "ReviewKind": {
+      "enum": [
+        "source_review",
+        "quantity_review",
+        "dietary_review",
+        "cook_test"
+      ],
+      "type": "string"
+    },
+    "ReviewRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/ReviewActor"
+        },
+        "at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "kind": {
+          "$ref": "#/$defs/ReviewKind"
+        },
+        "note": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "kind",
+        "actor",
+        "at",
+        "note"
+      ],
+      "type": "object"
+    },
+    "Revision": {
+      "description": "Canonical positive decimal u64, maximum 18446744073709551615",
+      "pattern": "^(?:[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$",
+      "type": "string"
+    },
+    "RightsDistribution": {
+      "enum": [
+        "permitted",
+        "personal_only",
+        "unresolved"
+      ],
+      "type": "string"
+    },
+    "RightsRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptations": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "attribution": {
+          "$ref": "#/$defs/Text"
+        },
+        "distribution": {
+          "$ref": "#/$defs/RightsDistribution"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_0_256"
+        },
+        "licence_id": {
+          "$ref": "#/$defs/Text"
+        },
+        "licence_url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "licence_id",
+        "licence_url",
+        "attribution",
+        "adaptations",
+        "distribution",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
+    "ScalingPolicy": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "maximum": {
+                  "$ref": "#/$defs/PositiveRational"
+                },
+                "minimum": {
+                  "$ref": "#/$defs/PositiveRational"
+                }
+              },
+              "required": [
+                "minimum",
+                "maximum"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "linear",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "batch_yield": {
+                  "$ref": "#/$defs/PositiveRational"
+                },
+                "maximum_batches": {
+                  "format": "uint16",
+                  "maximum": 65535,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "batch_yield",
+                "maximum_batches"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "discrete_batches",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SchemaVersion": {
+      "const": 1,
+      "type": "integer"
+    },
+    "SourceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptation_notice": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "authors": {
+          "$ref": "#/$defs/Array_Text_0_64"
+        },
+        "origin": {
+          "$ref": "#/$defs/RecipeSourceOrigin"
+        },
+        "retrieved_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "source_revision": {
+          "$ref": "#/$defs/Nullable_Text"
+        },
+        "url": {
+          "$ref": "#/$defs/Nullable_HttpUrl"
+        }
+      },
+      "required": [
+        "url",
+        "source_revision",
+        "retrieved_at",
+        "authors",
+        "adaptation_notice",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "StorageRule": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "cooling_instruction": {
+          "$ref": "#/$defs/Text"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/EvidenceId"
+        },
+        "max_chilled_seconds": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "max_reheats": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reheating_instruction": {
+          "$ref": "#/$defs/Text"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRecord"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "component_id",
+        "max_chilled_seconds",
+        "cooling_instruction",
+        "reheating_instruction",
+        "max_reheats",
+        "source"
+      ],
+      "type": "object"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Title": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "g",
+        "ml",
+        "each"
+      ],
+      "type": "string"
+    },
+    "YieldSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "$ref": "#/$defs/Text"
+        },
+        "components": {
+          "$ref": "#/$defs/Array_ComponentYield_1_128"
+        },
+        "servings": {
+          "$ref": "#/$defs/PositiveRational"
+        }
+      },
+      "required": [
+        "servings",
+        "basis",
+        "components"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "urn:mstrchf:contracts:v1:recipe-revision",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_minutes": {
+      "format": "uint16",
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/RecipeCapabilities"
+    },
+    "components": {
+      "$ref": "#/$defs/Array_ComponentSpec_1_128"
+    },
+    "dietary_evidence": {
+      "$ref": "#/$defs/Array_DietaryEvidence_0_256"
+    },
+    "elapsed_minutes": {
+      "format": "uint16",
+      "maximum": 65535,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "equipment": {
+      "$ref": "#/$defs/Array_EquipmentCode_0_9"
+    },
+    "extras": {
+      "$ref": "#/$defs/Array_ExtraSpec_0_64"
+    },
+    "image": {
+      "$ref": "#/$defs/Nullable_ImageRecord"
+    },
+    "ingredients": {
+      "$ref": "#/$defs/Array_RecipeIngredient_1_256"
+    },
+    "meal_types": {
+      "$ref": "#/$defs/Array_MealType_1_3"
+    },
+    "nutrition": {
+      "$ref": "#/$defs/Nullable_NutritionEvidence"
+    },
+    "portability": {
+      "$ref": "#/$defs/PortabilityEvidence"
+    },
+    "portion_presets": {
+      "$ref": "#/$defs/Array_PortionPreset_1_192"
+    },
+    "prep": {
+      "$ref": "#/$defs/Array_PrepSpec_0_128"
+    },
+    "recipe_id": {
+      "$ref": "#/$defs/RecipeId"
+    },
+    "reviews": {
+      "$ref": "#/$defs/Array_ReviewRecord_0_256"
+    },
+    "revision": {
+      "$ref": "#/$defs/Revision"
+    },
+    "scaling": {
+      "$ref": "#/$defs/ScalingPolicy"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/SchemaVersion"
+    },
+    "source": {
+      "$ref": "#/$defs/SourceRecord"
+    },
+    "steps": {
+      "$ref": "#/$defs/Array_InstructionStep_1_256"
+    },
+    "storage": {
+      "$ref": "#/$defs/Array_StorageRule_0_128"
+    },
+    "text_rights": {
+      "$ref": "#/$defs/RightsRecord"
+    },
+    "title": {
+      "$ref": "#/$defs/Title"
+    },
+    "yield": {
+      "$ref": "#/$defs/YieldSpec"
+    }
+  },
+  "required": [
+    "schema_version",
+    "recipe_id",
+    "revision",
+    "title",
+    "source",
+    "text_rights",
+    "ingredients",
+    "yield",
+    "scaling",
+    "steps",
+    "equipment",
+    "active_minutes",
+    "elapsed_minutes",
+    "meal_types",
+    "portability",
+    "components",
+    "extras",
+    "dietary_evidence",
+    "storage",
+    "prep",
+    "portion_presets",
+    "nutrition",
+    "image",
+    "reviews",
+    "capabilities"
+  ],
+  "title": "RecipeRevision",
+  "type": "object"
+}

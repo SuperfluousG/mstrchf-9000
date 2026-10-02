@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "candidate_id": "rc_0000000000000000000000000000001e",
+  "proposed_revision": "1",
+  "title": "Synthetic candidate",
+  "source": {
+    "url": null,
+    "source_revision": null,
+    "retrieved_at": "2026-12-28T12:00:00Z",
+    "authors": [],
+    "adaptation_notice": null,
+    "origin": "user_authored"
+  },
+  "ingredients": [],
+  "yield": null,
+  "steps": [],
+  "unresolved": [
+    {
+      "code": "missing_yield",
+      "path": "/yield",
+      "evidence_ids": []
+    }
+  ],
+  "image": null
+}

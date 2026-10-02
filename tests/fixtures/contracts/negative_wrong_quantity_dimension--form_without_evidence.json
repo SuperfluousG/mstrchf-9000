@@ -1,0 +1,27 @@
+{
+  "evidence": {
+    "evidence_id": "ev_00000000000000000000000000000001",
+    "ingredient_id": "ig_00000000000000000000000000000001",
+    "from_form": "dry",
+    "to_form": "cooked",
+    "from_unit": "g",
+    "to_unit": "g",
+    "factor": {
+      "numerator": "2",
+      "denominator": "1"
+    },
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-28T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    }
+  },
+  "ingredient_id": "ig_00000000000000000000000000000001",
+  "from_form": "raw",
+  "to_form": "cooked",
+  "from_unit": "g",
+  "to_unit": "g"
+}

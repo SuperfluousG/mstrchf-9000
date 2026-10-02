@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_00000000000000000000000000000011",
+  "action": "check_booking",
+  "week_id": "wk_00000000000000000000000000000001",
+  "base_plan_revision": "1",
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "1",
+        "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+      },
+      {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1",
+        "digest": "43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017"
+      }
+    ],
+    "read_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      }
+    ],
+    "write_weeks": []
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "generic_catalogue",
+    "data": {
+      "public_recipes": [
+        {
+          "schema_version": 1,
+          "recipe_id": "rc_00000000000000000000000000000001",
+          "revision": "1",
+          "title": "Synthetic shared base",
+          "source": {
+            "url": null,
+            "source_revision": null,
+            "retrieved_at": "2026-12-28T12:00:00Z",
+            "authors": [],
+            "adaptation_notice": null,
+            "origin": "user_authored"
+          },
+          "text_rights": {
+            "licence_id": "synthetic-personal-only",
+            "licence_url": null,
+            "attribution": "Synthetic fixture content",
+            "adaptations": [],
+            "distribution": "personal_only",
+            "evidence_ids": []
+          },
+          "ingredients": [
+            {
+              "ingredient_id": "ig_00000000000000000000000000000001",
+              "name": "Synthetic ingredient 1",
+              "quantity": {
+                "amount": {
+                  "numerator": "400",
+                  "denominator": "1"
+                },
+                "unit": "g",
+                "form": "raw"
+              },
+              "discrete": false,
+              "conversion_evidence": [],
+              "component_id": "co_00000000000000000000000000000001",
+              "step_ids": [
+                1
+              ]
+            }
+          ],
+          "yield": {
+            "servings": {
+              "numerator": "2",
+              "denominator": "1"
+            },
+            "basis": "Synthetic two-serving yield",
+            "components": [
+              {
+                "component_id": "co_00000000000000000000000000000001",
+                "quantity": {
+                  "amount": {
+                    "numerator": "400",
+                    "denominator": "1"
+                  },
+                  "unit": "g",
+                  "form": "raw"
+                }
+              }
+            ]
+          },
+          "scaling": {
+            "kind": "linear",
+            "data": {
+              "minimum": {
+                "numerator": "1",
+                "denominator": "1"
+              },
+              "maximum": {
+                "numerator": "2",
+                "denominator": "1"
+              }
+            }
+          },
+          "steps": [
+            {
+              "step_id": 1,
+              "text": "Combine the synthetic ingredients.",
+              "ingredient_ids": [
+                "ig_00000000000000000000000000000001"
+              ],
+              "component_ids": [
+                "co_00000000000000000000000000000001"
+              ],
+              "active_minutes": 5,
+              "elapsed_minutes": 10,
+              "depends_on": []
+            }
+          ],
+          "equipment": [
+            "hob"
+          ],
+          "active_minutes": 5,
+          "elapsed_minutes": 10,
+          "meal_types": [
+            "dinner"
+          ],
+          "portability": {
+            "cold_suitable": false,
+            "reheating_required": false,
+            "cold_storage_required": false,
+            "evidence_ids": []
+          },
+          "components": [
+            {
+              "component_id": "co_00000000000000000000000000000001",
+              "title": "Synthetic component 1",
+              "ingredient_ids": [
+                "ig_00000000000000000000000000000001"
+              ],
+              "storage_rule_ids": []
+            }
+          ],
+          "extras": [
+            {
+              "extra_id": "ex_00000000000000000000000000000001",
+              "title": "Synthetic supported extra",
+              "recipe": {
+                "recipe_id": "rc_00000000000000000000000000000002",
+                "revision": "1",
+                "digest": "43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017"
+              },
+              "eligible_person_requirements": [],
+              "supported_with": [
+                "co_00000000000000000000000000000001"
+              ]
+            }
+          ],
+          "dietary_evidence": [],
+          "storage": [],
+          "prep": [],
+          "portion_presets": [
+            {
+              "preset": "regular",
+              "age_band": "adult",
+              "meal_type": "dinner",
+              "servings": {
+                "numerator": "1",
+                "denominator": "1"
+              },
+              "evidence_ids": [
+                "ev_0000000000000000000000000000006e"
+              ]
+            }
+          ],
+          "nutrition": null,
+          "image": null,
+          "reviews": [],
+          "capabilities": {
+            "local_display": false,
+            "shopping": false,
+            "leftovers": false,
+            "starter_distribution": false,
+            "blocking_issues": []
+          }
+        }
+      ],
+      "meal_types": [
+        "dinner"
+      ]
+    }
+  },
+  "scope": {
+    "kind": "booking",
+    "data": {
+      "week_ids": [
+        "wk_00000000000000000000000000000001"
+      ],
+      "read_scope": {
+        "read_id": "rd_00000000000000000000000000000004",
+        "resource": {
+          "kind": "basket",
+          "data": {
+            "key": {
+              "retailer": "tesco",
+              "account_ref": "synthetic-account-1",
+              "basket_id": "bk_00000000000000000000000000000001"
+            }
+          }
+        },
+        "purpose": "slot_discovery",
+        "allowed_kinds": [
+          "slots"
+        ],
+        "products": [],
+        "event_ids": [],
+        "not_before": "2026-12-28T10:00:00Z",
+        "expires_at": "2026-12-28T20:00:00Z"
+      }
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "572789df1c61c828d48d8fd940f9b87cafcf799391eeac86fdf2beba654a06a8"
+}
