@@ -5,4 +5,5 @@ pub mod eligibility;
 pub mod household;
 pub mod portions;
 pub mod recipes;
+pub mod setup;
 pub mod weeks;
