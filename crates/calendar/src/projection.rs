@@ -183,6 +183,14 @@ pub(crate) fn occurrences(h: &HistoricalApproval) -> Result<Vec<Occurrence>, Cal
             meal.attendees
                 .0
                 .retain(|a| e.recipients.iter().any(|p| p.person == a.person));
+            let mut union = std::collections::BTreeMap::new();
+            for attendee in &meal.attendees.0 {
+                for requirement in &attendee.hard_requirements.0 {
+                    union.insert(canonical_bytes(requirement)?, requirement.clone());
+                }
+            }
+            bound(union.len(), 64, "/extra/requirements")?;
+            meal.shared_hard_requirements = BoundedVec(union.into_values().collect());
             let mut overrides = s.meal_overrides.clone();
             overrides
                 .portions
