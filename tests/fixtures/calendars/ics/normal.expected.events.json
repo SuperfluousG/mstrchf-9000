@@ -1,0 +1,99 @@
+{
+  "synthetic": true,
+  "stage": "renderer literals only; not full food input",
+  "events": [
+    {
+      "event": {
+        "event_id": "ce_00000000000000000000000000000001",
+        "logical_key": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "kind": "delivery",
+          "session_id": null,
+          "order_id": "or_00000000000000000000000000000001"
+        },
+        "payload_revision": "1",
+        "start": {
+          "local_date": "2026-10-12",
+          "local_time": "16:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-12T15:00:00Z"
+        },
+        "end": {
+          "local_date": "2026-10-12",
+          "local_time": "17:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-12T16:00:00Z"
+        },
+        "title": "SYNTHETIC Grocery delivery",
+        "body": "SYNTHETIC EXAMPLE — no actual order or delivery has been confirmed.\nMonday 12 October 2026. Europe/London (UTC+01:00).\nDelivery window: 16:00–17:00.\nSynthetic premise: user explicitly confirmed checkout and this delivery window on 11 October 2026 at 12:00 UTC.\nFirst purchased-ingredient preparation: Monday 18:00.\nThis event is a manual calendar snapshot. Importing it does not place an order, synchronise changes or establish publication.",
+        "event_payload_digest": "415b15545a65b9e0c35d09d4a829eed9db86ef9909d6e476f801626c46bb5b71"
+      },
+      "sequence": 0,
+      "revised_at": "2026-10-11T12:05:00Z"
+    },
+    {
+      "event": {
+        "event_id": "ce_00000000000000000000000000000002",
+        "logical_key": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "kind": "cooking",
+          "session_id": "ps_00000000000000000000000000000001",
+          "order_id": null
+        },
+        "payload_revision": "1",
+        "start": {
+          "local_date": "2026-10-12",
+          "local_time": "18:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-12T17:00:00Z"
+        },
+        "end": {
+          "local_date": "2026-10-12",
+          "local_time": "18:10:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-12T17:10:00Z"
+        },
+        "title": "SYNTHETIC Cheese toast, tomato extra and oats prep",
+        "body": "SYNTHETIC EXAMPLE — not an admitted recipe or real order.\nMonday 12 October 2026. Europe/London (UTC+01:00).\nStart 18:00. Eat dinner at 18:10. Elapsed session: 10 minutes.\nHands-on work: 18:00–18:08. Grill runs unattended 18:03–18:10.\n\nPORTIONS\nCheese toast: 2 servings; Diner 1 and Diner 2 receive 1 each.\nTomato extra: 1 serving for Diner 2 only.\nLinked prep: 1 serving of oats for Tuesday breakfast at 08:00.\n\nINGREDIENTS — exact totals for these occurrences\nBase: 2 whole bread slices; 60 g prepared grated cheese.\nExtra for Diner 2: 100 g raw cherry tomatoes.\nTuesday oats prep: 40 g dry oats; 100 ml prepared milk.\n\nCOOKING AND LINKED PREP — synthetic instructions\n1. 18:00–18:03: Heat the grill to medium. Put the bread slices on a tray and divide the cheese equally between them.\n2. 18:03–18:10: Grill the topped bread until the cheese is melted and the edges are golden; the synthetic schedule allows 7 minutes. Watch it while completing the following tasks.\n3. 18:03–18:05: Wash and halve the tomatoes. Put all 100 g on Diner 2's plate, separate from the shared base.\n4. 18:05–18:08: Mix the oats and milk in a covered container. Label it for Tuesday breakfast and refrigerate according to the admitted oats method.\n5. 18:10: Serve one cheese toast slice to each diner. Diner 2 also receives the tomato extra.\n\nLINKED PREP\nThe oats are prepared here once. Tuesday's breakfast entry refers back to this task; do not make a second portion.\nNo leftovers are allocated from this dinner. Storage and food-evidence admission for the oats are synthetic premises, not verified guidance.\n\nSOURCE AND RIGHTS\nOriginal fictional fixture text authored for this preparation. No external recipe or image copied. Not cook-tested.",
+        "event_payload_digest": "f39826e83ac397175893e119685a629f47cae98bf23dede150349e7a17087953"
+      },
+      "sequence": 0,
+      "revised_at": "2026-10-11T12:05:00Z"
+    },
+    {
+      "event": {
+        "event_id": "ce_00000000000000000000000000000003",
+        "logical_key": {
+          "week_id": "wk_00000000000000000000000000000001",
+          "kind": "cooking",
+          "session_id": "ps_00000000000000000000000000000002",
+          "order_id": null
+        },
+        "payload_revision": "1",
+        "start": {
+          "local_date": "2026-10-13",
+          "local_time": "07:55:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-13T06:55:00Z"
+        },
+        "end": {
+          "local_date": "2026-10-13",
+          "local_time": "08:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-10-13T07:00:00Z"
+        },
+        "title": "SYNTHETIC Overnight oats",
+        "body": "SYNTHETIC EXAMPLE — not an admitted recipe or real order.\nTuesday 13 October 2026. Europe/London (UTC+01:00).\nStart 07:55. Eat at 08:00. Active/elapsed: 5 minutes.\n\nPORTIONS AND INGREDIENTS\n1 serving for Diner 1, already prepared from 40 g dry oats and 100 ml prepared milk. No additional ingredient demand.\n\nPRIOR PREP — reference only; do not repeat\nPrepared Monday 12 October at 18:05–18:08 during the cheese toast session.\nThe complete prep method was: mix the oats and milk in a covered container, label for Tuesday breakfast and refrigerate according to the admitted oats method.\n\nFINISH\n1. 07:55–08:00: Take the labelled prepared portion from the fridge, stir and serve cold at 08:00 under the admitted method.\nThe assumed storage and fresh-service support is synthetic and unverified; this fixture is not real cooking advice.\n\nSOURCE AND RIGHTS\nOriginal fictional fixture text authored for this preparation. Not cook-tested.",
+        "event_payload_digest": "5d5e452bfa99d5fd2bbf1814c0d5e3a39e4baabd50ce4f229b41aabcfb906ae0"
+      },
+      "sequence": 0,
+      "revised_at": "2026-10-11T12:05:00Z"
+    }
+  ]
+}

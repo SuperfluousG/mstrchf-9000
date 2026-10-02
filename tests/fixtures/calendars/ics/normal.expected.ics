@@ -1,0 +1,75 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Bayes Ltd//MSTRCHF 9000 Calendar 1//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:mstrchf-9000-ce_00000000000000000000000000000001
+DTSTAMP:20261011T120500Z
+SEQUENCE:0
+DTSTART:20261012T150000Z
+DTEND:20261012T160000Z
+SUMMARY:SYNTHETIC Grocery delivery
+DESCRIPTION:SYNTHETIC EXAMPLE — no actual order or delivery has been conf
+ irmed.\nMonday 12 October 2026. Europe/London (UTC+01:00).\nDelivery windo
+ w: 16:00–17:00.\nSynthetic premise: user explicitly confirmed checkout a
+ nd this delivery window on 11 October 2026 at 12:00 UTC.\nFirst purchased-
+ ingredient preparation: Monday 18:00.\nThis event is a manual calendar sna
+ pshot. Importing it does not place an order\, synchronise changes or estab
+ lish publication.
+END:VEVENT
+BEGIN:VEVENT
+UID:mstrchf-9000-ce_00000000000000000000000000000002
+DTSTAMP:20261011T120500Z
+SEQUENCE:0
+DTSTART:20261012T170000Z
+DTEND:20261012T171000Z
+SUMMARY:SYNTHETIC Cheese toast\, tomato extra and oats prep
+DESCRIPTION:SYNTHETIC EXAMPLE — not an admitted recipe or real order.\nMo
+ nday 12 October 2026. Europe/London (UTC+01:00).\nStart 18:00. Eat dinner 
+ at 18:10. Elapsed session: 10 minutes.\nHands-on work: 18:00–18:08. Gril
+ l runs unattended 18:03–18:10.\n\nPORTIONS\nCheese toast: 2 servings\; D
+ iner 1 and Diner 2 receive 1 each.\nTomato extra: 1 serving for Diner 2 on
+ ly.\nLinked prep: 1 serving of oats for Tuesday breakfast at 08:00.\n\nING
+ REDIENTS — exact totals for these occurrences\nBase: 2 whole bread slice
+ s\; 60 g prepared grated cheese.\nExtra for Diner 2: 100 g raw cherry toma
+ toes.\nTuesday oats prep: 40 g dry oats\; 100 ml prepared milk.\n\nCOOKING
+  AND LINKED PREP — synthetic instructions\n1. 18:00–18:03: Heat the gr
+ ill to medium. Put the bread slices on a tray and divide the cheese equall
+ y between them.\n2. 18:03–18:10: Grill the topped bread until the cheese
+  is melted and the edges are golden\; the synthetic schedule allows 7 minu
+ tes. Watch it while completing the following tasks.\n3. 18:03–18:05: Was
+ h and halve the tomatoes. Put all 100 g on Diner 2's plate\, separate from
+  the shared base.\n4. 18:05–18:08: Mix the oats and milk in a covered co
+ ntainer. Label it for Tuesday breakfast and refrigerate according to the a
+ dmitted oats method.\n5. 18:10: Serve one cheese toast slice to each diner
+ . Diner 2 also receives the tomato extra.\n\nLINKED PREP\nThe oats are pre
+ pared here once. Tuesday's breakfast entry refers back to this task\; do n
+ ot make a second portion.\nNo leftovers are allocated from this dinner. St
+ orage and food-evidence admission for the oats are synthetic premises\, no
+ t verified guidance.\n\nSOURCE AND RIGHTS\nOriginal fictional fixture text
+  authored for this preparation. No external recipe or image copied. Not co
+ ok-tested.
+END:VEVENT
+BEGIN:VEVENT
+UID:mstrchf-9000-ce_00000000000000000000000000000003
+DTSTAMP:20261011T120500Z
+SEQUENCE:0
+DTSTART:20261013T065500Z
+DTEND:20261013T070000Z
+SUMMARY:SYNTHETIC Overnight oats
+DESCRIPTION:SYNTHETIC EXAMPLE — not an admitted recipe or real order.\nTu
+ esday 13 October 2026. Europe/London (UTC+01:00).\nStart 07:55. Eat at 08:
+ 00. Active/elapsed: 5 minutes.\n\nPORTIONS AND INGREDIENTS\n1 serving for 
+ Diner 1\, already prepared from 40 g dry oats and 100 ml prepared milk. No
+  additional ingredient demand.\n\nPRIOR PREP — reference only\; do not r
+ epeat\nPrepared Monday 12 October at 18:05–18:08 during the cheese toast
+  session.\nThe complete prep method was: mix the oats and milk in a covere
+ d container\, label for Tuesday breakfast and refrigerate according to the
+  admitted oats method.\n\nFINISH\n1. 07:55–08:00: Take the labelled prep
+ ared portion from the fridge\, stir and serve cold at 08:00 under the admi
+ tted method.\nThe assumed storage and fresh-service support is synthetic a
+ nd unverified\; this fixture is not real cooking advice.\n\nSOURCE AND RIG
+ HTS\nOriginal fictional fixture text authored for this preparation. Not co
+ ok-tested.
+END:VEVENT
+END:VCALENDAR
