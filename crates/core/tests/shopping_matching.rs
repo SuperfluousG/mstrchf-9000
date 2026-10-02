@@ -88,7 +88,7 @@ fn admitted_extra_origin_retains_recipient_and_extra_spec_requirements() {
     }
 }
 #[test]
-fn m11_upstream_extra_derivation_blocker_is_reproduced_without_changing_expectation() {
+fn m11_stale_extra_projection_is_invalid_while_recipient_projection_is_valid() {
     use mstrchf_core::{
         eligibility::{Eligibility, validate_extra},
         portions::resolve_servings,
@@ -129,7 +129,7 @@ fn m11_upstream_extra_derivation_blocker_is_reproduced_without_changing_expectat
         validate_extra(&base, &extra, selected, meal, &sel.meal_overrides).unwrap(),
         Eligibility::Eligible
     );
-    // Reproduce the existing food::occurrences extra projection exactly.
+    // Retain the former stale projection as a negative control after the fix.
     let mut filtered = meal.clone();
     filtered
         .attendees
@@ -733,7 +733,6 @@ fn m25_m26_mixed_origins_retain_individual_quantities_factors() {
     }
 }
 #[test]
-#[ignore = "M11 blocked upstream: food::occurrences retains shared base requirements after filtering extra attendees; root-owned correction required"]
 fn m11_extra_only_consumer_avoids_shared_vegetarian_restriction() {
     let (s, d) = rebuild(extra_value());
     let line = d
