@@ -7,11 +7,8 @@ mod admission;
 mod audit;
 mod backup;
 mod commands;
-<<<<<<< HEAD
 mod custody;
-=======
 mod compat;
->>>>>>> 0929a4038dfd0475787247a7f11dd06f6644c167
 mod database;
 mod migrate;
 mod receipts;
