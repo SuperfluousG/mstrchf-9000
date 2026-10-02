@@ -1,0 +1,2329 @@
+{
+  "evidence_format": "mstrchf-independent-synthetic-expectations-v1",
+  "not_a_public_wire_contract": true,
+  "authored_on": "2026-09-27",
+  "zone": "Europe/London",
+  "sources": {
+    "spec": "../../../../../Cowork/Outputs/Weekly-Shop/Weekly-Shop_Product-Spec_v1.md",
+    "implementation_plan": "../../../../../Cowork/Outputs/Weekly-Shop/Weekly-Shop_Implementation-Plan_v1.md",
+    "frozen_contract": "../foundation/contract-design.md",
+    "freeze": "../foundation/freeze.md"
+  },
+  "assumptions": [
+    "All recipes, people, products, IDs, amounts, prices and reviewed evidence premises are SYNTHETIC.",
+    "No quantity establishes meal adequacy, age suitability, nutrition or actual cooking/storage safety.",
+    "Rational strings such as 7/12 are evidence notation; consumer maps them into frozen decimal-string numerator/denominator types.",
+    "Symbolic IDs/digests/reason labels are fixture vocabulary, not new public contract fields/enums.",
+    "base_case references are local fixture inputs plus the explicitly named replacement; no production output is inherited.",
+    "Positive cases assume required provenance, scoped synthetic dietary/portion evidence and storage instructions except when a case explicitly removes them.",
+    "All offset timestamps are explicit Europe/London BST instants in these examples; no DST transition is hidden.",
+    "Pack search examples have one objective: minimum applicable full spend then minimum surplus, within 0..8 of each pack. They avoid an unresolved spend-versus-waste preference tradeoff.",
+    "Plan maxima are inclusive48h general/24h rice from original cook; shorter declared limits win. Cooling delay never extends the fixture clock.",
+    "No automation, retailer write, calendar publication or production acceptance is established."
+  ],
+  "fixtures": [
+    {
+      "name": "F01_exact_rational_recipe_specific_presets",
+      "synthetic": true,
+      "requirements": [
+        "AC-08",
+        "AC-13"
+      ],
+      "package": "P04b",
+      "input": {
+        "recipe": "SYNTHETIC-bean-base@1",
+        "yield_servings": "3",
+        "beans": {
+          "amount": "360",
+          "unit": "g",
+          "form": "drained"
+        },
+        "presets": {
+          "adult_regular_dinner": "1",
+          "child_7_10_regular_dinner": "2/3"
+        },
+        "preset_evidence": "SYNTHETIC reviewed mapping premise only",
+        "diners": [
+          {
+            "id": "a",
+            "preset": "adult_regular_dinner",
+            "adjustment": "5/4"
+          },
+          {
+            "id": "c",
+            "preset": "child_7_10_regular_dinner",
+            "adjustment": "3/4"
+          }
+        ],
+        "scaling": {
+          "linear_multiplier_min": "1/4",
+          "max": "2"
+        }
+      },
+      "expected": {
+        "outcome": "valid",
+        "servings": {
+          "a": "5/4",
+          "c": "1/2"
+        },
+        "total_servings": "7/4",
+        "multiplier": "7/12",
+        "beans": {
+          "amount": "210",
+          "unit": "g",
+          "form": "drained"
+        }
+      },
+      "reasoning": "Adult: 1 \u00d7 5/4 = 5/4. Child: recipe-specific 2/3 \u00d7 3/4 = 1/2; the result is not a universal child default. Total 7/4; divide by recipe yield 3, then multiply 360g: 210g.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "1*5/4",
+          "expected": "5/4"
+        },
+        {
+          "kind": "rational",
+          "expression": "2/3*3/4",
+          "expected": "1/2"
+        },
+        {
+          "kind": "rational",
+          "expression": "5/4+1/2",
+          "expected": "7/4"
+        },
+        {
+          "kind": "rational",
+          "expression": "(7/4)/3",
+          "expected": "7/12"
+        },
+        {
+          "kind": "rational",
+          "expression": "360*7/12",
+          "expected": "210"
+        }
+      ]
+    },
+    {
+      "name": "F02_same_child_other_recipe",
+      "synthetic": true,
+      "requirements": [
+        "AC-08"
+      ],
+      "package": "P04b",
+      "input": {
+        "recipe": "SYNTHETIC-other-base@1",
+        "child_age": "child_7_10",
+        "regular_dinner_preset": "3/4",
+        "adjustment": "3/4"
+      },
+      "expected": {
+        "outcome": "valid",
+        "servings": "9/16"
+      },
+      "reasoning": "The same age/adjustment yields 9/16 for this different reviewed recipe, proving there is no global half-portion mapping.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "3/4*3/4",
+          "expected": "9/16"
+        }
+      ]
+    },
+    {
+      "name": "F03_missing_age_recipe_mapping",
+      "synthetic": true,
+      "requirements": [
+        "AC-08",
+        "AC-09"
+      ],
+      "package": "P04b",
+      "input": {
+        "recipe": "SYNTHETIC-other-base@1",
+        "available_age_mappings": [
+          "adult",
+          "child_7_10"
+        ],
+        "requested_age": "child_4_6"
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "MISSING_REVIEWED_PORTION_PRESET",
+        "servings": null
+      },
+      "reasoning": "An adult or another child age mapping cannot fill this gap.",
+      "audits": []
+    },
+    {
+      "name": "F04_meal_override_is_local",
+      "synthetic": true,
+      "requirements": [
+        "AC-08"
+      ],
+      "package": "P04b",
+      "input": {
+        "recipe_preset_servings": {
+          "breakfast_larger": "3/2",
+          "lunch_smaller": "3/4",
+          "dinner_regular": "1"
+        },
+        "diner_a_overrides": {
+          "breakfast": "larger",
+          "lunch": "smaller"
+        },
+        "diner_b_default": "regular",
+        "regular_servings_all_meals": "1",
+        "ingredient_per_serving": {
+          "amount": "80",
+          "unit": "g",
+          "form": "dry"
+        }
+      },
+      "expected": {
+        "outcome": "valid",
+        "a_grams": {
+          "breakfast": "120",
+          "lunch": "60",
+          "dinner": "80"
+        },
+        "b_grams": {
+          "breakfast": "80",
+          "lunch": "80",
+          "dinner": "80"
+        }
+      },
+      "reasoning": "Only A breakfast/lunch change. Meal mappings are declared synthetic recipe evidence, not nutritional prescriptions.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "80*3/2",
+          "expected": "120"
+        },
+        {
+          "kind": "rational",
+          "expression": "80*3/4",
+          "expected": "60"
+        }
+      ]
+    },
+    {
+      "name": "F05_shared_base_and_separate_extra",
+      "synthetic": true,
+      "requirements": [
+        "AC-05",
+        "AC-06"
+      ],
+      "package": "P04b",
+      "input": {
+        "recipe": "SYNTHETIC-shared-base@1",
+        "per_serving_beans": {
+          "amount": "120",
+          "unit": "g",
+          "form": "drained"
+        },
+        "supported_requirements": [
+          "vegetarian",
+          "gluten_free",
+          "exclude_sesame"
+        ],
+        "diners": {
+          "a": [
+            "vegetarian"
+          ],
+          "b": [
+            "gluten_free"
+          ],
+          "guest_friday": [
+            "exclude_sesame"
+          ]
+        },
+        "servings": {
+          "a": "1",
+          "b": "1",
+          "guest_friday": "1/2"
+        },
+        "chicken_extra": {
+          "id": "SYNTHETIC-chicken@1",
+          "per_serving": {
+            "amount": "100",
+            "unit": "g",
+            "form": "raw"
+          },
+          "supported_requirements": [
+            "gluten_free",
+            "exclude_sesame"
+          ],
+          "conflicts": [
+            "vegetarian"
+          ],
+          "recipients": {
+            "b": "1"
+          },
+          "step": "Cook separate chicken extra; serve only to b"
+        },
+        "occasion": "2026-10-09/dinner",
+        "guest_persistence": false
+      },
+      "expected": {
+        "outcome": "valid",
+        "shared_union": [
+          "vegetarian",
+          "gluten_free",
+          "exclude_sesame"
+        ],
+        "beans": {
+          "amount": "300",
+          "unit": "g",
+          "form": "drained"
+        },
+        "chicken": {
+          "amount": "100",
+          "unit": "g",
+          "form": "raw"
+        },
+        "chicken_recipients": [
+          "b"
+        ],
+        "guest_profiles_created": 0,
+        "unrelated_meals_changed": 0
+      },
+      "reasoning": "Shared base serves 1+1+1/2=5/2; 120\u00d75/2=300g. Chicken serves only b:100g. Guest adds sesame exclusion only to this occasion.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "1+1+1/2",
+          "expected": "5/2"
+        },
+        {
+          "kind": "rational",
+          "expression": "120*5/2",
+          "expected": "300"
+        },
+        {
+          "kind": "rational",
+          "expression": "100*1",
+          "expected": "100"
+        }
+      ]
+    },
+    {
+      "name": "F06_extra_to_ineligible_person",
+      "synthetic": true,
+      "requirements": [
+        "AC-05",
+        "AC-09"
+      ],
+      "package": "P04b",
+      "input": {
+        "base_case": "F05_shared_base_and_separate_extra",
+        "replace_chicken_recipients": {
+          "a": "1"
+        }
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "EXTRA_CONFLICTS_WITH_RECIPIENT_VEGETARIAN",
+        "affected_person": "a"
+      },
+      "reasoning": "A compliant base does not make a conflicting extra eligible.",
+      "audits": []
+    },
+    {
+      "name": "F07_guest_blocks_previous_base",
+      "synthetic": true,
+      "requirements": [
+        "AC-06",
+        "AC-09"
+      ],
+      "package": "P04b",
+      "input": {
+        "base_case": "F05_shared_base_and_separate_extra",
+        "replace_base_sesame_evidence": "conflicting"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "SHARED_BASE_CONFLICTS_WITH_GUEST_SESAME_EXCLUSION",
+        "affected_slot": "2026-10-09/dinner",
+        "unrelated_meals_changed": 0
+      },
+      "reasoning": "Guest restrictions belong to the union for the shared base, even when household diners can eat the original base.",
+      "audits": []
+    },
+    {
+      "name": "F08_portable_cold_control_and_no_fit",
+      "synthetic": true,
+      "requirements": [
+        "AC-04",
+        "AC-09"
+      ],
+      "package": "P04b",
+      "input": {
+        "reheating_available": false,
+        "cold_storage_available": true,
+        "temperature": "cold",
+        "candidates": [
+          {
+            "id": "cold",
+            "cold_suitable": true,
+            "requires_reheat": false,
+            "requires_cold_storage": true
+          },
+          {
+            "id": "hot",
+            "cold_suitable": false,
+            "requires_reheat": true,
+            "requires_cold_storage": true
+          }
+        ],
+        "restrictions_evidence": "all supported synthetic"
+      },
+      "expected": {
+        "outcome": "valid",
+        "eligible": [
+          "cold"
+        ],
+        "rejected": {
+          "hot": "REHEATING_UNAVAILABLE"
+        },
+        "when_cold_storage_removed": {
+          "outcome": "unresolved",
+          "eligible": [],
+          "reason": "COLD_STORAGE_UNAVAILABLE"
+        }
+      },
+      "reasoning": "The cold candidate is a positive control. Removing required cold storage leaves no fit; equipment must not be invented.",
+      "audits": []
+    },
+    {
+      "name": "F09_no_suitable_recipe_both_routes",
+      "synthetic": true,
+      "requirements": [
+        "AC-07",
+        "AC-09"
+      ],
+      "package": "P04b",
+      "input": {
+        "required": [
+          "vegetarian",
+          "gluten_free"
+        ],
+        "candidates": {
+          "meat": "conflicting vegetarian",
+          "wheat": "conflicting gluten_free"
+        },
+        "routes": [
+          "manual",
+          "suggested"
+        ]
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "eligible": [],
+        "reason": "NO_RECIPE_MEETS_HARD_REQUIREMENTS",
+        "both_routes_same": true,
+        "restrictions_relaxed": false
+      },
+      "reasoning": "Two unsuitable candidates do not justify a fallback meal. Manual selection of either also conflicts.",
+      "audits": []
+    },
+    {
+      "name": "F10_fixed_selection_survives_suggestions",
+      "synthetic": true,
+      "requirements": [
+        "AC-07"
+      ],
+      "package": "P03/P04 boundary",
+      "input": {
+        "fixed": {
+          "2026-10-05/dinner": "SYNTHETIC-shared-base@1"
+        },
+        "open_slot": "2026-10-06/dinner",
+        "proposal": {
+          "2026-10-06/dinner": "SYNTHETIC-other-base@1"
+        },
+        "all_required_evidence": "synthetically supported",
+        "repeat_constraint": "different main dinners"
+      },
+      "expected": {
+        "outcome": "valid",
+        "selections": {
+          "2026-10-05/dinner": "SYNTHETIC-shared-base@1",
+          "2026-10-06/dinner": "SYNTHETIC-other-base@1"
+        },
+        "fixed_replaced": false
+      },
+      "reasoning": "The suggestion fills only the open slot. This is a consumer-boundary expectation, not P03 implementation evidence.",
+      "audits": []
+    },
+    {
+      "name": "F11_chilli_2_plus_1_plus_1",
+      "synthetic": true,
+      "requirements": [
+        "AC-11",
+        "AC-13"
+      ],
+      "package": "P04c",
+      "input": {
+        "batch": "SYNTHETIC-chilli-B1",
+        "source": "2026-10-05/dinner",
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "yield_servings": "4",
+        "component_produced": {
+          "amount": "1200",
+          "unit": "g",
+          "form": "cooked"
+        },
+        "original_ingredients": {
+          "beans": {
+            "amount": "480",
+            "unit": "g",
+            "form": "drained"
+          },
+          "tomatoes": {
+            "amount": "400",
+            "unit": "g",
+            "form": "raw"
+          },
+          "onion": {
+            "amount": "160",
+            "unit": "g",
+            "form": "raw"
+          },
+          "oil": {
+            "amount": "20",
+            "unit": "ml",
+            "form": "prepared"
+          }
+        },
+        "allocations": [
+          {
+            "slot": "2026-10-05/dinner",
+            "servings": "2",
+            "quantity": {
+              "amount": "600",
+              "unit": "g",
+              "form": "cooked"
+            },
+            "at": "2026-10-05T18:00:00+01:00",
+            "reheats": 0
+          },
+          {
+            "slot": "2026-10-06/lunch",
+            "servings": "1",
+            "quantity": {
+              "amount": "300",
+              "unit": "g",
+              "form": "cooked"
+            },
+            "at": "2026-10-06T12:00:00+01:00",
+            "reheats": 1
+          },
+          {
+            "slot": "2026-10-07/lunch",
+            "servings": "1",
+            "quantity": {
+              "amount": "300",
+              "unit": "g",
+              "form": "cooked"
+            },
+            "at": "2026-10-07T12:00:00+01:00",
+            "reheats": 1
+          }
+        ],
+        "remix_only": {
+          "2026-10-06/lunch": {
+            "wrap": {
+              "amount": "1",
+              "unit": "each",
+              "form": "prepared"
+            }
+          },
+          "2026-10-07/lunch": {
+            "potato": {
+              "amount": "250",
+              "unit": "g",
+              "form": "raw"
+            }
+          }
+        },
+        "storage_limit_seconds": 172800,
+        "max_reheats_per_portion": 1,
+        "component_yield_note": "Synthetic declared yield, not inferred mass balance; water/cooking changes are not conversion evidence"
+      },
+      "expected": {
+        "outcome": "valid",
+        "original_batch_count": 1,
+        "allocated": {
+          "amount": "1200",
+          "unit": "g",
+          "form": "cooked"
+        },
+        "unallocated": {
+          "amount": "0",
+          "unit": "g",
+          "form": "cooked"
+        },
+        "demand": {
+          "beans": {
+            "amount": "480",
+            "unit": "g",
+            "form": "drained"
+          },
+          "tomatoes": {
+            "amount": "400",
+            "unit": "g",
+            "form": "raw"
+          },
+          "onion": {
+            "amount": "160",
+            "unit": "g",
+            "form": "raw"
+          },
+          "oil": {
+            "amount": "20",
+            "unit": "ml",
+            "form": "prepared"
+          },
+          "wrap": {
+            "amount": "1",
+            "unit": "each",
+            "form": "prepared"
+          },
+          "potato": {
+            "amount": "250",
+            "unit": "g",
+            "form": "raw"
+          }
+        },
+        "leftover_ages_seconds": [
+          64800,
+          151200
+        ]
+      },
+      "reasoning": "2+1+1=4 servings and 600+300+300=1200g, so no remainder. Original ingredients enter once; add only one wrap and 250g raw potato. Reheat counts belong to different allocated portions.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "2+1+1",
+          "expected": "4"
+        },
+        {
+          "kind": "rational",
+          "expression": "600+300+300",
+          "expected": "1200"
+        },
+        {
+          "kind": "rational",
+          "expression": "1200-600-300-300",
+          "expected": "0"
+        },
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T12:00:00+01:00",
+          "expected": 64800
+        },
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-07T12:00:00+01:00",
+          "expected": 151200
+        }
+      ]
+    },
+    {
+      "name": "F12_overallocated_batch",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "base_case": "F11_chilli_2_plus_1_plus_1",
+        "replace_last_servings": "3/2",
+        "replace_last_grams": "450"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "BATCH_OVERALLOCATED",
+        "requested_servings": "9/2",
+        "excess_servings": "1/2",
+        "excess_grams": "150"
+      },
+      "reasoning": "600+300+450=1350g exceeds1200g by150g; do not silently scale the source or reuse the same allocation.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "2+1+3/2",
+          "expected": "9/2"
+        },
+        {
+          "kind": "rational",
+          "expression": "600+300+450-1200",
+          "expected": "150"
+        }
+      ]
+    },
+    {
+      "name": "F13_cyclic_batches",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "dependencies": {
+          "A": [
+            "B"
+          ],
+          "B": [
+            "A"
+          ]
+        },
+        "edge_means": "consumes component from"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "CYCLIC_BATCH_DEPENDENCY",
+        "valid_topological_order": null
+      },
+      "reasoning": "Neither source can be produced first; reject before demand expansion.",
+      "audits": []
+    },
+    {
+      "name": "F14_disabled_source_batch",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "base_case": "F11_chilli_2_plus_1_plus_1",
+        "source_day_enabled": false,
+        "consumer_days_enabled": true
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "ACTIVE_LEFTOVER_DEPENDS_ON_DISABLED_SOURCE",
+        "disabled_source_demand_included": false
+      },
+      "reasoning": "Retaining the inactive source selection is not permission to cook it or include its demand.",
+      "audits": []
+    },
+    {
+      "name": "F15_general_exact_48h",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-07T18:00:00+01:00",
+        "component": "chilli",
+        "source_limit_seconds": 172800,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "valid",
+        "age_seconds": 172800,
+        "effective_limit_seconds": 172800,
+        "reason": null
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-07T18:00:00+01:00",
+          "expected": 172800
+        }
+      ]
+    },
+    {
+      "name": "F16_general_48h_one_minute_over",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-07T18:01:00+01:00",
+        "component": "chilli",
+        "source_limit_seconds": 172800,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "reject",
+        "age_seconds": 172860,
+        "effective_limit_seconds": 172800,
+        "reason": "ORIGINAL_COOK_STORAGE_LIMIT_EXCEEDED"
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-07T18:01:00+01:00",
+          "expected": 172860
+        }
+      ]
+    },
+    {
+      "name": "F17_rice_exact_24h",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T18:00:00+01:00",
+        "component": "rice",
+        "source_limit_seconds": 86400,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "valid",
+        "age_seconds": 86400,
+        "effective_limit_seconds": 86400,
+        "reason": null
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T18:00:00+01:00",
+          "expected": 86400
+        }
+      ]
+    },
+    {
+      "name": "F18_rice_24h_one_minute_over",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T18:01:00+01:00",
+        "component": "rice",
+        "source_limit_seconds": 86400,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "reject",
+        "age_seconds": 86460,
+        "effective_limit_seconds": 86400,
+        "reason": "ORIGINAL_COOK_STORAGE_LIMIT_EXCEEDED"
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T18:01:00+01:00",
+          "expected": 86460
+        }
+      ]
+    },
+    {
+      "name": "F19_shorter_component_exact_18h",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T12:00:00+01:00",
+        "component": "synthetic sauce",
+        "source_limit_seconds": 64800,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "valid",
+        "age_seconds": 64800,
+        "effective_limit_seconds": 64800,
+        "reason": null
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T12:00:00+01:00",
+          "expected": 64800
+        }
+      ]
+    },
+    {
+      "name": "F20_shorter_component_one_minute_over",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T12:01:00+01:00",
+        "component": "synthetic sauce",
+        "source_limit_seconds": 64800,
+        "planned_reheats": 1,
+        "storage_evidence": "synthetic complete cooling/storage/reheating premise"
+      },
+      "expected": {
+        "outcome": "reject",
+        "age_seconds": 64860,
+        "effective_limit_seconds": 64800,
+        "reason": "ORIGINAL_COOK_STORAGE_LIMIT_EXCEEDED"
+      },
+      "reasoning": "Compare elapsed instants with the inclusive planning maximum. Shorter component rules win; passing this synthetic check is not food-safety certification.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T12:01:00+01:00",
+          "expected": 64860
+        }
+      ]
+    },
+    {
+      "name": "F21_mixed_components_keep_separate_clocks",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T18:01:00+01:00",
+        "components": {
+          "chilli": 172800,
+          "rice": 86400
+        }
+      },
+      "expected": {
+        "outcome": "reject",
+        "component_results": {
+          "chilli": "valid",
+          "rice": "ORIGINAL_COOK_STORAGE_LIMIT_EXCEEDED"
+        },
+        "age_seconds": 86460
+      },
+      "reasoning": "The meal fails because rice is late although chilli is within48h; a shared batch cannot inherit its longest component limit.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-06T18:01:00+01:00",
+          "expected": 86460
+        }
+      ]
+    },
+    {
+      "name": "F22_remix_does_not_reset_clock",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "remix_assembly": "2026-10-06T18:00:00+01:00",
+        "use_at": "2026-10-07T18:01:00+01:00",
+        "limit_seconds": 172800,
+        "remix_assembly_reheated": false
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "ORIGINAL_COOK_STORAGE_LIMIT_EXCEEDED",
+        "true_age_seconds": 172860,
+        "incorrect_remix_age_seconds": 86460
+      },
+      "reasoning": "Cold remix assembly does not turn the original component into newly cooked food.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T18:00:00+01:00",
+          "end": "2026-10-07T18:01:00+01:00",
+          "expected": 172860
+        }
+      ]
+    },
+    {
+      "name": "F23_same_portion_second_reheat",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "portion": "P1",
+        "reheats": [
+          "2026-10-06T12:00:00+01:00",
+          "2026-10-06T18:00:00+01:00"
+        ],
+        "max_reheats": 1
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "PORTION_REHEATED_MORE_THAN_ONCE",
+        "planned_reheats": 2
+      },
+      "reasoning": "Within24h is insufficient: this is the same portion reheated twice. F11 has two separate portions each reheated once.",
+      "audits": []
+    },
+    {
+      "name": "F24_no_reheat_component_control",
+      "synthetic": true,
+      "requirements": [
+        "AC-11"
+      ],
+      "package": "P04c",
+      "input": {
+        "original_cook": "2026-10-05T18:00:00+01:00",
+        "use_at": "2026-10-06T12:00:00+01:00",
+        "max_reheats": 0,
+        "planned_reheats": 0,
+        "cold_suitable": true
+      },
+      "expected": {
+        "outcome": "valid",
+        "when_planned_reheats_is_1": {
+          "outcome": "reject",
+          "reason": "COMPONENT_REHEAT_PROHIBITED"
+        }
+      },
+      "reasoning": "At-most-one is an upper ceiling; a stricter component limit of zero still applies.",
+      "audits": []
+    },
+    {
+      "name": "F25_sunday_standalone_prep",
+      "synthetic": true,
+      "requirements": [
+        "AC-10"
+      ],
+      "package": "P04d",
+      "input": {
+        "week_monday": "2026-10-05",
+        "zone": "Europe/London",
+        "eat_by": "2026-10-05T08:00:00+01:00",
+        "prep_window_start": "2026-10-04T19:30:00+01:00",
+        "prep_window_end": "2026-10-04T21:00:00+01:00",
+        "tasks": [
+          {
+            "id": "mix",
+            "start": "2026-10-04T20:00:00+01:00",
+            "end": "2026-10-04T20:10:00+01:00",
+            "active_minutes": 10,
+            "depends_on": []
+          },
+          {
+            "id": "chill",
+            "start": "2026-10-04T20:10:00+01:00",
+            "end": "2026-10-05T08:00:00+01:00",
+            "active_minutes": 0,
+            "depends_on": [
+              "mix"
+            ]
+          }
+        ],
+        "ingredient_needed_at": "2026-10-04T20:00:00+01:00",
+        "existing_prior_sessions": [],
+        "ingredients_already_available": false,
+        "delivery_start": "2026-10-04T18:00:00+01:00",
+        "delivery_end": "2026-10-04T19:00:00+01:00"
+      },
+      "expected": {
+        "outcome": "valid",
+        "visible_standalone_prep": true,
+        "attached_to": null,
+        "active_minutes": 10,
+        "elapsed_minutes": 720,
+        "unattended_minutes": 710,
+        "delivery_slack_seconds": 3600,
+        "linked_slot": "2026-10-05/breakfast"
+      },
+      "reasoning": "Sunday20:00 to Monday08:00 is12h=720min. Mixing uses10min; the remaining710min is unattended. The complete delivery window ends1h before ingredients are needed.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-04T20:00:00+01:00",
+          "end": "2026-10-05T08:00:00+01:00",
+          "expected": 43200
+        },
+        {
+          "kind": "rational",
+          "expression": "720-10",
+          "expected": "710"
+        },
+        {
+          "kind": "seconds",
+          "start": "2026-10-04T19:00:00+01:00",
+          "end": "2026-10-04T20:00:00+01:00",
+          "expected": 3600
+        }
+      ]
+    },
+    {
+      "name": "F26_sunday_attach_existing_session",
+      "synthetic": true,
+      "requirements": [
+        "AC-10"
+      ],
+      "package": "P04d",
+      "input": {
+        "base_case": "F25_sunday_standalone_prep",
+        "existing_session": {
+          "id": "sunday_dinner",
+          "start": "2026-10-04T19:30:00+01:00",
+          "end": "2026-10-04T20:10:00+01:00"
+        },
+        "free_active_interval": [
+          "2026-10-04T20:00:00+01:00",
+          "2026-10-04T20:10:00+01:00"
+        ],
+        "can_attach": true
+      },
+      "expected": {
+        "outcome": "valid",
+        "attached_to": "sunday_dinner",
+        "duplicate_standalone_prep": false,
+        "ingredients_needed_at": "2026-10-04T20:00:00+01:00"
+      },
+      "reasoning": "A compatible existing session contains the whole10min active task. Attachment does not move its ingredient deadline.",
+      "audits": []
+    },
+    {
+      "name": "F27_confirmed_delivery_too_late",
+      "synthetic": true,
+      "requirements": [
+        "AC-10",
+        "AC-21"
+      ],
+      "package": "P04d/P09 boundary",
+      "input": {
+        "base_case": "F25_sunday_standalone_prep",
+        "delivery_start": "2026-10-04T19:00:00+01:00",
+        "delivery_end": "2026-10-04T21:00:00+01:00",
+        "order_confirmation": "user_confirmed",
+        "order_id": "SYNTHETIC-order-1",
+        "earliest_available_ingredients": "2026-10-04T21:00:00+01:00"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "DELIVERY_NOT_BEFORE_INGREDIENT_DEPENDENT_PREP",
+        "calendar_publication": "blocked",
+        "order_confirmation_retained": true,
+        "booked_status_retained": true,
+        "latest_window_slack_seconds": -3600
+      },
+      "reasoning": "The window overlaps prep and can finish1h too late. Its start cannot prove timely delivery. Block publication; retain the actual confirmed order.",
+      "audits": [
+        {
+          "kind": "seconds",
+          "start": "2026-10-04T21:00:00+01:00",
+          "end": "2026-10-04T20:00:00+01:00",
+          "expected": -3600
+        }
+      ]
+    },
+    {
+      "name": "F28_active_and_elapsed_overlap",
+      "synthetic": true,
+      "requirements": [
+        "AC-10"
+      ],
+      "package": "P04d",
+      "input": {
+        "eat_by": "2026-10-05T18:00:00+01:00",
+        "one_cook": true,
+        "tasks": [
+          {
+            "id": "oven_prep",
+            "active": [
+              "2026-10-05T17:00:00+01:00",
+              "2026-10-05T17:10:00+01:00"
+            ],
+            "elapsed": [
+              "2026-10-05T17:00:00+01:00",
+              "2026-10-05T17:40:00+01:00"
+            ],
+            "depends_on": []
+          },
+          {
+            "id": "sauce",
+            "active": [
+              "2026-10-05T17:10:00+01:00",
+              "2026-10-05T17:25:00+01:00"
+            ],
+            "elapsed": [
+              "2026-10-05T17:10:00+01:00",
+              "2026-10-05T17:30:00+01:00"
+            ],
+            "depends_on": []
+          },
+          {
+            "id": "assemble",
+            "active": [
+              "2026-10-05T17:40:00+01:00",
+              "2026-10-05T17:50:00+01:00"
+            ],
+            "elapsed": [
+              "2026-10-05T17:40:00+01:00",
+              "2026-10-05T17:50:00+01:00"
+            ],
+            "depends_on": [
+              "oven_prep",
+              "sauce"
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "valid",
+        "active_minutes": 35,
+        "elapsed_minutes": 50,
+        "incorrect_sum_elapsed_minutes": 70,
+        "eat_by_slack_minutes": 10
+      },
+      "reasoning": "10+15+10=35 active minutes. Sauce runs during unattended oven time. Assembly waits for both at17:40; complete17:50. Overall50min, not40+20+10=70.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "10+15+10",
+          "expected": "35"
+        },
+        {
+          "kind": "rational",
+          "expression": "40+20+10",
+          "expected": "70"
+        },
+        {
+          "kind": "seconds",
+          "start": "2026-10-05T17:00:00+01:00",
+          "end": "2026-10-05T17:50:00+01:00",
+          "expected": 3000
+        }
+      ]
+    },
+    {
+      "name": "F29_unknown_perishable_date",
+      "synthetic": true,
+      "requirements": [
+        "AC-10",
+        "AC-15"
+      ],
+      "package": "P04d/P08a",
+      "input": {
+        "product": "SYNTHETIC-yoghurt",
+        "observed_at": "2026-10-04T19:00:00+01:00",
+        "actual_use_by": null,
+        "planned_use": "2026-10-11T08:00:00+01:00"
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "PERISHABLE_DATE_UNKNOWN",
+        "fresh_all_week": false
+      },
+      "reasoning": "A planned week or plausible shelf life is not evidence of a delivered pack date.",
+      "audits": []
+    },
+    {
+      "name": "F30_have_enough_exact",
+      "synthetic": true,
+      "requirements": [
+        "AC-12"
+      ],
+      "package": "P04d",
+      "input": {
+        "line": "SYNTHETIC-rice-line",
+        "displayed": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "confirmed_digest": "DEMAND-A",
+        "confirmation": "have_enough",
+        "confirmation_at": "2026-10-03T10:00:00+01:00",
+        "current": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry",
+          "digest": "DEMAND-A"
+        }
+      },
+      "expected": {
+        "outcome": "valid",
+        "reason": null,
+        "confirmation_usable": true,
+        "retained_required_amount": "200",
+        "shopping_amount": "0",
+        "renew_confirmation": false
+      },
+      "reasoning": "The full exact displayed demand remains traceable. Only its matching confirmation can suppress shopping; changed amount, form or bound demand digest requires renewed confirmation. Digests here are symbolic fixture identities, not wire digests.",
+      "audits": []
+    },
+    {
+      "name": "F31_have_enough_amount_changed",
+      "synthetic": true,
+      "requirements": [
+        "AC-12"
+      ],
+      "package": "P04d",
+      "input": {
+        "line": "SYNTHETIC-rice-line",
+        "displayed": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "confirmed_digest": "DEMAND-A",
+        "confirmation": "have_enough",
+        "confirmation_at": "2026-10-03T10:00:00+01:00",
+        "current": {
+          "amount": "250",
+          "unit": "g",
+          "form": "dry",
+          "digest": "DEMAND-A"
+        }
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "ESSENTIAL_CONFIRMATION_AMOUNT_CHANGED",
+        "confirmation_usable": false,
+        "retained_required_amount": "250",
+        "shopping_amount": "250",
+        "renew_confirmation": true
+      },
+      "reasoning": "The full exact displayed demand remains traceable. Only its matching confirmation can suppress shopping; changed amount, form or bound demand digest requires renewed confirmation. Digests here are symbolic fixture identities, not wire digests.",
+      "audits": []
+    },
+    {
+      "name": "F32_have_enough_form_changed",
+      "synthetic": true,
+      "requirements": [
+        "AC-12"
+      ],
+      "package": "P04d",
+      "input": {
+        "line": "SYNTHETIC-rice-line",
+        "displayed": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "confirmed_digest": "DEMAND-A",
+        "confirmation": "have_enough",
+        "confirmation_at": "2026-10-03T10:00:00+01:00",
+        "current": {
+          "amount": "200",
+          "unit": "g",
+          "form": "cooked",
+          "digest": "DEMAND-A"
+        }
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "ESSENTIAL_CONFIRMATION_FORM_CHANGED",
+        "confirmation_usable": false,
+        "retained_required_amount": "200",
+        "shopping_amount": "200",
+        "renew_confirmation": true
+      },
+      "reasoning": "The full exact displayed demand remains traceable. Only its matching confirmation can suppress shopping; changed amount, form or bound demand digest requires renewed confirmation. Digests here are symbolic fixture identities, not wire digests.",
+      "audits": []
+    },
+    {
+      "name": "F33_have_enough_digest_changed",
+      "synthetic": true,
+      "requirements": [
+        "AC-12"
+      ],
+      "package": "P04d",
+      "input": {
+        "line": "SYNTHETIC-rice-line",
+        "displayed": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "confirmed_digest": "DEMAND-A",
+        "confirmation": "have_enough",
+        "confirmation_at": "2026-10-03T10:00:00+01:00",
+        "current": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry",
+          "digest": "DEMAND-B"
+        }
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "ESSENTIAL_CONFIRMATION_DIGEST_CHANGED",
+        "confirmation_usable": false,
+        "retained_required_amount": "200",
+        "shopping_amount": "200",
+        "renew_confirmation": true
+      },
+      "reasoning": "The full exact displayed demand remains traceable. Only its matching confirmation can suppress shopping; changed amount, form or bound demand digest requires renewed confirmation. Digests here are symbolic fixture identities, not wire digests.",
+      "audits": []
+    },
+    {
+      "name": "F34_previous_purchase_is_not_stock",
+      "synthetic": true,
+      "requirements": [
+        "AC-12"
+      ],
+      "package": "P04d",
+      "input": {
+        "required": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "last_week_purchase": {
+          "amount": "1000",
+          "unit": "g",
+          "form": "dry"
+        },
+        "confirmation": null
+      },
+      "expected": {
+        "outcome": "valid",
+        "demand": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "shopping": {
+          "amount": "200",
+          "unit": "g",
+          "form": "dry"
+        },
+        "assumed_stock": {
+          "amount": "0",
+          "unit": "g",
+          "form": "dry"
+        }
+      },
+      "reasoning": "A previous purchase does not say what remains. No automatic subtraction.",
+      "audits": []
+    },
+    {
+      "name": "F35_drained_not_gross",
+      "synthetic": true,
+      "requirements": [
+        "AC-13"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "gross_g": "400",
+            "price_pence": "80"
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "160",
+        "gross_total_g": "800"
+      },
+      "reasoning": "ceil(480/240)=2 tins. 400g gross is irrelevant to drained coverage; total spend2\u00d780=160p.",
+      "audits": []
+    },
+    {
+      "name": "F36_eggs_whole_packs",
+      "synthetic": true,
+      "requirements": [
+        "AC-13"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "7",
+          "unit": "each",
+          "form": "whole"
+        },
+        "packs": [
+          {
+            "id": "six",
+            "usable_amount": "6",
+            "unit": "each",
+            "form": "whole",
+            "price_pence": "150"
+          },
+          {
+            "id": "ten",
+            "usable_amount": "10",
+            "unit": "each",
+            "form": "whole",
+            "price_pence": "220"
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "six": 0,
+          "ten": 1
+        },
+        "covered_amount": "10",
+        "surplus": "3",
+        "purchase_pence": "220"
+      },
+      "reasoning": "Two six-packs cost300p and leave5; one ten-pack costs220p and leaves3. Seven eggs is discrete demand; do not buy1.1667 packs.",
+      "audits": []
+    },
+    {
+      "name": "F37_fractional_egg_without_supported_scaling",
+      "synthetic": true,
+      "requirements": [
+        "AC-08",
+        "AC-13"
+      ],
+      "package": "P04b",
+      "input": {
+        "base_servings": "2",
+        "eggs": {
+          "amount": "3",
+          "unit": "each",
+          "form": "whole"
+        },
+        "requested_servings": "1",
+        "discrete": true,
+        "scaling": "linear only; no supported whole-batch option"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "INDIVISIBLE_UNIT_REQUIRES_SUPPORTED_SCALING",
+        "naive_eggs": "3/2"
+      },
+      "reasoning": "3 eggs\u00d71/2 would be1.5 whole eggs. Do not silently round ingredient amounts.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "3*1/2",
+          "expected": "3/2"
+        }
+      ]
+    },
+    {
+      "name": "F38_discrete_batch_scaling_control",
+      "synthetic": true,
+      "requirements": [
+        "AC-08",
+        "AC-13"
+      ],
+      "package": "P04b",
+      "input": {
+        "batch_servings": "2",
+        "eggs": {
+          "amount": "3",
+          "unit": "each",
+          "form": "whole"
+        },
+        "requested_servings": "3",
+        "scaling": {
+          "discrete_batches": "2",
+          "maximum_batches": 3
+        }
+      },
+      "expected": {
+        "outcome": "valid",
+        "batches": 2,
+        "produced_servings": "4",
+        "allocated_servings": "3",
+        "unallocated_servings": "1",
+        "eggs": {
+          "amount": "6",
+          "unit": "each",
+          "form": "whole"
+        }
+      },
+      "reasoning": "The explicit batch policy allows two whole batches:4 servings and6 eggs. Record1 unallocated serving; do not invent a scheduled leftover.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "2*3",
+          "expected": "6"
+        },
+        {
+          "kind": "rational",
+          "expression": "2*2-3",
+          "expected": "1"
+        }
+      ]
+    },
+    {
+      "name": "F39_dry_cooked_without_conversion",
+      "synthetic": true,
+      "requirements": [
+        "AC-13"
+      ],
+      "package": "P04/P08b",
+      "input": {
+        "demand": {
+          "amount": "300",
+          "unit": "g",
+          "form": "cooked"
+        },
+        "product": {
+          "amount": "500",
+          "unit": "g",
+          "form": "dry"
+        },
+        "ingredient": "SYNTHETIC-rice",
+        "conversion_evidence": []
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "UNSUPPORTED_DRY_TO_COOKED_CONVERSION",
+        "pack_count": null
+      },
+      "reasoning": "Mass units agree but forms do not. A guessed absorption factor is not evidence.",
+      "audits": []
+    },
+    {
+      "name": "F40_scoped_conversion_control",
+      "synthetic": true,
+      "requirements": [
+        "AC-13"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "100",
+          "unit": "g",
+          "form": "dry"
+        },
+        "packs": [
+          {
+            "id": "dry-rice",
+            "usable_amount": "500",
+            "unit": "g",
+            "form": "dry",
+            "price_pence": "120"
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "conversion": {
+          "ingredient": "SYNTHETIC-rice",
+          "recipe": "SYNTHETIC-rice-recipe@1",
+          "from": "g dry",
+          "to": "g cooked",
+          "factor": "3",
+          "original_demand": {
+            "amount": "300",
+            "unit": "g",
+            "form": "cooked"
+          },
+          "evidence": "SYNTHETIC-scoped-conversion"
+        }
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "dry-rice": 1
+        },
+        "covered_amount": "500",
+        "surplus": "400",
+        "purchase_pence": "120",
+        "original_cooked_demand": "300"
+      },
+      "reasoning": "Explicit synthetic conversion for this ingredient and recipe is cooked/dry=3. 300g cooked/3=100g dry; one500g bag leaves400g dry. This invented factor is test data only.",
+      "audits": []
+    },
+    {
+      "name": "F41_pack_mix_lowest_full_spend",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "750",
+          "unit": "g",
+          "form": "raw"
+        },
+        "packs": [
+          {
+            "id": "small",
+            "usable_amount": "250",
+            "unit": "g",
+            "form": "raw",
+            "price_pence": "90"
+          },
+          {
+            "id": "large",
+            "usable_amount": "500",
+            "unit": "g",
+            "form": "raw",
+            "price_pence": "150"
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "small": 1,
+          "large": 1
+        },
+        "covered_amount": "750",
+        "surplus": "0",
+        "purchase_pence": "240"
+      },
+      "reasoning": "3 small cost270p;2 large cost300p and surplus250g;1 of each costs240p with no surplus. Unit price alone does not select the basket.",
+      "audits": []
+    },
+    {
+      "name": "F42_loyalty_member_control",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 1,
+              "total_pence": "70",
+              "loyalty_required": true,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "yes"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "loyalty": "confirmed_member"
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "140",
+        "offer_used": true
+      },
+      "reasoning": "Two packs. Applicable observed member price70p gives140p; otherwise known standard100p gives200p. Observation before expiry does not make a later delivery eligible.",
+      "audits": []
+    },
+    {
+      "name": "F43_loyalty_nonmember",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 1,
+              "total_pence": "70",
+              "loyalty_required": true,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "yes"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "loyalty": "not_member"
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "200",
+        "offer_used": false
+      },
+      "reasoning": "Two packs. Applicable observed member price70p gives140p; otherwise known standard100p gives200p. Observation before expiry does not make a later delivery eligible.",
+      "audits": []
+    },
+    {
+      "name": "F44_loyalty_unknown",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 1,
+              "total_pence": "70",
+              "loyalty_required": true,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "yes"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "loyalty": "unknown"
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "200",
+        "offer_used": false
+      },
+      "reasoning": "Two packs. Applicable observed member price70p gives140p; otherwise known standard100p gives200p. Observation before expiry does not make a later delivery eligible.",
+      "audits": []
+    },
+    {
+      "name": "F45_offer_expired_by_delivery",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 1,
+              "total_pence": "70",
+              "loyalty_required": true,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "yes"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-06",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "loyalty": "confirmed_member"
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "200",
+        "offer_used": false
+      },
+      "reasoning": "Two packs. Applicable observed member price70p gives140p; otherwise known standard100p gives200p. Observation before expiry does not make a later delivery eligible.",
+      "audits": []
+    },
+    {
+      "name": "F46_offer_delivery_applicability_unknown",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 1,
+              "total_pence": "70",
+              "loyalty_required": true,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "unknown"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8,
+        "loyalty": "confirmed_member"
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "200",
+        "offer_used": false
+      },
+      "reasoning": "Two packs. Applicable observed member price70p gives140p; otherwise known standard100p gives200p. Observation before expiry does not make a later delivery eligible.",
+      "audits": []
+    },
+    {
+      "name": "F47_multibuy_overbuy_costs_more",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "tin",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "100",
+            "offer": {
+              "minimum_packs": 3,
+              "total_pence": "270",
+              "loyalty_required": false,
+              "valid_from": "2026-10-01",
+              "valid_to": "2026-10-05",
+              "delivery_applicable": "yes"
+            }
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "tin": 2
+        },
+        "covered_amount": "480",
+        "surplus": "0",
+        "purchase_pence": "200",
+        "offer_used": false,
+        "rejected_offer": {
+          "packs": 3,
+          "purchase_pence": "270",
+          "surplus": "240"
+        }
+      },
+      "reasoning": "90p promoted unit price is lower, but270p full purchase is70p more than the required two tins. No extra pack merely to obtain the offer.",
+      "audits": []
+    },
+    {
+      "name": "F48_zero_is_known_price",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "240",
+          "unit": "g",
+          "form": "drained"
+        },
+        "packs": [
+          {
+            "id": "free",
+            "usable_amount": "240",
+            "unit": "g",
+            "form": "drained",
+            "price_pence": "0"
+          }
+        ],
+        "observed_at": "2026-10-03T10:00:00+01:00",
+        "delivery_date": "2026-10-04",
+        "all_pack_labels": "synthetically known suitable",
+        "availability": "in_stock",
+        "objective": "minimum full purchase pence; then minimum surplus",
+        "max_packs_each": 8
+      },
+      "expected": {
+        "outcome": "valid",
+        "counts": {
+          "free": 1
+        },
+        "covered_amount": "240",
+        "surplus": "0",
+        "purchase_pence": "0"
+      },
+      "reasoning": "A synthetic observed zero price is known. Equal-cost excessive free packs lose on surplus.",
+      "audits": []
+    },
+    {
+      "name": "F49_unknown_price_not_zero",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "240",
+          "unit": "g",
+          "form": "drained"
+        },
+        "pack": {
+          "amount": "240",
+          "unit": "g",
+          "form": "drained"
+        },
+        "price": null,
+        "price_state": "unknown"
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "PRICE_UNKNOWN",
+        "physical_packs_required": 1,
+        "purchase_pence": null,
+        "ready_for_checkout": false
+      },
+      "reasoning": "Physical coverage can be computed, but unknown price cannot be ranked as free or approved as a known basket total.",
+      "audits": []
+    },
+    {
+      "name": "F50_unknown_or_conflicting_product_label",
+      "synthetic": true,
+      "requirements": [
+        "AC-09",
+        "AC-15"
+      ],
+      "package": "P08a",
+      "input": {
+        "required": [
+          "gluten_free"
+        ],
+        "title": "SYNTHETIC gluten-free sauce",
+        "variants": [
+          {
+            "id": "unknown",
+            "ingredients": "unknown",
+            "allergens": "unknown"
+          },
+          {
+            "id": "conflicting",
+            "ingredients": [
+              "contains wheat",
+              "gluten free"
+            ],
+            "allergens": "conflicting"
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "line_results": {
+          "unknown": "PRODUCT_LABEL_UNKNOWN",
+          "conflicting": "PRODUCT_LABEL_CONFLICTING"
+        },
+        "suitable_product_ids": [],
+        "ready_for_checkout": false
+      },
+      "reasoning": "Neither title nor conflicting observations establish suitability. Do not silently substitute a cooking variant.",
+      "audits": []
+    },
+    {
+      "name": "F51_known_label_positive_control",
+      "synthetic": true,
+      "requirements": [
+        "AC-15"
+      ],
+      "package": "P08a",
+      "input": {
+        "required": [
+          "gluten_free"
+        ],
+        "product": "SYNTHETIC-reviewed-GF-sauce",
+        "ingredients": "known synthetic matching reviewed variant",
+        "allergens": "known synthetic supported GF evidence",
+        "review": "SYNTHETIC reviewed interpretation",
+        "availability": "in_stock",
+        "price_pence": "100"
+      },
+      "expected": {
+        "outcome": "valid",
+        "product_suitability": "supported_under_fixture_premises"
+      },
+      "reasoning": "Known coherent evidence supports this synthetic line; actual retailer label interpretation still needs real evidence.",
+      "audits": []
+    },
+    {
+      "name": "F52_incomplete_import_capability_boundary",
+      "synthetic": true,
+      "requirements": [
+        "AC-24"
+      ],
+      "package": "P04a",
+      "input": {
+        "candidate": "SYNTHETIC-import@1",
+        "ingredients": [
+          {
+            "id": "beans",
+            "quantity": null
+          }
+        ],
+        "yield_servings": null,
+        "text_rights": "unresolved",
+        "storage_evidence": null,
+        "nutrition": null,
+        "imported_claims": {
+          "shopping": true,
+          "cook_test": "AI says cooked"
+        }
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "state": "candidate",
+        "shopping": false,
+        "leftovers": false,
+        "starter_distribution": false,
+        "nutrition": null,
+        "cook_test_evidence_accepted": false,
+        "reasons": [
+          "CRITICAL_QUANTITY_MISSING",
+          "YIELD_MISSING",
+          "RIGHTS_UNRESOLVED",
+          "STORAGE_EVIDENCE_MISSING",
+          "AUTOMATED_COOK_TEST_INVALID"
+        ]
+      },
+      "reasoning": "Imported claims cannot manufacture capabilities. Missing nutrition stays absent; this is not a zero value.",
+      "audits": []
+    },
+    {
+      "name": "F53_immutable_recipe_revision",
+      "synthetic": true,
+      "requirements": [
+        "AC-24"
+      ],
+      "package": "P04a/P02 boundary",
+      "input": {
+        "recipe": "SYNTHETIC-beans",
+        "accepted_revision_1": {
+          "beans": {
+            "amount": "480",
+            "unit": "g",
+            "form": "drained"
+          },
+          "text_attribution": "SYNTHETIC author A",
+          "image_attribution": "SYNTHETIC artist B",
+          "rights": "permitted premise"
+        },
+        "approved_plan_ref": "SYNTHETIC-beans@1",
+        "edit_revision_2": {
+          "beans": {
+            "amount": "600",
+            "unit": "g",
+            "form": "drained"
+          }
+        },
+        "retain_attribution": true
+      },
+      "expected": {
+        "outcome": "valid",
+        "new_ref": "SYNTHETIC-beans@2",
+        "approved_ref": "SYNTHETIC-beans@1",
+        "approved_beans": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "new_candidate_beans": {
+          "amount": "600",
+          "unit": "g",
+          "form": "drained"
+        },
+        "text_attribution": "SYNTHETIC author A",
+        "image_attribution": "SYNTHETIC artist B",
+        "approved_snapshot_rewritten": false
+      },
+      "reasoning": "An edit creates a new revision requiring its own checks; it does not rewrite an approved480g snapshot or drop attribution.",
+      "audits": []
+    },
+    {
+      "name": "F54_known_product_use_by_wins",
+      "synthetic": true,
+      "requirements": [
+        "AC-10",
+        "AC-15"
+      ],
+      "package": "P04d/P08a",
+      "input": {
+        "product": "SYNTHETIC-yoghurt",
+        "use_by_date": "2026-10-06",
+        "planned_use": "2026-10-07T08:00:00+01:00",
+        "generic_shelf_life_claim_days": 7,
+        "delivery_date": "2026-10-04"
+      },
+      "expected": {
+        "outcome": "reject",
+        "reason": "PRODUCT_USE_BY_BEFORE_PLANNED_USE",
+        "generic_shelf_life_override": false
+      },
+      "reasoning": "Known product date ends before the planned use day; a generic seven-day claim cannot extend it. No midnight boundary ambiguity is used.",
+      "audits": []
+    },
+    {
+      "name": "F55_estimated_cost_not_observed",
+      "synthetic": true,
+      "requirements": [
+        "AC-14"
+      ],
+      "package": "P08b",
+      "input": {
+        "demand": {
+          "amount": "480",
+          "unit": "g",
+          "form": "drained"
+        },
+        "pack": {
+          "amount": "240",
+          "unit": "g",
+          "form": "drained"
+        },
+        "price_state": "estimated",
+        "estimated_pence_per_pack": "90"
+      },
+      "expected": {
+        "outcome": "unresolved",
+        "reason": "LIVE_PRICE_NOT_OBSERVED",
+        "physical_packs_required": 2,
+        "display_estimate_pence": "180",
+        "observed_purchase_pence": null
+      },
+      "reasoning": "Two estimated90p packs support only a labelled180p estimate; they do not establish an observed checkout total.",
+      "audits": [
+        {
+          "kind": "rational",
+          "expression": "2*90",
+          "expected": "180"
+        }
+      ]
+    }
+  ]
+}

@@ -362,6 +362,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "mstrchf-core"
+version = "0.1.0"
+dependencies = [
+ "mstrchf-contracts",
+ "serde_json",
+]
+
+[[package]]
 name = "num"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
