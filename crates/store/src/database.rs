@@ -1,73 +1,74 @@
-use crate::{migrate, records::*, recovery, snapshot};
-use mstrchf_contracts::*;
-use rusqlite::{Connection, OpenFlags};
-use std::{
-    fs::{File, OpenOptions},
-    path::{Path, PathBuf},
-    time::Duration,
+use crate::{
+    custody::{GuardedLive, StoreLock, TrustedStoreRoot},
+    records::*,
+    recovery, snapshot,
+    startup::{self, Catalogue},
 };
+use mstrchf_contracts::*;
+use rusqlite::Connection;
+use std::path::{Path, PathBuf};
 
 pub(crate) struct Database {
     pub(crate) connection: Connection,
     pub(crate) path: PathBuf,
-    _lock: File,
-    recovery_only: bool,
-}
-pub(crate) fn connect(path: &Path) -> Result<Connection, DomainError> {
-    let ro =
-        Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY).map_err(storage)?;
-    ro.execute_batch("PRAGMA foreign_keys=ON; PRAGMA trusted_schema=OFF;")
-        .map_err(storage)?;
-    migrate::verify(&ro)?;
-    ro.close().map_err(|(_, e)| storage(e))?;
-    let c =
-        Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_WRITE).map_err(storage)?;
-    if rusqlite::version_number() < 3_051_003 {
-        return Err(storage("unpatched SQLite"));
-    }
-    c.busy_timeout(Duration::from_millis(2000))
-        .map_err(storage)?;
-    c.execute_batch("PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA foreign_keys=ON; PRAGMA trusted_schema=OFF;").map_err(storage)?;
-    let mode: String = c
-        .pragma_query_value(None, "journal_mode", |r| r.get(0))
-        .map_err(storage)?;
-    for (pragma, want) in [
-        ("synchronous", 2),
-        ("foreign_keys", 1),
-        ("trusted_schema", 0),
-        ("busy_timeout", 2000),
-    ] {
-        let got: i64 = c
-            .pragma_query_value(None, pragma, |r| r.get(0))
-            .map_err(storage)?;
-        if got != want {
-            return Err(storage("SQLite settings"));
-        }
-    }
-    if mode != "wal" {
-        return Err(storage("WAL unavailable"));
-    }
-    Ok(c)
+    pub(crate) live: GuardedLive,
+    _lock: StoreLock,
+    pub(crate) root: TrustedStoreRoot,
+    pub(crate) recovery_only: bool,
+    // Declared after connection: owner destruction closes SQLite before releasing
+    // unresolved upgrade evidence. Dropping a Maintenance borrow cannot release it.
+    upgrade_backup: Option<crate::backup::VerifiedBackupReceipt>,
 }
 impl Database {
-    pub(crate) fn open(root: &Path) -> Result<Self, DomainError> {
-        std::fs::create_dir_all(root).map_err(storage)?;
-        let lock = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .create(true)
-            .truncate(false)
-            .open(root.join("store.lock"))
-            .map_err(storage)?;
-        lock.try_lock().map_err(storage)?;
-        recovery::prepare(root)?;
-        let path = root.join("planner.sqlite");
-        let connection = connect(&path)?;
+    pub(crate) fn has_upgrade_backup(&self) -> bool {
+        self.upgrade_backup.is_some()
+    }
+    #[cfg(test)]
+    pub(crate) fn retain_upgrade_backup(
+        &mut self,
+        receipt: crate::backup::VerifiedBackupReceipt,
+    ) -> Result<(), DomainError> {
+        if !self.recovery_only || self.upgrade_backup.is_some() {
+            return Err(storage("upgrade custody state"));
+        }
+        self.upgrade_backup = Some(receipt);
+        Ok(())
+    }
+    #[cfg(test)]
+    pub(crate) fn release_resolved_upgrade(&mut self) {
+        // Only the closed fixture runner calls this, after exact target audit,
+        // normal configuration and its final fallible ready barrier.
+        self.upgrade_backup = None;
+        self.recovery_only = false;
+    }
+    #[cfg(test)]
+    pub(crate) fn invalidate_lock_for_test(&mut self) {
+        self._lock.invalidate_identity_for_test();
+    }
+    pub(crate) fn verify_owner(&self) -> Result<(), DomainError> {
+        self._lock.reverify()?;
+        self.live.reverify()
+    }
+    pub(crate) fn open(path: &Path) -> Result<Self, DomainError> {
+        Self::open_catalogue(path, Catalogue::B1)
+    }
+    pub(crate) fn open_catalogue(path: &Path, catalogue: Catalogue) -> Result<Self, DomainError> {
+        let root = TrustedStoreRoot::open_or_create(path)?;
+        let lock = root.acquire_store_lock()?;
+        // Only actual native absence permits the separate initialisation protocol.
+        if root.seal_leaf("planner.sqlite")?.is_none() {
+            recovery::prepare(root.path())?;
+        }
+        let (connection, live) = startup::open(&root, &lock, catalogue)?;
+        let path = live.path().to_owned();
         Ok(Self {
             connection,
             path,
+            live,
             _lock: lock,
+            root,
             recovery_only: false,
+            upgrade_backup: None,
         })
     }
     pub(crate) fn snapshot(&mut self) -> Result<Snapshot, DomainError> {
@@ -99,7 +100,12 @@ impl Database {
             if crate::tests::recovery_unavailable() {
                 return Err(storage("injected reopen failure"));
             }
-            self.connection = connect(&self.path)?;
+            self.verify_owner()?;
+            self.connection = startup::writable_query_only(&self.path)?;
+            // Preserve B1 command recovery: this retained owner is not fresh
+            // startup recognition or a verified-backup maintenance session.
+            crate::migrate::verify(&self.connection)?;
+            startup::configure(&self.connection)?;
             let receipt = crate::receipts::lookup(&self.connection, command, bytes)?;
             self.recovery_only = false;
             if let Some(response) = receipt {
