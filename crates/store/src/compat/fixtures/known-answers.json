@@ -1,0 +1,183 @@
+{
+  "status": "AUTHOR_LITERAL_BYTES_ONLY_NOT_RUNTIME_TESTS",
+  "encoding": "UTF-8 no BOM, no trailing newline; ASCII keys/string values; sorted object keys; no whitespace",
+  "vectors": [
+    {
+      "file": "fixtures/old-draft.json",
+      "bytes": 178,
+      "sha256": "782ee7df3e30a09c8b02949ea70eef4c17f7f1ee5096cdf2f92cab33cc16be1b"
+    },
+    {
+      "file": "fixtures/old-initial-snapshot.json",
+      "bytes": 402,
+      "sha256": "9f5fc3277e38b97572ea87d12dcdb2e5efd21eff09918d9383ed73bd4205093b"
+    },
+    {
+      "file": "fixtures/old-save-command.json",
+      "bytes": 342,
+      "sha256": "8ad9ff2574b79a0d1b0a8beff9483ca0c9b5044c61a0dfa5c57d90a781e96a83"
+    },
+    {
+      "file": "fixtures/old-save-response.json",
+      "bytes": 402,
+      "sha256": "6029cc29d47b643664570e805b3951be2f3cb330003278c2a0685e691afc1c4f"
+    },
+    {
+      "file": "fixtures/old-privacy-command.json",
+      "bytes": 286,
+      "sha256": "20e5a308d645382e338d62b9c3b80a721cce5db1064d789e0be0113fba64231a"
+    },
+    {
+      "file": "fixtures/old-privacy-response.json",
+      "bytes": 402,
+      "sha256": "f65b7475c631faacc32e637aded645a65f28a54e62d8f544690e0e7b3afb3ce7"
+    },
+    {
+      "file": "fixtures/old-cancel-command.json",
+      "bytes": 192,
+      "sha256": "cd20d38eb07089cd35e79a32b0ea9ed78cc9c8387329557ab0ceacb55de61a5c"
+    },
+    {
+      "file": "fixtures/old-cancel-response.json",
+      "bytes": 529,
+      "sha256": "9913d6046e3bc23ed0a58df231e206f6a20230739edb91b96192e8a1e30c2e9a"
+    },
+    {
+      "file": "fixtures/new-transition-snapshot.json",
+      "bytes": 431,
+      "sha256": "f633b22491f34619b81ae21555be30a30f9566600594b9c03404248a76c20112"
+    },
+    {
+      "file": "fixtures/new-transition-draft.json",
+      "bytes": 207,
+      "sha256": "b5d57013f03355d2c4a4dd032869e6ae8dda78a03499aeb4cc1c7668172a3f53"
+    },
+    {
+      "file": "fixtures/new-identical-privacy-command.json",
+      "bytes": 286,
+      "sha256": "20e5a308d645382e338d62b9c3b80a721cce5db1064d789e0be0113fba64231a"
+    },
+    {
+      "file": "fixtures/new-identical-cancel-command.json",
+      "bytes": 192,
+      "sha256": "cd20d38eb07089cd35e79a32b0ea9ed78cc9c8387329557ab0ceacb55de61a5c"
+    },
+    {
+      "file": "fixtures/new-issue-command.json",
+      "bytes": 791,
+      "sha256": "8693be98745fc75e05519749459344f47a177dc1812f67b02a8539e0572e02b5"
+    },
+    {
+      "file": "fixtures/new-issue-response.json",
+      "bytes": 822,
+      "sha256": "6e6f1b1d54c7cd01c11e6684631f23b3365c22a7ff9161c98760794784271a1f"
+    },
+    {
+      "file": "fixtures/new-resolve-command.json",
+      "bytes": 779,
+      "sha256": "f94cf922dd0377ee9aba9e9287082a1b22b7b858465588ef29e04fae21a17a7a"
+    },
+    {
+      "file": "fixtures/new-resolve-response.json",
+      "bytes": 734,
+      "sha256": "37532e60199472dcf87a481b43826bb3329c337f8b0b70fdcace7820abe8b539"
+    },
+    {
+      "file": "fixtures/same-id-different-command.json",
+      "bytes": 286,
+      "sha256": "6a021c1fec4170bc400f699ddae1cac09d94d5b0479a6754417e893c1b883eb3"
+    },
+    {
+      "file": "fixtures/new-missing-edits-command.json",
+      "bytes": 762,
+      "sha256": "0b8bcaa18a64b27c5d3d164a297156b15a4815956651bb3daf42fc99b701c274"
+    },
+    {
+      "file": "fixtures/new-missing-issues-draft.json",
+      "bytes": 430,
+      "sha256": "7ec7f27be9f82d8c4343423e4f71cc11b46044897a95bf822b6175579acaa984"
+    },
+    {
+      "file": "fixtures/new-null-issues-draft.json",
+      "bytes": 461,
+      "sha256": "7eb6c0d7f5c89b23eed9b1b0159e1930eff3d7eea9ccba61b5f5b8bfdee355f1"
+    },
+    {
+      "file": "fixtures/old-unconfirmed-draft.json",
+      "bytes": 430,
+      "sha256": "ef2b192f87419f844b977823b23c71764afc3bc3a6dd94b6ffc8cfc2d6982945"
+    },
+    {
+      "file": "fixtures/new-unconfirmed-transition-draft.json",
+      "bytes": 459,
+      "sha256": "3ea8f273827a40b2a6f17c7567b9ba63a1dc8ae84073512a53954832c124dade"
+    },
+    {
+      "file": "fixtures/old-profile-readable-snapshot.json",
+      "bytes": 5425,
+      "sha256": "4f0f5b5ec97abe75bf7fe6015de6db9df55ad7ab4a0812506f1ac6823fbbfaf1"
+    },
+    {
+      "file": "fixtures/unsupported-update-profile-command.json",
+      "bytes": 5219,
+      "sha256": "1710c591501ba4cd06326a06d8abc1ac165d7d951deb9c2fee675b9c0f9cb579"
+    },
+    {
+      "file": "fixtures/unsupported-conflict-snapshot.json",
+      "bytes": 506,
+      "sha256": "a9da59b15daa453243bcc7787f62d85087d9136f0fd41641694926ab69c1c2a3"
+    },
+    {
+      "file": "fixtures/new-save-same-id-command.json",
+      "bytes": 400,
+      "sha256": "018d5c04f347b33c754547e42717d8b1ebaf4e2d4eaf0d2a504bf0a35b8c81b0"
+    }
+  ],
+  "independent_receipt_examples": [
+    {
+      "command_id": "cm_00000000000000000000000000000001",
+      "command_file": "fixtures/old-save-command.json",
+      "command_digest": "8ad9ff2574b79a0d1b0a8beff9483ca0c9b5044c61a0dfa5c57d90a781e96a83",
+      "response_file": "fixtures/old-save-response.json",
+      "response_digest": "6029cc29d47b643664570e805b3951be2f3cb330003278c2a0685e691afc1c4f",
+      "snapshot_revision": "2",
+      "proposed_profile": "B1RetainedV1"
+    },
+    {
+      "command_id": "cm_00000000000000000000000000000002",
+      "command_file": "fixtures/old-privacy-command.json",
+      "command_digest": "20e5a308d645382e338d62b9c3b80a721cce5db1064d789e0be0113fba64231a",
+      "response_file": "fixtures/old-privacy-response.json",
+      "response_digest": "f65b7475c631faacc32e637aded645a65f28a54e62d8f544690e0e7b3afb3ce7",
+      "snapshot_revision": "2",
+      "proposed_profile": "B1RetainedV1"
+    },
+    {
+      "command_id": "cm_00000000000000000000000000000006",
+      "command_file": "fixtures/old-cancel-command.json",
+      "command_digest": "cd20d38eb07089cd35e79a32b0ea9ed78cc9c8387329557ab0ceacb55de61a5c",
+      "response_file": "fixtures/old-cancel-response.json",
+      "response_digest": "9913d6046e3bc23ed0a58df231e206f6a20230739edb91b96192e8a1e30c2e9a",
+      "snapshot_revision": "2",
+      "proposed_profile": "B1RetainedV1"
+    },
+    {
+      "command_id": "cm_00000000000000000000000000000003",
+      "command_file": "fixtures/new-issue-command.json",
+      "command_digest": "8693be98745fc75e05519749459344f47a177dc1812f67b02a8539e0572e02b5",
+      "response_file": "fixtures/new-issue-response.json",
+      "response_digest": "6e6f1b1d54c7cd01c11e6684631f23b3365c22a7ff9161c98760794784271a1f",
+      "snapshot_revision": "4",
+      "proposed_profile": "B1Draft005"
+    },
+    {
+      "command_id": "cm_00000000000000000000000000000004",
+      "command_file": "fixtures/new-resolve-command.json",
+      "command_digest": "f94cf922dd0377ee9aba9e9287082a1b22b7b858465588ef29e04fae21a17a7a",
+      "response_file": "fixtures/new-resolve-response.json",
+      "response_digest": "37532e60199472dcf87a481b43826bb3329c337f8b0b70fdcace7820abe8b539",
+      "snapshot_revision": "5",
+      "proposed_profile": "B1Draft005"
+    }
+  ]
+}

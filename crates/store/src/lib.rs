@@ -5,6 +5,7 @@ use std::sync::mpsc::{self, SyncSender};
 use std::thread::JoinHandle;
 mod admission;
 mod commands;
+mod compat;
 mod database;
 mod migrate;
 mod receipts;
