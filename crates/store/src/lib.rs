@@ -12,6 +12,27 @@ mod custody;
 pub use compat::b1_v1::B1RetainedV1 as HistoricalB1Snapshot;
 pub use compat::draft005::B1Draft005 as Draft005ReceiptSnapshot;
 pub use compat::{CommandDisposition, ReceiptSnapshot, UiCommandOutcome};
+/// Enum names for read-only typed navigation of retained B1 responses.
+/// Checked snapshots and their decoders remain privately constructible.
+pub mod historical_b1 {
+    pub use crate::compat::b1_v1::{
+        Action, AgeBand, AllergenCode, DietCode, EquipmentCode, ErrorCode, HardRequirement,
+        HouseholdStage, JobState, LoyaltyStatus, MealLocation, MealType, MobilityTemperature,
+        Never, PortionPresetName, Provider, ReminderChannel, ReminderPrompt, RequiredAction,
+        RestrictionDeclaration, Retailer, SpendingStyle, Weekday,
+    };
+}
+/// Enum names for read-only typed navigation of fixed draft005 responses.
+/// These types cannot mutate or construct a checked receipt snapshot.
+pub mod draft005_receipt {
+    pub use crate::compat::draft005::{
+        Action, AgeBand, AllergenCode, DietCode, EquipmentCode, ErrorCode, HardRequirement,
+        HouseholdStage, JobState, LoyaltyStatus, MealLocation, MealType, MobilityTemperature,
+        Never, PortionPresetName, Provider, ReminderChannel, ReminderPrompt, RequiredAction,
+        RestrictionDeclaration, Retailer, SpendingStyle, Weekday,
+    };
+}
+
 mod database;
 mod migrate;
 mod receipts;

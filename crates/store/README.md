@@ -22,11 +22,18 @@ The host supplies a trusted local app-data directory, never a renderer-selected 
 
 SQLite is pinned and bundled, with WAL, synchronous FULL, foreign keys on, trusted schema off and a 2000ms busy timeout. Migrations001 and002 are checksummed; recipes, assets, weeks, result/grant journals and portable formats are not allocated placeholder schemas. Command receipts retain the original canonical response and command bytes. Exact replay precedes current CAS and returns the original response even after later state changes. Uncertain storage outcomes reconnect under the retained owner lock and look up that binding; unreadable recovery blocks mutation.
 
-Run from the repository root with the existing Windows toolchain:
+Run from the repository root with the already installed exact Windows toolchain.
+The downstream compiler test refuses floating channels, Rustup proxies, missing
+sibling tools or mismatched release/host identities; it never installs a toolchain:
 
 ```powershell
-cargo +stable-x86_64-pc-windows-msvc test --locked -p mstrchf-store -- --nocapture
-cargo +stable-x86_64-pc-windows-msvc clippy --locked -p mstrchf-store --all-targets -- -D warnings
+$toolchain = Join-Path $env:USERPROFILE '.rustup/toolchains/1.94.0-x86_64-pc-windows-msvc/bin'
+$env:RUSTUP_TOOLCHAIN = '1.94.0-x86_64-pc-windows-msvc'
+$env:RUSTUP_AUTO_INSTALL = '0'
+$env:RUSTC = Join-Path $toolchain 'rustc.exe'
+$env:RUSTDOC = Join-Path $toolchain 'rustdoc.exe'
+& (Join-Path $toolchain 'cargo.exe') test --offline --locked -p mstrchf-store -- --nocapture
+& (Join-Path $toolchain 'cargo.exe') clippy --offline --locked -p mstrchf-store --all-targets -- -D warnings
 ```
 
 Local cancellation retains terminal outcomes and quarantines live synthetic resource ownership. It supplies no worker-stop evidence and never releases a resource. There is no successful public job producer in B1.
@@ -65,7 +72,9 @@ manifests cannot restore that authority. The separate literal fixture catalogue
 and upgrade_fixture runner remain compiled only for unit tests.
 
 Historical receipt wrappers expose immutable frozen values and exact original
-bytes. They provide no Deserialize, mutation or conversion into a current
+bytes. The public historical_b1 and draft005_receipt namespaces export only the
+23 enum types reachable from each checked response, so callers can match variants
+and inspect their borrowed payloads through typed navigation. They provide no Deserialize, mutation or conversion into a current
 Snapshot. All retained jobs and receipts are audited, including rows outside the
 1024-job snapshot projection. New receipts and their fixed005 bindings commit
 together. SaveHouseholdDraft uses the accepted core transition helper, SQLite
