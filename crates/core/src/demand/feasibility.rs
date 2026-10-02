@@ -295,21 +295,19 @@ fn validate_inputs(inputs: &FeasibilityInputs) -> Result<(), DomainError> {
     shape(&inputs.digest, "/digest")?;
     shape(&inputs.evaluated_at, "/evaluated_at")?;
     limit(inputs.confirmations.len(), 4096, "/confirmations")?;
-    for (index, c) in inputs.confirmations.iter().enumerate() {
+    for c in &inputs.confirmations {
         shape(c, "/confirmations")?;
         require(
             c.confirmed_at <= inputs.evaluated_at,
             ErrorCode::InvalidValue,
             "/confirmations/confirmed_at",
         )?;
-        if index > 0 {
-            require(
-                inputs.confirmations[index - 1].line_id < c.line_id,
-                ErrorCode::NoncanonicalValue,
-                "/confirmations",
-            )?;
-        }
     }
+    ordered(
+        &inputs.confirmations,
+        |a, b| a.line_id.cmp(&b.line_id),
+        "/confirmations",
+    )?;
     match &inputs.delivery {
         DeliveryInput::Unselected => (),
         DeliveryInput::Proposed {

@@ -26,26 +26,19 @@ pub fn project_essentials(
     limit(confirmations.len(), 4096, "/confirmations")?;
     shape(demand, "/demand")?;
     shape(evaluated_at, "/evaluated_at")?;
-    for (i, c) in confirmations.iter().enumerate() {
+    for c in confirmations {
         shape(c, "/confirmations")?;
         require(
             c.confirmed_at <= *evaluated_at,
             ErrorCode::InvalidValue,
             "/confirmations/confirmed_at",
         )?;
-        if let Some(previous) = i.checked_sub(1).map(|p| &confirmations[p]) {
-            require(
-                previous.line_id != c.line_id,
-                ErrorCode::InvalidValue,
-                "/confirmations/line_id",
-            )?;
-            require(
-                previous.line_id < c.line_id,
-                ErrorCode::NoncanonicalValue,
-                "/confirmations",
-            )?;
-        }
     }
+    ordered(
+        confirmations,
+        |a, b| a.line_id.cmp(&b.line_id),
+        "/confirmations",
+    )?;
     let mut result = ShoppingProjection {
         required: demand.clone(),
         covered_line_ids: vec![],

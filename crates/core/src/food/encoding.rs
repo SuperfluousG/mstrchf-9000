@@ -381,8 +381,16 @@ pub fn food_inputs_digest(
     schedule: &ScheduleInputs,
 ) -> Result<PayloadDigest, DomainError> {
     shape(input)?;
-    validate_evidence_shape(evidence)?;
-    validate_identities_shape(identities)?;
+    require(
+        food_evidence_digest(evidence)? == evidence.catalogue_digest,
+        ErrorCode::DigestMismatch,
+        "/evidence/catalogue_digest",
+    )?;
+    require(
+        food_identities_digest(identities)? == identities.digest,
+        ErrorCode::DigestMismatch,
+        "/identities/digest",
+    )?;
     validate_schedule_shape(schedule)?;
     hash_native(
         "mstrchf-food-inputs-r3",
@@ -424,7 +432,11 @@ pub fn essentials_source_digest(
         "/source",
     )?;
     shape(&pin.revision)?;
+    if let Some(t) = &pin.valid_until {
+        shape(t)?;
+    }
     limit(values.len(), 4096, "/values")?;
+    ordered(values, |a, b| a.line_id.cmp(&b.line_id), "/values")?;
     for v in values {
         shape(v)?;
     }
@@ -443,6 +455,9 @@ pub fn order_source_digest(
         "/source",
     )?;
     shape(&pin.revision)?;
+    if let Some(t) = &pin.valid_until {
+        shape(t)?;
+    }
     shape(order)?;
     hash_native(
         "mstrchf-r3-live_source",

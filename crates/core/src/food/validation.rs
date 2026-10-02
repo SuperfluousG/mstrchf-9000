@@ -742,6 +742,17 @@ pub(crate) fn validate_live_evidence(v: &RelevantEvidenceSnapshot) -> Result<(),
         |a, b| recipe_cmp(live_recipe_ref(a), live_recipe_ref(b)),
         "/recipes",
     )?;
+    // The full canonical key includes the digest, but one recipe revision
+    // cannot acquire two contradictory digests by changing its live state.
+    require(
+        v.recipes.windows(2).all(|pair| {
+            let a = live_recipe_ref(&pair[0]);
+            let b = live_recipe_ref(&pair[1]);
+            a.recipe_id != b.recipe_id || a.revision != b.revision
+        }),
+        ErrorCode::IdentityMismatch,
+        "/recipes",
+    )?;
     for r in &v.recipes {
         match r {
             LiveRecipeState::Withdrawn { recipe, evidence } => {

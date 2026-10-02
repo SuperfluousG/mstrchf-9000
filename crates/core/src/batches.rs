@@ -110,12 +110,30 @@ pub fn check_reuse(
         ErrorCode::DomainConflict,
         "/planned_reheats",
     )?;
+    check_original_age(
+        original,
+        use_at,
+        classified_limit_seconds.min(source_rule.max_chilled_seconds),
+    )
+}
+
+/// A known class/policy age limit applies even to the original first service
+/// and even when its producing occasion has no stored-reuse rule.
+pub(crate) fn check_original_age(
+    original: &ZonedMoment,
+    use_at: &ZonedMoment,
+    limit_seconds: u32,
+) -> Result<(), DomainError> {
+    ensure(
+        (1..=172800).contains(&limit_seconds),
+        ErrorCode::InvalidValue,
+        "/classified_limit_seconds",
+    )?;
     let elapsed = time(use_at)?
         .checked_sub(time(original)?)
         .ok_or_else(|| err(ErrorCode::ArithmeticOverflow, "/use_at"))?;
     ensure(
-        elapsed >= 0
-            && elapsed <= i64::from(classified_limit_seconds.min(source_rule.max_chilled_seconds)),
+        elapsed >= 0 && elapsed <= i64::from(limit_seconds),
         ErrorCode::DomainConflict,
         "/use_at",
     )
@@ -125,6 +143,9 @@ pub fn check_reuse(
 /// original clocks. It does not authenticate derivation, source classification,
 /// omitted storage rules, method counts or lineage; `derive_batches` does that
 /// against the complete admitted native basis.
+/// Without class evidence this can enforce only the universal 172800-second
+/// ceiling and represented shorter rules. Null source storage does not establish
+/// fresh-only applicability: output has no producing-occasion or holding evidence.
 pub fn validate_allocations(
     batches: &[DerivedBatch],
     allocations: &[Allocation],
@@ -224,10 +245,10 @@ fn validate_output(
             ErrorCode::DomainConflict,
             "/quantity",
         )?;
-        ensure(
-            time(&allocation.use_at)? >= time(original(&component.original_production))?,
-            ErrorCode::DomainConflict,
-            "/use_at",
+        check_original_age(
+            original(&component.original_production),
+            &allocation.use_at,
+            172800,
         )?;
         if allocation.target_slot == batch.source_slot {
             ensure(
@@ -235,18 +256,20 @@ fn validate_output(
                 ErrorCode::DomainConflict,
                 "/original_service",
             )?;
-        } else {
-            let rule = component
-                .storage_rule
-                .0
-                .as_ref()
-                .ok_or_else(|| err(ErrorCode::UnsupportedCapability, "/storage_rule"))?;
+        }
+        if let Some(rule) = &component.storage_rule.0 {
             check_reuse(
                 original(&component.original_production),
                 &allocation.use_at,
                 rule,
                 172800,
                 allocation.planned_reheats,
+            )?;
+        } else {
+            ensure(
+                allocation.target_slot == batch.source_slot,
+                ErrorCode::UnsupportedCapability,
+                "/storage_rule",
             )?;
         }
     }
@@ -843,9 +866,31 @@ pub(crate) fn derive_batches(
                     ErrorCode::DomainConflict,
                     "/production/use_at",
                 )?;
-                if allocation.target_slot != source.key.slot {
-                    let limit = ceiling
-                        .ok_or_else(|| err(ErrorCode::UnsupportedCapability, "/component/class"))?;
+                // First source service does not reset or bypass a known class
+                // ceiling. Null storage cannot erase that independent limit.
+                if let Some(limit) = ceiling {
+                    check_original_age(original(&original_production), &allocation.use_at, limit)
+                        .map_err(|failure| {
+                        if failure.code == ErrorCode::DomainConflict {
+                            food::blocked(plan, failure.code)
+                        } else {
+                            FoodFailure::Invalid(failure)
+                        }
+                    })?;
+                }
+                // Every admitted rule applies to every use, including first
+                // service. Another occurrence still requires explicit storage.
+                if !rules.is_empty() || allocation.target_slot != source.key.slot {
+                    let limit = if allocation.target_slot == source.key.slot {
+                        // Frozen A/B permits fresh sources without a known
+                        // class. Retain the universal ceiling, not a fabricated
+                        // General classification or permission for later reuse.
+                        ceiling.unwrap_or(172800)
+                    } else {
+                        ceiling.ok_or_else(|| {
+                            err(ErrorCode::UnsupportedCapability, "/component/class")
+                        })?
+                    };
                     ensure(
                         !rules.is_empty(),
                         ErrorCode::UnsupportedCapability,

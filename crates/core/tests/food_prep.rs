@@ -6,6 +6,8 @@ use mstrchf_core::prep::*;
 use mstrchf_core::{
     availability::meal_requirements, food::*, portions::resolve_servings, recipes::*,
 };
+#[path = "food_prep/review_r2.rs"]
+mod review_r2;
 fn at(date: &str, time: &str) -> ZonedMoment {
     ZonedMoment::new(
         LocalDate(date.into()),

@@ -297,9 +297,6 @@ pub fn assess_continuation(
             .iter()
             .find(|b| b.batch_id == allocation.batch_id)
             .ok_or_else(|| err(ErrorCode::MissingReference, "/batches"))?;
-        if allocation.target_slot == batch.source_slot {
-            continue;
-        }
         let c = batch
             .components
             .iter()
@@ -317,6 +314,9 @@ pub fn assess_continuation(
         let max = match class.map(|c| c.class) {
             Some(ComponentClass::General) => current.policy.general_seconds,
             Some(ComponentClass::Rice) => current.policy.rice_seconds,
+            // Frozen A/B preserves unclassified fresh sources. Apply today's
+            // general maximum without granting class support for later reuse.
+            _ if allocation.target_slot == batch.source_slot => current.policy.general_seconds,
             _ => 0,
         };
         let original = match &c.original_production {
@@ -325,18 +325,29 @@ pub fn assess_continuation(
                 preparation_started_at,
             } => preparation_started_at,
         };
-        let valid = max > 0
-            && allocation.planned_reheats <= current.policy.maximum_reheats
-            && c.storage_rule.0.as_ref().is_some_and(|r| {
-                crate::batches::check_reuse(
-                    original,
-                    &allocation.use_at,
-                    r,
-                    max,
-                    allocation.planned_reheats,
-                )
-                .is_ok()
-            });
+        let source_without_storage =
+            allocation.target_slot == batch.source_slot && c.storage_rule.0.is_none();
+        // Current known class ceilings also bind first service, independently
+        // of nullable source storage and the unchanged reviewed reheat count.
+        let age_valid = max > 0
+            && crate::batches::check_original_age(original, &allocation.use_at, max).is_ok();
+        let storage_valid = match &c.storage_rule.0 {
+            Some(rule) => {
+                max > 0
+                    && crate::batches::check_reuse(
+                        original,
+                        &allocation.use_at,
+                        rule,
+                        max,
+                        allocation.planned_reheats,
+                    )
+                    .is_ok()
+            }
+            None => source_without_storage,
+        };
+        let valid = allocation.planned_reheats <= current.policy.maximum_reheats
+            && age_valid
+            && storage_valid;
         if !valid {
             checks.push(conflict(
                 week,

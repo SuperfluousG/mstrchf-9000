@@ -6,7 +6,7 @@ use crate::food::*;
 use chrono::{DateTime, LocalResult, TimeZone, Utc};
 use chrono_tz::Tz;
 use mstrchf_contracts::*;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub use crate::food::ProductDateAssessment;
 const PLACEMENT_LIMIT: usize = 100_000;
@@ -251,6 +251,7 @@ fn topological(edges: &[Vec<usize>]) -> Result<Vec<usize>, DomainError> {
 struct Phase {
     key: PhaseKey,
     spec: PrepSpec,
+    ingredient_ids: Vec<IngredientId>,
     equipment: Vec<EquipmentCode>,
     zone: ZoneId,
     earliest: i64,
@@ -411,12 +412,30 @@ fn model(
                     prep_id: *id,
                 })
                 .collect();
+            // Only ingredients produced locally require new raw ingredients here.
+            // Reused source ingredients retain their original procurement/use graph.
+            let ingredient_ids = occurrence
+                .scaled
+                .ingredients
+                .iter()
+                .filter(|ingredient| {
+                    occurrence.kind == MethodKind::Production
+                        && (spec.ingredient_ids.contains(&ingredient.ingredient_id)
+                            || recipe.steps.iter().any(|step| {
+                                spec.step_ids.contains(&step.step_id)
+                                    && (step.ingredient_ids.contains(&ingredient.ingredient_id)
+                                        || step.component_ids.contains(&ingredient.component_id))
+                            }))
+                })
+                .map(|ingredient| ingredient.ingredient_id.clone())
+                .collect();
             phases.push(Phase {
                 key: PhaseKey {
                     occurrence: occurrence.key.clone(),
                     prep_id: id,
                 },
                 spec,
+                ingredient_ids,
                 equipment: resources.equipment.clone(),
                 zone: occurrence.use_at.zone.clone(),
                 earliest,
@@ -610,7 +629,6 @@ fn layout_keys(
         for route in routes {
             ingredients.extend(
                 phases[phase_index(phases, &route.phase)?]
-                    .spec
                     .ingredient_ids
                     .iter()
                     .cloned(),
@@ -1001,6 +1019,7 @@ fn occupied(
             "/occupied/resources",
         )?;
     }
+    validate_retained_graphs(&snapshot.owners)?;
     for attachment in &schedule.layout.attachments {
         let owner = snapshot
             .owners
@@ -1017,6 +1036,77 @@ fn occupied(
         )?;
     }
     Ok(out)
+}
+fn validate_retained_graphs(owners: &[OccupiedOwner]) -> Result<(), DomainError> {
+    let sessions: Vec<_> = owners.iter().flat_map(|owner| &owner.sessions).collect();
+    let session_indices: BTreeMap<_, _> = sessions
+        .iter()
+        .enumerate()
+        .map(|(i, session)| (&session.session_id, i))
+        .collect();
+    let tasks: Vec<_> = sessions
+        .iter()
+        .flat_map(|session| session.tasks.iter().map(|task| (&session.session_id, task)))
+        .collect();
+    let task_indices: BTreeMap<_, _> = tasks
+        .iter()
+        .enumerate()
+        .map(|(i, (session, task))| ((*session, task.task_id), i))
+        .collect();
+    let mut dependencies = vec![vec![]; tasks.len()];
+    for (i, (_, task)) in tasks.iter().enumerate() {
+        for reference in task.depends_on.iter() {
+            // A supplied session is complete. Only an absent session can be an
+            // out-of-horizon edge whose validity remains the producer's duty.
+            if session_indices.contains_key(&reference.session_id) {
+                let &j = task_indices
+                    .get(&(&reference.session_id, reference.task_id))
+                    .ok_or_else(|| error(ErrorCode::MissingReference, "/occupied/dependencies"))?;
+                ensure(
+                    i != j,
+                    ErrorCode::DomainConflict,
+                    "/occupied/dependency_cycle",
+                )?;
+                ensure(
+                    seconds(&tasks[j].1.elapsed.end)? <= seconds(&task.elapsed.start)?,
+                    ErrorCode::DomainConflict,
+                    "/occupied/dependencies/time",
+                )?;
+                dependencies[i].push(j);
+            }
+        }
+    }
+    retained_acyclic(&dependencies, "/occupied/dependency_cycle")?;
+    let mut attachments = vec![vec![]; sessions.len()];
+    for (i, session) in sessions.iter().enumerate() {
+        if let Some(target) = session.attached_to.0.as_ref()
+            && let Some(&j) = session_indices.get(target)
+        {
+            attachments[i].push(j);
+        }
+    }
+    retained_acyclic(&attachments, "/occupied/attachment_cycle")
+}
+fn retained_acyclic(edges: &[Vec<usize>], path: &str) -> Result<(), DomainError> {
+    let mut remaining: Vec<_> = edges.iter().map(Vec::len).collect();
+    let mut dependents = vec![vec![]; edges.len()];
+    for (i, dependencies) in edges.iter().enumerate() {
+        for &j in dependencies {
+            dependents[j].push(i);
+        }
+    }
+    let mut ready: Vec<_> = (0..edges.len()).filter(|&i| remaining[i] == 0).collect();
+    let mut count = 0;
+    while let Some(i) = ready.pop() {
+        count += 1;
+        for &j in &dependents[i] {
+            remaining[j] -= 1;
+            if remaining[j] == 0 {
+                ready.push(j);
+            }
+        }
+    }
+    ensure(count == edges.len(), ErrorCode::DomainConflict, path)
 }
 fn task_dependencies(
     phase: &Phase,
@@ -1244,8 +1334,8 @@ pub fn validate_schedule(
                 "/tasks/resource_collision",
             )?;
             reservations.push(reservation(p, start)?);
-            ingredients.extend(p.spec.ingredient_ids.iter().cloned());
-            if !p.spec.ingredient_ids.is_empty() {
+            ingredients.extend(p.ingredient_ids.iter().cloned());
+            if !p.ingredient_ids.is_empty() {
                 needed = needed.min(start);
             }
             if !slots.contains(&p.key.occurrence.slot) {
@@ -1439,8 +1529,8 @@ pub(crate) fn derive_schedule(
             if !slots.contains(&p.key.occurrence.slot) {
                 slots.push(p.key.occurrence.slot.clone());
             }
-            ingredients.extend(p.spec.ingredient_ids.iter().cloned());
-            if !p.spec.ingredient_ids.is_empty() {
+            ingredients.extend(p.ingredient_ids.iter().cloned());
+            if !p.ingredient_ids.is_empty() {
                 needed = needed.min(start);
             }
         }
@@ -1623,6 +1713,7 @@ mod search_tests {
                 ingredient_ids: BoundedVec(vec![]),
                 can_attach_to_prior_session: false,
             },
+            ingredient_ids: vec![],
             equipment: vec![],
             zone: ZoneId("UTC".into()),
             earliest: 0,
