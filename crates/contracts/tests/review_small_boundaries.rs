@@ -99,11 +99,20 @@ fn url_schema_matches_control_and_unicode_whitespace_admission() {
 fn request_job_command_rejects_incompatible_action_and_scope_at_admission() {
     let cases = [
         ("setup", "job-request-setup.json"),
-        ("plan", "job-request.json"),
+        ("plan", "ruling004-current--job-request.json"),
         ("add_adapt_recipe", "job-request-recipe-candidate.json"),
-        ("prepare_shop", "job-request-product-observation.json"),
-        ("finish_week", "job-request-calendar-publication.json"),
-        ("check_booking", "job-request-booking-check.json"),
+        (
+            "prepare_shop",
+            "ruling004-current--job-request-product-observation.json",
+        ),
+        (
+            "finish_week",
+            "ruling004-current--job-request-calendar-publication.json",
+        ),
+        (
+            "check_booking",
+            "ruling004-current--job-request-booking-check.json",
+        ),
     ];
     let scopes = cases
         .iter()
@@ -136,7 +145,7 @@ fn request_job_command_rejects_incompatible_action_and_scope_at_admission() {
 
 #[test]
 fn hold_slot_grant_action_expiry_must_follow_grant_time() {
-    let mut grant = fixture("operation-grant.json");
+    let mut grant = fixture("ruling004-current--operation-grant.json");
     grant["action"] = json!({
         "kind": "hold_slot",
         "data": {

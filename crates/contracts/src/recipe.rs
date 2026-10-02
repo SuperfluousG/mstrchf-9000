@@ -182,6 +182,7 @@ record! {
         pub title: Title,
         pub ingredient_ids: BoundedVec<IngredientId, 0, 256>,
         pub storage_rule_ids: BoundedVec<EvidenceId, 0, 256>,
+        pub production: Nullable<ComponentProductionSpec>,
     }
 }
 
@@ -346,6 +347,7 @@ record! {
         pub portability: PortabilityEvidence,
         pub components: BoundedVec<ComponentSpec, 1, 128>,
         pub extras: BoundedVec<ExtraSpec, 0, 64>,
+        pub reused_inputs: BoundedVec<ReusedComponentInput, 0, 128>,
         pub dietary_evidence: BoundedVec<DietaryEvidence, 0, 256>,
         pub storage: BoundedVec<StorageRule, 0, 128>,
         pub prep: BoundedVec<PrepSpec, 0, 128>,
@@ -354,5 +356,23 @@ record! {
         pub image: Nullable<ImageRecord>,
         pub reviews: BoundedVec<ReviewRecord, 0, 256>,
         pub capabilities: RecipeCapabilities,
+    }
+}
+
+tagged! {
+    pub enum ComponentProductionSpec {
+        Cooked { completion_prep_id: u16 },
+        Unheated { first_handling_prep_id: u16 },
+    }
+}
+
+record! {
+    pub struct ReusedComponentInput {
+        pub source_recipe: RecipeRef,
+        pub source_component_id: ComponentId,
+        pub quantity_per_recipe_yield: Quantity,
+        pub step_ids: BoundedVec<u16, 1, 256>,
+        pub planned_reheats: u8,
+        pub evidence_ids: BoundedVec<EvidenceId, 1, 256>,
     }
 }

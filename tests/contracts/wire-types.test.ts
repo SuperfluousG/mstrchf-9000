@@ -56,3 +56,28 @@ const mismatchedJobPayload: JobPayload = { kind: 'setup_check', data: { week_ids
 const numericQuantity: Quantity = { amount: { numerator: 1, denominator: '1' }, unit: 'g', form: 'raw' };
 const validSetupPayload: JobPayload = { kind: 'setup_check', data: { provider: 'codex_local', requested_capabilities: [] } };
 void [wrongDinerId, _displayName, missingDinerName, unknownJobPayload, mismatchedJobPayload, numericQuantity, validSetupPayload];
+
+import type { BatchUse, DerivedBatch, DerivedComponent, DerivedPlan, ComponentSpec,
+  ComponentProductionSpec, ProductionMoment, RecipeRevision, ReusedComponentInput } from '../../app/generated/contracts';
+type _RequiredProduction = Assert<IsRequired<Extract<BatchUse, {kind: 'new_batch'}>['data'], 'production_servings'>>;
+type _RequiredClock = Assert<IsRequired<DerivedComponent, 'original_production'>>;
+type _RequiredStorage = Assert<IsRequired<DerivedComponent, 'storage_rule'>>;
+type _NullableStorage = Assert<null extends DerivedComponent['storage_rule'] ? true : false>;
+type _RequiredAnchor = Assert<IsRequired<ComponentSpec, 'production'>>;
+type _NullableAnchor = Assert<null extends ComponentSpec['production'] ? true : false>;
+type _RequiredReuse = Assert<IsRequired<RecipeRevision, 'reused_inputs'>>;
+type _RequiredFoodDigest = Assert<IsRequired<DerivedPlan, 'food_inputs_digest'>>;
+type _RemovedClock = Assert<'original_cook' extends keyof DerivedBatch ? false : true>;
+declare const component: DerivedComponent;
+declare const spec: ComponentSpec;
+declare const revision: RecipeRevision;
+const freshComponent: DerivedComponent = {...component, storage_rule: null};
+const unknownAnchor: ComponentSpec = {...spec, production: null};
+const ordinaryRecipe: RecipeRevision = {...revision, reused_inputs: []};
+// @ts-expect-error original production is a closed, required union
+const nullClock: ProductionMoment = null;
+// @ts-expect-error wrong anchor payload for the discriminant
+const wrongAnchor: ComponentProductionSpec = {kind: 'cooked', data: {first_handling_prep_id: 1}};
+// @ts-expect-error source recipe is required
+const incompleteReuse: ReusedComponentInput = {source_component_id: component.component_id};
+void [freshComponent, unknownAnchor, ordinaryRecipe, nullClock, wrongAnchor, incompleteReuse];

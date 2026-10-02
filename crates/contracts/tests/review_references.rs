@@ -22,7 +22,7 @@ fn rejected<T: serde::de::DeserializeOwned + ValidateShape + std::fmt::Debug>(
 
 #[test]
 fn f03_recipe_components_resolve_ingredient_and_storage_ids() {
-    let recipe = fixture("recipe-revision-minimal-unrestricted.json");
+    let recipe = fixture("ruling004-current--recipe-revision-minimal-unrestricted.json");
     parse::<RecipeRevision>(&recipe).unwrap();
 
     let mut missing_ingredient = recipe.clone();
@@ -51,7 +51,7 @@ fn f03_recipe_components_resolve_ingredient_and_storage_ids() {
     linked_storage["storage"][0]["component_id"] = json!("co_00000000000000000000000000000099");
     rejected::<RecipeRevision>(&linked_storage, ErrorCode::MissingReference);
 
-    let mut unsupported_extra = fixture("recipe-revision.json");
+    let mut unsupported_extra = fixture("ruling004-current--recipe-revision.json");
     parse::<RecipeRevision>(&unsupported_extra).unwrap();
     unsupported_extra["extras"][0]["supported_with"] =
         json!(["co_00000000000000000000000000000099"]);
@@ -59,9 +59,9 @@ fn f03_recipe_components_resolve_ingredient_and_storage_ids() {
 }
 
 fn disabled_retained_context() -> Value {
-    let mut context = fixture("planning-context.json");
+    let mut context = fixture("ruling004-current--planning-context.json");
     context["weeks"][0]["plan"]["selections"] =
-        fixture("week-disabled-retained.json")["plan"]["selections"].clone();
+        fixture("ruling004-current--week-disabled-retained.json")["plan"]["selections"].clone();
     let week_id = context["weeks"][0]["range"]["week_id"].clone();
     context["weeks"][0]["day_enabled"] = json!([false, false, false, false, false, false, false]);
     for requirement in context["requirements"].as_array_mut().unwrap() {
@@ -164,9 +164,10 @@ fn r2_inactive_extra_recipient_and_override_keep_scoped_guest_identity() {
     rejected::<PlanningContext>(&foreign_extra, ErrorCode::ForeignReference);
 
     let (mut override_control, target, _) = retained_guest_context();
-    override_control["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] =
-        fixture("week-disabled-retained.json")["plan"]["selections"][0]["servings"][0]["person"]
-            .clone();
+    override_control["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] = fixture(
+        "ruling004-current--week-disabled-retained.json",
+    )["plan"]["selections"][0]["servings"][0]["person"]
+        .clone();
     override_control["weeks"][0]["plan"]["selections"][0]["meal_overrides"]["portions"] = json!([{
         "person":person,
         "preset":"regular",
@@ -180,16 +181,17 @@ fn r2_inactive_extra_recipient_and_override_keep_scoped_guest_identity() {
 #[test]
 fn r2_retained_diner_remains_valid_with_zero_effective_attendees() {
     let (mut context, target, _) = retained_guest_context();
-    context["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] =
-        fixture("week-disabled-retained.json")["plan"]["selections"][0]["servings"][0]["person"]
-            .clone();
+    context["weeks"][0]["plan"]["selections"][0]["servings"][0]["person"] = fixture(
+        "ruling004-current--week-disabled-retained.json",
+    )["plan"]["selections"][0]["servings"][0]["person"]
+        .clone();
     move_guest_occasion(&mut context, target, 0, (target + 3) % 21);
     parse::<PlanningContext>(&context).unwrap();
 }
 
 #[test]
 fn f05_disabled_requirements_may_omit_attendees_but_supplied_people_resolve() {
-    let mut context = fixture("planning-context.json");
+    let mut context = fixture("ruling004-current--planning-context.json");
     parse::<PlanningContext>(&context).unwrap();
     let week_id = context["weeks"][0]["range"]["week_id"].clone();
     context["weeks"][0]["day_enabled"] = json!([false, false, false, false, false, false, false]);
@@ -258,7 +260,7 @@ fn f08_every_delivery_event_belongs_to_batch_order() {
         .push(extra);
     rejected::<EventBatchDocumentV1>(&foreign, ErrorCode::IdentityMismatch);
 
-    let mut request = fixture("job-request-calendar-publication.json");
+    let mut request = fixture("ruling004-current--job-request-calendar-publication.json");
     request["payload"]["data"]["batch"] = foreign["event_batch"].clone();
     let event_ids = json!([
         "ce_00000000000000000000000000000001",
@@ -273,8 +275,9 @@ fn f08_every_delivery_event_belongs_to_batch_order() {
 }
 
 fn old_history_context() -> Value {
-    let mut context = fixture("planning-context.json");
-    let selection = fixture("week-disabled-retained.json")["plan"]["selections"][0].clone();
+    let mut context = fixture("ruling004-current--planning-context.json");
+    let selection =
+        fixture("ruling004-current--week-disabled-retained.json")["plan"]["selections"][0].clone();
     let mut selected = json!({
         "week_id":"wk_00000000000000000000000000000099",
         "slot":{

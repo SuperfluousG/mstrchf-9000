@@ -47,9 +47,10 @@ fn tagged_union_data_before_kind_enforces_its_inner_collection_cap() {
 #[test]
 fn exact_bound_and_valid_field_orders_remain_accepted() {
     let fixture_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
-    let mut recipe: Value =
-        serde_json::from_slice(&std::fs::read(fixture_root.join("recipe-revision.json")).unwrap())
-            .unwrap();
+    let mut recipe: Value = serde_json::from_slice(
+        &std::fs::read(fixture_root.join("ruling004-current--recipe-revision.json")).unwrap(),
+    )
+    .unwrap();
     recipe["source"]["authors"] = json!((0..64).map(|i| format!("author{i}")).collect::<Vec<_>>());
     parse_document::<RecipeRevision>(&serde_json::to_vec(&recipe).unwrap()).unwrap();
     let values = "\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"";

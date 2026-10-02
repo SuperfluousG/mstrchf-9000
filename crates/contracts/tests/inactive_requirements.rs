@@ -43,7 +43,8 @@ fn required_nullable_activity_pairs_and_missing_key() {
 }
 #[test]
 fn direct_entrypoints_reject_disabled_present_deadline() {
-    let mut c: PlanningContext = parse(&fixture("planning-context.json")).unwrap();
+    let mut c: PlanningContext =
+        parse(&fixture("ruling004-current--planning-context.json")).unwrap();
     c.weeks.0[0].day_enabled.0[0] = false;
     for r in &mut c.requirements.0 {
         if r.slot.week_id == c.weeks[0].range.week_id && r.slot.date == c.weeks[0].range.monday {
@@ -61,7 +62,8 @@ fn direct_entrypoints_reject_disabled_present_deadline() {
 }
 #[test]
 fn direct_request_rejects_disabled_present_deadline() {
-    let mut r: JobRequestV1 = parse(&fixture("job-request-personalised.json")).unwrap();
+    let mut r: JobRequestV1 =
+        parse(&fixture("ruling004-current--job-request-personalised.json")).unwrap();
     if let JobPayload::PersonalisedPlan { requirements, .. } = &mut r.payload {
         requirements.0[0].enabled = false;
         requirements.0[0].attendees.0.clear();
@@ -78,7 +80,8 @@ fn direct_request_rejects_disabled_present_deadline() {
 
 #[test]
 fn direct_context_rejects_malformed_nested_requirement() {
-    let mut c: PlanningContext = parse(&fixture("planning-context.json")).unwrap();
+    let mut c: PlanningContext =
+        parse(&fixture("ruling004-current--planning-context.json")).unwrap();
     c.requirements.0[0].attendees.0[0]
         .portion
         .adjustment
@@ -119,8 +122,10 @@ fn request_requirements(r: &mut JobRequestV1) -> &mut Vec<MealRequirements> {
 #[test]
 fn direct_context_and_request_reject_both_contradictions_and_malformed_children() {
     for mode in 0..11 {
-        let mut context: PlanningContext = parse(&fixture("planning-context.json")).unwrap();
-        let mut request: JobRequestV1 = parse(&fixture("job-request-personalised.json")).unwrap();
+        let mut context: PlanningContext =
+            parse(&fixture("ruling004-current--planning-context.json")).unwrap();
+        let mut request: JobRequestV1 =
+            parse(&fixture("ruling004-current--job-request-personalised.json")).unwrap();
         let mutate = |r: &mut MealRequirements| match mode {
             0 => r.enabled = false,
             1 => r.eat_by = Nullable(None),
@@ -152,7 +157,10 @@ fn direct_context_and_request_reject_both_contradictions_and_malformed_children(
 }
 #[test]
 fn mixed_context_activity_membership_and_all_inactive_closure() {
-    let c: PlanningContext = parse(&fixture("positive_mixed_activity_context.json")).unwrap();
+    let c: PlanningContext = parse(&fixture(
+        "ruling004-current--positive_mixed_activity_context.json",
+    ))
+    .unwrap();
     validate_context(&c).unwrap();
     for mode in 0..7 {
         let mut bad = c.clone();
@@ -241,8 +249,11 @@ fn independently_derived_null_bytes_and_digest_vectors() {
             );
         }
     }
-    let r: JobRequestV1 = parse(&fixture("positive_inactive_request.json")).unwrap();
-    let vector = fixture("positive_inactive_request_canonical.json");
+    let r: JobRequestV1 = parse(&fixture(
+        "ruling004-current--positive_inactive_request.json",
+    ))
+    .unwrap();
+    let vector = fixture("ruling004-current--positive_inactive_request_canonical.json");
     assert_eq!(
         canonical_bytes(&RequestMaterial::from(&r)).unwrap(),
         vector["expected_canonical"].as_str().unwrap().as_bytes()
@@ -251,7 +262,8 @@ fn independently_derived_null_bytes_and_digest_vectors() {
         r.input_digest.0,
         vector["expected_sha256"].as_str().unwrap()
     );
-    let mut result: JobResultV1 = parse(&fixture("job-result-complete-noop.json")).unwrap();
+    let mut result: JobResultV1 =
+        parse(&fixture("ruling004-current--job-result-complete-noop.json")).unwrap();
     assert_eq!(
         validate_result_binding(&result, &r, &r.context_stamp)
             .unwrap_err()

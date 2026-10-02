@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "job_id": "jb_00000000000000000000000000000022",
+  "action": "plan",
+  "week_id": "wk_00000000000000000000000000000001",
+  "base_plan_revision": "1",
+  "context_stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_00000000000000000000000000000001",
+        "revision": "1",
+        "digest": "6fdd4f440d782aebd299791ff71a731d4613090542ee3402f42496179102528a"
+      },
+      {
+        "recipe_id": "rc_00000000000000000000000000000002",
+        "revision": "1",
+        "digest": "87b5ca57068637d98bf885615a196bee540f73f5d2bd8d116b7175f8d6d25061"
+      }
+    ],
+    "read_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      },
+      {
+        "week_id": "wk_00000000000000000000000000000002",
+        "revision": "1"
+      }
+    ],
+    "write_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "1"
+      },
+      {
+        "week_id": "wk_00000000000000000000000000000002",
+        "revision": "1"
+      }
+    ]
+  },
+  "privacy_policy_revision": "1",
+  "required_capabilities": [
+    "scoped_file_read"
+  ],
+  "allowed_artefacts": [],
+  "payload": {
+    "kind": "personalised_plan",
+    "data": {
+      "requirements": [
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "breakfast"
+          },
+          "enabled": true,
+          "location": "at_home",
+          "attendees": [
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000001"
+                }
+              },
+              "age_band": "adult",
+              "hard_requirements": [
+                {
+                  "kind": "diet",
+                  "data": {
+                    "code": "vegetarian"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "regular",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            },
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000002"
+                }
+              },
+              "age_band": "teen",
+              "hard_requirements": [
+                {
+                  "kind": "allergen_exclusion",
+                  "data": {
+                    "code": "cereals_containing_gluten"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "larger",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            }
+          ],
+          "shared_hard_requirements": [
+            {
+              "kind": "allergen_exclusion",
+              "data": {
+                "code": "cereals_containing_gluten"
+              }
+            },
+            {
+              "kind": "diet",
+              "data": {
+                "code": "vegetarian"
+              }
+            }
+          ],
+          "equipment": [
+            "hob"
+          ],
+          "mobility": {
+            "reheating": false,
+            "cold_storage": false,
+            "temperature": "either"
+          },
+          "eat_by": {
+            "local_date": "2026-12-28",
+            "local_time": "18:00:00",
+            "zone": "Europe/London",
+            "resolution": "unambiguous",
+            "instant": "2026-12-28T18:00:00Z"
+          },
+          "preferred_hands_on_minutes": 30,
+          "leftovers_allowed": false
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000002",
+            "date": "2027-01-04",
+            "meal_type": "breakfast"
+          },
+          "enabled": true,
+          "location": "at_home",
+          "attendees": [
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000001"
+                }
+              },
+              "age_band": "adult",
+              "hard_requirements": [
+                {
+                  "kind": "diet",
+                  "data": {
+                    "code": "vegetarian"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "regular",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            },
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000002"
+                }
+              },
+              "age_band": "teen",
+              "hard_requirements": [
+                {
+                  "kind": "allergen_exclusion",
+                  "data": {
+                    "code": "cereals_containing_gluten"
+                  }
+                }
+              ],
+              "portion": {
+                "preset": "larger",
+                "adjustment": {
+                  "numerator": "1",
+                  "denominator": "1"
+                },
+                "meal_overrides": []
+              }
+            }
+          ],
+          "shared_hard_requirements": [
+            {
+              "kind": "allergen_exclusion",
+              "data": {
+                "code": "cereals_containing_gluten"
+              }
+            },
+            {
+              "kind": "diet",
+              "data": {
+                "code": "vegetarian"
+              }
+            }
+          ],
+          "equipment": [
+            "hob"
+          ],
+          "mobility": {
+            "reheating": false,
+            "cold_storage": false,
+            "temperature": "either"
+          },
+          "eat_by": {
+            "local_date": "2027-01-04",
+            "local_time": "18:00:00",
+            "zone": "Europe/London",
+            "resolution": "unambiguous",
+            "instant": "2027-01-04T18:00:00Z"
+          },
+          "preferred_hands_on_minutes": 30,
+          "leftovers_allowed": false
+        }
+      ],
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_00000000000000000000000000000001",
+          "revision": "1",
+          "digest": "6fdd4f440d782aebd299791ff71a731d4613090542ee3402f42496179102528a"
+        }
+      ],
+      "preferences": {
+        "spending_style": "balanced",
+        "higher_protein": false,
+        "more_variety": true,
+        "quick_meals": false,
+        "whole_food_preference": true,
+        "preferred_hands_on_minutes": 30
+      },
+      "history": {
+        "selected_recipe_refs": [],
+        "ordered_recipe_refs": [],
+        "hidden_recipe_ids": [],
+        "feedback": []
+      },
+      "other_weeks": []
+    }
+  },
+  "scope": {
+    "kind": "plan",
+    "data": {
+      "mode": "fill_open",
+      "slots": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "date": "2026-12-28",
+          "meal_type": "breakfast"
+        },
+        {
+          "week_id": "wk_00000000000000000000000000000002",
+          "date": "2027-01-04",
+          "meal_type": "breakfast"
+        }
+      ]
+    }
+  },
+  "created_at": "2026-12-28T10:00:00Z",
+  "expires_at": "2026-12-28T20:00:00Z",
+  "input_digest": "6882994a0df891542f9c4b8edbb5bb283619a9c1691c3d9d6f6af58ffc8f5f03"
+}

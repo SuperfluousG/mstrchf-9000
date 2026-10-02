@@ -57,7 +57,7 @@ export type BatchId = string & { readonly __brand: "BatchId" };
 
 export type BatchLink = { batch_id: BatchId, source_slot: SlotId, target_slot: SlotId, components: Array<ComponentAllocation>, };
 
-export type BatchUse = { "kind": "new_batch", "data": { batch_id: BatchId, } } | { "kind": "leftover", "data": { batch_id: BatchId, component_ids: Array<ComponentId>, } };
+export type BatchUse = { "kind": "new_batch", "data": { batch_id: BatchId, production_servings: PositiveRational, } } | { "kind": "leftover", "data": { batch_id: BatchId, component_ids: Array<ComponentId>, } };
 
 export type BoundedCount = number;
 
@@ -97,7 +97,9 @@ export type ComponentAllocation = { component_id: ComponentId, quantity: Quantit
 
 export type ComponentId = string & { readonly __brand: "ComponentId" };
 
-export type ComponentSpec = { component_id: ComponentId, title: Title, ingredient_ids: Array<IngredientId>, storage_rule_ids: Array<EvidenceId>, };
+export type ComponentProductionSpec = { "kind": "cooked", "data": { completion_prep_id: number, } } | { "kind": "unheated", "data": { first_handling_prep_id: number, } };
+
+export type ComponentSpec = { component_id: ComponentId, title: Title, ingredient_ids: Array<IngredientId>, storage_rule_ids: Array<EvidenceId>, production: ComponentProductionSpec | null, };
 
 export type ComponentYield = { component_id: ComponentId, quantity: Quantity, };
 
@@ -127,11 +129,11 @@ export type DemandLineId = string & { readonly __brand: "DemandLineId" };
 
 export type DemandSet = { input_plan_digest: PlanInputDigest, lines: Array<DemandLine>, digest: DemandDigest, };
 
-export type DerivedBatch = { batch_id: BatchId, recipe: RecipeRef, source_slot: SlotId, original_cook: ZonedMoment, components: Array<DerivedComponent>, };
+export type DerivedBatch = { batch_id: BatchId, recipe: RecipeRef, source_slot: SlotId, components: Array<DerivedComponent>, };
 
-export type DerivedComponent = { component_id: ComponentId, produced: Quantity, allocated: Quantity, unallocated: NonnegativeQuantity, storage_rule: StorageRule, };
+export type DerivedComponent = { component_id: ComponentId, produced: Quantity, allocated: Quantity, unallocated: NonnegativeQuantity, original_production: ProductionMoment, storage_rule: StorageRule | null, };
 
-export type DerivedPlan = { schema_version: SchemaVersion, week_id: WeekId, plan_revision: Revision, input_plan_digest: PlanInputDigest, context_stamp: ContextStamp, recipe_refs: Array<RecipeRef>, batches: Array<DerivedBatch>, allocations: Array<Allocation>, prep_sessions: Array<PrepSession>, demand: DemandSet, warnings: Array<Conflict>, derivation_policy_version: Revision, digest: PayloadDigest, };
+export type DerivedPlan = { schema_version: SchemaVersion, week_id: WeekId, plan_revision: Revision, input_plan_digest: PlanInputDigest, food_inputs_digest: PayloadDigest, context_stamp: ContextStamp, recipe_refs: Array<RecipeRef>, batches: Array<DerivedBatch>, allocations: Array<Allocation>, prep_sessions: Array<PrepSession>, demand: DemandSet, warnings: Array<Conflict>, derivation_policy_version: Revision, digest: PayloadDigest, };
 
 export type DietCode = "vegetarian" | "vegan" | "gluten_free";
 
@@ -347,6 +349,8 @@ export type ProductObservation = { product: ProductRef, url: HttpUrl, title: Tex
 
 export type ProductRef = { retailer: Retailer, product_id: Text, variant_id: Text | null, };
 
+export type ProductionMoment = { "kind": "cooked", "data": { completed_at: ZonedMoment, } } | { "kind": "unheated", "data": { preparation_started_at: ZonedMoment, } };
+
 export type ProposedSelection = { slot: SlotId, selection: MealSelection | null, };
 
 export type Provider = "codex_local" | "claude_cowork";
@@ -393,7 +397,7 @@ export type RecipeIngredient = { ingredient_id: IngredientId, name: NameText, qu
 
 export type RecipeRef = { recipe_id: RecipeId, revision: Revision, digest: RecipeDigest, };
 
-export type RecipeRevision = { schema_version: SchemaVersion, recipe_id: RecipeId, revision: Revision, title: Title, source: SourceRecord, text_rights: RightsRecord, ingredients: Array<RecipeIngredient>, yield: YieldSpec, scaling: ScalingPolicy, steps: Array<InstructionStep>, equipment: Array<EquipmentCode>, active_minutes: number, elapsed_minutes: number, meal_types: Array<MealType>, portability: PortabilityEvidence, components: Array<ComponentSpec>, extras: Array<ExtraSpec>, dietary_evidence: Array<DietaryEvidence>, storage: Array<StorageRule>, prep: Array<PrepSpec>, portion_presets: Array<PortionPreset>, nutrition: NutritionEvidence | null, image: ImageRecord | null, reviews: Array<ReviewRecord>, capabilities: RecipeCapabilities, };
+export type RecipeRevision = { schema_version: SchemaVersion, recipe_id: RecipeId, revision: Revision, title: Title, source: SourceRecord, text_rights: RightsRecord, ingredients: Array<RecipeIngredient>, yield: YieldSpec, scaling: ScalingPolicy, steps: Array<InstructionStep>, equipment: Array<EquipmentCode>, active_minutes: number, elapsed_minutes: number, meal_types: Array<MealType>, portability: PortabilityEvidence, components: Array<ComponentSpec>, extras: Array<ExtraSpec>, reused_inputs: Array<ReusedComponentInput>, dietary_evidence: Array<DietaryEvidence>, storage: Array<StorageRule>, prep: Array<PrepSpec>, portion_presets: Array<PortionPreset>, nutrition: NutritionEvidence | null, image: ImageRecord | null, reviews: Array<ReviewRecord>, capabilities: RecipeCapabilities, };
 
 export type RecipeSourceOrigin = "published" | "user_authored" | "adapted";
 
@@ -422,6 +426,8 @@ export type Retailer = "tesco";
 export type RetailerDeliveryContext = { retailer: Retailer, account_ref: Text, context_ref: Text, delivery_date: LocalDate | null, slot_ref: Text | null, };
 
 export type Retry = "never" | "after_refresh" | "after_user_action" | "read_backoff";
+
+export type ReusedComponentInput = { source_recipe: RecipeRef, source_component_id: ComponentId, quantity_per_recipe_yield: Quantity, step_ids: Array<number>, planned_reheats: number, evidence_ids: Array<EvidenceId>, };
 
 export type ReviewActor = "human" | "automated";
 

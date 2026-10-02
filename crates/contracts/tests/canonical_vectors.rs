@@ -5,7 +5,7 @@ use mstrchf_contracts::revision::{Generation, Revision};
 use mstrchf_contracts::time::{Instant, LocalDate, LocalTime, ZoneId, ZonedMoment};
 use mstrchf_contracts::{
     DemandMaterial, DerivedMaterial, DerivedPlan, PlanInputMaterial, canonical_bytes,
-    canonical_digest, demand_digest, derived_digest, parse_document, plan_input_digest,
+    canonical_digest, demand_digest, parse_document, plan_input_digest,
 };
 use serde_json::{Value, json};
 use ts_rs::{Config, TS};
@@ -27,15 +27,17 @@ fn positive_derived_demand_known_answers() {
         "67b17eea783378b277278da5ecc5b63d1c6cc907cf2cfc64ac504b926cd808ed"
     );
     let material = r#"{"allocations":[],"batches":[],"context_stamp":{"catalogue_revision":"1","history_revision":"1","household_revision":"1","privacy_revision":"1","ranking_policy_version":"1","read_weeks":[{"revision":"1","week_id":"wk_00000000000000000000000000000001"}],"recipe_refs":[],"settings_revision":"1","write_weeks":[{"revision":"1","week_id":"wk_00000000000000000000000000000001"}]},"demand":{"digest":"67b17eea783378b277278da5ecc5b63d1c6cc907cf2cfc64ac504b926cd808ed","input_plan_digest":"de39f29ff0302a9f932eabdec43b2587ee14543f89a68ff934f66c9addca271b","lines":[]},"derivation_policy_version":"1","input_plan_digest":"de39f29ff0302a9f932eabdec43b2587ee14543f89a68ff934f66c9addca271b","plan_revision":"1","prep_sessions":[],"recipe_refs":[],"schema_version":1,"warnings":[],"week_id":"wk_00000000000000000000000000000001"}"#;
-    let m: DerivedMaterial = parse_document(material.as_bytes()).unwrap();
+    // Historical pre-ruling004 bytes stay pinned; the current decoder must reject them.
+    assert!(parse_document::<DerivedMaterial>(material.as_bytes()).is_err());
+    let m: Value = serde_json::from_str(material).unwrap();
     assert_eq!(canonical_bytes(&m).unwrap(), material.as_bytes());
     assert_eq!(
-        derived_digest(&m).unwrap().0,
+        canonical_digest(&m).unwrap().0,
         "27026cdc9b650240ae5ed268cb63a3ee17591f965e77f082e904aeb4f65deb1f"
     );
     let mut complete: Value = serde_json::from_str(material).unwrap();
     complete["digest"] = json!("27026cdc9b650240ae5ed268cb63a3ee17591f965e77f082e904aeb4f65deb1f");
-    parse_document::<DerivedPlan>(&serde_json::to_vec(&complete).unwrap()).unwrap();
+    assert!(parse_document::<DerivedPlan>(&serde_json::to_vec(&complete).unwrap()).is_err());
 }
 #[test]
 fn positive_jcs_unicode_vector() {

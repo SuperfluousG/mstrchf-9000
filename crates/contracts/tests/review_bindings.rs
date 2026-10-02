@@ -46,9 +46,9 @@ fn fragment(request: &JobRequestV1, value: Value) -> Result<(), DomainError> {
     )
 }
 fn result_pair() -> (JobRequestV1, Value) {
-    let reqv = load("job-request-personalised.json");
+    let reqv = load("ruling004-current--job-request-personalised.json");
     let req = decode(&reqv);
-    let mut result = load("job-result-complete-noop.json");
+    let mut result = load("ruling004-current--job-result-complete-noop.json");
     for name in [
         "job_id",
         "action",
@@ -60,7 +60,8 @@ fn result_pair() -> (JobRequestV1, Value) {
     ] {
         result[name] = reqv[name].clone();
     }
-    let mut s = load("week-disabled-retained.json")["plan"]["selections"][0].clone();
+    let mut s =
+        load("ruling004-current--week-disabled-retained.json")["plan"]["selections"][0].clone();
     let slot = reqv["scope"]["data"]["slots"][0].clone();
     s["slot"] = slot.clone();
     s["origin"] = json!("suggested");
@@ -86,7 +87,7 @@ fn selection(v: &mut Value) -> &mut Value {
 }
 #[test]
 fn f01_parent_payload_recipe_references_must_also_be_closed() {
-    let mut req: JobRequestV1 = decode(&load("job-request-personalised.json"));
+    let mut req: JobRequestV1 = decode(&load("ruling004-current--job-request-personalised.json"));
     let mut foreign = req.context_stamp.recipe_refs[0].clone();
     foreign.recipe_id = RecipeId("rc_00000000000000000000000000000099".into());
     if let JobPayload::PersonalisedPlan { history, .. } = &mut req.payload {
@@ -134,7 +135,7 @@ fn f02_allowed_extra_and_override_are_preserved() {
 }
 #[test]
 fn f01_parent_requirements_and_permitted_recipe_set_are_not_replaced() {
-    let req: JobRequestV1 = decode(&load("job-request-personalised.json"));
+    let req: JobRequestV1 = decode(&load("ruling004-current--job-request-personalised.json"));
     let payload = serde_json::to_value(&req.payload).unwrap();
     fragment(&req, payload.clone()).unwrap();
     for (label, changed) in ["recipes", "person", "restriction", "preferences", "history"]
@@ -177,12 +178,12 @@ fn f01_parent_requirements_and_permitted_recipe_set_are_not_replaced() {
 #[test]
 fn f01_all_payload_variants_keep_unchanged_fragments_valid() {
     for file in [
-        "job-request-personalised.json",
-        "job-request.json",
+        "ruling004-current--job-request-personalised.json",
+        "ruling004-current--job-request.json",
         "job-request-recipe-candidate.json",
-        "job-request-product-observation.json",
-        "job-request-calendar-publication.json",
-        "job-request-booking-check.json",
+        "ruling004-current--job-request-product-observation.json",
+        "ruling004-current--job-request-calendar-publication.json",
+        "ruling004-current--job-request-booking-check.json",
         "job-request-setup.json",
     ] {
         let req: JobRequestV1 = decode(&load(file));
@@ -192,7 +193,7 @@ fn f01_all_payload_variants_keep_unchanged_fragments_valid() {
 }
 #[test]
 fn f01_complete_record_subset_is_valid() {
-    let mut req: JobRequestV1 = decode(&load("job-request-personalised.json"));
+    let mut req: JobRequestV1 = decode(&load("ruling004-current--job-request-personalised.json"));
     if let JobPayload::PersonalisedPlan {
         requirements,
         recipe_refs,

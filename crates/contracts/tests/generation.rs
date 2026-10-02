@@ -646,7 +646,7 @@ fn collection_boundaries_on_positive_root_fixtures() {
     let mut maximum = 0;
     for case in &cases {
         let label = format!("{}{}", case.root, case.path);
-        let raw = std::fs::read(fixture_root.join(format!("{}.json", case.root))).unwrap();
+        let raw = std::fs::read(current_fixture(&fixture_root, case.root)).unwrap();
         let baseline: Value = serde_json::from_slice(&raw).unwrap();
         parse_root(case.root, &raw).unwrap_or_else(|error| panic!("baseline {label}: {error}"));
         let schema: Value =
@@ -823,10 +823,9 @@ fn keyed_collections_reject_same_identity_with_different_other_fields() {
     ];
     let fixture_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
     for (root, path, changed_field, different) in &cases {
-        let mut value: Value = serde_json::from_slice(
-            &std::fs::read(fixture_root.join(format!("{root}.json"))).unwrap(),
-        )
-        .unwrap();
+        let mut value: Value =
+            serde_json::from_slice(&std::fs::read(current_fixture(&fixture_root, root)).unwrap())
+                .unwrap();
         parse_root(root, &serde_json::to_vec(&value).unwrap()).unwrap();
         let items = value.pointer_mut(path).unwrap().as_array_mut().unwrap();
         let mut duplicate = items[0].clone();
@@ -856,7 +855,10 @@ fn nested_collection_types_keep_their_own_bounds_and_identity_rules() {
     use mstrchf_contracts::{Fact, ReadScope, Text, parse_document};
     let fixture_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
     let request: Value = serde_json::from_slice(
-        &std::fs::read(fixture_root.join("job-request-product-observation.json")).unwrap(),
+        &std::fs::read(
+            fixture_root.join("ruling004-current--job-request-product-observation.json"),
+        )
+        .unwrap(),
     )
     .unwrap();
     let scope = request.pointer("/scope/data/read_scope").unwrap().clone();
@@ -1412,11 +1414,14 @@ fn outbound_bundle_internal_artefacts_accept_zero_and_reject_over_sixty_four() {
         parse_document, validate_outbound,
     };
     let fixture_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
-    let request: JobRequestV1 =
-        parse_document(&std::fs::read(fixture_root.join("job-request.json")).unwrap()).unwrap();
-    let context: Value =
-        serde_json::from_slice(&std::fs::read(fixture_root.join("planning-context.json")).unwrap())
-            .unwrap();
+    let request: JobRequestV1 = parse_document(
+        &std::fs::read(fixture_root.join("ruling004-current--job-request.json")).unwrap(),
+    )
+    .unwrap();
+    let context: Value = serde_json::from_slice(
+        &std::fs::read(fixture_root.join("ruling004-current--planning-context.json")).unwrap(),
+    )
+    .unwrap();
     let policy: PrivacyPolicy =
         parse_document(&serde_json::to_vec(&context["privacy"]).unwrap()).unwrap();
     let mut bundle = OutboundBundle {
@@ -1435,4 +1440,14 @@ fn outbound_bundle_internal_artefacts_accept_zero_and_reject_over_sixty_four() {
         ErrorCode::LimitExceeded
     );
     println!("outbound internal artefact count subcases=2");
+}
+
+// Ruling004 current synthetic copies are separately named; originals remain immutable.
+fn current_fixture(root: &Path, name: &str) -> std::path::PathBuf {
+    let current = root.join(format!("ruling004-current--{name}.json"));
+    if current.exists() {
+        current
+    } else {
+        root.join(format!("{name}.json"))
+    }
 }

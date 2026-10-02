@@ -68,7 +68,7 @@ fn update(
 }
 fn selection() -> MealSelection {
     let w: Week = parse_document(include_bytes!(
-        "../../../tests/fixtures/contracts/week-disabled-retained.json"
+        "../../../tests/fixtures/contracts/ruling004-current--week-disabled-retained.json"
     ))
     .unwrap();
     let mut s = w.plan.selections[0].clone();

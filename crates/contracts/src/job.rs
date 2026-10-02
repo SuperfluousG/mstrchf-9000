@@ -87,6 +87,12 @@ pub fn validate_request_shape(r: &JobRequestV1) -> Result<(), DomainError> {
             .validate_shape()
             .map_err(crate::parse::shape_error)?;
     }
+    if let JobPayload::GenericCatalogue { public_recipes, .. } = &r.payload {
+        // Validate the embedded children, never recursively validate this request.
+        public_recipes
+            .validate_shape()
+            .map_err(crate::parse::shape_error)?;
+    }
     validate_stamp(&r.context_stamp)?;
     if r.created_at.0 >= r.expires_at.0 {
         return Err(refuse(ErrorCode::InvalidValue, "/expires_at"));
@@ -310,9 +316,12 @@ fn validate_payload_references(
                         .all(|s| s.slot.week_id == w.week_id && known(&s.recipe))
                 })
         }
-        JobPayload::GenericCatalogue { public_recipes, .. } => public_recipes
-            .iter()
-            .all(|r| r.extras.iter().all(|e| known(&e.recipe))),
+        JobPayload::GenericCatalogue { public_recipes, .. } => public_recipes.iter().all(|r| {
+            r.extras.iter().all(|e| known(&e.recipe))
+                && r.reused_inputs
+                    .iter()
+                    .all(|input| known(&input.source_recipe))
+        }),
         JobPayload::RecipeCandidate { adaptation, .. } => adaptation
             .0
             .as_ref()

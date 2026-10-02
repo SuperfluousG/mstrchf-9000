@@ -365,9 +365,6 @@
         "components": {
           "$ref": "#/$defs/Array_DerivedComponent_1_128"
         },
-        "original_cook": {
-          "$ref": "#/$defs/ZonedMoment"
-        },
         "recipe": {
           "$ref": "#/$defs/RecipeRef"
         },
@@ -379,7 +376,6 @@
         "batch_id",
         "recipe",
         "source_slot",
-        "original_cook",
         "components"
       ],
       "type": "object"
@@ -393,11 +389,14 @@
         "component_id": {
           "$ref": "#/$defs/ComponentId"
         },
+        "original_production": {
+          "$ref": "#/$defs/ProductionMoment"
+        },
         "produced": {
           "$ref": "#/$defs/Quantity"
         },
         "storage_rule": {
-          "$ref": "#/$defs/StorageRule"
+          "$ref": "#/$defs/Nullable_StorageRule"
         },
         "unallocated": {
           "$ref": "#/$defs/NonnegativeQuantity"
@@ -408,6 +407,7 @@
         "produced",
         "allocated",
         "unallocated",
+        "original_production",
         "storage_rule"
       ],
       "type": "object"
@@ -543,6 +543,16 @@
       "anyOf": [
         {
           "$ref": "#/$defs/RecipeRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_StorageRule": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StorageRule"
         },
         {
           "type": "null"
@@ -716,6 +726,62 @@
         "task_id"
       ],
       "type": "object"
+    },
+    "ProductionMoment": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "completed_at": {
+                  "$ref": "#/$defs/ZonedMoment"
+                }
+              },
+              "required": [
+                "completed_at"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "cooked",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "preparation_started_at": {
+                  "$ref": "#/$defs/ZonedMoment"
+                }
+              },
+              "required": [
+                "preparation_started_at"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unheated",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
     },
     "Quantity": {
       "additionalProperties": false,
@@ -1046,6 +1112,9 @@
     "digest": {
       "$ref": "#/$defs/PayloadDigest"
     },
+    "food_inputs_digest": {
+      "$ref": "#/$defs/PayloadDigest"
+    },
     "input_plan_digest": {
       "$ref": "#/$defs/PlanInputDigest"
     },
@@ -1073,6 +1142,7 @@
     "week_id",
     "plan_revision",
     "input_plan_digest",
+    "food_inputs_digest",
     "context_stamp",
     "recipe_refs",
     "batches",

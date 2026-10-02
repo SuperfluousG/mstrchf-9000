@@ -1,0 +1,96 @@
+{
+  "source_manifest_sha256": "ba41e5af3fab492d243696082f4826b165a5f72fe0dcb1069f71abe4b53ebede",
+  "source": "loop/001/food-supplement-vectors/native-v4",
+  "acceptance": "loop/001/food-vector-review/acceptance-v4.md",
+  "status": "Root accepted independent expected-vector evidence after clean same-reviewer R2; synthetic premises remain synthetic. This replaces only the working copy of v3 wire fixtures; original v3 remains historical and unaccepted.",
+  "vectors": [
+    {
+      "id": "recipe",
+      "type": "RecipeRevision",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76",
+      "bytes": 3885,
+      "input": "recipe.input.json",
+      "preimage": "recipe.canonical.json"
+    },
+    {
+      "id": "prior-saved-basis",
+      "type": "SavedFoodBasis",
+      "classification": "positive_synthetic_premise",
+      "domain": "mstrchf-saved-food-basis-r3",
+      "omit_outer_field": null,
+      "sha256": "46c3679ae65f730c6b75837b7c61df78d278d791005566bfa4a0d2b5c2eea3f9",
+      "bytes": 28407,
+      "input": "prior-saved-basis.input.json",
+      "preimage": "prior-saved-basis.canonical.json"
+    },
+    {
+      "id": "subject-plan-input",
+      "type": "PlanInputMaterial",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "14af92c078a6a90e4dcdbb2de0b2319cbc9f8eb4704feb3cdde51efdefb6e14a",
+      "bytes": 3035,
+      "input": "subject-plan-input.input.json",
+      "preimage": "subject-plan-input.canonical.json"
+    },
+    {
+      "id": "subject-saved-basis",
+      "type": "SavedFoodBasis",
+      "classification": "positive_synthetic_premise",
+      "domain": "mstrchf-saved-food-basis-r3",
+      "omit_outer_field": null,
+      "sha256": "437408a9ac8581b1d92e28292a0fc256587d27e5e2bdb4b93a81c6fc5c222caf",
+      "bytes": 35723,
+      "input": "subject-saved-basis.input.json",
+      "preimage": "subject-saved-basis.canonical.json"
+    },
+    {
+      "id": "subject-derived",
+      "type": "DerivedMaterial",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+      "bytes": 6620,
+      "input": "subject-derived.input.json",
+      "preimage": "subject-derived.canonical.json"
+    },
+    {
+      "id": "wire-derived-batch",
+      "type": "DerivedBatch",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "8b3f776ec127dbf19c704b01880d1fbf423664ac920739fe22cdda282f272c24",
+      "bytes": 1309,
+      "input": "wire-derived-batch.input.json",
+      "preimage": "wire-derived-batch.canonical.json"
+    },
+    {
+      "id": "wire-derived-plan",
+      "type": "DerivedPlan",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": "digest",
+      "sha256": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+      "bytes": 6620,
+      "input": "wire-derived-plan.input.json",
+      "preimage": "wire-derived-plan.canonical.json"
+    },
+    {
+      "id": "wire-addition-only-recipe",
+      "type": "RecipeRevision",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "ddcd57fd2454400a3ba8ff9bcd601a2d8e07b84d9492c8f9b068f2414b540090",
+      "bytes": 3416,
+      "input": "wire-addition-only-recipe.input.json",
+      "preimage": "wire-addition-only-recipe.canonical.json"
+    }
+  ]
+}

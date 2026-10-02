@@ -3,7 +3,7 @@ use mstrchf_core::recipes::*;
 
 fn recipe() -> RecipeRevision {
     parse_document(include_bytes!(
-        "../../../tests/fixtures/food/admission/complete-synthetic.json"
+        "../../../tests/fixtures/food/admission/ruling004-current--complete-synthetic.json"
     ))
     .unwrap()
 }

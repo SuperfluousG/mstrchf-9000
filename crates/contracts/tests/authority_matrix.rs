@@ -844,8 +844,10 @@ fn named_basket_operation_matrix() {
 fn concrete_authority_fixtures_execute_predicates() {
     let base =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
-    let manifest: Value =
-        serde_json::from_slice(&std::fs::read(base.join("manifest.json")).unwrap()).unwrap();
+    let manifest: Value = serde_json::from_slice(
+        &std::fs::read(base.join("ruling004-current-manifest.json")).unwrap(),
+    )
+    .unwrap();
     let mut executed = 0;
     let mut failures = Vec::new();
     for case in manifest["cases"].as_array().unwrap() {
@@ -945,12 +947,16 @@ fn every_command_variant_has_all_three_caller_rules() {
     let draft: HouseholdDraft = serde_json::from_value(load("household-draft.json")).unwrap();
     let profile: HouseholdProfile = serde_json::from_value(load("household-profile.json")).unwrap();
     let week: Week = serde_json::from_value(load("week.json")).unwrap();
-    let request: JobRequestV1 =
-        serde_json::from_value(load("job-request-product-observation.json")).unwrap();
-    let calendar_request: JobRequestV1 =
-        serde_json::from_value(load("job-request-calendar-publication.json")).unwrap();
+    let request: JobRequestV1 = serde_json::from_value(load(
+        "ruling004-current--job-request-product-observation.json",
+    ))
+    .unwrap();
+    let calendar_request: JobRequestV1 = serde_json::from_value(load(
+        "ruling004-current--job-request-calendar-publication.json",
+    ))
+    .unwrap();
     let operation: OperationRequest =
-        serde_json::from_value(load("operation-request.json")).unwrap();
+        serde_json::from_value(load("ruling004-current--operation-request.json")).unwrap();
     let policy = policy();
     let calendar_event = match calendar_request.payload {
         JobPayload::CalendarPublication { batch, .. } => batch.events.0[0].clone(),

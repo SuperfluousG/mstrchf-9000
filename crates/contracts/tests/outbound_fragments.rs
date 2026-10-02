@@ -34,7 +34,7 @@ fn policy(share: bool) -> PrivacyPolicy {
 }
 #[test]
 fn same_variant_scoped_fragment() {
-    let r = request("job-request-personalised.json");
+    let r = request("ruling004-current--job-request-personalised.json");
     let b = bundle(r.clone(), serde_json::to_value(&r.payload).unwrap());
     assert_eq!(validate_outbound(&b, &policy(true)), Ok(()));
 }
@@ -50,7 +50,7 @@ fn matching_hash_wrong_variant_refused() {
 }
 #[test]
 fn matching_hash_out_of_scope_slot_refused() {
-    let r = request("job-request-personalised.json");
+    let r = request("ruling004-current--job-request-personalised.json");
     let mut f = serde_json::to_value(&r.payload).unwrap();
     f["data"]["requirements"][0]["slot"]["week_id"] = json!("wk_00000000000000000000000000000009");
     let b = bundle(r, f);
@@ -62,7 +62,7 @@ fn matching_hash_out_of_scope_slot_refused() {
 #[test]
 fn sharing_off_fragment_leak_refused() {
     let r = request("job-request-setup.json");
-    let other = request("job-request-personalised.json");
+    let other = request("ruling004-current--job-request-personalised.json");
     let b = bundle(r, serde_json::to_value(other.payload).unwrap());
     assert_eq!(
         validate_outbound(&b, &policy(false)).unwrap_err().code,
@@ -135,7 +135,7 @@ fn diet_exact_code() {
 }
 #[test]
 fn inactive_exact_fragment_and_both_privacy_gates() {
-    let r = request("positive_inactive_request.json");
+    let r = request("ruling004-current--positive_inactive_request.json");
     let mut fragment = serde_json::to_value(&r.payload).unwrap();
     fragment["data"]["requirements"]
         .as_array_mut()
@@ -168,7 +168,7 @@ fn inactive_exact_fragment_and_both_privacy_gates() {
 }
 #[test]
 fn rehashed_deadline_and_activity_changes_are_not_exact_fragments() {
-    let active = request("job-request-complete-noop.json");
+    let active = request("ruling004-current--job-request-complete-noop.json");
     for mode in 0..3 {
         let mut parent = active.clone();
         let mut fragment = serde_json::to_value(&active.payload).unwrap();
