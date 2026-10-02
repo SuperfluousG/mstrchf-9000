@@ -514,7 +514,7 @@ fn food_f05_shared_base_and_separate_extra() {
     let er = assess_revision(&extra, &eb, &ec).unwrap();
     assert_eq!(eligible(&br, &m).unwrap(), Eligibility::Eligible);
     assert_eq!(
-        validate_extra(&br, &er, &selected, &m).unwrap(),
+        validate_extra(&br, &er, &selected, &m, &no_overrides()).unwrap(),
         Eligibility::Eligible
     );
     let s = resolve_servings(&br, &m, &no_overrides()).unwrap();
@@ -553,7 +553,7 @@ fn food_f06_extra_to_ineligible_person() {
     let br = assess_revision(&base, &b, &c).unwrap();
     let er = assess_revision(&extra, &eb, &ec).unwrap();
     assert!(matches!(
-        validate_extra(&br, &er, &selected, &m).unwrap(),
+        validate_extra(&br, &er, &selected, &m, &no_overrides()).unwrap(),
         Eligibility::Ineligible(_)
     ));
 }
@@ -946,23 +946,23 @@ fn food_extra_duplicate_foreign_wrong_ref_and_amount_refused() {
     let er = assess_revision(&extra, &eb, &ec).unwrap();
     let mut duplicate = selected.clone();
     duplicate.recipients.0.push(duplicate.recipients[0].clone());
-    assert!(validate_extra(&br, &er, &duplicate, &m).is_err());
+    assert!(validate_extra(&br, &er, &duplicate, &m, &no_overrides()).is_err());
     let mut foreign = selected.clone();
     foreign.recipients[0].person = person(99);
-    assert!(validate_extra(&br, &er, &foreign, &m).is_err());
+    assert!(validate_extra(&br, &er, &foreign, &m, &no_overrides()).is_err());
     let mut wrong = selected.clone();
     wrong.recipe.revision = Revision(2);
-    assert!(validate_extra(&br, &er, &wrong, &m).is_err());
+    assert!(validate_extra(&br, &er, &wrong, &m, &no_overrides()).is_err());
     let mut wrong = selected.clone();
     wrong.recipients[0].servings = p(2, 1);
     assert!(matches!(
-        validate_extra(&br, &er, &wrong, &m).unwrap(),
+        validate_extra(&br, &er, &wrong, &m, &no_overrides()).unwrap(),
         Eligibility::Ineligible(_)
     ));
     let mut wrong = selected.clone();
     wrong.recipients[0].preset_ref.recipe.digest = RecipeDigest("b".repeat(64));
     assert!(matches!(
-        validate_extra(&br, &er, &wrong, &m).unwrap(),
+        validate_extra(&br, &er, &wrong, &m, &no_overrides()).unwrap(),
         Eligibility::Ineligible(_)
     ));
 }
@@ -977,27 +977,27 @@ fn food_extra_applicability_never_weakens_restrictions() {
     let br = assess_revision(&base, &b, &c).unwrap();
     let er = assess_revision(&extra, &eb, &ec).unwrap();
     assert!(matches!(
-        validate_extra(&br, &er, &selected, &m).unwrap(),
+        validate_extra(&br, &er, &selected, &m, &no_overrides()).unwrap(),
         Eligibility::Unresolved(_)
     ));
     base.extras[0].eligible_person_requirements = BoundedVec(vec![gf()]);
     let (b, c) = inputs(&base);
     let br = assess_revision(&base, &b, &c).unwrap();
     assert_eq!(
-        validate_extra(&br, &er, &selected, &m).unwrap(),
+        validate_extra(&br, &er, &selected, &m, &no_overrides()).unwrap(),
         Eligibility::Eligible
     );
     let mut for_a = selected.clone();
     for_a.recipients[0].person = person(1);
     assert!(matches!(
-        validate_extra(&br, &er, &for_a, &m).unwrap(),
+        validate_extra(&br, &er, &for_a, &m, &no_overrides()).unwrap(),
         Eligibility::Ineligible(_)
     ));
     base.dietary_evidence[0].verdict = DietaryVerdict::Conflicting;
     let (b, c) = inputs(&base);
     let br = assess_revision(&base, &b, &c).unwrap();
     assert!(matches!(
-        validate_extra(&br, &er, &selected, &m).unwrap(),
+        validate_extra(&br, &er, &selected, &m, &no_overrides()).unwrap(),
         Eligibility::Ineligible(_)
     ));
 }
@@ -1259,7 +1259,7 @@ fn food_conversion_inverse_limits_and_no_multihop() {
     }
 }
 #[test]
-fn food_conversion_duplicate_evidence_across_components_refused() {
+fn food_conversion_identical_evidence_across_components_coalesces() {
     let mut r = recipe();
     conversion(&mut r);
     second_component(&mut r);
@@ -1282,8 +1282,315 @@ fn food_conversion_duplicate_evidence_across_components_refused() {
             IngredientForm::Dry,
             &eid(9)
         )
-        .unwrap_err()
-        .code,
-        ErrorCode::DomainConflict
+        .unwrap()
+        .amount,
+        p(100, 1)
     );
+}
+include!(
+    "../../../tests/fixtures/food/portions-eligibility/r1-original-conversion-counterexample.inc.rs"
+);
+
+fn local_override(
+    person: PersonRef,
+    preset: PortionPresetName,
+    adjustment: PositiveRational,
+) -> MealOverrides {
+    MealOverrides {
+        portions: BoundedVec(vec![PersonPortionOverride {
+            person,
+            preset,
+            adjustment,
+        }]),
+        eat_by: Nullable(None),
+    }
+}
+fn extra_fit(
+    base: &RecipeRevision,
+    extra: &RecipeRevision,
+    selected: &ExtraSelection,
+    meal: &MealRequirements,
+    overrides: &MealOverrides,
+) -> Result<Eligibility, DomainError> {
+    let (bb, bc) = inputs(base);
+    let br = assess_revision(base, &bb, &bc).unwrap();
+    let (eb, ec) = inputs(extra);
+    let er = assess_revision(extra, &eb, &ec).unwrap();
+    validate_extra(&br, &er, selected, meal, overrides)
+}
+#[test]
+fn food_extra_local_override_replaces_household_and_meal_type_pair() {
+    let (mut base, mut extra, mut m, mut selected) = extra_case();
+    preset(
+        &mut extra,
+        AgeBand::Adult,
+        MealType::Dinner,
+        PortionPresetName::Larger,
+        p(3, 2),
+    );
+    base.extras[0].recipe = reference(&extra);
+    selected.recipe = reference(&extra);
+    selected.recipients[0].preset_ref.recipe = reference(&extra);
+    m.attendees[1].portion.adjustment = p(2, 1);
+    m.attendees[1].portion.meal_overrides = BoundedVec(vec![MealPortionOverride {
+        meal_type: MealType::Dinner,
+        preset: PortionPresetName::Larger,
+        adjustment: p(3, 1),
+    }]);
+    let o = local_override(person(2), PortionPresetName::Regular, p(5, 4));
+    selected.recipients[0].servings = p(5, 4);
+    let before = (
+        base.clone(),
+        extra.clone(),
+        m.clone(),
+        selected.clone(),
+        o.clone(),
+    );
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+    assert!(matches!(
+        extra_fit(&base, &extra, &selected, &m, &no_overrides()).unwrap(),
+        Eligibility::Ineligible(_)
+    ));
+    assert_eq!((base, extra, m, selected, o), before);
+}
+#[test]
+fn food_extra_valid_nonrecipient_override_is_irrelevant() {
+    let (base, extra, m, selected) = extra_case();
+    // This preset need not be offered by this extra to an unrelated attendee.
+    let o = local_override(person(1), PortionPresetName::Smaller, p(7, 4));
+    let before = (m.clone(), selected.clone(), o.clone());
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+    assert_eq!((m, selected, o), before);
+}
+#[test]
+fn food_extra_omitted_override_never_inferred_from_selected_amount() {
+    let (base, extra, m, mut selected) = extra_case();
+    selected.recipients[0].servings = p(3, 2);
+    assert!(matches!(
+        extra_fit(&base, &extra, &selected, &m, &no_overrides()).unwrap(),
+        Eligibility::Ineligible(_)
+    ));
+    let o = local_override(person(2), PortionPresetName::Regular, p(3, 2));
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+}
+#[test]
+fn food_extra_duplicate_foreign_overrides_reject_before_projection() {
+    let (mut base, extra, m, selected) = extra_case();
+    for who in [person(1), person(2)] {
+        let mut o = local_override(who, PortionPresetName::Regular, p(1, 1));
+        o.portions.0.push(o.portions[0].clone());
+        assert!(extra_fit(&base, &extra, &selected, &m, &o).is_err());
+    }
+    let foreign = local_override(person(99), PortionPresetName::Regular, p(1, 1));
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &foreign)
+            .unwrap_err()
+            .code,
+        ErrorCode::ForeignReference
+    );
+    base.dietary_evidence[0].verdict = DietaryVerdict::Conflicting;
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &foreign)
+            .unwrap_err()
+            .code,
+        ErrorCode::ForeignReference
+    );
+}
+#[test]
+fn food_extra_full_override_shape_bounds_and_eat_by_checked() {
+    let (base, extra, m, selected) = extra_case();
+    for (n, d) in [(0, 1), (1, 0), (2, 2), (MAX_NUMERATOR + 1, 1)] {
+        let o = local_override(
+            person(1),
+            PortionPresetName::Regular,
+            PositiveRational(Rational {
+                numerator: DecimalU64(n),
+                denominator: DecimalU64(d),
+            }),
+        );
+        assert!(extra_fit(&base, &extra, &selected, &m, &o).is_err());
+    }
+    let mut o = local_override(person(1), PortionPresetName::Regular, p(1, 1));
+    o.portions = BoundedVec(vec![o.portions[0].clone(); 65]);
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o)
+            .unwrap_err()
+            .code,
+        ErrorCode::LimitExceeded
+    );
+    let mut o = no_overrides();
+    o.eat_by = m.eat_by.clone();
+    o.eat_by.0.as_mut().unwrap().instant = Instant("malformed".into());
+    assert!(extra_fit(&base, &extra, &selected, &m, &o).is_err());
+    o.eat_by = m.eat_by.clone();
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+}
+#[test]
+fn food_extra_local_missing_mapping_remains_unresolved() {
+    let (base, extra, mut m, selected) = extra_case();
+    let o = local_override(person(2), PortionPresetName::Smaller, p(1, 1));
+    assert!(matches!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Unresolved(_)
+    ));
+    m.attendees[1].age_band = AgeBand::Child4To6;
+    let o = local_override(person(2), PortionPresetName::Regular, p(1, 1));
+    assert!(matches!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Unresolved(_)
+    ));
+}
+#[test]
+fn food_extra_local_override_does_not_relax_recipient_restrictions() {
+    let (base, extra, m, mut selected) = extra_case();
+    selected.recipients[0].person = person(1);
+    selected.recipients[0].servings = p(1, 2);
+    let o = local_override(person(1), PortionPresetName::Regular, p(1, 2));
+    assert!(matches!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Ineligible(_)
+    ));
+}
+#[test]
+fn food_extra_guest_default_and_local_override() {
+    let (base, extra, m, mut selected) = extra_case();
+    let guest = m.attendees[2].person.clone();
+    selected.recipients[0].person = guest.clone();
+    selected.recipients[0].servings = p(1, 2);
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &no_overrides()).unwrap(),
+        Eligibility::Eligible
+    );
+    let o = local_override(guest, PortionPresetName::Regular, p(3, 4));
+    selected.recipients[0].servings = p(3, 4);
+    let before = (
+        base.clone(),
+        extra.clone(),
+        m.clone(),
+        selected.clone(),
+        o.clone(),
+    );
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+    assert_eq!((base, extra, m, selected, o), before);
+}
+#[test]
+fn food_extra_local_servings_match_by_identity_without_reordering_inputs() {
+    let (base, extra, m, mut selected) = extra_case();
+    let mut guest = selected.recipients[0].clone();
+    guest.person = m.attendees[2].person.clone();
+    guest.servings = p(3, 4);
+    selected.recipients[0].servings = p(5, 4);
+    selected.recipients.0.insert(0, guest);
+    let mut o = local_override(
+        m.attendees[2].person.clone(),
+        PortionPresetName::Regular,
+        p(3, 4),
+    );
+    o.portions.0.push(PersonPortionOverride {
+        person: person(2),
+        preset: PortionPresetName::Regular,
+        adjustment: p(5, 4),
+    });
+    o.portions.0.push(PersonPortionOverride {
+        person: person(1),
+        preset: PortionPresetName::Smaller,
+        adjustment: p(7, 4),
+    });
+    let before = (m.clone(), selected.clone(), o.clone());
+    assert_eq!(
+        extra_fit(&base, &extra, &selected, &m, &o).unwrap(),
+        Eligibility::Eligible
+    );
+    assert_eq!((m.clone(), selected, o), before);
+    let mut malformed = m.clone();
+    malformed.equipment = BoundedVec(vec![EquipmentCode::Oven, EquipmentCode::Hob]);
+    let selected = extra_case().3;
+    let unchanged = malformed.clone();
+    assert!(extra_fit(&base, &extra, &selected, &malformed, &no_overrides()).is_err());
+    assert_eq!(malformed, unchanged);
+}
+#[test]
+fn food_extra_local_selected_binding_and_amount_tampering_refused() {
+    let (base, extra, m, mut selected) = extra_case();
+    selected.recipients[0].servings = p(3, 2);
+    let o = local_override(person(2), PortionPresetName::Regular, p(3, 2));
+    for mutation in 0..5 {
+        let mut wrong = selected.clone();
+        match mutation {
+            0 => wrong.recipients[0].servings = p(2, 1),
+            1 => wrong.recipients[0].preset_ref.age_band = AgeBand::Teen,
+            2 => wrong.recipients[0].preset_ref.preset = PortionPresetName::Larger,
+            3 => wrong.recipients[0].preset_ref.meal_type = MealType::Lunch,
+            _ => wrong.recipients[0].preset_ref.recipe.revision = Revision(2),
+        };
+        assert!(matches!(
+            extra_fit(&base, &extra, &wrong, &m, &o).unwrap(),
+            Eligibility::Ineligible(_)
+        ));
+    }
+}
+#[test]
+fn food_conversion_same_id_differing_complete_records_still_conflict() {
+    for change in 0..3 {
+        for reverse in [false, true] {
+            let mut r = recipe();
+            conversion(&mut r);
+            second_component(&mut r);
+            match change {
+                0 => r.ingredients[1].conversion_evidence[0].factor = p(4, 1),
+                1 => {
+                    r.ingredients[1].conversion_evidence[0]
+                        .source
+                        .source_revision = Nullable(Some(Text("different-source".into())))
+                }
+                _ => r.ingredients[1].conversion_evidence[0].from_unit = Unit::Ml,
+            }
+            if reverse {
+                r.ingredients.0.reverse();
+            }
+            let (b, c) = reviewed_classes(&r);
+            let rr = assess_revision(&r, &b, &c).unwrap();
+            assert_eq!(
+                dry_result(&rr, &eid(9)).unwrap_err().code,
+                ErrorCode::DomainConflict
+            );
+        }
+    }
+}
+#[test]
+fn food_conversion_distinct_consistent_ids_and_order_controls() {
+    for identical_id in [false, true] {
+        for reverse in [false, true] {
+            let mut r = recipe();
+            conversion(&mut r);
+            second_component(&mut r);
+            if !identical_id {
+                r.ingredients[1].conversion_evidence[0].evidence_id = eid(10);
+            }
+            if reverse {
+                r.ingredients.0.reverse();
+            }
+            let (b, c) = reviewed_classes(&r);
+            let rr = assess_revision(&r, &b, &c).unwrap();
+            expect_amount(dry_result(&rr, &eid(9)).unwrap().amount, 100, 1);
+            if !identical_id {
+                expect_amount(dry_result(&rr, &eid(10)).unwrap().amount, 100, 1);
+            }
+        }
+    }
 }

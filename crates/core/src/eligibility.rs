@@ -118,13 +118,34 @@ pub fn eligible(
     }
 }
 
+/// `overrides` must be the authoritative overrides of the same current meal
+/// selection. This pure API checks their values; the caller establishes binding.
 pub fn validate_extra(
     base: &ReviewedRecipe<'_>,
     extra: &ReviewedRecipe<'_>,
     selected: &ExtraSelection,
     meal: &MealRequirements,
+    overrides: &MealOverrides,
 ) -> Result<Eligibility, DomainError> {
     check_meal(meal)?;
+    // Check the entire supplied context before projecting recipients. Otherwise
+    // foreign, duplicate or malformed nonrecipient overrides could disappear.
+    bound(overrides.portions.len(), 0, 64, "/overrides/portions")?;
+    shape(overrides, "/overrides")?;
+    for (i, o) in overrides.portions.iter().enumerate() {
+        if overrides.portions[..i].iter().any(|p| p.person == o.person) {
+            return Err(DomainError::new(
+                ErrorCode::DuplicateKey,
+                "/overrides/portions",
+            ));
+        }
+        if !meal.attendees.iter().any(|a| a.person == o.person) {
+            return Err(DomainError::new(
+                ErrorCode::ForeignReference,
+                "/overrides/portions",
+            ));
+        }
+    }
     bound(selected.recipients.len(), 1, 64, "/extra/recipients")?;
     shape(selected, "/extra")?;
     let extra_ref = recipe_ref(extra)?;
@@ -209,16 +230,15 @@ pub fn validate_extra(
     if fit != Eligibility::Eligible {
         return Ok(fit);
     }
-    // This API carries no per-meal override. Only a serving resolvable from its
-    // supplied attendee preferences can be authorised here.
-    let resolved = match crate::portions::resolve_servings(
-        extra,
-        &recipients,
-        &MealOverrides {
-            portions: BoundedVec(vec![]),
-            eat_by: Nullable(None),
-        },
-    ) {
+    let mut recipient_overrides = overrides.clone();
+    recipient_overrides
+        .portions
+        .0
+        .retain(|o| recipients.attendees.iter().any(|a| a.person == o.person));
+    // Only portions affect this calculation. eat_by was shape-checked above;
+    // scheduling and binding to the current selection remain caller obligations.
+    let resolved = match crate::portions::resolve_servings(extra, &recipients, &recipient_overrides)
+    {
         Ok(v) => v,
         Err(e) => return Ok(Eligibility::Unresolved(e)),
     };

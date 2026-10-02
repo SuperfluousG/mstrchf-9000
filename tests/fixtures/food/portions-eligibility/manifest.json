@@ -1,6 +1,6 @@
 {
   "target": "food_portions_eligibility",
-  "test_function_count": 33,
+  "test_function_count": 46,
   "tests": [
     "food_oracle_case_inventory",
     "food_f01_exact_rational_recipe_specific_presets",
@@ -34,7 +34,20 @@
     "food_conversion_same_ingredient_across_components_checks_all_rules",
     "food_conflicts_are_deterministic_across_requirement_order",
     "food_conversion_inverse_limits_and_no_multihop",
-    "food_conversion_duplicate_evidence_across_components_refused"
+    "food_conversion_identical_evidence_across_components_coalesces",
+    "food_extra_local_override_replaces_household_and_meal_type_pair",
+    "food_extra_valid_nonrecipient_override_is_irrelevant",
+    "food_extra_omitted_override_never_inferred_from_selected_amount",
+    "food_extra_duplicate_foreign_overrides_reject_before_projection",
+    "food_extra_full_override_shape_bounds_and_eat_by_checked",
+    "food_extra_local_missing_mapping_remains_unresolved",
+    "food_extra_local_override_does_not_relax_recipient_restrictions",
+    "food_extra_guest_default_and_local_override",
+    "food_extra_local_servings_match_by_identity_without_reordering_inputs",
+    "food_extra_local_selected_binding_and_amount_tampering_refused",
+    "food_conversion_same_id_differing_complete_records_still_conflict",
+    "food_conversion_distinct_consistent_ids_and_order_controls",
+    "r1_identical_rule_repeated_across_components_remains_unambiguous"
   ],
   "oracle_case_group_count": 13,
   "oracle_sha256": "ba50ac3ff55ea90aae006d2883cfe21ab1c9667b5ccfdd185f2e967263c8b092",
@@ -46,5 +59,7 @@
     "P08 F40 pricing",
     "C/D/E scheduling and demand"
   ],
-  "synthetic": true
+  "synthetic": true,
+  "review_regression": "r1-original-conversion-counterexample.inc.rs",
+  "native_amendment": "validate_extra fifth argument MealOverrides"
 }

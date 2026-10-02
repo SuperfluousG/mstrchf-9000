@@ -238,13 +238,15 @@ pub fn convert_quantity(
             "/conversion_evidence",
         ));
     }
-    if selected.len() != 1 {
+    // Repeated component occurrences may carry the same admitted fact. Only
+    // complete record equality permits coalescing; identity alone is not enough.
+    let e = *selected[0];
+    if selected.iter().any(|other| **other != e) {
         return Err(DomainError::new(
             ErrorCode::DomainConflict,
             "/conversion_evidence/evidence_id",
         ));
     }
-    let e = *selected[0];
     let direct = |e: &ConversionEvidence| {
         e.from_unit == quantity.unit
             && e.from_form == quantity.form
