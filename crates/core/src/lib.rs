@@ -9,6 +9,7 @@ pub mod history;
 pub mod household;
 pub mod portions;
 pub mod prep;
+pub mod products;
 pub mod ranking;
 pub mod recipes;
 pub mod selection;
