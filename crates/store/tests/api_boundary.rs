@@ -142,4 +142,21 @@ fn downstream_consumers_cannot_reach_internal_mutation_or_test_modules() {
 
     let manifest = write_downstream_fixture(&temp_root.join("consumer"), Some(TESTS_MODULE_SOURCE));
     assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0433", "tests");
+
+    let manifest = write_downstream_fixture(
+        &temp_root.join("consumer"),
+        Some(
+            "fn main() { let _: Option<mstrchf_store::backup::VerifiedBackupReceipt> = None; let _: Option<mstrchf_store::custody::SealedFile> = None; }",
+        ),
+    );
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0603", "private");
+    let manifest = write_downstream_fixture(
+        &temp_root.join("consumer"),
+        Some("fn main() { mstrchf_store::upgrade_fixture::apply(); }"),
+    );
+    assert_only_error_code(
+        &cargo_check(&manifest, &target_dir),
+        "E0433",
+        "upgrade_fixture",
+    );
 }

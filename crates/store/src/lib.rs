@@ -4,14 +4,27 @@ use std::path::PathBuf;
 use std::sync::mpsc::{self, SyncSender};
 use std::thread::JoinHandle;
 mod admission;
+mod audit;
+mod backup;
 mod commands;
+mod custody;
 mod database;
 mod migrate;
 mod receipts;
 mod records;
 mod recovery;
 mod snapshot;
+mod startup;
 mod windows_fs;
+
+#[cfg(test)]
+#[path = "../tests/backup_upgrade_tests.rs"]
+mod backup_upgrade_tests;
+#[cfg(test)]
+mod upgrade_fixture;
+#[cfg(all(test, windows))]
+#[path = "../tests/vfs_trace.rs"]
+mod vfs_trace;
 
 /// Trusted host configuration. The renderer must never choose this directory.
 pub struct StoreConfig {

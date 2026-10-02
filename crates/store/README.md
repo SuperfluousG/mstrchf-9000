@@ -29,3 +29,43 @@ cargo +stable-x86_64-pc-windows-msvc clippy --locked -p mstrchf-store --all-targ
 ```
 
 Local cancellation retains terminal outcomes and quarantines live synthetic resource ownership. It supplies no worker-stop evidence and never releases a resource. There is no successful public job producer in B1.
+
+## Private backup foundation (awaiting independent source review)
+
+Startup now requires a fixed local NTFS volume, retained no-delete ancestor handles,
+no reparse points and single-link regular leaves. Root custody precedes lock-file
+creation. Existing data is recognised either through sealed existing WAL/SHM or
+through a new sealed inspection copy when **all** journal sidecars are absent.
+Only that private copy uses SQLite immutable mode. Any rollback journal, partial
+WAL/SHM pair or unreadable safe-reader state refuses without writable retry.
+Ordinary clean closure and retained-sidecar process crashes have separate positive
+fixtures. Recognition is followed by original-file logical revalidation.
+
+`audit.rs` checks every B1 table/row, original receipt bytes, projections, ledger,
+integrity and foreign keys. Production B1 has an explicitly empty asset closure.
+`backup.rs` implements SQLite Online Backup with a pinned source read transaction,
+bounded stepping, destination close/flush/seal and independent full audit. Its
+private non-cloneable receipt retains protected database/manifest/asset handles;
+persisted `verified.json` is evidence only and cannot recreate authority.
+
+Production catalogue remains migration001. `upgrade_fixture.rs` and its literal
+schema1→2 catalogue are compiled only for unit tests: a consumed verified receipt
+precedes the single exclusive transaction, and uncertain commit compares exact old
+or intended-new contents after guarded reopen. Neither a successful backup nor a
+test migration enables a production producer, export, restore or migration005.
+The retained old/005 reader boundary remains a separate dependency.
+
+Limits: database/WAL 1GiB, SHM 32MiB, individual asset 32MiB, total assets 1GiB,
+10,000 assets, manifest 2MiB, existing BLOB 8MiB; 64KiB streaming buffers, 128-page
+backup steps, three 25ms busy retries and a cooperative 120-second phase budget.
+Blocking OS calls are not hard-cancelled. Failed attempts and inspection copies
+remain on disk; repeated starts can retain another source-sized inspection copy.
+No pruning or retention optimisation is implemented. Asset tests use 21 literal
+bytes named `.png` to prove path/copy mechanics, not media decoding or rights.
+
+BU01–BU24, the 15 kill barriers and SR01–SR13 remain distinct requirements/groups,
+not executed test counts. The implementation evidence and remaining gaps are in
+the coordinating checkout's `loop/001/backup-upgrade-implementation/`. Process kills
+do not establish power-cut, torn-write or disk-firmware guarantees. The observed
+fresh-crash VFS path uses heap index reconstruction; read-only SHM mapping remains
+a separately unobserved branch. Full loop001 and product acceptance remain open.
