@@ -88,6 +88,12 @@ impl<'db> Maintenance<'db> {
         database: &'db mut Database,
         catalogue: Catalogue,
     ) -> Result<Self, DomainError> {
+        if database.recovery_only
+            || database.has_upgrade_backup()
+            || !database.connection.is_autocommit()
+        {
+            return Err(storage("maintenance requires resolved owner"));
+        }
         database.verify_owner()?;
         let source = catalogue.audit(&database.connection)?;
         let version: u32 = database

@@ -15,8 +15,32 @@ pub(crate) struct Database {
     _lock: StoreLock,
     pub(crate) root: TrustedStoreRoot,
     pub(crate) recovery_only: bool,
+    // Declared after connection: owner destruction closes SQLite before releasing
+    // unresolved upgrade evidence. Dropping a Maintenance borrow cannot release it.
+    upgrade_backup: Option<crate::backup::VerifiedBackupReceipt>,
 }
 impl Database {
+    pub(crate) fn has_upgrade_backup(&self) -> bool {
+        self.upgrade_backup.is_some()
+    }
+    #[cfg(test)]
+    pub(crate) fn retain_upgrade_backup(
+        &mut self,
+        receipt: crate::backup::VerifiedBackupReceipt,
+    ) -> Result<(), DomainError> {
+        if !self.recovery_only || self.upgrade_backup.is_some() {
+            return Err(storage("upgrade custody state"));
+        }
+        self.upgrade_backup = Some(receipt);
+        Ok(())
+    }
+    #[cfg(test)]
+    pub(crate) fn release_resolved_upgrade(&mut self) {
+        // Only the closed fixture runner calls this, after exact target audit,
+        // normal configuration and its final fallible ready barrier.
+        self.upgrade_backup = None;
+        self.recovery_only = false;
+    }
     #[cfg(test)]
     pub(crate) fn invalidate_lock_for_test(&mut self) {
         self._lock.invalidate_identity_for_test();
@@ -44,6 +68,7 @@ impl Database {
             _lock: lock,
             root,
             recovery_only: false,
+            upgrade_backup: None,
         })
     }
     pub(crate) fn snapshot(&mut self) -> Result<Snapshot, DomainError> {

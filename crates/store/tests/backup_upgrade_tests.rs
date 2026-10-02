@@ -1,4 +1,7 @@
 //! Synthetic, private backup/startup fixtures. Never compiled into a consumer build.
+// Exact reviewer regression probes, preserved without weakening their assertions.
+include!("reviewer_rollback_probes.rs");
+include!("upgrade_cleanup_tests.rs");
 use super::*;
 use std::path::{Path, PathBuf};
 
