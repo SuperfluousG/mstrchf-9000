@@ -365,6 +365,8 @@ dependencies = [
 name = "mstrchf-core"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "chrono-tz",
  "mstrchf-contracts",
  "serde_json",
 ]
