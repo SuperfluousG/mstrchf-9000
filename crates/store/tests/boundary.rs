@@ -63,7 +63,7 @@ fn draft_with_connections(policy: &PrivacyPolicy, household_id: &HouseholdId) ->
 }
 
 fn imported_result() -> Vec<u8> {
-    serde_json::to_vec(&fixture("job-result.json")).unwrap()
+    serde_json::to_vec(&fixture("ruling004-current--job-result.json")).unwrap()
 }
 
 #[test]
@@ -410,12 +410,16 @@ fn nine_unsupported_ui_commands_are_rejected_without_state_changes() {
     let profile: HouseholdProfile =
         serde_json::from_value(fixture("household-profile.json")).unwrap();
     let week: Week = serde_json::from_value(fixture("week.json")).unwrap();
-    let request: JobRequestV1 =
-        serde_json::from_value(fixture("job-request-product-observation.json")).unwrap();
-    let calendar_request: JobRequestV1 =
-        serde_json::from_value(fixture("job-request-calendar-publication.json")).unwrap();
+    let request: JobRequestV1 = serde_json::from_value(fixture(
+        "ruling004-current--job-request-product-observation.json",
+    ))
+    .unwrap();
+    let calendar_request: JobRequestV1 = serde_json::from_value(fixture(
+        "ruling004-current--job-request-calendar-publication.json",
+    ))
+    .unwrap();
     let operation: OperationRequest =
-        serde_json::from_value(fixture("operation-request.json")).unwrap();
+        serde_json::from_value(fixture("ruling004-current--operation-request.json")).unwrap();
     let calendar_event = match calendar_request.payload {
         JobPayload::CalendarPublication { batch, .. } => batch.events.0[0].clone(),
         _ => unreachable!(),

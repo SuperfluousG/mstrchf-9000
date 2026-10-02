@@ -1,7 +1,7 @@
 use mstrchf_contracts::*;
 fn week() -> Week {
     let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/contracts/week-disabled-retained.json");
+        .join("../../tests/fixtures/contracts/ruling004-current--week-disabled-retained.json");
     let mut w: Week = parse_document(&std::fs::read(path).unwrap()).unwrap();
     w.day_enabled = BoundedVec(vec![true; 7]);
     w.meal_type_enabled = MealTypeEnabled {

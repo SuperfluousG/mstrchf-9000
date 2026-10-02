@@ -904,10 +904,14 @@
               "properties": {
                 "batch_id": {
                   "$ref": "#/$defs/BatchId"
+                },
+                "production_servings": {
+                  "$ref": "#/$defs/PositiveRational"
                 }
               },
               "required": [
-                "batch_id"
+                "batch_id",
+                "production_servings"
               ],
               "type": "object"
             },

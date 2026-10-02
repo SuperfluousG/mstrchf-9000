@@ -30,7 +30,7 @@ fn decode<T: serde::de::DeserializeOwned + ValidateShape>(v: &Value) -> T {
 #[test]
 fn disabled_selection_projection_preserves_canonical_plan() {
     let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/contracts/week-disabled-retained.json");
+        .join("../../tests/fixtures/contracts/ruling004-current--week-disabled-retained.json");
     let mut week: Week = parse_document(&std::fs::read(path).unwrap()).unwrap();
     let retained = week.plan.clone();
     assert!(!retained.selections.is_empty());
@@ -61,8 +61,10 @@ fn disabled_selection_projection_preserves_canonical_plan() {
 fn semantic_manifest_cases() {
     let base =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
-    let m: Value =
-        serde_json::from_slice(&std::fs::read(base.join("manifest.json")).unwrap()).unwrap();
+    let m: Value = serde_json::from_slice(
+        &std::fs::read(base.join("ruling004-current-manifest.json")).unwrap(),
+    )
+    .unwrap();
     let mut executed = 0;
     let mut failures = Vec::new();
     for c in m["cases"].as_array().unwrap() {

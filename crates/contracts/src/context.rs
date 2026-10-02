@@ -223,6 +223,37 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
             )
         }
         "RecipeRevision" => validate_recipe(&decoded(v)?),
+        "ComponentProductionSpec" => {
+            let anchor: ComponentProductionSpec = decoded(v)?;
+            let id = match anchor {
+                ComponentProductionSpec::Cooked { completion_prep_id } => completion_prep_id,
+                ComponentProductionSpec::Unheated {
+                    first_handling_prep_id,
+                } => first_handling_prep_id,
+            };
+            require((1..=128).contains(&id), ErrorCode::InvalidValue, "/data")
+        }
+        "ReusedComponentInput" => {
+            let input: ReusedComponentInput = decoded(v)?;
+            require(
+                input.planned_reheats <= 1
+                    && input.step_ids.iter().all(|id| (1..=256).contains(id)),
+                ErrorCode::InvalidValue,
+                "/planned_reheats",
+            )
+        }
+        "DerivedComponent" => {
+            let component: DerivedComponent = decoded(v)?;
+            require(
+                component
+                    .storage_rule
+                    .0
+                    .as_ref()
+                    .is_none_or(|rule| rule.component_id == component.component_id),
+                ErrorCode::ForeignReference,
+                "/storage_rule/component_id",
+            )
+        }
         "ReviewRecord" => {
             let r: ReviewRecord = decoded(v)?;
             require(
@@ -489,6 +520,7 @@ fn collection_identity(field: &str, x: &Value) -> String {
         "prep" => &["prep_id"],
         "tasks" => &["task_id"],
         "extras" => &["extra_id"],
+        "reused_inputs" => &["source_recipe", "source_component_id"],
         "dietary_evidence" | "storage" | "reviews" | "conversion_evidence" => &["evidence_id"],
         "portion_presets" => &["age_band", "meal_type", "preset"],
         "unresolved" | "blocking_issues" => {
@@ -866,6 +898,12 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                 .iter()
                 .find(|r| r.recipe_id == s.recipe.recipe_id && r.revision == s.recipe.revision)
                 .ok_or_else(|| err(ErrorCode::MissingReference, "/selections/recipe"))?;
+            require(
+                !matches!(s.batch_use, BatchUse::NewBatch { .. })
+                    || recipe.reused_inputs.is_empty(),
+                ErrorCode::DomainConflict,
+                "/selections/batch_use",
+            )?;
             for e in s.extras.iter() {
                 check_ref(&e.recipe, c)?;
                 for recipient in e.recipients.iter() {
@@ -926,6 +964,35 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
         for e in r.extras.iter() {
             check_ref(&e.recipe, c)?;
         }
+        for input in r.reused_inputs.iter() {
+            check_ref(&input.source_recipe, c)?;
+            let source = c
+                .recipes
+                .iter()
+                .find(|source| {
+                    source.recipe_id == input.source_recipe.recipe_id
+                        && source.revision == input.source_recipe.revision
+                })
+                .ok_or_else(|| {
+                    err(
+                        ErrorCode::MissingReference,
+                        "/recipes/reused_inputs/source_recipe",
+                    )
+                })?;
+            require(
+                source
+                    .components
+                    .iter()
+                    .any(|component| component.component_id == input.source_component_id),
+                ErrorCode::MissingReference,
+                "/recipes/reused_inputs/source_component_id",
+            )?;
+            require(
+                source.reused_inputs.is_empty(),
+                ErrorCode::DomainConflict,
+                "/recipes/reused_inputs/source_recipe",
+            )?;
+        }
     }
     for selected in c
         .history
@@ -966,6 +1033,12 @@ fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
                 r.extras
                     .iter()
                     .map(|e| format!("{}:{}", e.recipe.recipe_id.0, e.recipe.revision.0))
+                    .chain(r.reused_inputs.iter().map(|input| {
+                        format!(
+                            "{}:{}",
+                            input.source_recipe.recipe_id.0, input.source_recipe.revision.0
+                        )
+                    }))
                     .collect(),
             )
         })
@@ -1082,7 +1155,72 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
     )?;
     let ingredients: BTreeSet<_> = r.ingredients.iter().map(|i| &i.ingredient_id).collect();
     let steps: BTreeSet<_> = r.steps.iter().map(|s| s.step_id).collect();
+    let external: BTreeSet<_> = r
+        .reused_inputs
+        .iter()
+        .map(|input| &input.source_component_id)
+        .collect();
+    require(
+        components.is_disjoint(&external),
+        ErrorCode::ForeignReference,
+        "/reused_inputs/source_component_id",
+    )?;
+    for input in r.reused_inputs.iter() {
+        require(
+            input.source_recipe.recipe_id != r.recipe_id
+                || input.source_recipe.revision != r.revision,
+            ErrorCode::DomainConflict,
+            "/reused_inputs/source_recipe",
+        )?;
+        require(
+            input.step_ids.iter().all(|id| {
+                r.steps.iter().any(|step| {
+                    step.step_id == *id && step.component_ids.contains(&input.source_component_id)
+                })
+            }),
+            ErrorCode::MissingReference,
+            "/reused_inputs/step_ids",
+        )?;
+        require(
+            input.evidence_ids.iter().all(|id| {
+                r.reviews.iter().any(|review| review.evidence_id == *id)
+                    || r.dietary_evidence
+                        .iter()
+                        .any(|evidence| evidence.evidence_id == *id)
+                    || r.storage.iter().any(|rule| rule.evidence_id == *id)
+                    || r.ingredients.iter().any(|ingredient| {
+                        ingredient
+                            .conversion_evidence
+                            .iter()
+                            .any(|evidence| evidence.evidence_id == *id)
+                    })
+            }),
+            ErrorCode::MissingReference,
+            "/reused_inputs/evidence_ids",
+        )?;
+    }
     for component in r.components.iter() {
+        if let Some(anchor) = &component.production.0 {
+            let id = match anchor {
+                ComponentProductionSpec::Cooked { completion_prep_id } => completion_prep_id,
+                ComponentProductionSpec::Unheated {
+                    first_handling_prep_id,
+                } => first_handling_prep_id,
+            };
+            require(
+                r.prep.iter().any(|phase| {
+                    phase.prep_id == *id
+                        && phase.step_ids.iter().any(|step_id| {
+                            r.steps.iter().any(|step| {
+                                step.step_id == *step_id
+                                    && step.component_ids.contains(&component.component_id)
+                            })
+                        })
+                }),
+                ErrorCode::MissingReference,
+                "/components/production",
+            )?;
+        }
         require(
             component
                 .ingredient_ids
@@ -1135,7 +1273,12 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
     for s in r.steps.iter() {
         require(
             s.ingredient_ids.iter().all(|i| ingredients.contains(i))
-                && s.component_ids.iter().all(|i| components.contains(i)),
+                && s.component_ids.iter().all(|i| {
+                    components.contains(i)
+                        || r.reused_inputs.iter().any(|input| {
+                            input.source_component_id == *i && input.step_ids.contains(&s.step_id)
+                        })
+                }),
             ErrorCode::MissingReference,
             "/steps",
         )?;

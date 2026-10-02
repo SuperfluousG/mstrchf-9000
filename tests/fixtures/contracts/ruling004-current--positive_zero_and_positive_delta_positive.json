@@ -1,0 +1,69 @@
+{
+  "request": {
+    "schema_version": 1,
+    "operation_id": "op_00000000000000000000000000000001",
+    "worker": {
+      "provider": "codex_local",
+      "provider_build": "synthetic-build-1",
+      "native_task_ref": "synthetic-task-1",
+      "job_id": "jb_00000000000000000000000000000014",
+      "generation": "1"
+    },
+    "resource": {
+      "kind": "basket",
+      "data": {
+        "key": {
+          "retailer": "tesco",
+          "account_ref": "synthetic-account-1",
+          "basket_id": "bk_00000000000000000000000000000001"
+        }
+      }
+    },
+    "context_stamp": {
+      "household_revision": "1",
+      "settings_revision": "1",
+      "privacy_revision": "1",
+      "history_revision": "1",
+      "catalogue_revision": "1",
+      "ranking_policy_version": "1",
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_00000000000000000000000000000001",
+          "revision": "1",
+          "digest": "6fdd4f440d782aebd299791ff71a731d4613090542ee3402f42496179102528a"
+        },
+        {
+          "recipe_id": "rc_00000000000000000000000000000002",
+          "revision": "1",
+          "digest": "87b5ca57068637d98bf885615a196bee540f73f5d2bd8d116b7175f8d6d25061"
+        }
+      ],
+      "read_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "1"
+        }
+      ],
+      "write_weeks": []
+    },
+    "input_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "approval_id": "au_00000000000000000000000000000002",
+    "action": {
+      "kind": "basket_set_quantity",
+      "data": {
+        "product_ref": {
+          "retailer": "tesco",
+          "product_id": "synthetic-product-1",
+          "variant_id": null
+        },
+        "expected_observed_quantity": 3,
+        "target_quantity": 4,
+        "planner_delta": 1,
+        "product_evidence_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "price_approval_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "baseline_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    "requested_at": "2026-12-28T12:00:00Z"
+  }
+}

@@ -37,6 +37,7 @@ record! {
         pub week_id: WeekId,
         pub plan_revision: Revision,
         pub input_plan_digest: PlanInputDigest,
+        pub food_inputs_digest: PayloadDigest,
         pub context_stamp: ContextStamp,
         pub recipe_refs: BoundedVec<RecipeRef, 0, 512>,
         pub batches: BoundedVec<DerivedBatch, 0, 256>,
@@ -54,7 +55,6 @@ record! {
         pub batch_id: BatchId,
         pub recipe: RecipeRef,
         pub source_slot: SlotId,
-        pub original_cook: ZonedMoment,
         pub components: BoundedVec<DerivedComponent, 1, 128>,
     }
 }
@@ -65,7 +65,8 @@ record! {
         pub produced: Quantity,
         pub allocated: Quantity,
         pub unallocated: NonnegativeQuantity,
-        pub storage_rule: StorageRule,
+        pub original_production: ProductionMoment,
+        pub storage_rule: Nullable<StorageRule>,
     }
 }
 
@@ -168,5 +169,12 @@ record! {
         pub derived_digest: PayloadDigest,
         pub context_stamp: ContextStamp,
         pub approved_at: Instant,
+    }
+}
+
+tagged! {
+    pub enum ProductionMoment {
+        Cooked { completed_at: ZonedMoment },
+        Unheated { preparation_started_at: ZonedMoment },
     }
 }

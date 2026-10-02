@@ -310,9 +310,12 @@ fn validate_payload_references(
                         .all(|s| s.slot.week_id == w.week_id && known(&s.recipe))
                 })
         }
-        JobPayload::GenericCatalogue { public_recipes, .. } => public_recipes
-            .iter()
-            .all(|r| r.extras.iter().all(|e| known(&e.recipe))),
+        JobPayload::GenericCatalogue { public_recipes, .. } => public_recipes.iter().all(|r| {
+            r.extras.iter().all(|e| known(&e.recipe))
+                && r.reused_inputs
+                    .iter()
+                    .all(|input| known(&input.source_recipe))
+        }),
         JobPayload::RecipeCandidate { adaptation, .. } => adaptation
             .0
             .as_ref()

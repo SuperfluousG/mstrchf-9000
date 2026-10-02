@@ -103,6 +103,14 @@
       "minItems": 0,
       "type": "array"
     },
+    "Array_EvidenceId_1_256": {
+      "items": {
+        "$ref": "#/$defs/EvidenceId"
+      },
+      "maxItems": 256,
+      "minItems": 1,
+      "type": "array"
+    },
     "Array_ExtraSpec_0_64": {
       "items": {
         "$ref": "#/$defs/ExtraSpec"
@@ -165,6 +173,14 @@
       },
       "maxItems": 256,
       "minItems": 1,
+      "type": "array"
+    },
+    "Array_ReusedComponentInput_0_128": {
+      "items": {
+        "$ref": "#/$defs/ReusedComponentInput"
+      },
+      "maxItems": 128,
+      "minItems": 0,
       "type": "array"
     },
     "Array_ReviewRecord_0_256": {
@@ -270,6 +286,68 @@
       "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
       "type": "string"
     },
+    "ComponentProductionSpec": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "completion_prep_id": {
+                  "format": "uint16",
+                  "maximum": 65535,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "completion_prep_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "cooked",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "first_handling_prep_id": {
+                  "format": "uint16",
+                  "maximum": 65535,
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "first_handling_prep_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "unheated",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "ComponentSpec": {
       "additionalProperties": false,
       "properties": {
@@ -278,6 +356,9 @@
         },
         "ingredient_ids": {
           "$ref": "#/$defs/Array_IngredientId_0_256"
+        },
+        "production": {
+          "$ref": "#/$defs/Nullable_ComponentProductionSpec"
         },
         "storage_rule_ids": {
           "$ref": "#/$defs/Array_EvidenceId_0_256"
@@ -290,7 +371,8 @@
         "component_id",
         "title",
         "ingredient_ids",
-        "storage_rule_ids"
+        "storage_rule_ids",
+        "production"
       ],
       "type": "object"
     },
@@ -648,6 +730,16 @@
       "maxLength": 80,
       "minLength": 1,
       "type": "string"
+    },
+    "Nullable_ComponentProductionSpec": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ComponentProductionSpec"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "Nullable_HttpUrl": {
       "anyOf": [
@@ -1030,6 +1122,41 @@
       ],
       "type": "string"
     },
+    "ReusedComponentInput": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_ids": {
+          "$ref": "#/$defs/Array_EvidenceId_1_256"
+        },
+        "planned_reheats": {
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "quantity_per_recipe_yield": {
+          "$ref": "#/$defs/Quantity"
+        },
+        "source_component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "source_recipe": {
+          "$ref": "#/$defs/RecipeRef"
+        },
+        "step_ids": {
+          "$ref": "#/$defs/Array_uint16_1_256"
+        }
+      },
+      "required": [
+        "source_recipe",
+        "source_component_id",
+        "quantity_per_recipe_yield",
+        "step_ids",
+        "planned_reheats",
+        "evidence_ids"
+      ],
+      "type": "object"
+    },
     "ReviewActor": {
       "enum": [
         "human",
@@ -1357,6 +1484,9 @@
     "recipe_id": {
       "$ref": "#/$defs/RecipeId"
     },
+    "reused_inputs": {
+      "$ref": "#/$defs/Array_ReusedComponentInput_0_128"
+    },
     "reviews": {
       "$ref": "#/$defs/Array_ReviewRecord_0_256"
     },
@@ -1406,6 +1536,7 @@
     "portability",
     "components",
     "extras",
+    "reused_inputs",
     "dietary_evidence",
     "storage",
     "prep",

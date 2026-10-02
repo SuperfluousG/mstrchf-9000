@@ -27,7 +27,7 @@ fn unresolved_candidate_ingredients_have_no_fabricated_identity() {
 }
 #[test]
 fn ordered_history_identity_is_order_and_slot() {
-    let w = fixture("week-disabled-retained.json");
+    let w = fixture("ruling004-current--week-disabled-retained.json");
     let s = &w["plan"]["selections"][0];
     let selected = json!({"week_id":s["slot"]["week_id"],"slot":s["slot"],"recipe":s["recipe"],"servings":s["servings"],"extras":s["extras"],"repeat_authorised":s["repeat_authorised"],"selected_at":"2026-12-28T10:00:00Z"});
     let first = json!({"selection":selected,"order_id":"or_00000000000000000000000000000001","ordered_at":"2026-12-28T12:00:00Z"});

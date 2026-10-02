@@ -29,7 +29,8 @@ fn empty_input() {
 fn manifest_fixtures_run_and_schema_runtime_agree() {
     let base =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
-    let raw = std::fs::read(base.join("manifest.json")).expect("required fixture manifest");
+    let raw = std::fs::read(base.join("ruling004-current-manifest.json"))
+        .expect("required fixture manifest");
     let manifest: serde_json::Value = serde_json::from_slice(&raw).unwrap();
     let cases = manifest["cases"].as_array().expect("cases array");
     assert!(!cases.is_empty(), "empty fixture corpus");

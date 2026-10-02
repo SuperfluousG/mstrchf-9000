@@ -1,0 +1,2925 @@
+{
+  "cases": [
+    {
+      "id": "positive_onboarding_draft_empty",
+      "root": "household-draft",
+      "stage": "wire",
+      "file": "household-draft.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_profile_mixed_requirements",
+      "root": "household-profile",
+      "stage": "semantic",
+      "file": "household-profile.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_profile_confirmed_none",
+      "root": "household-profile",
+      "stage": "semantic",
+      "file": "household-profile-confirmed-none.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_four_weeks_cross_year",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--planning-context.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_multiweek_binding",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--planning-context.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_disabled_retained_selection",
+      "root": "week",
+      "stage": "semantic",
+      "file": "ruling004-current--week-disabled-retained.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_recipe_revision_and_extra",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--recipe-revision.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_minimal_unrestricted_no_extra_recipe",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--recipe-revision-minimal-unrestricted.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_rational_one_third",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--recipe-revision-rational-one-third.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_unknown_nutrition",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--recipe-revision.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_empty_plan_and_history",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "week-plan.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_derived_demand_known_answers",
+      "root": "derived-plan",
+      "stage": "semantic",
+      "file": "ruling004-current--derived-plan.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_generic_catalogue",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_setup",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "job-request-setup.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_personalised_plan",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request-personalised.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_recipe_candidate",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "job-request-recipe-candidate.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_product_observation",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request-product-observation.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_calendar_publication",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request-calendar-publication.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_payload_booking_check",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request-booking-check.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_exact_binding_echo",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--job-result.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_needs_user_no_proposal",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--job-result-needs-user.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_approved_negative_planner_delta",
+      "root": "operation-request",
+      "stage": "semantic",
+      "file": "ruling004-current--operation-request.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_initial_products_and_empty_basket_read",
+      "root": "read-observation",
+      "stage": "semantic",
+      "file": "ruling004-current--read-observation.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_read_unknown_label",
+      "root": "read-observation",
+      "stage": "semantic",
+      "file": "ruling004-current--read-observation.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_post_stop_reconciliation_read",
+      "root": "read-observation",
+      "stage": "semantic",
+      "file": "ruling004-current--read-observation-post-stop-reconciliation.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_qualified_user_stop_facts",
+      "root": "worker-stop-evidence",
+      "stage": "semantic",
+      "file": "worker-stop-evidence.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_qualified_native_stop_facts",
+      "root": "worker-stop-evidence",
+      "stage": "semantic",
+      "file": "worker-stop-evidence-native.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_meal_requirements",
+      "root": "meal-requirements",
+      "stage": "wire",
+      "file": "meal-requirements.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_recipe_candidate",
+      "root": "recipe-candidate",
+      "stage": "wire",
+      "file": "recipe-candidate.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_operation_grant",
+      "root": "operation-grant",
+      "stage": "wire",
+      "file": "ruling004-current--operation-grant.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_operation_observation",
+      "root": "operation-observation",
+      "stage": "wire",
+      "file": "operation-observation.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_app_command",
+      "root": "app-command",
+      "stage": "wire",
+      "file": "app-command.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_snapshot",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_root_event_batch",
+      "root": "event-batch",
+      "stage": "wire",
+      "file": "event-batch.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_empty_basket_read",
+      "root": "read-observation",
+      "stage": "semantic",
+      "file": "ruling004-current--read-observation-empty-basket.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_jcs_property_order",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--job-request-reordered.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_complete_explicit_noop",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--job-result-complete-noop.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_zero_and_positive_delta",
+      "root": "operation-request",
+      "stage": "semantic",
+      "file": "ruling004-current--operation-request.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_multiweek_binding",
+      "subcase": "bound",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--positive_multiweek_binding--bound.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_complete_explicit_noop",
+      "subcase": "bound",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--positive_complete_explicit_noop--bound.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_exact_binding_echo",
+      "subcase": "bound",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--positive_exact_binding_echo--bound.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_context_other_week_changed",
+      "subcase": "read_weeks",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_other_week_changed--read_weeks.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_household_changed",
+      "subcase": "household_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_household_changed--household_revision.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "history_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--history_revision.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "catalogue_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--catalogue_revision.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "settings_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--settings_revision.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "ranking_policy_version",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--ranking_policy_version.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "privacy_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--privacy_revision.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_context_history_or_catalogue_changed",
+      "subcase": "recipe_refs",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_context_history_or_catalogue_changed--recipe_refs.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_result_foreign_job_or_action",
+      "subcase": "job_id",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_foreign_job_or_action--job_id.json",
+      "expected": "identity_mismatch"
+    },
+    {
+      "id": "negative_result_foreign_job_or_action",
+      "subcase": "action",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_foreign_job_or_action--action.json",
+      "expected": "identity_mismatch"
+    },
+    {
+      "id": "negative_result_foreign_job_or_action",
+      "subcase": "week_id",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_foreign_job_or_action--week_id.json",
+      "expected": "identity_mismatch"
+    },
+    {
+      "id": "negative_result_foreign_job_or_action",
+      "subcase": "base_plan_revision",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_foreign_job_or_action--base_plan_revision.json",
+      "expected": "identity_mismatch"
+    },
+    {
+      "id": "negative_result_foreign_job_or_action",
+      "subcase": "input_digest",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_foreign_job_or_action--input_digest.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_result_partial_success",
+      "subcase": "omitted_week",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_partial_success--omitted_week.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_result_partial_success",
+      "subcase": "needs_user",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_partial_success--needs_user.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_result_partial_success",
+      "subcase": "failed",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_result_partial_success--failed.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_scope_fixed_slot",
+      "subcase": "fill_open",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_scope_fixed_slot--fill_open.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_scope_fixed_slot",
+      "subcase": "swap_named",
+      "root": "job-result",
+      "stage": "binding",
+      "file": "ruling004-current--negative_scope_fixed_slot--swap_named.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_0_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_0_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_0_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_0_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_0_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_0_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_0_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_1_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_1_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_1.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_2_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_2_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_3_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_3_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_3_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_3_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_3_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_3_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--payload_3_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_4_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_4_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_5_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_5_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "payload_6_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--payload_6_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_0_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_0_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_1_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_1_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_1_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_1_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_1_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_1_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_1_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_1_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_1_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_1_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_2_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_2_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_2_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_2_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_2_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_2_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_2_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_2_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_2_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_2_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_3_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "negative_action_payload_result_cross_product--scope_3_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_4_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_4_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_5_6",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_5_6.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_0",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_0.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_1",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_1.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_2",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_2.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_3",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_3.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_4",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_4.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "scope_6_5",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--scope_6_5.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "setup_check",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "negative_ai_off_launch--setup_check.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "personalised_plan",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_ai_off_launch--personalised_plan.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "generic_catalogue",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_ai_off_launch--generic_catalogue.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "recipe_candidate",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "negative_ai_off_launch--recipe_candidate.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "product_observation",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_ai_off_launch--product_observation.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "calendar_publication",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_ai_off_launch--calendar_publication.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_ai_off_launch",
+      "subcase": "booking_check",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_ai_off_launch--booking_check.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_share_off_personalised",
+      "subcase": "personalised_plan",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_share_off_personalised--personalised_plan.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_share_off_personalised",
+      "subcase": "calendar_publication",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--negative_share_off_personalised--calendar_publication.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "negative_arithmetic_overflow",
+      "subcase": "add_1",
+      "root": "recipe-revision",
+      "stage": "arithmetic",
+      "file": "negative_arithmetic_overflow--add_1.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_arithmetic_overflow",
+      "subcase": "multiply_1",
+      "root": "recipe-revision",
+      "stage": "arithmetic",
+      "file": "negative_arithmetic_overflow--multiply_1.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_arithmetic_overflow",
+      "subcase": "add_1000000",
+      "root": "recipe-revision",
+      "stage": "arithmetic",
+      "file": "negative_arithmetic_overflow--add_1000000.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_wrong_quantity_dimension",
+      "subcase": "mass_to_volume",
+      "root": "recipe-revision",
+      "stage": "conversion",
+      "file": "negative_wrong_quantity_dimension--mass_to_volume.json",
+      "expected": "domain_conflict"
+    },
+    {
+      "id": "negative_wrong_quantity_dimension",
+      "subcase": "form_without_evidence",
+      "root": "recipe-revision",
+      "stage": "conversion",
+      "file": "negative_wrong_quantity_dimension--form_without_evidence.json",
+      "expected": "domain_conflict"
+    },
+    {
+      "id": "negative_wrong_quantity_dimension",
+      "subcase": "wrong_ingredient",
+      "root": "recipe-revision",
+      "stage": "conversion",
+      "file": "negative_wrong_quantity_dimension--wrong_ingredient.json",
+      "expected": "domain_conflict"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "plan",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--plan.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "quantity",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--quantity.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "form",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--form.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "origin",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--origin.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "line",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--line.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_demand_essentials_binding",
+      "subcase": "digest",
+      "root": "derived-plan",
+      "stage": "essentials",
+      "file": "negative_demand_essentials_binding--digest.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "empty_completed_household",
+      "subcase": "no_diners",
+      "root": "household-profile",
+      "stage": "semantic",
+      "file": "empty_completed_household--no_diners.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_confirmed_restrictions",
+      "subcase": "requirements",
+      "root": "household-profile",
+      "stage": "semantic",
+      "file": "empty_confirmed_restrictions--requirements.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_input",
+      "subcase": "empty_object",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "empty_input--empty_object.txt",
+      "expected": "missing_field"
+    },
+    {
+      "id": "empty_input",
+      "subcase": "null_root",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "empty_input--null_root.txt",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_input",
+      "subcase": "whitespace",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "empty_input--whitespace.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "empty_input",
+      "subcase": "zero_bytes",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "empty_input--zero_bytes.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "empty_personalised_planning_write_set",
+      "subcase": "no_writes",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_personalised_planning_write_set--no_writes.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_recipe_core",
+      "subcase": "ingredients",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_recipe_core--ingredients.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_recipe_core",
+      "subcase": "meal_types",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_recipe_core--meal_types.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_recipe_core",
+      "subcase": "portion_presets",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_recipe_core--portion_presets.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_recipe_core",
+      "subcase": "steps",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_recipe_core--steps.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_recipe_core",
+      "subcase": "title",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--empty_recipe_core--title.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_stop_identity",
+      "subcase": "native_task_ref",
+      "root": "worker-stop-evidence",
+      "stage": "semantic",
+      "file": "empty_stop_identity--native_task_ref.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_stop_identity",
+      "subcase": "qualification",
+      "root": "worker-stop-evidence",
+      "stage": "semantic",
+      "file": "empty_stop_identity--qualification.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "empty_stop_identity",
+      "subcase": "source",
+      "root": "worker-stop-evidence",
+      "stage": "semantic",
+      "file": "empty_stop_identity--source.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "missing_nullable_name",
+      "subcase": "display_name",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "missing_nullable_name--display_name.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_privacy_or_stamp",
+      "subcase": "consulted_week_revision",
+      "root": "planning-context",
+      "stage": "wire",
+      "file": "ruling004-current--missing_privacy_or_stamp--consulted_week_revision.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_privacy_or_stamp",
+      "subcase": "household_revision",
+      "root": "planning-context",
+      "stage": "wire",
+      "file": "ruling004-current--missing_privacy_or_stamp--household_revision.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_privacy_or_stamp",
+      "subcase": "privacy_revision",
+      "root": "planning-context",
+      "stage": "wire",
+      "file": "ruling004-current--missing_privacy_or_stamp--privacy_revision.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_recipe_yield_or_rights",
+      "subcase": "rights",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--missing_recipe_yield_or_rights--rights.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_recipe_yield_or_rights",
+      "subcase": "yield",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--missing_recipe_yield_or_rights--yield.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_request_digest_or_artefacts",
+      "subcase": "allowed_artefacts",
+      "root": "job-request",
+      "stage": "wire",
+      "file": "ruling004-current--missing_request_digest_or_artefacts--allowed_artefacts.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_request_digest_or_artefacts",
+      "subcase": "input_digest",
+      "root": "job-request",
+      "stage": "wire",
+      "file": "ruling004-current--missing_request_digest_or_artefacts--input_digest.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_restriction_confirmation",
+      "subcase": "restrictions",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "missing_restriction_confirmation--restrictions.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_stop_source",
+      "subcase": "qualification",
+      "root": "worker-stop-evidence",
+      "stage": "wire",
+      "file": "missing_stop_source--qualification.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_stop_source",
+      "subcase": "source",
+      "root": "worker-stop-evidence",
+      "stage": "wire",
+      "file": "missing_stop_source--source.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_stop_source",
+      "subcase": "task_identity",
+      "root": "worker-stop-evidence",
+      "stage": "wire",
+      "file": "missing_stop_source--task_identity.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "absolute",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--absolute.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "ads",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--ads.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "encoded_traversal",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--encoded_traversal.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "parent_traversal",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--parent_traversal.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "reserved",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--reserved.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "unc",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--unc.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_artefact_path",
+      "subcase": "wrong_extension",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_artefact_path--wrong_extension.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_calendar_revision_in_identity",
+      "subcase": "date_in_key",
+      "root": "event-batch",
+      "stage": "wire",
+      "file": "negative_calendar_revision_in_identity--date_in_key.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_calendar_revision_in_identity",
+      "subcase": "recipe_revision_in_key",
+      "root": "event-batch",
+      "stage": "wire",
+      "file": "negative_calendar_revision_in_identity--recipe_revision_in_key.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_cell_second_selection",
+      "subcase": "different_choice",
+      "root": "week",
+      "stage": "wire",
+      "file": "ruling004-current--negative_cell_second_selection--different_choice.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_cell_second_selection",
+      "subcase": "same_choice",
+      "root": "week",
+      "stage": "wire",
+      "file": "ruling004-current--negative_cell_second_selection--same_choice.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_duplicate_recipe_or_week",
+      "subcase": "duplicate_recipe_ref",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_duplicate_recipe_or_week--duplicate_recipe_ref.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_duplicate_recipe_or_week",
+      "subcase": "duplicate_week",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_duplicate_recipe_or_week--duplicate_week.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_foreign_diner",
+      "subcase": "undeclared_diner",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_foreign_diner--undeclared_diner.json",
+      "expected": "foreign_reference"
+    },
+    {
+      "id": "negative_foreign_recipe_revision",
+      "subcase": "missing_revision",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_foreign_recipe_revision--missing_revision.json",
+      "expected": "missing_reference"
+    },
+    {
+      "id": "negative_foreign_recipe_revision",
+      "subcase": "wrong_recipe_digest",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_foreign_recipe_revision--wrong_recipe_digest.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_fraction_not_reduced",
+      "subcase": "leading_zero",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_fraction_not_reduced--leading_zero.json",
+      "expected": "noncanonical_value"
+    },
+    {
+      "id": "negative_fraction_not_reduced",
+      "subcase": "two_sixths",
+      "root": "recipe-revision",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_fraction_not_reduced--two_sixths.json",
+      "expected": "noncanonical_value"
+    },
+    {
+      "id": "negative_fraction_not_reduced",
+      "subcase": "zero_two",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_fraction_not_reduced--zero_two.json",
+      "expected": "noncanonical_value"
+    },
+    {
+      "id": "negative_id_type_confusion",
+      "subcase": "all_zero",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "negative_id_type_confusion--all_zero.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_id_type_confusion",
+      "subcase": "malformed",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "negative_id_type_confusion--malformed.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_id_type_confusion",
+      "subcase": "uppercase",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "negative_id_type_confusion--uppercase.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_id_type_confusion",
+      "subcase": "wrong_prefix",
+      "root": "household-profile",
+      "stage": "wire",
+      "file": "negative_id_type_confusion--wrong_prefix.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_payment_action",
+      "subcase": "pay",
+      "root": "job-request",
+      "stage": "wire",
+      "file": "ruling004-current--negative_payment_action--pay.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_quantity_sign_and_extreme",
+      "subcase": "denominator_over_bound",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_quantity_sign_and_extreme--denominator_over_bound.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_quantity_sign_and_extreme",
+      "subcase": "negative_numerator",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_quantity_sign_and_extreme--negative_numerator.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_quantity_sign_and_extreme",
+      "subcase": "numerator_over_bound",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_quantity_sign_and_extreme--numerator_over_bound.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_quantity_sign_and_extreme",
+      "subcase": "zero_denominator",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_quantity_sign_and_extreme--zero_denominator.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_revision_encoding",
+      "subcase": "leading_zero",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_revision_encoding--leading_zero.json",
+      "expected": "noncanonical_value"
+    },
+    {
+      "id": "negative_revision_encoding",
+      "subcase": "numeric_json",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_revision_encoding--numeric_json.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_revision_encoding",
+      "subcase": "u64_overflow",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_revision_encoding--u64_overflow.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_revision_encoding",
+      "subcase": "zero",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_revision_encoding--zero.json",
+      "expected": "noncanonical_value"
+    },
+    {
+      "id": "negative_unknown_nested_field",
+      "subcase": "enum_payload",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_unknown_nested_field--enum_payload.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_unknown_nested_field",
+      "subcase": "recipe_capabilities",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_unknown_nested_field--recipe_capabilities.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_unknown_nested_field",
+      "subcase": "result_proposal",
+      "root": "job-result",
+      "stage": "wire",
+      "file": "ruling004-current--negative_unknown_nested_field--result_proposal.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_vector_missing_or_unsorted",
+      "subcase": "duplicate_read_week",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_vector_missing_or_unsorted--duplicate_read_week.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_vector_missing_or_unsorted",
+      "subcase": "write_missing_from_reads",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_vector_missing_or_unsorted--write_missing_from_reads.json",
+      "expected": "missing_reference"
+    },
+    {
+      "id": "negative_version",
+      "subcase": "future",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_version--future.json",
+      "expected": "unsupported_version"
+    },
+    {
+      "id": "negative_version",
+      "subcase": "string",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_version--string.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_version",
+      "subcase": "zero",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "negative_version--zero.json",
+      "expected": "unsupported_version"
+    },
+    {
+      "id": "negative_weakened_shared_requirements",
+      "subcase": "remove_gluten_free",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_weakened_shared_requirements--remove_gluten_free.json",
+      "expected": "domain_conflict"
+    },
+    {
+      "id": "negative_week_plan_revision_mismatch",
+      "subcase": "duplicate_retained_slot",
+      "root": "week",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_week_plan_revision_mismatch--duplicate_retained_slot.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_week_plan_revision_mismatch",
+      "subcase": "foreign_plan_week",
+      "root": "week",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_week_plan_revision_mismatch--foreign_plan_week.json",
+      "expected": "identity_mismatch"
+    },
+    {
+      "id": "negative_week_plan_revision_mismatch",
+      "subcase": "week_revision",
+      "root": "week",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_week_plan_revision_mismatch--week_revision.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_zero_required_quantity",
+      "subcase": "ingredient_amount",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_zero_required_quantity--ingredient_amount.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_zero_required_quantity",
+      "subcase": "portion_servings",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_zero_required_quantity--portion_servings.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_zero_required_quantity",
+      "subcase": "yield_servings",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_zero_required_quantity--yield_servings.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "raw_duplicate_key",
+      "subcase": "job_id",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_duplicate_key--job_id.txt",
+      "expected": "duplicate_key"
+    },
+    {
+      "id": "raw_nonfinite_unicode_trailing",
+      "subcase": "bom",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_nonfinite_unicode_trailing--bom.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "raw_nonfinite_unicode_trailing",
+      "subcase": "infinity",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_nonfinite_unicode_trailing--infinity.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "raw_nonfinite_unicode_trailing",
+      "subcase": "lone_surrogate",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_nonfinite_unicode_trailing--lone_surrogate.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "raw_nonfinite_unicode_trailing",
+      "subcase": "nan",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_nonfinite_unicode_trailing--nan.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "raw_nonfinite_unicode_trailing",
+      "subcase": "trailing_document",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_nonfinite_unicode_trailing--trailing_document.txt",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "raw_oversize_and_depth",
+      "subcase": "document_over_8mib",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_oversize_and_depth--document_over_8mib.txt",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "raw_oversize_and_depth",
+      "subcase": "nesting_33",
+      "root": "job-request",
+      "stage": "raw",
+      "file": "raw_oversize_and_depth--nesting_33.txt",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_account_context",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_account_context.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_event_scope",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_event_scope.json",
+      "expected": "scope_violation",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_outside_time_or_kind",
+      "subcase": "authority_negative_read_future_clock_skew",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_future_clock_skew.json",
+      "expected": "invalid_value",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_input_digest",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_input_digest.json",
+      "expected": "digest_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_job_identity",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_job_identity.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_outside_time_or_kind",
+      "subcase": "authority_negative_read_kind_scope",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_kind_scope.json",
+      "expected": "scope_violation",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_outside_time_or_kind",
+      "subcase": "authority_negative_read_payload_scope_divergence",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_payload_scope_divergence.json",
+      "expected": "scope_violation",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_product_scope",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_product_scope.json",
+      "expected": "scope_violation",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_read_identity",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_read_identity.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_reader_provider",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_reader_provider.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_reader_task",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_reader_task.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_foreign_resource_or_task",
+      "subcase": "authority_negative_read_resource_key",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_resource_key.json",
+      "expected": "identity_mismatch",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_outside_time_or_kind",
+      "subcase": "authority_negative_read_time_after_scope",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_time_after_scope.json",
+      "expected": "invalid_value",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_outside_time_or_kind",
+      "subcase": "authority_negative_read_time_before_scope",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_time_before_scope.json",
+      "expected": "invalid_value",
+      "root": "read-observation"
+    },
+    {
+      "id": "positive_initial_products_and_empty_basket_read",
+      "subcase": "authority_positive_initial_empty_basket_read",
+      "stage": "read_binding",
+      "file": "ruling004-current--positive_initial_empty_basket_read.json",
+      "expected": "ok",
+      "root": "read-observation"
+    },
+    {
+      "id": "positive_initial_products_and_empty_basket_read",
+      "subcase": "authority_positive_initial_products_read",
+      "stage": "read_binding",
+      "file": "ruling004-current--positive_initial_products_read.json",
+      "expected": "ok",
+      "root": "read-observation"
+    },
+    {
+      "id": "positive_post_stop_reconciliation_read",
+      "subcase": "authority_positive_post_stop_reconciliation_read",
+      "stage": "read_binding",
+      "file": "ruling004-current--positive_post_stop_reconciliation_read.json",
+      "expected": "ok",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_manual_conflict",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_manual_conflict.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_no_reconciliation",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_no_reconciliation.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_outstanding_operation",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_outstanding_operation.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_prestop_reconciliation",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_prestop_reconciliation.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_unresolved_operation",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_unresolved_operation.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_reconcile_before_stop",
+      "subcase": "authority_negative_reconcile_wrong_reconciliation_worker",
+      "stage": "resume",
+      "file": "ruling004-current--negative_reconcile_wrong_reconciliation_worker.json",
+      "expected": "reconciliation_required",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stale_grant_or_revoked_policy",
+      "subcase": "authority_negative_stale_grant_approval_stale",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stale_grant_approval_stale.json",
+      "expected": "authority_denied",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stale_grant_or_revoked_policy",
+      "subcase": "authority_negative_stale_grant_context_changed",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stale_grant_context_changed.json",
+      "expected": "context_stale",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stale_grant_or_revoked_policy",
+      "subcase": "authority_negative_stale_grant_policy_disabled",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stale_grant_policy_disabled.json",
+      "expected": "privacy_denied",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stale_grant_or_revoked_policy",
+      "subcase": "authority_negative_stale_grant_policy_revision",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stale_grant_policy_revision.json",
+      "expected": "context_stale",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_lock_active",
+      "subcase": "authority_negative_stop_lock_active",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_lock_active.json",
+      "expected": "domain_conflict",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_timeout_only",
+      "subcase": "authority_negative_stop_no_stop",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_no_stop.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_wrong_worker",
+      "subcase": "authority_negative_stop_qualification_mismatch",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_qualification_mismatch.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_self_attested",
+      "subcase": "authority_negative_stop_untrusted_source",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_untrusted_source.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_wrong_worker",
+      "subcase": "authority_negative_stop_wrong_generation",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_wrong_generation.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_wrong_worker",
+      "subcase": "authority_negative_stop_wrong_provider_build",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_wrong_provider_build.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_self_attested",
+      "subcase": "authority_negative_stop_wrong_source_trust",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_wrong_source_trust.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_stop_wrong_worker",
+      "subcase": "authority_negative_stop_wrong_worker",
+      "stage": "resume",
+      "file": "ruling004-current--negative_stop_wrong_worker.json",
+      "expected": "worker_not_stopped",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "positive_qualified_native_stop_facts",
+      "subcase": "authority_positive_qualified_native_stop_facts",
+      "stage": "resume",
+      "file": "ruling004-current--positive_qualified_native_stop_facts.json",
+      "expected": "ok",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "positive_qualified_user_stop_facts",
+      "subcase": "authority_positive_qualified_user_stop_facts",
+      "stage": "resume",
+      "file": "ruling004-current--positive_qualified_user_stop_facts.json",
+      "expected": "ok",
+      "root": "worker-stop-evidence"
+    },
+    {
+      "id": "negative_delta_bounds_underflow_or_unapproved",
+      "subcase": "authority_negative_delta_delta_limit",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_delta_delta_limit.json",
+      "expected": "limit_exceeded",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_operation_target_arithmetic",
+      "subcase": "authority_negative_delta_delta_target_mismatch",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_delta_delta_target_mismatch.json",
+      "expected": "invalid_value",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_delta_bounds_underflow_or_unapproved",
+      "subcase": "authority_negative_delta_negative_underflow",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_delta_negative_underflow.json",
+      "expected": "invalid_value",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_operation_expected_quantity_limit",
+      "subcase": "authority_negative_operation_expected_quantity_limit",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_operation_expected_quantity_limit.json",
+      "expected": "limit_exceeded",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_operation_resource_mismatch",
+      "subcase": "authority_negative_operation_resource_mismatch",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_operation_resource_mismatch.json",
+      "expected": "scope_violation",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_operation_target_quantity_limit",
+      "subcase": "authority_negative_operation_target_quantity_limit",
+      "stage": "operation_shape",
+      "file": "ruling004-current--negative_operation_target_quantity_limit.json",
+      "expected": "limit_exceeded",
+      "root": "operation-request"
+    },
+    {
+      "id": "positive_zero_and_positive_delta",
+      "subcase": "authority_positive_zero_and_positive_delta_positive",
+      "stage": "operation_shape",
+      "file": "ruling004-current--positive_zero_and_positive_delta_positive.json",
+      "expected": "ok",
+      "root": "operation-request"
+    },
+    {
+      "id": "positive_zero_and_positive_delta",
+      "subcase": "authority_positive_zero_and_positive_delta_zero",
+      "stage": "operation_shape",
+      "file": "ruling004-current--positive_zero_and_positive_delta_zero.json",
+      "expected": "ok",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_delta_bounds_underflow_or_unapproved",
+      "subcase": "authority_negative_approved_negative_attribution_missing",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_attribution_missing.json",
+      "expected": "authority_denied",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_duplicate_lines",
+      "subcase": "authority_negative_approved_negative_duplicate_lines",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_duplicate_lines.json",
+      "expected": "invalid_value",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_expected_quantity_mismatch",
+      "subcase": "authority_negative_approved_negative_expected_quantity_mismatch",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_expected_quantity_mismatch.json",
+      "expected": "authority_denied",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_line_quantity_limit",
+      "subcase": "authority_negative_approved_negative_line_quantity_limit",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_line_quantity_limit.json",
+      "expected": "limit_exceeded",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_price_digest_mismatch",
+      "subcase": "authority_negative_approved_negative_price_digest_mismatch",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_price_digest_mismatch.json",
+      "expected": "digest_mismatch",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_product_digest_mismatch",
+      "subcase": "authority_negative_approved_negative_product_digest_mismatch",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_product_digest_mismatch.json",
+      "expected": "digest_mismatch",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_product_mismatch",
+      "subcase": "authority_negative_approved_negative_product_mismatch",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_product_mismatch.json",
+      "expected": "authority_denied",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_delta_bounds_underflow_or_unapproved",
+      "subcase": "authority_negative_approved_negative_removal_missing",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_removal_missing.json",
+      "expected": "authority_denied",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_approved_negative_target_quantity_mismatch",
+      "subcase": "authority_negative_approved_negative_target_quantity_mismatch",
+      "stage": "operation_approval",
+      "file": "ruling004-current--negative_approved_negative_target_quantity_mismatch.json",
+      "expected": "authority_denied",
+      "root": "operation-request"
+    },
+    {
+      "id": "positive_approved_negative_planner_delta",
+      "subcase": "authority_positive_approved_negative_planner_delta",
+      "stage": "operation_approval",
+      "file": "ruling004-current--positive_approved_negative_planner_delta.json",
+      "expected": "ok",
+      "root": "operation-request"
+    },
+    {
+      "id": "negative_read_fabricated_authority",
+      "subcase": "negative_read_fabricated_authority_approved",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_fabricated_authority_approved.json",
+      "expected": "unknown_field",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_fabricated_authority",
+      "subcase": "negative_read_fabricated_authority_grant_token",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_fabricated_authority_grant_token.json",
+      "expected": "unknown_field",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_fabricated_authority",
+      "subcase": "negative_read_fabricated_authority_operation_id",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_fabricated_authority_operation_id.json",
+      "expected": "unknown_field",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_fabricated_authority",
+      "subcase": "negative_read_fabricated_authority_paid",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_fabricated_authority_paid.json",
+      "expected": "unknown_field",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_read_fabricated_authority",
+      "subcase": "negative_read_fabricated_authority_worker_stopped",
+      "stage": "read_binding",
+      "file": "ruling004-current--negative_read_fabricated_authority_worker_stopped.json",
+      "expected": "unknown_field",
+      "root": "read-observation"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_approve_plan",
+      "stage": "command",
+      "file": "negative_authority_spoof_approve_plan.json",
+      "expected": "authority_denied",
+      "root": "app-command"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_record_user_stop",
+      "stage": "command",
+      "file": "negative_authority_spoof_record_user_stop.json",
+      "expected": "authority_denied",
+      "root": "app-command"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_set_privacy",
+      "stage": "command",
+      "file": "negative_authority_spoof_set_privacy.json",
+      "expected": "authority_denied",
+      "root": "app-command"
+    },
+    {
+      "id": "negative_booked_from_basket",
+      "subcase": "negative_booked_from_basket_confirm_order",
+      "stage": "command",
+      "file": "negative_booked_from_basket_confirm_order.json",
+      "expected": "authority_denied",
+      "root": "app-command"
+    },
+    {
+      "id": "positive_zero_balance",
+      "subcase": "exact_zero",
+      "root": "derived-plan",
+      "stage": "primitive",
+      "file": "positive_zero_balance--exact_zero.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_jcs_unicode_vector",
+      "subcase": "utf16_key_order",
+      "root": "job-request",
+      "stage": "canonical",
+      "file": "positive_jcs_unicode_vector--utf16_key_order.json",
+      "expected": "ok"
+    },
+    {
+      "id": "empty_plan_and_history",
+      "subcase": "empty_plan",
+      "root": "week-plan",
+      "stage": "wire",
+      "file": "empty_plan_and_history--empty_plan.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_collection_bounds_and_duplicates",
+      "subcase": "recipe_ingredients_minimum",
+      "root": "recipe-revision",
+      "stage": "wire",
+      "file": "ruling004-current--negative_collection_bounds_and_duplicates--recipe_ingredients_minimum.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_dst_gap_or_unresolved_fold",
+      "subcase": "gap",
+      "root": "event-batch",
+      "stage": "primitive",
+      "file": "negative_dst_gap_or_unresolved_fold--gap.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_dst_gap_or_unresolved_fold",
+      "subcase": "fold",
+      "root": "event-batch",
+      "stage": "primitive",
+      "file": "negative_dst_gap_or_unresolved_fold--fold.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_dst_gap_or_unresolved_fold",
+      "subcase": "wrong_instant",
+      "root": "event-batch",
+      "stage": "primitive",
+      "file": "negative_dst_gap_or_unresolved_fold--wrong_instant.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "setup_proposal_none",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--setup_proposal_none.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "setup_proposal_plan",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--setup_proposal_plan.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "setup_proposal_recipe",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--setup_proposal_recipe.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "setup_proposal_catalogue",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--setup_proposal_catalogue.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "plan_proposal_none",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--plan_proposal_none.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "plan_proposal_recipe",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--plan_proposal_recipe.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "plan_proposal_setup",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--plan_proposal_setup.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "add_adapt_recipe_proposal_none",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--add_adapt_recipe_proposal_none.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "add_adapt_recipe_proposal_plan",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--add_adapt_recipe_proposal_plan.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "add_adapt_recipe_proposal_catalogue",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--add_adapt_recipe_proposal_catalogue.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "add_adapt_recipe_proposal_setup",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--add_adapt_recipe_proposal_setup.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "prepare_shop_proposal_plan",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--prepare_shop_proposal_plan.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "prepare_shop_proposal_recipe",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--prepare_shop_proposal_recipe.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "prepare_shop_proposal_catalogue",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--prepare_shop_proposal_catalogue.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "prepare_shop_proposal_setup",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--prepare_shop_proposal_setup.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "finish_week_proposal_plan",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--finish_week_proposal_plan.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "finish_week_proposal_recipe",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--finish_week_proposal_recipe.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "finish_week_proposal_catalogue",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--finish_week_proposal_catalogue.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "finish_week_proposal_setup",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--finish_week_proposal_setup.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "check_booking_proposal_plan",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--check_booking_proposal_plan.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "check_booking_proposal_recipe",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--check_booking_proposal_recipe.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "check_booking_proposal_catalogue",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--check_booking_proposal_catalogue.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_action_payload_result_cross_product",
+      "subcase": "check_booking_proposal_setup",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_action_payload_result_cross_product--check_booking_proposal_setup.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "same_variant_scoped",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--ruling001_artefact_fragment--same_variant_scoped.json",
+      "expected": "ok"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "wrong_variant_matching_hash",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--wrong_variant_matching_hash.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "out_of_scope_matching_hash",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling004-current--ruling001_artefact_fragment--out_of_scope_matching_hash.json",
+      "expected": "scope_violation"
+    },
+    {
+      "id": "negative_share_off_personalised",
+      "subcase": "fragment_leak",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "negative_share_off_personalised--fragment_leak.json",
+      "expected": "privacy_denied"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "unknown_field",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--unknown_field.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "malformed",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--malformed.json",
+      "expected": "malformed_json"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "undeclared",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--undeclared.json",
+      "expected": "missing_reference"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "declared_missing",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--declared_missing.json",
+      "expected": "missing_reference"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "byte_length_changed",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--byte_length_changed.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "ruling001_artefact_fragment",
+      "subcase": "bytes_changed_same_length",
+      "root": "job-request",
+      "stage": "privacy",
+      "file": "ruling001_artefact_fragment--bytes_changed_same_length.json",
+      "expected": "digest_mismatch"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_result_caller_role",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_authority_spoof_result_caller_role.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_result_grant_token",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_authority_spoof_result_grant_token.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_result_order_confirmation",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_authority_spoof_result_order_confirmation.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_authority_spoof",
+      "subcase": "negative_authority_spoof_result_paid",
+      "root": "job-result",
+      "stage": "semantic",
+      "file": "ruling004-current--negative_authority_spoof_result_paid.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_booked_from_basket",
+      "subcase": "negative_booked_from_basket_basket_ready",
+      "root": "app-command",
+      "stage": "semantic",
+      "file": "negative_booked_from_basket_basket_ready.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "negative_booked_from_basket",
+      "subcase": "negative_booked_from_basket_slot_hold",
+      "root": "app-command",
+      "stage": "semantic",
+      "file": "negative_booked_from_basket_slot_hold.json",
+      "expected": "unknown_field"
+    },
+    {
+      "id": "raw_oversize_and_depth",
+      "subcase": "artefact_total_over_32mib",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "raw_oversize_and_depth--artefact_total_over_32mib.json",
+      "expected": "limit_exceeded"
+    },
+    {
+      "id": "positive_snapshot_initial_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-initial-privacy.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_snapshot_partial_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-partial-privacy.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_snapshot_equal_privacy_copies",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-equal-privacy-copies.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_snapshot_missing_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-missing-privacy.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "negative_snapshot_null_privacy",
+      "root": "snapshot",
+      "stage": "wire",
+      "file": "snapshot-null-privacy.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_snapshot_draft_privacy_mismatch",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-draft-privacy-mismatch.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "negative_snapshot_profile_privacy_mismatch",
+      "root": "snapshot",
+      "stage": "semantic",
+      "file": "snapshot-profile-privacy-mismatch.json",
+      "expected": "context_stale"
+    },
+    {
+      "id": "positive_inactive_requirement",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "positive_inactive_requirement.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_activity_deadline_disabled_moment",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "negative_activity_deadline_disabled_moment.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_activity_deadline_enabled_null",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "negative_activity_deadline_enabled_null.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "missing_activity_deadline_false",
+      "root": "meal-requirements",
+      "stage": "wire",
+      "file": "missing_activity_deadline_false.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_activity_deadline_true",
+      "root": "meal-requirements",
+      "stage": "wire",
+      "file": "missing_activity_deadline_true.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "positive_mixed_activity_context",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "ruling004-current--positive_mixed_activity_context.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_request",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "ruling004-current--positive_inactive_request.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_requirement_canonical",
+      "root": "meal-requirements",
+      "stage": "canonical",
+      "file": "positive_inactive_requirement_canonical.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_context_canonical",
+      "root": "planning-context",
+      "stage": "canonical",
+      "file": "ruling004-current--positive_inactive_context_canonical.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_request_canonical",
+      "root": "job-request",
+      "stage": "canonical",
+      "file": "ruling004-current--positive_inactive_request_canonical.json",
+      "expected": "ok"
+    }
+  ]
+}

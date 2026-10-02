@@ -80,6 +80,7 @@ tagged! {
     pub enum BatchUse {
         NewBatch {
             batch_id: BatchId,
+            production_servings: PositiveRational,
         },
         Leftover {
             batch_id: BatchId,

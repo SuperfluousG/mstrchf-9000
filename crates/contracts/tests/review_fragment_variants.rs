@@ -53,7 +53,7 @@ fn scope_violation(request: &JobRequestV1, value: Value, label: &str) {
 
 #[test]
 fn generic_catalogue_fragment_cannot_replace_or_expand_authorised_content() {
-    let request: JobRequestV1 = decode(&fixture("job-request.json"));
+    let request: JobRequestV1 = decode(&fixture("ruling004-current--job-request.json"));
     let original = payload(&request);
     fragment(&request, original.clone()).unwrap();
 
@@ -118,7 +118,9 @@ fn recipe_candidate_fragment_cannot_add_drop_or_replace_adaptation_authority() {
 
 #[test]
 fn product_observation_fragment_cannot_add_products_or_retarget_read_scope() {
-    let request: JobRequestV1 = decode(&fixture("job-request-product-observation.json"));
+    let request: JobRequestV1 = decode(&fixture(
+        "ruling004-current--job-request-product-observation.json",
+    ));
     let original = payload(&request);
     fragment(&request, original.clone()).unwrap();
 
@@ -138,7 +140,9 @@ fn product_observation_fragment_cannot_add_products_or_retarget_read_scope() {
 
 #[test]
 fn calendar_fragment_cannot_substitute_an_event_with_a_recomputed_digest() {
-    let request: JobRequestV1 = decode(&fixture("job-request-calendar-publication.json"));
+    let request: JobRequestV1 = decode(&fixture(
+        "ruling004-current--job-request-calendar-publication.json",
+    ));
     let original = payload(&request);
     fragment(&request, original.clone()).unwrap();
 
@@ -161,7 +165,9 @@ fn calendar_fragment_cannot_substitute_an_event_with_a_recomputed_digest() {
 
 #[test]
 fn booking_fragment_cannot_expand_the_week_set() {
-    let request: JobRequestV1 = decode(&fixture("job-request-booking-check.json"));
+    let request: JobRequestV1 = decode(&fixture(
+        "ruling004-current--job-request-booking-check.json",
+    ));
     let original = payload(&request);
     fragment(&request, original.clone()).unwrap();
 

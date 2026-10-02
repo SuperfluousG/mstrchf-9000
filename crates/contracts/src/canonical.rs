@@ -26,7 +26,7 @@ pub fn result_digest(v: &JobResultV1) -> Result<ResultDigest, DomainError> {
 }
 record! {pub struct PlanInputMaterial {pub schema_version:SchemaVersion,pub week_plan:WeekPlan,pub context_stamp:ContextStamp}}
 record! {pub struct DemandMaterial {pub schema_version:SchemaVersion,pub input_plan_digest:PlanInputDigest,pub lines:BoundedVec<DemandLine,0,4096>}}
-record! {pub struct DerivedMaterial {pub schema_version:SchemaVersion,pub week_id:WeekId,pub plan_revision:Revision,pub input_plan_digest:PlanInputDigest,pub context_stamp:ContextStamp,pub recipe_refs:BoundedVec<RecipeRef,0,512>,pub batches:BoundedVec<DerivedBatch,0,256>,pub allocations:BoundedVec<Allocation,0,4096>,pub prep_sessions:BoundedVec<PrepSession,0,256>,pub demand:DemandSet,pub warnings:BoundedVec<Conflict,0,100>,pub derivation_policy_version:Revision}}
+record! {pub struct DerivedMaterial {pub schema_version:SchemaVersion,pub week_id:WeekId,pub plan_revision:Revision,pub input_plan_digest:PlanInputDigest,pub food_inputs_digest:PayloadDigest,pub context_stamp:ContextStamp,pub recipe_refs:BoundedVec<RecipeRef,0,512>,pub batches:BoundedVec<DerivedBatch,0,256>,pub allocations:BoundedVec<Allocation,0,4096>,pub prep_sessions:BoundedVec<PrepSession,0,256>,pub demand:DemandSet,pub warnings:BoundedVec<Conflict,0,100>,pub derivation_policy_version:Revision}}
 pub fn plan_input_digest(v: &PlanInputMaterial) -> Result<PlanInputDigest, DomainError> {
     Ok(PlanInputDigest(canonical_digest(v)?.0))
 }
@@ -43,6 +43,7 @@ impl From<&DerivedPlan> for DerivedMaterial {
             week_id: v.week_id.clone(),
             plan_revision: v.plan_revision,
             input_plan_digest: v.input_plan_digest.clone(),
+            food_inputs_digest: v.food_inputs_digest.clone(),
             context_stamp: v.context_stamp.clone(),
             recipe_refs: v.recipe_refs.clone(),
             batches: v.batches.clone(),

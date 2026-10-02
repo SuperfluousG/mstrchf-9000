@@ -1,0 +1,73 @@
+{
+  "source_manifest_sha256": "f615a735aeb60b35794308f93045d366346226609d445ddd6cf23054f215c36a",
+  "source": "loop/001/food-supplement-vectors/native-v3",
+  "status": "Wire-only reference bytes. Independent reviewer found omitted skipped-slot rows in v3 PlanningContexts; full v3 semantic acceptance is blocked pending corrected pack. These copies do not claim valid complete contexts or native derivation acceptance.",
+  "vectors": [
+    {
+      "id": "recipe",
+      "type": "RecipeRevision",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76",
+      "bytes": 3885,
+      "input": "recipe.input.json",
+      "preimage": "recipe.canonical.json"
+    },
+    {
+      "id": "subject-plan-input",
+      "type": "PlanInputMaterial",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "14af92c078a6a90e4dcdbb2de0b2319cbc9f8eb4704feb3cdde51efdefb6e14a",
+      "bytes": 3035,
+      "input": "subject-plan-input.input.json",
+      "preimage": "subject-plan-input.canonical.json"
+    },
+    {
+      "id": "subject-derived",
+      "type": "DerivedMaterial",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "bytes": 6620,
+      "input": "subject-derived.input.json",
+      "preimage": "subject-derived.canonical.json"
+    },
+    {
+      "id": "wire-derived-batch",
+      "type": "DerivedBatch",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "8b3f776ec127dbf19c704b01880d1fbf423664ac920739fe22cdda282f272c24",
+      "bytes": 1309,
+      "input": "wire-derived-batch.input.json",
+      "preimage": "wire-derived-batch.canonical.json"
+    },
+    {
+      "id": "wire-derived-plan",
+      "type": "DerivedPlan",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": "digest",
+      "sha256": "73e4602a8756a522b3b5ff30ce4455bf4b249aec4fb5e58144f1a3af200f14b3",
+      "bytes": 6620,
+      "input": "wire-derived-plan.input.json",
+      "preimage": "wire-derived-plan.canonical.json"
+    },
+    {
+      "id": "wire-addition-only-recipe",
+      "type": "RecipeRevision",
+      "classification": "positive_synthetic_premise",
+      "domain": null,
+      "omit_outer_field": null,
+      "sha256": "ddcd57fd2454400a3ba8ff9bcd601a2d8e07b84d9492c8f9b068f2414b540090",
+      "bytes": 3416,
+      "input": "wire-addition-only-recipe.input.json",
+      "preimage": "wire-addition-only-recipe.canonical.json"
+    }
+  ]
+}
