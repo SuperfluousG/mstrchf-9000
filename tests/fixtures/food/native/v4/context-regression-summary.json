@@ -1,0 +1,18 @@
+{
+  "finding": "FV3-R1-01",
+  "historical_requirement_counts": {
+    "prior": 21,
+    "subject": 21
+  },
+  "negative_historical_requirement_counts": {
+    "prior": 1,
+    "subject": 2
+  },
+  "current_live_requirement_count_each_branch": 2,
+  "actual_validator_controls": {
+    "positive": 2,
+    "negative": 2,
+    "log": "validator-results.log"
+  },
+  "compatibility_scope": "Legacy decoder projection only; independent reference hashes, actual validator never generates expected data; not proof of future R3 implementation."
+}

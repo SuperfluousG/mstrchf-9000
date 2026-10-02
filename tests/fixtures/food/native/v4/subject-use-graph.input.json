@@ -1,0 +1,143 @@
+{
+  "type": "UseGraph",
+  "classification": "positive_synthetic_premise",
+  "domain": null,
+  "omit_outer_field": null,
+  "value": {
+    "derived_digest": "418aa9d41640f1bd7f4b4c2d202a48e7580eca1b0afb09eb6deb848fd95e55ff",
+    "uses": [
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "consumption",
+          "data": {
+            "occurrence": {
+              "slot": {
+                "week_id": "wk_00000000000000000000000000000001",
+                "date": "2026-12-28",
+                "meal_type": "lunch"
+              },
+              "extra_id": null,
+              "recipe": {
+                "recipe_id": "rc_0000000000000000000000000000012d",
+                "revision": "1",
+                "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+              }
+            },
+            "component_id": "co_0000000000000000000000000000012d",
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            }
+          }
+        },
+        "at": {
+          "local_date": "2026-12-28",
+          "local_time": "12:10:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:10:00Z"
+        }
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "consumption",
+          "data": {
+            "occurrence": {
+              "slot": {
+                "week_id": "wk_00000000000000000000000000000001",
+                "date": "2026-12-28",
+                "meal_type": "dinner"
+              },
+              "extra_id": null,
+              "recipe": {
+                "recipe_id": "rc_0000000000000000000000000000012d",
+                "revision": "1",
+                "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+              }
+            },
+            "component_id": "co_0000000000000000000000000000012d",
+            "person": {
+              "kind": "diner",
+              "data": {
+                "diner_id": "dn_00000000000000000000000000000001"
+              }
+            }
+          }
+        },
+        "at": {
+          "local_date": "2026-12-28",
+          "local_time": "18:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T18:00:00Z"
+        }
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "preparation",
+          "data": {
+            "phase": {
+              "occurrence": {
+                "slot": {
+                  "week_id": "wk_00000000000000000000000000000001",
+                  "date": "2026-12-28",
+                  "meal_type": "lunch"
+                },
+                "extra_id": null,
+                "recipe": {
+                  "recipe_id": "rc_0000000000000000000000000000012d",
+                  "revision": "1",
+                  "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+                }
+              },
+              "prep_id": 1
+            }
+          }
+        },
+        "at": {
+          "local_date": "2026-12-28",
+          "local_time": "12:00:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T12:00:00Z"
+        }
+      },
+      {
+        "line_id": "dl_00000000000000000000000000000001",
+        "use_key": {
+          "kind": "preparation",
+          "data": {
+            "phase": {
+              "occurrence": {
+                "slot": {
+                  "week_id": "wk_00000000000000000000000000000001",
+                  "date": "2026-12-28",
+                  "meal_type": "dinner"
+                },
+                "extra_id": null,
+                "recipe": {
+                  "recipe_id": "rc_0000000000000000000000000000012d",
+                  "revision": "1",
+                  "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+                }
+              },
+              "prep_id": 2
+            }
+          }
+        },
+        "at": {
+          "local_date": "2026-12-28",
+          "local_time": "17:50:00",
+          "zone": "Europe/London",
+          "resolution": "unambiguous",
+          "instant": "2026-12-28T17:50:00Z"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "DemandMaterial",
+  "classification": "positive_synthetic_premise",
+  "domain": null,
+  "omit_outer_field": null,
+  "value": {
+    "schema_version": 1,
+    "input_plan_digest": "bd9777208f168019f22ca43abfabc0a02782e91ee70be04a7306de9cdd6f7cd9",
+    "lines": [
+      {
+        "line_id": "dl_0000000000000000000000000000005a",
+        "ingredient_id": "ig_0000000000000000000000000000012d",
+        "quantity": {
+          "amount": {
+            "numerator": "200",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "origin_batches": [
+          "ba_0000000000000000000000000000005a"
+        ],
+        "origin_extras": [],
+        "essential": false,
+        "conversion_evidence_ids": []
+      }
+    ]
+  }
+}

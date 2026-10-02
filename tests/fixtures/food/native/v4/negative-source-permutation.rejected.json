@@ -1,0 +1,65 @@
+{
+  "type": "LiveSourcePin[]",
+  "classification": "negative_reject_before_authoritative_hash",
+  "expected_rejection_class": "noncanonical_value",
+  "reason": "Seven unique pins in wrong order",
+  "value": [
+    {
+      "source": {
+        "kind": "requirements"
+      },
+      "revision": "1",
+      "digest": "7bb83ec52f64b2a27d433eaffccbb261e862cc3d9b9e37667eb60f6da7ba1a97",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "recipe_evidence"
+      },
+      "revision": "1",
+      "digest": "ba249b95787e7526676381fdc83dc855afc5bac13f1057f0f29f298cf73f8cf4",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "product_evidence"
+      },
+      "revision": "1",
+      "digest": "fdabdc7ae6cd02f96b89be134e43f090ca0db88b13d738c77c3d04e2bfac8d2d",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "order"
+      },
+      "revision": "1",
+      "digest": "24f7884ef334fb9910424d244ed3aaa33cff512b54b5b540b25105ffb4cffb59",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "occupancy"
+      },
+      "revision": "2",
+      "digest": "f2ba48fb71504ab56d8a88b99d525411f2961de9ee95f7676472b2fba5d27da8",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "food_policy"
+      },
+      "revision": "1",
+      "digest": "0991c5bc579fef7cea9abf8abb67d8fb559bc1a8980d0928813ec1b265b30c7d",
+      "valid_until": null
+    },
+    {
+      "source": {
+        "kind": "essentials"
+      },
+      "revision": "1",
+      "digest": "eca844a2d2f6e330914e68fda7ba00b731c3e12ae29fed1e17696df7dd46cee5",
+      "valid_until": null
+    }
+  ],
+  "raw_sha256_not_authority": "70ca723e2b3bf3f01dd63d2bcdb2e802b11574f912b0efe4e70f2a83aba92d62"
+}

@@ -1,0 +1,129 @@
+{
+  "type": "LiveRecipeState",
+  "classification": "negative_reject_before_authoritative_hash",
+  "expected_rejection_class": "saved_method_mismatch",
+  "reason": "Current cold count0 cannot reinterpret saved warmed count1; stale hash or rehash cannot repair changed method semantics",
+  "value": {
+    "kind": "admitted",
+    "data": {
+      "basis": {
+        "recipe": {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        },
+        "admitted": [
+          {
+            "evidence_id": "ev_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "f63d2f754c0a4a62d34ebf1b6d0b1b52b237d5129b502b9fca4e3fd06bd502ce"
+          }
+        ],
+        "verified_asset_digests": []
+      },
+      "classes": {
+        "recipe": {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        },
+        "components": [
+          {
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+            },
+            "component_id": "co_0000000000000000000000000000012d",
+            "class": {
+              "kind": "general"
+            },
+            "evidence_ids": [
+              "ev_0000000000000000000000000000012d"
+            ]
+          }
+        ]
+      },
+      "methods": [
+        {
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          },
+          "kind": {
+            "kind": "production"
+          },
+          "prep_ids": [
+            1
+          ],
+          "direct_reuse_counts": [],
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        },
+        {
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          },
+          "kind": {
+            "kind": "reuse"
+          },
+          "prep_ids": [
+            2
+          ],
+          "direct_reuse_counts": [
+            {
+              "recipe": {
+                "recipe_id": "rc_0000000000000000000000000000012d",
+                "revision": "1",
+                "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+              },
+              "component_id": "co_0000000000000000000000000000012d",
+              "planned_reheats": 0,
+              "evidence_ids": [
+                "ev_0000000000000000000000000000012d"
+              ]
+            }
+          ],
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        }
+      ],
+      "resources": [
+        {
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          },
+          "prep_id": 1,
+          "equipment": [
+            "hob"
+          ],
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        },
+        {
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          },
+          "prep_id": 2,
+          "equipment": [
+            "hob"
+          ],
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        }
+      ]
+    }
+  },
+  "raw_sha256_not_authority": "19e3f7954e1cd0d6ec59a8d61fa7a70d19f4e54edbbaf666cd8cac3a3eff9d61"
+}

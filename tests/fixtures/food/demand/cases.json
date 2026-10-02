@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "oracle_source": "../oracle-v1.json",
+  "oracle_expected_values_modified": false,
+  "projection_cases": [
+    "F30_have_enough_exact",
+    "F31_have_enough_amount_changed",
+    "F32_have_enough_form_changed",
+    "F33_have_enough_digest_changed",
+    "F34_previous_purchase_is_not_stock"
+  ],
+  "full_derivation_fixture": "crates/core/tests/food_demand.rs::full_fixture",
+  "full_derivation_premises": "Frozen A EvidenceBasis and ComponentClassView; real B servings and ingredient scaling; exact A3 context; atomic reviewed phase; supplied identities, occupancy horizon and feasibility inputs.",
+  "f11_lineage_fixture": "../batches/f11_fixture.rs",
+  "full_graph_controls": [
+    "150 distinct ingredients yield 300 preparation/consumption uses",
+    "300 admitted product pins remain in their source snapshot without report unions",
+    "one known expiry retains all 300 uses in FoodFailure::Blocked feasibility",
+    "repeated ExtraId across two slots expands twice and retains four use keys",
+    "F11 source ingredients propagate to three disjoint source-component consumptions; additions stay local"
+  ],
+  "native_validator_only_controls": [
+    "16384 use report accepted; 16385 rejected",
+    "4097 product pins rejected",
+    "257 pins in one source evidence list rejected",
+    "101 genuine non-use details rejected"
+  ],
+  "native_hash_vector_scope": "No independent native hash oracle is authored here. Root owns accepted native-v4 vector replay.",
+  "consumer_cases": "P08/P02/P09-owned cases NOT RUN by this worker. No real product admission, stock, order, persistence or publication claim."
+}

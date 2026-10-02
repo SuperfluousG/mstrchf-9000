@@ -1,0 +1,1638 @@
+{
+  "schema_version": 1,
+  "household": {
+    "schema_version": 1,
+    "household_id": "hh_00000000000000000000000000000001",
+    "revision": "1",
+    "diners": [
+      {
+        "diner_id": "dn_00000000000000000000000000000001",
+        "display_name": "Alex",
+        "age_band": "adult",
+        "restrictions": {
+          "kind": "confirmed_none",
+          "data": {
+            "confirmed_at": "2026-12-27T08:00:00Z"
+          }
+        },
+        "dislikes": [],
+        "portions": {
+          "preset": "regular",
+          "adjustment": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "meal_overrides": []
+        }
+      }
+    ],
+    "preferences": {
+      "spending_style": "balanced",
+      "higher_protein": false,
+      "more_variety": true,
+      "quick_meals": false,
+      "whole_food_preference": true,
+      "dislikes": [],
+      "equipment": [
+        "hob"
+      ],
+      "preferred_hands_on_minutes": 30,
+      "meal_times": [
+        {
+          "meal_type": "breakfast",
+          "time": "08:00:00"
+        },
+        {
+          "meal_type": "dinner",
+          "time": "18:00:00"
+        },
+        {
+          "meal_type": "lunch",
+          "time": "12:00:00"
+        }
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      }
+    },
+    "usual_week": {
+      "enabled_meal_types": [
+        "breakfast",
+        "dinner",
+        "lunch"
+      ],
+      "day_enabled": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "cells": [
+        {
+          "weekday": "monday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "monday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "monday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "tuesday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "tuesday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "tuesday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "wednesday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "wednesday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "wednesday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "thursday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "thursday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "thursday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "friday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "friday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "friday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "saturday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "saturday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "saturday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "sunday",
+          "meal_type": "breakfast",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "sunday",
+          "meal_type": "lunch",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        },
+        {
+          "weekday": "sunday",
+          "meal_type": "dinner",
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ]
+        }
+      ],
+      "suggest_leftovers": false,
+      "zone": "Europe/London"
+    },
+    "connections": {
+      "harness": "codex_local",
+      "retailer": "tesco",
+      "calendar_destination": "cd_00000000000000000000000000000001",
+      "loyalty": "unknown",
+      "delivery_preferences": [],
+      "privacy": {
+        "revision": "1",
+        "use_ai_features": true,
+        "include_household_requirements": true,
+        "confirmed_at": "2026-12-28T12:00:00Z"
+      },
+      "reminders": {
+        "enabled": false,
+        "channels": [],
+        "prompts": []
+      }
+    }
+  },
+  "settings_revision": "1",
+  "privacy": {
+    "revision": "1",
+    "use_ai_features": true,
+    "include_household_requirements": true,
+    "confirmed_at": "2026-12-28T12:00:00Z"
+  },
+  "requirements": [
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-28",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-28",
+        "meal_type": "lunch"
+      },
+      "enabled": true,
+      "location": "at_home",
+      "attendees": [
+        {
+          "person": {
+            "kind": "diner",
+            "data": {
+              "diner_id": "dn_00000000000000000000000000000001"
+            }
+          },
+          "age_band": "adult",
+          "hard_requirements": [],
+          "portion": {
+            "preset": "regular",
+            "adjustment": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "meal_overrides": []
+          }
+        }
+      ],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": {
+        "local_date": "2026-12-28",
+        "local_time": "12:10:00",
+        "zone": "Europe/London",
+        "resolution": "unambiguous",
+        "instant": "2026-12-28T12:10:00Z"
+      },
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-28",
+        "meal_type": "dinner"
+      },
+      "enabled": true,
+      "location": "at_home",
+      "attendees": [
+        {
+          "person": {
+            "kind": "diner",
+            "data": {
+              "diner_id": "dn_00000000000000000000000000000001"
+            }
+          },
+          "age_band": "adult",
+          "hard_requirements": [],
+          "portion": {
+            "preset": "regular",
+            "adjustment": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "meal_overrides": []
+          }
+        }
+      ],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": {
+        "local_date": "2026-12-28",
+        "local_time": "18:00:00",
+        "zone": "Europe/London",
+        "resolution": "unambiguous",
+        "instant": "2026-12-28T18:00:00Z"
+      },
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-29",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-29",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-29",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-30",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-30",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-30",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-31",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-31",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2026-12-31",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-01",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-01",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-01",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-02",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-02",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-02",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-03",
+        "meal_type": "breakfast"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-03",
+        "meal_type": "lunch"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    },
+    {
+      "slot": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "date": "2027-01-03",
+        "meal_type": "dinner"
+      },
+      "enabled": false,
+      "location": "skip",
+      "attendees": [],
+      "shared_hard_requirements": [],
+      "equipment": [
+        "hob"
+      ],
+      "mobility": {
+        "reheating": true,
+        "cold_storage": true,
+        "temperature": "either"
+      },
+      "eat_by": null,
+      "preferred_hands_on_minutes": 30,
+      "leftovers_allowed": true
+    }
+  ],
+  "weeks": [
+    {
+      "schema_version": 1,
+      "range": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "monday": "2026-12-28",
+        "zone": "Europe/London"
+      },
+      "revision": "2",
+      "defaults_snapshot": {
+        "enabled_meal_types": [
+          "breakfast",
+          "dinner",
+          "lunch"
+        ],
+        "day_enabled": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "cells": [
+          {
+            "weekday": "monday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "monday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "monday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "tuesday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "tuesday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "tuesday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "wednesday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "wednesday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "wednesday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "thursday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "thursday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "thursday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "friday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "friday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "friday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "saturday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "saturday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "saturday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "sunday",
+            "meal_type": "breakfast",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "sunday",
+            "meal_type": "lunch",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          },
+          {
+            "weekday": "sunday",
+            "meal_type": "dinner",
+            "choice": "at_home",
+            "attendee_ids": [
+              "dn_00000000000000000000000000000001"
+            ]
+          }
+        ],
+        "suggest_leftovers": false,
+        "zone": "Europe/London"
+      },
+      "day_enabled": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "meal_type_enabled": {
+        "breakfast": true,
+        "lunch": true,
+        "dinner": true
+      },
+      "cells": [
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "dinner"
+          },
+          "choice": "at_home",
+          "attendee_ids": [
+            "dn_00000000000000000000000000000001"
+          ],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-29",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-29",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-29",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-30",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-30",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-30",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-31",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-31",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-31",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-01",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-01",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-01",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-02",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-02",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-02",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-03",
+            "meal_type": "breakfast"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-03",
+            "meal_type": "lunch"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        },
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2027-01-03",
+            "meal_type": "dinner"
+          },
+          "choice": "skip",
+          "attendee_ids": [],
+          "occasion": null
+        }
+      ],
+      "plan": {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "2",
+        "selections": [
+          {
+            "slot": {
+              "week_id": "wk_00000000000000000000000000000001",
+              "date": "2026-12-28",
+              "meal_type": "lunch"
+            },
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "8c294b7bbe95aed1b1fa2bd60ddf73ce4e0b23a900f9bbf3fe5bf4216cbf6aad"
+            },
+            "origin": "fixed",
+            "repeat_authorised": true,
+            "servings": [
+              {
+                "person": {
+                  "kind": "diner",
+                  "data": {
+                    "diner_id": "dn_00000000000000000000000000000001"
+                  }
+                },
+                "preset_ref": {
+                  "recipe": {
+                    "recipe_id": "rc_0000000000000000000000000000012d",
+                    "revision": "1",
+                    "digest": "8c294b7bbe95aed1b1fa2bd60ddf73ce4e0b23a900f9bbf3fe5bf4216cbf6aad"
+                  },
+                  "preset": "regular",
+                  "age_band": "adult",
+                  "meal_type": "lunch"
+                },
+                "servings": {
+                  "numerator": "1",
+                  "denominator": "1"
+                }
+              }
+            ],
+            "extras": [],
+            "batch_use": {
+              "kind": "new_batch",
+              "data": {
+                "batch_id": "ba_00000000000000000000000000000001"
+              }
+            },
+            "meal_overrides": {
+              "portions": [],
+              "eat_by": {
+                "local_date": "2026-12-28",
+                "local_time": "12:10:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T12:10:00Z"
+              }
+            }
+          },
+          {
+            "slot": {
+              "week_id": "wk_00000000000000000000000000000001",
+              "date": "2026-12-28",
+              "meal_type": "dinner"
+            },
+            "recipe": {
+              "recipe_id": "rc_0000000000000000000000000000012d",
+              "revision": "1",
+              "digest": "8c294b7bbe95aed1b1fa2bd60ddf73ce4e0b23a900f9bbf3fe5bf4216cbf6aad"
+            },
+            "origin": "fixed",
+            "repeat_authorised": true,
+            "servings": [
+              {
+                "person": {
+                  "kind": "diner",
+                  "data": {
+                    "diner_id": "dn_00000000000000000000000000000001"
+                  }
+                },
+                "preset_ref": {
+                  "recipe": {
+                    "recipe_id": "rc_0000000000000000000000000000012d",
+                    "revision": "1",
+                    "digest": "8c294b7bbe95aed1b1fa2bd60ddf73ce4e0b23a900f9bbf3fe5bf4216cbf6aad"
+                  },
+                  "preset": "regular",
+                  "age_band": "adult",
+                  "meal_type": "dinner"
+                },
+                "servings": {
+                  "numerator": "1",
+                  "denominator": "1"
+                }
+              }
+            ],
+            "extras": [],
+            "batch_use": {
+              "kind": "leftover",
+              "data": {
+                "batch_id": "ba_00000000000000000000000000000001",
+                "component_ids": [
+                  "co_0000000000000000000000000000012d"
+                ]
+              }
+            },
+            "meal_overrides": {
+              "portions": [],
+              "eat_by": {
+                "local_date": "2026-12-28",
+                "local_time": "18:00:00",
+                "zone": "Europe/London",
+                "resolution": "unambiguous",
+                "instant": "2026-12-28T18:00:00Z"
+              }
+            }
+          }
+        ],
+        "batch_links": [
+          {
+            "batch_id": "ba_00000000000000000000000000000001",
+            "source_slot": {
+              "week_id": "wk_00000000000000000000000000000001",
+              "date": "2026-12-28",
+              "meal_type": "lunch"
+            },
+            "target_slot": {
+              "week_id": "wk_00000000000000000000000000000001",
+              "date": "2026-12-28",
+              "meal_type": "dinner"
+            },
+            "components": [
+              {
+                "component_id": "co_0000000000000000000000000000012d",
+                "quantity": {
+                  "amount": {
+                    "numerator": "200",
+                    "denominator": "1"
+                  },
+                  "unit": "g",
+                  "form": "cooked"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "approved_plan": null,
+      "confirmed_order": null,
+      "publication": "not_requested"
+    }
+  ],
+  "recipes": [
+    {
+      "schema_version": 1,
+      "recipe_id": "rc_0000000000000000000000000000012d",
+      "revision": "1",
+      "title": "Synthetic two-method component",
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-27T09:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "text_rights": {
+        "licence_id": "synthetic-personal-only",
+        "licence_url": null,
+        "attribution": "Synthetic fixture content",
+        "adaptations": [],
+        "distribution": "personal_only",
+        "evidence_ids": []
+      },
+      "ingredients": [
+        {
+          "ingredient_id": "ig_0000000000000000000000000000012d",
+          "name": "Synthetic ingredient",
+          "quantity": {
+            "amount": {
+              "numerator": "200",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          },
+          "discrete": false,
+          "conversion_evidence": [],
+          "component_id": "co_0000000000000000000000000000012d",
+          "step_ids": [
+            1,
+            2
+          ]
+        }
+      ],
+      "yield": {
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "basis": "Synthetic admitted one serving equals 200g output",
+        "components": [
+          {
+            "component_id": "co_0000000000000000000000000000012d",
+            "quantity": {
+              "amount": {
+                "numerator": "200",
+                "denominator": "1"
+              },
+              "unit": "g",
+              "form": "cooked"
+            }
+          }
+        ]
+      },
+      "scaling": {
+        "kind": "linear",
+        "data": {
+          "minimum": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "maximum": {
+            "numerator": "4",
+            "denominator": "1"
+          }
+        }
+      },
+      "steps": [
+        {
+          "step_id": 1,
+          "text": "Synthetic original cooking.",
+          "ingredient_ids": [
+            "ig_0000000000000000000000000000012d"
+          ],
+          "component_ids": [
+            "co_0000000000000000000000000000012d"
+          ],
+          "active_minutes": 10,
+          "elapsed_minutes": 10,
+          "depends_on": []
+        },
+        {
+          "step_id": 2,
+          "text": "Synthetic direct reuse reheating.",
+          "ingredient_ids": [
+            "ig_0000000000000000000000000000012d"
+          ],
+          "component_ids": [
+            "co_0000000000000000000000000000012d"
+          ],
+          "active_minutes": 10,
+          "elapsed_minutes": 10,
+          "depends_on": []
+        }
+      ],
+      "equipment": [
+        "hob"
+      ],
+      "active_minutes": 20,
+      "elapsed_minutes": 20,
+      "meal_types": [
+        "dinner",
+        "lunch"
+      ],
+      "portability": {
+        "cold_suitable": false,
+        "reheating_required": true,
+        "cold_storage_required": true,
+        "evidence_ids": [
+          "ev_0000000000000000000000000000012d"
+        ]
+      },
+      "components": [
+        {
+          "component_id": "co_0000000000000000000000000000012d",
+          "title": "Synthetic cooked component",
+          "ingredient_ids": [
+            "ig_0000000000000000000000000000012d"
+          ],
+          "storage_rule_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        }
+      ],
+      "extras": [],
+      "dietary_evidence": [],
+      "storage": [
+        {
+          "evidence_id": "ev_0000000000000000000000000000012d",
+          "component_id": "co_0000000000000000000000000000012d",
+          "max_chilled_seconds": 172800,
+          "cooling_instruction": "Synthetic admitted premise: cool promptly and refrigerate.",
+          "reheating_instruction": "Synthetic admitted premise: one reheating phase.",
+          "max_reheats": 1,
+          "source": {
+            "url": null,
+            "source_revision": null,
+            "retrieved_at": "2026-12-27T09:00:00Z",
+            "authors": [],
+            "adaptation_notice": null,
+            "origin": "user_authored"
+          }
+        }
+      ],
+      "prep": [
+        {
+          "prep_id": 1,
+          "title": "Production",
+          "step_ids": [
+            1
+          ],
+          "depends_on": [],
+          "active_minutes": 10,
+          "elapsed_minutes": 10,
+          "earliest_offset_seconds": -600,
+          "latest_offset_seconds": -600,
+          "ingredient_ids": [
+            "ig_0000000000000000000000000000012d"
+          ],
+          "can_attach_to_prior_session": false
+        },
+        {
+          "prep_id": 2,
+          "title": "Reuse",
+          "step_ids": [
+            2
+          ],
+          "depends_on": [],
+          "active_minutes": 10,
+          "elapsed_minutes": 10,
+          "earliest_offset_seconds": -600,
+          "latest_offset_seconds": -600,
+          "ingredient_ids": [
+            "ig_0000000000000000000000000000012d"
+          ],
+          "can_attach_to_prior_session": false
+        }
+      ],
+      "portion_presets": [
+        {
+          "preset": "regular",
+          "age_band": "adult",
+          "meal_type": "dinner",
+          "servings": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        },
+        {
+          "preset": "regular",
+          "age_band": "adult",
+          "meal_type": "lunch",
+          "servings": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "evidence_ids": [
+            "ev_0000000000000000000000000000012d"
+          ]
+        }
+      ],
+      "nutrition": null,
+      "image": null,
+      "reviews": [
+        {
+          "evidence_id": "ev_0000000000000000000000000000012d",
+          "kind": "quantity_review",
+          "actor": "automated",
+          "at": "2026-12-27T10:00:00Z",
+          "note": "Synthetic attestation premise only; no human cook test."
+        }
+      ],
+      "capabilities": {
+        "local_display": true,
+        "shopping": true,
+        "leftovers": true,
+        "starter_distribution": false,
+        "blocking_issues": []
+      }
+    }
+  ],
+  "history": {
+    "revision": "1",
+    "selected": [],
+    "ordered": [],
+    "feedback": [],
+    "hidden_recipe_ids": []
+  },
+  "stamp": {
+    "household_revision": "1",
+    "settings_revision": "1",
+    "privacy_revision": "1",
+    "history_revision": "1",
+    "catalogue_revision": "1",
+    "ranking_policy_version": "1",
+    "recipe_refs": [
+      {
+        "recipe_id": "rc_0000000000000000000000000000012d",
+        "revision": "1",
+        "digest": "8c294b7bbe95aed1b1fa2bd60ddf73ce4e0b23a900f9bbf3fe5bf4216cbf6aad"
+      }
+    ],
+    "read_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "2"
+      }
+    ],
+    "write_weeks": [
+      {
+        "week_id": "wk_00000000000000000000000000000001",
+        "revision": "2"
+      }
+    ]
+  },
+  "ranking_policy": {
+    "version": "1",
+    "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

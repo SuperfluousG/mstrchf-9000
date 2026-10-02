@@ -1,0 +1,102 @@
+{
+  "type": "PlanInputMaterial",
+  "classification": "positive_synthetic_premise",
+  "domain": null,
+  "omit_outer_field": null,
+  "value": {
+    "schema_version": 1,
+    "week_plan": {
+      "week_id": "wk_00000000000000000000000000000001",
+      "revision": "1",
+      "selections": [
+        {
+          "slot": {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "lunch"
+          },
+          "recipe": {
+            "recipe_id": "rc_0000000000000000000000000000012d",
+            "revision": "1",
+            "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+          },
+          "origin": "fixed",
+          "repeat_authorised": true,
+          "servings": [
+            {
+              "person": {
+                "kind": "diner",
+                "data": {
+                  "diner_id": "dn_00000000000000000000000000000001"
+                }
+              },
+              "preset_ref": {
+                "recipe": {
+                  "recipe_id": "rc_0000000000000000000000000000012d",
+                  "revision": "1",
+                  "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+                },
+                "preset": "regular",
+                "age_band": "adult",
+                "meal_type": "lunch"
+              },
+              "servings": {
+                "numerator": "1",
+                "denominator": "1"
+              }
+            }
+          ],
+          "extras": [],
+          "batch_use": {
+            "kind": "new_batch",
+            "data": {
+              "batch_id": "ba_0000000000000000000000000000005a",
+              "production_servings": {
+                "numerator": "1",
+                "denominator": "1"
+              }
+            }
+          },
+          "meal_overrides": {
+            "portions": [],
+            "eat_by": {
+              "local_date": "2026-12-28",
+              "local_time": "12:40:00",
+              "zone": "Europe/London",
+              "resolution": "unambiguous",
+              "instant": "2026-12-28T12:40:00Z"
+            }
+          }
+        }
+      ],
+      "batch_links": []
+    },
+    "context_stamp": {
+      "household_revision": "1",
+      "settings_revision": "1",
+      "privacy_revision": "1",
+      "history_revision": "1",
+      "catalogue_revision": "1",
+      "ranking_policy_version": "1",
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_0000000000000000000000000000012d",
+          "revision": "1",
+          "digest": "0fb683dff9176716c54b5757a2c299237825db24d1c104e5c7307b27ce5ead76"
+        }
+      ],
+      "read_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "1"
+        }
+      ],
+      "write_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "1"
+        }
+      ]
+    }
+  }
+}
