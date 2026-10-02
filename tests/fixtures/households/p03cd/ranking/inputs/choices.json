@@ -1,0 +1,90 @@
+[
+  {
+    "recipe": {
+      "recipe_id": "rc_00000000000000000000000000000001",
+      "revision": "2",
+      "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4"
+    },
+    "extras": [],
+    "meal_overrides": {
+      "portions": [],
+      "eat_by": null
+    },
+    "batch_use": {
+      "kind": "new_batch",
+      "data": {
+        "batch_id": "ba_00000000000000000000000000000001",
+        "production_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    }
+  },
+  {
+    "recipe": {
+      "recipe_id": "rc_00000000000000000000000000000002",
+      "revision": "1",
+      "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d"
+    },
+    "extras": [],
+    "meal_overrides": {
+      "portions": [],
+      "eat_by": null
+    },
+    "batch_use": {
+      "kind": "new_batch",
+      "data": {
+        "batch_id": "ba_00000000000000000000000000000003",
+        "production_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    }
+  },
+  {
+    "recipe": {
+      "recipe_id": "rc_00000000000000000000000000000003",
+      "revision": "1",
+      "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f"
+    },
+    "extras": [],
+    "meal_overrides": {
+      "portions": [],
+      "eat_by": null
+    },
+    "batch_use": {
+      "kind": "new_batch",
+      "data": {
+        "batch_id": "ba_00000000000000000000000000000004",
+        "production_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    }
+  },
+  {
+    "recipe": {
+      "recipe_id": "rc_00000000000000000000000000000004",
+      "revision": "1",
+      "digest": "477bab5562d0a670a4f31994fd5d393f92435a46c05f8a9c21fef808d0d41fbe"
+    },
+    "extras": [],
+    "meal_overrides": {
+      "portions": [],
+      "eat_by": null
+    },
+    "batch_use": {
+      "kind": "new_batch",
+      "data": {
+        "batch_id": "ba_00000000000000000000000000000005",
+        "production_servings": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,523 @@
+[
+  {
+    "id": "SK01",
+    "binding": {
+      "id": "SK01",
+      "context": "canonical/context-base.jcs.json",
+      "pool": "canonical/pool-base.jcs.json",
+      "evidence": "inputs/ranking-evidence-known-zero.json",
+      "evaluated_at": "2026-12-21T12:00:00Z"
+    },
+    "scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 8,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 16,
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": 12
+    },
+    "compromises": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": [
+        {
+          "metric": "hands_on_minutes",
+          "chosen": {
+            "kind": "count",
+            "data": 30
+          },
+          "alternative": {
+            "kind": "count",
+            "data": 10
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        },
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "10",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "20",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        }
+      ],
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "300",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4",
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "2"
+          },
+          "alternative_choice": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        },
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "20",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f",
+            "recipe_id": "rc_00000000000000000000000000000003",
+            "revision": "1"
+          },
+          "alternative_choice": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        }
+      ],
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "700",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        },
+        {
+          "metric": "hands_on_minutes",
+          "chosen": {
+            "kind": "count",
+            "data": 20
+          },
+          "alternative": {
+            "kind": "count",
+            "data": 10
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "eec1ec0db4cdc22ebc59ec55543e602ab28f9b32a31aad39d373d03c3f5c5bdd"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SK02-balanced-protein",
+    "binding": {
+      "id": "SK02-balanced",
+      "context": "canonical/context-SK02-balanced.jcs.json",
+      "pool": "canonical/pool-SK02-balanced.jcs.json",
+      "evidence": "inputs/ranking-evidence-SK02-balanced.json",
+      "evaluated_at": "2026-12-21T12:00:00Z"
+    },
+    "scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 4,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 6,
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": 8
+    },
+    "compromises": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": [
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "10",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f",
+            "recipe_id": "rc_00000000000000000000000000000003",
+            "revision": "1"
+          },
+          "alternative_choice": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+          "evidence_digest": "b3a43af3bc4f072db384a6816a0695e192528d47d3f1a8b28d238160fa75fc06"
+        }
+      ],
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": [
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "20",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f",
+            "recipe_id": "rc_00000000000000000000000000000003",
+            "revision": "1"
+          },
+          "alternative_choice": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+          "evidence_digest": "b3a43af3bc4f072db384a6816a0695e192528d47d3f1a8b28d238160fa75fc06"
+        },
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "300",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4",
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "2"
+          },
+          "alternative_choice": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+          "evidence_digest": "b3a43af3bc4f072db384a6816a0695e192528d47d3f1a8b28d238160fa75fc06"
+        }
+      ],
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "700",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "b3a43af3bc4f072db384a6816a0695e192528d47d3f1a8b28d238160fa75fc06"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SK02-flexible-protein",
+    "binding": {
+      "id": "SK02-flexible",
+      "context": "canonical/context-SK02-flexible.jcs.json",
+      "pool": "canonical/pool-SK02-flexible.jcs.json",
+      "evidence": "inputs/ranking-evidence-SK02-flexible.json",
+      "evaluated_at": "2026-12-21T12:00:00Z"
+    },
+    "scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 0,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 4,
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": 8
+    },
+    "compromises": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": [
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "10",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f",
+            "recipe_id": "rc_00000000000000000000000000000003",
+            "revision": "1"
+          },
+          "alternative_choice": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+          "evidence_digest": "c433681ac790ec3148b6e3146ce770a9b76e6e1679fe6c5f7fbc2de1b2a2501a"
+        }
+      ],
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": [
+        {
+          "metric": "protein_grams",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "20",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "ab134c9167ea2811a7e67af129fdd65158fe96da32a4794325d5b444f0750e4f",
+            "recipe_id": "rc_00000000000000000000000000000003",
+            "revision": "1"
+          },
+          "alternative_choice": "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750",
+          "evidence_digest": "c433681ac790ec3148b6e3146ce770a9b76e6e1679fe6c5f7fbc2de1b2a2501a"
+        }
+      ],
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": []
+    }
+  },
+  {
+    "id": "SK02-value-only",
+    "binding": {
+      "id": "SK02-value",
+      "context": "canonical/context-SK02-value.jcs.json",
+      "pool": "canonical/pool-SK02-value.jcs.json",
+      "evidence": "inputs/ranking-evidence-SK02-value.json",
+      "evaluated_at": "2026-12-21T12:00:00Z"
+    },
+    "scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 8,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 4,
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": 0
+    },
+    "compromises": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": [],
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "300",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4",
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "2"
+          },
+          "alternative_choice": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+          "evidence_digest": "0084caf8ca995de36409db7f0233ff62d33fd497549c667ec09fc40e45bd57ed"
+        }
+      ],
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "700",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "300",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4",
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "2"
+          },
+          "alternative_choice": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+          "evidence_digest": "0084caf8ca995de36409db7f0233ff62d33fd497549c667ec09fc40e45bd57ed"
+        }
+      ]
+    }
+  },
+  {
+    "id": "SK03",
+    "binding": {
+      "id": "SK03",
+      "context": "canonical/context-SK03.jcs.json",
+      "pool": "canonical/pool-SK03.jcs.json",
+      "evidence": "inputs/ranking-evidence-SK03.json",
+      "evaluated_at": "2026-12-21T12:00:00Z"
+    },
+    "scores": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": 8,
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": 12,
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": 4
+    },
+    "compromises": {
+      "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb": [
+        {
+          "metric": "hands_on_minutes",
+          "chosen": {
+            "kind": "count",
+            "data": 30
+          },
+          "alternative": {
+            "kind": "count",
+            "data": 10
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "72b928197f48ec2308b4ed72696dfba22ccf3c2e3f29d9500bed932e286a9130"
+        }
+      ],
+      "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "300",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "b7d5f391253e8a0f3bc5e1bbd8d09be1589da8ce1e4b3a7a2a71a098fa29acc4",
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "2"
+          },
+          "alternative_choice": "6c09089e582f0917b0b60392cc44b86f40c3e9818f1adb0ecf18c51107a0bebb",
+          "evidence_digest": "72b928197f48ec2308b4ed72696dfba22ccf3c2e3f29d9500bed932e286a9130"
+        }
+      ],
+      "2ca23a967e625d363c9e829988c4af2402d770402b5b753d9a82b98a6af0c750": [
+        {
+          "metric": "purchase_cost",
+          "chosen": {
+            "kind": "amount",
+            "data": {
+              "numerator": "700",
+              "denominator": "1"
+            }
+          },
+          "alternative": {
+            "kind": "amount",
+            "data": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "72b928197f48ec2308b4ed72696dfba22ccf3c2e3f29d9500bed932e286a9130"
+        },
+        {
+          "metric": "hands_on_minutes",
+          "chosen": {
+            "kind": "count",
+            "data": 20
+          },
+          "alternative": {
+            "kind": "count",
+            "data": 10
+          },
+          "alternative_recipe": {
+            "digest": "568df616eeb1ce2076d6189a8100547e1c5a78b5da8c3dba9c08b7777145fa7d",
+            "recipe_id": "rc_00000000000000000000000000000002",
+            "revision": "1"
+          },
+          "alternative_choice": "9e45c4556204c533296365c11b9af9072cf8a541a010dd4a6d7cbec85ab6a887",
+          "evidence_digest": "72b928197f48ec2308b4ed72696dfba22ccf3c2e3f29d9500bed932e286a9130"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1162 @@
+[
+  {
+    "schema_version": 1,
+    "recipe_id": "rc_00000000000000000000000000000001",
+    "revision": "2",
+    "title": "SYNTHETIC selection vector A2",
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-21T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    },
+    "text_rights": {
+      "licence_id": "synthetic-personal-only",
+      "licence_url": null,
+      "attribution": "SYNTHETIC author A",
+      "adaptations": [],
+      "distribution": "permitted",
+      "evidence_ids": [
+        "ev_00000000000000000000000000000065"
+      ]
+    },
+    "ingredients": [
+      {
+        "ingredient_id": "ig_00000000000000000000000000000001",
+        "name": "SYNTHETIC rice",
+        "quantity": {
+          "amount": {
+            "numerator": "400",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "discrete": false,
+        "conversion_evidence": [],
+        "component_id": "co_00000000000000000000000000000001",
+        "step_ids": [
+          1
+        ]
+      }
+    ],
+    "yield": {
+      "servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "basis": "Synthetic two-serving yield",
+      "components": [
+        {
+          "component_id": "co_00000000000000000000000000000001",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "kind": "linear",
+      "data": {
+        "minimum": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "maximum": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    },
+    "steps": [
+      {
+        "step_id": 1,
+        "text": "Combine the synthetic ingredients.",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000001"
+        ],
+        "component_ids": [
+          "co_00000000000000000000000000000001"
+        ],
+        "active_minutes": 30,
+        "elapsed_minutes": 45,
+        "depends_on": []
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "active_minutes": 30,
+    "elapsed_minutes": 45,
+    "meal_types": [
+      "dinner"
+    ],
+    "portability": {
+      "cold_suitable": false,
+      "reheating_required": false,
+      "cold_storage_required": false,
+      "evidence_ids": []
+    },
+    "components": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "title": "Synthetic component 1",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000001"
+        ],
+        "storage_rule_ids": [
+          "ev_0000000000000000000000000000006a"
+        ],
+        "production": null
+      }
+    ],
+    "extras": [],
+    "dietary_evidence": [
+      {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000068",
+        "review_id": "ev_00000000000000000000000000000067",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_0000000000000000000000000000006a",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 86400
+      }
+    ],
+    "prep": [],
+    "portion_presets": [
+      {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000069"
+        ]
+      }
+    ],
+    "nutrition": {
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-21T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "per_servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "protein_g": {
+        "numerator": "10",
+        "denominator": "1"
+      },
+      "energy_kcal": null,
+      "estimated": true
+    },
+    "image": null,
+    "reviews": [
+      {
+        "kind": "source_review",
+        "actor": "human",
+        "note": "SYNTHETIC source evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000065"
+      },
+      {
+        "kind": "quantity_review",
+        "actor": "human",
+        "note": "SYNTHETIC quantity evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000066"
+      },
+      {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000067"
+      }
+    ],
+    "capabilities": {
+      "local_display": true,
+      "shopping": true,
+      "leftovers": true,
+      "starter_distribution": false,
+      "blocking_issues": [
+        {
+          "code": "missing_image",
+          "path": "/image",
+          "evidence_ids": []
+        }
+      ]
+    },
+    "reused_inputs": []
+  },
+  {
+    "schema_version": 1,
+    "recipe_id": "rc_00000000000000000000000000000001",
+    "revision": "10",
+    "title": "SYNTHETIC selection vector A10",
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-21T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    },
+    "text_rights": {
+      "licence_id": "synthetic-personal-only",
+      "licence_url": null,
+      "attribution": "SYNTHETIC author A",
+      "adaptations": [],
+      "distribution": "permitted",
+      "evidence_ids": [
+        "ev_000000000000000000000000000000c9"
+      ]
+    },
+    "ingredients": [
+      {
+        "ingredient_id": "ig_00000000000000000000000000000001",
+        "name": "SYNTHETIC rice",
+        "quantity": {
+          "amount": {
+            "numerator": "400",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "discrete": false,
+        "conversion_evidence": [],
+        "component_id": "co_00000000000000000000000000000001",
+        "step_ids": [
+          1
+        ]
+      }
+    ],
+    "yield": {
+      "servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "basis": "Synthetic two-serving yield",
+      "components": [
+        {
+          "component_id": "co_00000000000000000000000000000001",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "kind": "linear",
+      "data": {
+        "minimum": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "maximum": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    },
+    "steps": [
+      {
+        "step_id": 1,
+        "text": "Combine the synthetic ingredients.",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000001"
+        ],
+        "component_ids": [
+          "co_00000000000000000000000000000001"
+        ],
+        "active_minutes": 30,
+        "elapsed_minutes": 45,
+        "depends_on": []
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "active_minutes": 30,
+    "elapsed_minutes": 45,
+    "meal_types": [
+      "dinner"
+    ],
+    "portability": {
+      "cold_suitable": false,
+      "reheating_required": false,
+      "cold_storage_required": false,
+      "evidence_ids": []
+    },
+    "components": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "title": "Synthetic component 1",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000001"
+        ],
+        "storage_rule_ids": [
+          "ev_000000000000000000000000000000ce"
+        ],
+        "production": null
+      }
+    ],
+    "extras": [],
+    "dietary_evidence": [
+      {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000000cc",
+        "review_id": "ev_000000000000000000000000000000cb",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000000ce",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 86400
+      }
+    ],
+    "prep": [],
+    "portion_presets": [
+      {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_000000000000000000000000000000cd"
+        ]
+      }
+    ],
+    "nutrition": {
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-21T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "per_servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "protein_g": {
+        "numerator": "10",
+        "denominator": "1"
+      },
+      "energy_kcal": null,
+      "estimated": true
+    },
+    "image": null,
+    "reviews": [
+      {
+        "kind": "source_review",
+        "actor": "human",
+        "note": "SYNTHETIC source evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000000c9"
+      },
+      {
+        "kind": "quantity_review",
+        "actor": "human",
+        "note": "SYNTHETIC quantity evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000000ca"
+      },
+      {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000000cb"
+      }
+    ],
+    "capabilities": {
+      "local_display": true,
+      "shopping": true,
+      "leftovers": true,
+      "starter_distribution": false,
+      "blocking_issues": [
+        {
+          "code": "missing_image",
+          "path": "/image",
+          "evidence_ids": []
+        }
+      ]
+    },
+    "reused_inputs": []
+  },
+  {
+    "schema_version": 1,
+    "recipe_id": "rc_00000000000000000000000000000002",
+    "revision": "1",
+    "title": "SYNTHETIC selection vector B",
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-21T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    },
+    "text_rights": {
+      "licence_id": "synthetic-personal-only",
+      "licence_url": null,
+      "attribution": "SYNTHETIC author A",
+      "adaptations": [],
+      "distribution": "permitted",
+      "evidence_ids": [
+        "ev_0000000000000000000000000000012d"
+      ]
+    },
+    "ingredients": [
+      {
+        "ingredient_id": "ig_00000000000000000000000000000002",
+        "name": "SYNTHETIC beans",
+        "quantity": {
+          "amount": {
+            "numerator": "400",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "discrete": false,
+        "conversion_evidence": [],
+        "component_id": "co_00000000000000000000000000000001",
+        "step_ids": [
+          1
+        ]
+      }
+    ],
+    "yield": {
+      "servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "basis": "Synthetic two-serving yield",
+      "components": [
+        {
+          "component_id": "co_00000000000000000000000000000001",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "kind": "linear",
+      "data": {
+        "minimum": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "maximum": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    },
+    "steps": [
+      {
+        "step_id": 1,
+        "text": "Combine the synthetic ingredients.",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000002"
+        ],
+        "component_ids": [
+          "co_00000000000000000000000000000001"
+        ],
+        "active_minutes": 10,
+        "elapsed_minutes": 35,
+        "depends_on": []
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "active_minutes": 10,
+    "elapsed_minutes": 35,
+    "meal_types": [
+      "dinner"
+    ],
+    "portability": {
+      "cold_suitable": false,
+      "reheating_required": false,
+      "cold_storage_required": false,
+      "evidence_ids": []
+    },
+    "components": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "title": "Synthetic component 1",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000002"
+        ],
+        "storage_rule_ids": [
+          "ev_00000000000000000000000000000132"
+        ],
+        "production": null
+      }
+    ],
+    "extras": [],
+    "dietary_evidence": [
+      {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000130",
+        "review_id": "ev_0000000000000000000000000000012f",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000132",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      }
+    ],
+    "prep": [],
+    "portion_presets": [
+      {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000131"
+        ]
+      }
+    ],
+    "nutrition": {
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-21T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "per_servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "protein_g": {
+        "numerator": "20",
+        "denominator": "1"
+      },
+      "energy_kcal": null,
+      "estimated": true
+    },
+    "image": null,
+    "reviews": [
+      {
+        "kind": "source_review",
+        "actor": "human",
+        "note": "SYNTHETIC source evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_0000000000000000000000000000012d"
+      },
+      {
+        "kind": "quantity_review",
+        "actor": "human",
+        "note": "SYNTHETIC quantity evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_0000000000000000000000000000012e"
+      },
+      {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_0000000000000000000000000000012f"
+      }
+    ],
+    "capabilities": {
+      "local_display": true,
+      "shopping": true,
+      "leftovers": true,
+      "starter_distribution": false,
+      "blocking_issues": [
+        {
+          "code": "missing_image",
+          "path": "/image",
+          "evidence_ids": []
+        }
+      ]
+    },
+    "reused_inputs": []
+  },
+  {
+    "schema_version": 1,
+    "recipe_id": "rc_00000000000000000000000000000003",
+    "revision": "1",
+    "title": "SYNTHETIC selection vector C",
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-21T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    },
+    "text_rights": {
+      "licence_id": "synthetic-personal-only",
+      "licence_url": null,
+      "attribution": "SYNTHETIC author A",
+      "adaptations": [],
+      "distribution": "permitted",
+      "evidence_ids": [
+        "ev_00000000000000000000000000000191"
+      ]
+    },
+    "ingredients": [
+      {
+        "ingredient_id": "ig_00000000000000000000000000000003",
+        "name": "SYNTHETIC lentils",
+        "quantity": {
+          "amount": {
+            "numerator": "400",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "discrete": false,
+        "conversion_evidence": [],
+        "component_id": "co_00000000000000000000000000000001",
+        "step_ids": [
+          1
+        ]
+      }
+    ],
+    "yield": {
+      "servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "basis": "Synthetic two-serving yield",
+      "components": [
+        {
+          "component_id": "co_00000000000000000000000000000001",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "kind": "linear",
+      "data": {
+        "minimum": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "maximum": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    },
+    "steps": [
+      {
+        "step_id": 1,
+        "text": "Combine the synthetic ingredients.",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000003"
+        ],
+        "component_ids": [
+          "co_00000000000000000000000000000001"
+        ],
+        "active_minutes": 20,
+        "elapsed_minutes": 50,
+        "depends_on": []
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "active_minutes": 20,
+    "elapsed_minutes": 50,
+    "meal_types": [
+      "dinner"
+    ],
+    "portability": {
+      "cold_suitable": false,
+      "reheating_required": false,
+      "cold_storage_required": false,
+      "evidence_ids": []
+    },
+    "components": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "title": "Synthetic component 1",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000003"
+        ],
+        "storage_rule_ids": [
+          "ev_00000000000000000000000000000196"
+        ],
+        "production": null
+      }
+    ],
+    "extras": [],
+    "dietary_evidence": [
+      {
+        "verdict": "supported",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000194",
+        "review_id": "ev_00000000000000000000000000000193",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_00000000000000000000000000000196",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      }
+    ],
+    "prep": [],
+    "portion_presets": [
+      {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_00000000000000000000000000000195"
+        ]
+      }
+    ],
+    "nutrition": {
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-21T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "per_servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "protein_g": {
+        "numerator": "40",
+        "denominator": "1"
+      },
+      "energy_kcal": null,
+      "estimated": true
+    },
+    "image": null,
+    "reviews": [
+      {
+        "kind": "source_review",
+        "actor": "human",
+        "note": "SYNTHETIC source evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000191"
+      },
+      {
+        "kind": "quantity_review",
+        "actor": "human",
+        "note": "SYNTHETIC quantity evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000192"
+      },
+      {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_00000000000000000000000000000193"
+      }
+    ],
+    "capabilities": {
+      "local_display": true,
+      "shopping": true,
+      "leftovers": true,
+      "starter_distribution": false,
+      "blocking_issues": [
+        {
+          "code": "missing_image",
+          "path": "/image",
+          "evidence_ids": []
+        }
+      ]
+    },
+    "reused_inputs": []
+  },
+  {
+    "schema_version": 1,
+    "recipe_id": "rc_00000000000000000000000000000004",
+    "revision": "1",
+    "title": "SYNTHETIC selection vector D",
+    "source": {
+      "url": null,
+      "source_revision": null,
+      "retrieved_at": "2026-12-21T12:00:00Z",
+      "authors": [],
+      "adaptation_notice": null,
+      "origin": "user_authored"
+    },
+    "text_rights": {
+      "licence_id": "synthetic-personal-only",
+      "licence_url": null,
+      "attribution": "SYNTHETIC author A",
+      "adaptations": [],
+      "distribution": "permitted",
+      "evidence_ids": [
+        "ev_000000000000000000000000000001f5"
+      ]
+    },
+    "ingredients": [
+      {
+        "ingredient_id": "ig_00000000000000000000000000000004",
+        "name": "SYNTHETIC chicken",
+        "quantity": {
+          "amount": {
+            "numerator": "400",
+            "denominator": "1"
+          },
+          "unit": "g",
+          "form": "raw"
+        },
+        "discrete": false,
+        "conversion_evidence": [],
+        "component_id": "co_00000000000000000000000000000001",
+        "step_ids": [
+          1
+        ]
+      }
+    ],
+    "yield": {
+      "servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "basis": "Synthetic two-serving yield",
+      "components": [
+        {
+          "component_id": "co_00000000000000000000000000000001",
+          "quantity": {
+            "amount": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "unit": "g",
+            "form": "raw"
+          }
+        }
+      ]
+    },
+    "scaling": {
+      "kind": "linear",
+      "data": {
+        "minimum": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "maximum": {
+          "numerator": "2",
+          "denominator": "1"
+        }
+      }
+    },
+    "steps": [
+      {
+        "step_id": 1,
+        "text": "Combine the synthetic ingredients.",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000004"
+        ],
+        "component_ids": [
+          "co_00000000000000000000000000000001"
+        ],
+        "active_minutes": 5,
+        "elapsed_minutes": 10,
+        "depends_on": []
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "active_minutes": 5,
+    "elapsed_minutes": 10,
+    "meal_types": [
+      "dinner"
+    ],
+    "portability": {
+      "cold_suitable": false,
+      "reheating_required": false,
+      "cold_storage_required": false,
+      "evidence_ids": []
+    },
+    "components": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "title": "Synthetic component 1",
+        "ingredient_ids": [
+          "ig_00000000000000000000000000000004"
+        ],
+        "storage_rule_ids": [
+          "ev_000000000000000000000000000001fa"
+        ],
+        "production": null
+      }
+    ],
+    "extras": [],
+    "dietary_evidence": [
+      {
+        "verdict": "conflicting",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000001f8",
+        "review_id": "ev_000000000000000000000000000001f7",
+        "requirement": {
+          "data": {
+            "code": "vegetarian"
+          },
+          "kind": "diet"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "component_id": "co_00000000000000000000000000000001",
+        "source": {
+          "url": null,
+          "source_revision": null,
+          "retrieved_at": "2026-12-21T12:00:00Z",
+          "authors": [],
+          "adaptation_notice": null,
+          "origin": "user_authored"
+        },
+        "evidence_id": "ev_000000000000000000000000000001fa",
+        "reheating_instruction": "SYNTHETIC reheating instruction",
+        "cooling_instruction": "SYNTHETIC cooling instruction",
+        "max_reheats": 1,
+        "max_chilled_seconds": 172800
+      }
+    ],
+    "prep": [],
+    "portion_presets": [
+      {
+        "preset": "regular",
+        "age_band": "adult",
+        "meal_type": "dinner",
+        "servings": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "evidence_ids": [
+          "ev_000000000000000000000000000001f9"
+        ]
+      }
+    ],
+    "nutrition": {
+      "source": {
+        "url": null,
+        "source_revision": null,
+        "retrieved_at": "2026-12-21T12:00:00Z",
+        "authors": [],
+        "adaptation_notice": null,
+        "origin": "user_authored"
+      },
+      "per_servings": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "protein_g": {
+        "numerator": "50",
+        "denominator": "1"
+      },
+      "energy_kcal": null,
+      "estimated": true
+    },
+    "image": null,
+    "reviews": [
+      {
+        "kind": "source_review",
+        "actor": "human",
+        "note": "SYNTHETIC source evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000001f5"
+      },
+      {
+        "kind": "quantity_review",
+        "actor": "human",
+        "note": "SYNTHETIC quantity evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000001f6"
+      },
+      {
+        "kind": "dietary_review",
+        "actor": "human",
+        "note": "SYNTHETIC dietary evidence",
+        "at": "2026-10-02T12:00:00Z",
+        "evidence_id": "ev_000000000000000000000000000001f7"
+      }
+    ],
+    "capabilities": {
+      "local_display": true,
+      "shopping": true,
+      "leftovers": true,
+      "starter_distribution": false,
+      "blocking_issues": [
+        {
+          "code": "missing_image",
+          "path": "/image",
+          "evidence_ids": []
+        }
+      ]
+    },
+    "reused_inputs": []
+  }
+]
