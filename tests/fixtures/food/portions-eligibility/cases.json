@@ -1,0 +1,19 @@
+{
+  "oracle_sha256": "ba50ac3ff55ea90aae006d2883cfe21ab1c9667b5ccfdd185f2e967263c8b092",
+  "synthetic": true,
+  "cases": [
+    {"name":"F01_exact_rational_recipe_specific_presets","test":"food_f01_exact_rational_recipe_specific_presets","literal_checks":["5/4","1/2","7/4","7/12","210 g drained"]},
+    {"name":"F02_same_child_other_recipe","test":"food_f02_same_child_other_recipe","literal_checks":["9/16"]},
+    {"name":"F03_missing_age_recipe_mapping","test":"food_f03_missing_age_recipe_mapping","literal_checks":["unresolved","no servings"]},
+    {"name":"F04_meal_override_is_local","test":"food_f04_meal_override_is_local","literal_checks":["120/60/80 g dry for a","80/80/80 g dry for b"]},
+    {"name":"F05_shared_base_and_separate_extra","test":"food_f05_shared_base_and_separate_extra","literal_checks":["300 g drained beans","100 g raw chicken","only b receives extra","inputs unchanged"]},
+    {"name":"F06_extra_to_ineligible_person","test":"food_f06_extra_to_ineligible_person","literal_checks":["ineligible recipient a"]},
+    {"name":"F07_guest_blocks_previous_base","test":"food_f07_guest_blocks_previous_base","literal_checks":["ineligible with guest","eligible without guest"]},
+    {"name":"F08_portable_cold_control_and_no_fit","test":"food_f08_portable_cold_control_and_no_fit","literal_checks":["cold eligible","hot ineligible","cold storage absent unresolved"]},
+    {"name":"F09_no_suitable_recipe_both_routes","test":"food_f09_no_suitable_recipe_both_routes","literal_checks":["both candidates ineligible","same predicate invoked for both routes"]},
+    {"name":"F37_fractional_egg_without_supported_scaling","test":"food_f37_fractional_egg_without_supported_scaling","literal_checks":["3/2 whole eggs refused"]},
+    {"name":"F38_discrete_batch_scaling_control","test":"food_f38_discrete_batch_scaling_control","literal_checks":["2 batches","4 produced","3 requested","1 unallocated","6 eggs"]},
+    {"name":"F39_dry_cooked_without_conversion","test":"food_f39_dry_cooked_without_conversion","literal_checks":["unsupported conversion"]},
+    {"name":"F40_scoped_conversion_control","test":"food_f40_scoped_conversion_control","literal_checks":["300 g cooked to 100 g dry","inverse returns 300 g cooked","original evidence unchanged"],"partial":"P04 conversion only; P08 pack count and price excluded"}
+  ]
+}
