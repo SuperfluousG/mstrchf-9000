@@ -24,7 +24,9 @@ SQLite is pinned and bundled, with WAL, synchronous FULL, foreign keys on, trust
 
 Run from the repository root with the already installed exact Windows toolchain.
 The downstream compiler test refuses floating channels, Rustup proxies, missing
-sibling tools or mismatched release/host identities; it never installs a toolchain:
+sibling tools or mismatched release/host identities; it never installs a toolchain.
+It explicitly sets both primary compiler-wrapper variables empty to disable
+alternate environment/config-file fallback:
 
 ```powershell
 $toolchain = Join-Path $env:USERPROFILE '.rustup/toolchains/1.94.0-x86_64-pc-windows-msvc/bin'

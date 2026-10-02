@@ -129,8 +129,9 @@ impl ExactToolchain {
             .env("RUSTDOC", &self.rustdoc)
             .env("RUSTUP_TOOLCHAIN", &self.name)
             .env("RUSTUP_AUTO_INSTALL", "0")
-            .env_remove("RUSTC_WRAPPER")
-            .env_remove("RUSTC_WORKSPACE_WRAPPER");
+            // Empty primary settings override alternate environment and Cargo config.
+            .env("RUSTC_WRAPPER", "")
+            .env("RUSTC_WORKSPACE_WRAPPER", "");
         command
     }
 
@@ -259,7 +260,10 @@ fn compiler_launcher_rejects_proxy_channel_missing_and_mismatched_identity() {
         );
     }
     for key in ["RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"] {
-        assert_eq!(environment.get(std::ffi::OsStr::new(key)), Some(&None));
+        assert_eq!(
+            environment.get(std::ffi::OsStr::new(key)),
+            Some(&Some(std::ffi::OsStr::new("")))
+        );
     }
     let version = |kind: &str| {
         format!(
@@ -528,4 +532,96 @@ fn downstream_traverses_every_frozen_response_enum_in_both_profiles() {
         assert_success(&cargo_check(&manifest, &temp_root.join("target")));
         println!("Traversed all23 reachable enums: {profile}");
     }
+}
+
+// Each probe gets only a child environment and a uniquely owned temporary cwd.
+// No process-wide environment or user/global Cargo configuration is changed.
+#[test]
+fn compiler_wrapper_configurations_cannot_interpose() {
+    let root = unique_temp_root();
+    let mut failures = Vec::new();
+    for (label, environment, config_key) in [
+        ("alternate-wrapper", Some("CARGO_BUILD_RUSTC_WRAPPER"), None),
+        (
+            "alternate-workspace-wrapper",
+            Some("CARGO_BUILD_RUSTC_WORKSPACE_WRAPPER"),
+            None,
+        ),
+        ("config-wrapper", None, Some("rustc-wrapper")),
+        (
+            "config-workspace-wrapper",
+            None,
+            Some("rustc-workspace-wrapper"),
+        ),
+    ] {
+        let scope = root.join(label);
+        fs::create_dir_all(&scope).unwrap();
+        let missing = scope.join("must-not-run-wrapper.exe");
+        assert!(!missing.exists());
+        if let Some(key) = config_key {
+            fs::create_dir_all(scope.join(".cargo")).unwrap();
+            let path = missing.to_string_lossy().replace('\\', "/");
+            fs::write(
+                scope.join(".cargo/config.toml"),
+                format!("[build]\n{key} = \"{path}\"\n"),
+            )
+            .unwrap();
+        }
+        let mut child = Command::new(std::env::current_exe().unwrap());
+        child
+            .arg("--exact")
+            .arg("compiler_wrapper_probe_child")
+            .arg("--nocapture")
+            .current_dir(&scope)
+            .env("MSTRCHF_WRAPPER_PROBE_ROOT", &scope)
+            .env_remove("RUSTC_WRAPPER")
+            .env_remove("RUSTC_WORKSPACE_WRAPPER")
+            .env_remove("CARGO_BUILD_RUSTC_WRAPPER")
+            .env_remove("CARGO_BUILD_RUSTC_WORKSPACE_WRAPPER");
+        if let Some(key) = environment {
+            child.env(key, &missing);
+        }
+        let output = child.output().expect("run isolated actual-launcher probe");
+        fs::write(scope.join("stdout.log"), &output.stdout).unwrap();
+        fs::write(scope.join("stderr.log"), &output.stderr).unwrap();
+        println!(
+            "wrapper probe {label}: status={} evidence={}",
+            output.status,
+            scope.display()
+        );
+        if !output.status.success() {
+            failures.push(format!(
+                "{label}:\n{}\n{}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr)
+            ));
+        }
+        assert!(!missing.exists());
+    }
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+}
+
+#[test]
+fn compiler_wrapper_probe_child() {
+    let Some(root) = std::env::var_os("MSTRCHF_WRAPPER_PROBE_ROOT") else {
+        return;
+    };
+    let root = PathBuf::from(root);
+    let consumer = root.join("consumer");
+    fs::create_dir_all(consumer.join("src")).unwrap();
+    fs::write(consumer.join("Cargo.toml"),
+        "[package]\nname = \"wrapper-probe\"\nversion = \"0.0.0\"\nedition = \"2024\"\n[workspace]\n").unwrap();
+    let source = consumer.join("src/main.rs");
+    fs::write(&source, "fn main() {}\n").unwrap();
+    let manifest = consumer.join("Cargo.toml");
+    let target = root.join("target");
+    let positive = cargo_check(&manifest, &target);
+    fs::write(root.join("positive.stdout.log"), &positive.stdout).unwrap();
+    fs::write(root.join("positive.stderr.log"), &positive.stderr).unwrap();
+    assert_success(&positive);
+    fs::write(&source, "fn main() { let _: u32 = true; }\n").unwrap();
+    let negative = cargo_check(&manifest, &target);
+    fs::write(root.join("negative.stdout.log"), &negative.stdout).unwrap();
+    fs::write(root.join("negative.stderr.log"), &negative.stderr).unwrap();
+    assert_only_error_code(&negative, "E0308", "mismatched types");
 }
