@@ -1,0 +1,35 @@
+{
+  "method": "Independent Python sorted-key compact UTF-8 JSON; preimages contain no non-integer numeric values or non-ASCII keys.",
+  "vectors": [
+    {
+      "file": "ruling005-current--household-draft.json",
+      "canonical_utf8": "{\"completed_stages\":[],\"connections\":null,\"diners\":[],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[],\"usual_week\":null}",
+      "sha256": "0a5acb408959ecfa233e49a056f0ff95df879a244d38ba8d33221312a6164335"
+    },
+    {
+      "file": "ruling005-current--app-command.json",
+      "canonical_utf8": "{\"command\":{\"data\":{\"draft\":{\"completed_stages\":[],\"connections\":null,\"diners\":[],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[],\"usual_week\":null},\"restriction_issue_edits\":[]},\"kind\":\"save_household_draft\"},\"command_id\":\"cm_00000000000000000000000000000001\",\"expected_snapshot_revision\":\"1\",\"schema_version\":1}",
+      "sha256": "018d5c04f347b33c754547e42717d8b1ebaf4e2d4eaf0d2a504bf0a35b8c81b0"
+    },
+    {
+      "file": "ruling005-current--snapshot-initial-privacy.json",
+      "canonical_utf8": "{\"conflicts\":[],\"household_draft\":{\"completed_stages\":[],\"connections\":null,\"diners\":[],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[],\"usual_week\":null},\"jobs\":[],\"privacy\":{\"confirmed_at\":null,\"include_household_requirements\":false,\"revision\":\"1\",\"use_ai_features\":false},\"profile\":null,\"schema_version\":1,\"snapshot_revision\":\"1\",\"weeks\":[]}",
+      "sha256": "2a6fe1b36c1107d42345664eea8d589c0c73f4e26bf53a7c56c975ef6f5d62e8"
+    },
+    {
+      "file": "ruling005-current--issues-valid.json",
+      "canonical_utf8": "{\"completed_stages\":[],\"connections\":null,\"diners\":[{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000001\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}},{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000002\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}}],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[{\"diner_id\":\"dn_00000000000000000000000000000001\",\"supplied_text\":\"Avoid every purple ingredient; this rule is not in the app vocabulary.\"},{\"diner_id\":\"dn_00000000000000000000000000000002\",\"supplied_text\":\"Avoid every purple ingredient; this rule is not in the app vocabulary.\"}],\"usual_week\":null}",
+      "sha256": "f90b36bf0efce948d6668ad019166cc4ff017c81d58062db7df54d4c1e7c5654"
+    },
+    {
+      "file": "ruling005-current--edits-valid.json",
+      "canonical_utf8": "{\"command\":{\"data\":{\"draft\":{\"completed_stages\":[],\"connections\":null,\"diners\":[{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000001\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}},{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000002\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}}],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[{\"diner_id\":\"dn_00000000000000000000000000000001\",\"supplied_text\":\"Avoid every purple ingredient; this rule is not in the app vocabulary.\"},{\"diner_id\":\"dn_00000000000000000000000000000002\",\"supplied_text\":\"Avoid every purple ingredient; this rule is not in the app vocabulary.\"}],\"usual_week\":null},\"restriction_issue_edits\":[{\"data\":{\"diner_id\":\"dn_00000000000000000000000000000001\"},\"kind\":\"resolve\"},{\"data\":{\"diner_id\":\"dn_00000000000000000000000000000002\"},\"kind\":\"replace_text\"}]},\"kind\":\"save_household_draft\"},\"command_id\":\"cm_00000000000000000000000000000001\",\"expected_snapshot_revision\":\"1\",\"schema_version\":1}",
+      "sha256": "a9f752ada257b80e33a411732aae3eabff80f86723a386ca98023175bd8d9ba8"
+    },
+    {
+      "file": "ruling005-current--text-fidelity.json",
+      "canonical_utf8": "{\"completed_stages\":[],\"connections\":null,\"diners\":[{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000001\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}},{\"age_band\":\"adult\",\"diner_id\":\"dn_00000000000000000000000000000002\",\"dislikes\":[],\"display_name\":null,\"portions\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"},\"restrictions\":{\"data\":{},\"kind\":\"unconfirmed\"}}],\"household_id\":\"hh_00000000000000000000000000000001\",\"preferences\":null,\"revision\":\"1\",\"schema_version\":1,\"unresolved_restrictions\":[{\"diner_id\":\"dn_00000000000000000000000000000001\",\"supplied_text\":\"é 🟣\\nTab\\tinside\"},{\"diner_id\":\"dn_00000000000000000000000000000002\",\"supplied_text\":\"Avoid every purple ingredient; this rule is not in the app vocabulary.\"}],\"usual_week\":null}",
+      "sha256": "b6bdef9d44c3402705379344de5a3c1ac61da3051e1f74235626d4b7b6507fd3"
+    }
+  ]
+}

@@ -62,7 +62,7 @@ fn semantic_manifest_cases() {
     let base =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
     let m: Value = serde_json::from_slice(
-        &std::fs::read(base.join("ruling004-current-manifest.json")).unwrap(),
+        &std::fs::read(base.join("ruling005-current-manifest.json")).unwrap(),
     )
     .unwrap();
     let mut executed = 0;

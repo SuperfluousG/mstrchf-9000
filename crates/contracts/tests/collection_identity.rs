@@ -46,7 +46,7 @@ fn ordered_history_identity_is_order_and_slot() {
 }
 #[test]
 fn snapshot_week_identity_does_not_include_zone() {
-    let mut v = fixture("snapshot.json");
+    let mut v = fixture("ruling005-current--snapshot.json");
     v["weeks"].as_array_mut().unwrap().truncate(1);
     let mut w = v["weeks"][0].clone();
     w["range"]["zone"] = json!("Etc/UTC");

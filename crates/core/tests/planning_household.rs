@@ -9,13 +9,13 @@ fn profile() -> HouseholdProfile {
 }
 fn draft() -> HouseholdDraft {
     parse_document(include_bytes!(
-        "../../../tests/fixtures/households/p03ab/a1a2-draft.json"
+        "../../../tests/fixtures/households/p03ab/ruling005-current--a1a2-draft.json"
     ))
     .unwrap()
 }
 fn empty() -> HouseholdDraft {
     parse_document(include_bytes!(
-        "../../../tests/fixtures/households/p03ab/a1a2-empty-draft.json"
+        "../../../tests/fixtures/households/p03ab/ruling005-current--a1a2-empty-draft.json"
     ))
     .unwrap()
 }

@@ -1444,6 +1444,10 @@ fn outbound_bundle_internal_artefacts_accept_zero_and_reject_over_sixty_four() {
 
 // Ruling004 current synthetic copies are separately named; originals remain immutable.
 fn current_fixture(root: &Path, name: &str) -> std::path::PathBuf {
+    let current005 = root.join(format!("ruling005-current--{name}.json"));
+    if current005.exists() {
+        return current005;
+    }
     let current = root.join(format!("ruling004-current--{name}.json"));
     if current.exists() {
         current

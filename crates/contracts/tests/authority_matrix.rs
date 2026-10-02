@@ -845,7 +845,7 @@ fn concrete_authority_fixtures_execute_predicates() {
     let base =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/contracts");
     let manifest: Value = serde_json::from_slice(
-        &std::fs::read(base.join("ruling004-current-manifest.json")).unwrap(),
+        &std::fs::read(base.join("ruling005-current-manifest.json")).unwrap(),
     )
     .unwrap();
     let mut executed = 0;
@@ -944,7 +944,8 @@ fn every_command_variant_has_all_three_caller_rules() {
     let load = |name: &str| -> Value {
         serde_json::from_slice(&std::fs::read(base.join(name)).unwrap()).unwrap()
     };
-    let draft: HouseholdDraft = serde_json::from_value(load("household-draft.json")).unwrap();
+    let draft: HouseholdDraft =
+        serde_json::from_value(load("ruling005-current--household-draft.json")).unwrap();
     let profile: HouseholdProfile = serde_json::from_value(load("household-profile.json")).unwrap();
     let week: Week = serde_json::from_value(load("week.json")).unwrap();
     let request: JobRequestV1 = serde_json::from_value(load(
@@ -963,7 +964,10 @@ fn every_command_variant_has_all_three_caller_rules() {
         _ => unreachable!(),
     };
     let commands = [
-        AppCommand::SaveHouseholdDraft { draft },
+        AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
+            draft,
+        },
         AppCommand::UpdateProfile {
             profile,
             expected_profile_revision: Revision(1),

@@ -5,7 +5,7 @@ fn fixture() -> Value {
     serde_json::from_slice(
         &std::fs::read(
             std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-                .join("../../tests/fixtures/contracts/snapshot.json"),
+                .join("../../tests/fixtures/contracts/ruling005-current--snapshot.json"),
         )
         .unwrap(),
     )

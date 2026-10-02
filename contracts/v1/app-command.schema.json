@@ -244,10 +244,14 @@
               "properties": {
                 "draft": {
                   "$ref": "#/$defs/HouseholdDraft"
+                },
+                "restriction_issue_edits": {
+                  "$ref": "#/$defs/Array_SetupRestrictionEdit_0_64"
                 }
               },
               "required": [
-                "draft"
+                "draft",
+                "restriction_issue_edits"
               ],
               "type": "object"
             },
@@ -823,6 +827,22 @@
         "$ref": "#/$defs/ReminderPrompt"
       },
       "maxItems": 2,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_SetupRestrictionEdit_0_64": {
+      "items": {
+        "$ref": "#/$defs/SetupRestrictionEdit"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_SetupRestrictionIssue_0_64": {
+      "items": {
+        "$ref": "#/$defs/SetupRestrictionIssue"
+      },
+      "maxItems": 64,
       "minItems": 0,
       "type": "array"
     },
@@ -1470,6 +1490,9 @@
         "schema_version": {
           "$ref": "#/$defs/SchemaVersion"
         },
+        "unresolved_restrictions": {
+          "$ref": "#/$defs/Array_SetupRestrictionIssue_0_64"
+        },
         "usual_week": {
           "$ref": "#/$defs/Nullable_UsualWeek"
         }
@@ -1479,6 +1502,7 @@
         "household_id",
         "revision",
         "completed_stages",
+        "unresolved_restrictions",
         "diners",
         "preferences",
         "usual_week",
@@ -2519,6 +2543,104 @@
         "suggested"
       ],
       "type": "string"
+    },
+    "SetupRestrictionEdit": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "replace_text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "resolve",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "diner_id": {
+                  "$ref": "#/$defs/DinerId"
+                }
+              },
+              "required": [
+                "diner_id"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "remove_diner",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "SetupRestrictionIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "diner_id": {
+          "$ref": "#/$defs/DinerId"
+        },
+        "supplied_text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "diner_id",
+        "supplied_text"
+      ],
+      "type": "object"
     },
     "ShopPhase": {
       "enum": [

@@ -54,6 +54,18 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
                 }
                 if matches!(
                     field.as_str(),
+                    "unresolved_restrictions" | "restriction_issue_edits"
+                ) {
+                    require(
+                        a.windows(2).all(|w| {
+                            collection_identity(field, &w[0]) < collection_identity(field, &w[1])
+                        }),
+                        ErrorCode::NoncanonicalValue,
+                        &format!("/{field}"),
+                    )?;
+                }
+                if matches!(
+                    field.as_str(),
                     "ingredient_ids"
                         | "component_ids"
                         | "evidence_ids"
@@ -105,7 +117,20 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
         }
         "HouseholdDraft" => {
             let h: HouseholdDraft = decoded(v)?;
-            let confirmed = !h.diners.is_empty()
+            for issue in h.unresolved_restrictions.iter() {
+                let owner = h
+                    .diners
+                    .iter()
+                    .find(|d| d.diner_id == issue.diner_id)
+                    .ok_or_else(|| err(ErrorCode::ForeignReference, "/unresolved_restrictions"))?;
+                require(
+                    matches!(owner.restrictions, RestrictionDeclaration::Unconfirmed {}),
+                    ErrorCode::InvalidValue,
+                    "/unresolved_restrictions",
+                )?;
+            }
+            let confirmed = h.unresolved_restrictions.is_empty()
+                && !h.diners.is_empty()
                 && h.diners
                     .iter()
                     .all(|d| !matches!(d.restrictions, RestrictionDeclaration::Unconfirmed {}));
@@ -433,6 +458,16 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
                 "/events",
             )
         }
+        "AppCommand" if v["kind"] == "save_household_draft" => {
+            // Tagged payload fields have no named schema of their own. Check the
+            // keyed collection here, including for direct native AppCommand values.
+            validate_local("SetupRestrictionEditCollection", &v["data"]).map_err(|mut error| {
+                for issue in &mut error.issues.0 {
+                    issue.path = format!("/data{}", issue.path);
+                }
+                error
+            })
+        }
         "AppCommandV1" => validate_request_job_command(&decoded(v)?),
         "ReadScope" => validate_read_scope(&decoded(v)?),
         "ReadObservationV1" => validate_read_shape(&decoded(v)?),
@@ -474,6 +509,9 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
     }
 }
 fn collection_identity(field: &str, x: &Value) -> String {
+    if field == "restriction_issue_edits" {
+        return key(&x.pointer("/data/diner_id"));
+    }
     if field == "weeks" {
         return key(&x.pointer("/range/week_id"));
     }
@@ -488,7 +526,7 @@ fn collection_identity(field: &str, x: &Value) -> String {
         ));
     }
     let fields: &[&str] = match field {
-        "diners" => &["diner_id"],
+        "diners" | "unresolved_restrictions" => &["diner_id"],
         "guests" => &["guest_id"],
         "cells" => {
             if x.get("slot").is_some() {

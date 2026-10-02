@@ -718,7 +718,10 @@ fn unknown_cancellation_and_foreign_draft_references_leave_no_receipt() {
     let mut draft = before.household_draft.clone();
     draft.usual_week = Nullable(Some(profile.usual_week));
     draft.completed_stages = BoundedVec(vec![HouseholdStage::UsualWeek]);
-    command.command = AppCommand::SaveHouseholdDraft { draft };
+    command.command = AppCommand::SaveHouseholdDraft {
+        restriction_issue_edits: BoundedVec(vec![]),
+        draft,
+    };
     assert_eq!(
         db.dispatch(&command, &canonical_bytes(&command).unwrap())
             .unwrap_err()
@@ -976,4 +979,96 @@ fn cancellation_validates_job_projection_outside_visible_history() {
         ErrorCode::StorageFailure
     );
     assert_eq!(db.snapshot().unwrap(), before);
+}
+
+// Ruling005 wire-only boundary. This proves refusal, not issue transition support.
+#[test]
+fn ruling005_issue_inputs_refuse_without_mutation_or_receipt() {
+    for (old_issue, new_issue, submitted_edit) in [
+        (false, true, false),
+        (false, false, true),
+        (true, false, false),
+        (true, true, false),
+        (true, false, true),
+    ] {
+        let p = root("ruling005 unsupported setup");
+        let mut db = database::Database::open(&p).unwrap();
+        let mut seeded = db.snapshot().unwrap().household_draft;
+        let profile: HouseholdProfile = parse_document(include_bytes!(
+            "../../../tests/fixtures/contracts/household-profile-confirmed-none.json"
+        ))
+        .unwrap();
+        let mut diner = profile.diners[0].clone();
+        diner.restrictions = RestrictionDeclaration::Unconfirmed {};
+        let issue = SetupRestrictionIssue {
+            diner_id: diner.diner_id.clone(),
+            supplied_text: Text("synthetic unresolved marker".into()),
+        };
+        seeded.diners = BoundedVec(vec![diner]);
+        if old_issue {
+            seeded.unresolved_restrictions = BoundedVec(vec![issue.clone()]);
+        }
+        // Private synthetic seed into a fresh test database, never production admission.
+        db.connection
+            .execute(
+                "UPDATE household SET draft=?1 WHERE singleton=1",
+                params![canonical_bytes(&seeded).unwrap()],
+            )
+            .unwrap();
+        let before = db.snapshot().unwrap();
+        let before_body: Vec<u8> = db
+            .connection
+            .query_row("SELECT draft FROM household", [], |r| r.get(0))
+            .unwrap();
+        let before_meta: (String,String,String) = db.connection.query_row(
+            "SELECT snapshot_revision,settings_revision,privacy_revision FROM app_meta CROSS JOIN household", [],
+            |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?))).unwrap();
+        let mut proposed = seeded;
+        proposed.unresolved_restrictions = BoundedVec(if new_issue {
+            vec![issue.clone()]
+        } else {
+            vec![]
+        });
+        let mut command = policy_command(1, 1, 1);
+        command.command = AppCommand::SaveHouseholdDraft {
+            draft: proposed,
+            restriction_issue_edits: BoundedVec(if submitted_edit {
+                vec![SetupRestrictionEdit::Resolve {
+                    diner_id: issue.diner_id,
+                }]
+            } else {
+                vec![]
+            }),
+        };
+        command.validate_shape().unwrap();
+        let error = db
+            .dispatch(&command, &canonical_bytes(&command).unwrap())
+            .unwrap_err();
+        assert_eq!(error.code, ErrorCode::UnsupportedCapability);
+        assert!(
+            !String::from_utf8(canonical_bytes(&error).unwrap())
+                .unwrap()
+                .contains("synthetic unresolved marker")
+        );
+        assert_eq!(db.snapshot().unwrap(), before);
+        let body: Vec<u8> = db
+            .connection
+            .query_row("SELECT draft FROM household", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(body, before_body);
+        let meta: (String,String,String) = db.connection.query_row(
+            "SELECT snapshot_revision,settings_revision,privacy_revision FROM app_meta CROSS JOIN household", [],
+            |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?))).unwrap();
+        assert_eq!(meta, before_meta);
+        assert_eq!(
+            db.connection
+                .query_row("SELECT count(*) FROM command_receipts", [], |r| r
+                    .get::<_, i64>(0))
+                .unwrap(),
+            0
+        );
+        drop(db);
+        let mut reopened = database::Database::open(&p).unwrap();
+        assert_eq!(reopened.snapshot().unwrap(), before);
+    }
 }

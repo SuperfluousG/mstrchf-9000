@@ -19,7 +19,7 @@ export type Allocation = { allocation_id: AllocationId, batch_id: BatchId, compo
 
 export type AllocationId = string & { readonly __brand: "AllocationId" };
 
-export type AppCommand = { "kind": "save_household_draft", "data": { draft: HouseholdDraft, } } | { "kind": "update_profile", "data": { profile: HouseholdProfile, expected_profile_revision: Revision, } } | { "kind": "set_privacy", "data": { policy: PrivacyPolicy, expected_policy_revision: Revision, } } | { "kind": "save_week", "data": { week: WeekEdit, expected_week_revision: Revision, } } | { "kind": "apply_plan_proposal", "data": { proposal: PlanProposal, context_stamp: ContextStamp, } } | { "kind": "confirm_essentials", "data": { confirmations: Array<EssentialsConfirmation>, } } | { "kind": "approve_plan", "data": { week_id: WeekId, plan_revision: Revision, derived_digest: PayloadDigest, } } | { "kind": "confirm_order", "data": { confirmation: OrderConfirmation, } } | { "kind": "request_job", "data": { action: Action, scope: ActionScope, } } | { "kind": "cancel_job", "data": { job_id: JobId, } } | { "kind": "record_user_stop", "data": { worker: WorkerIdentity, qualification_id: EvidenceId, procedure_version: Revision, visible_status: VisibleTerminalStatus, } } | { "kind": "request_calendar_publication", "data": { order_id: OrderId, destination_id: CalendarDestinationId, event_batch_digest: Digest, } };
+export type AppCommand = { "kind": "save_household_draft", "data": { draft: HouseholdDraft, restriction_issue_edits: Array<SetupRestrictionEdit>, } } | { "kind": "update_profile", "data": { profile: HouseholdProfile, expected_profile_revision: Revision, } } | { "kind": "set_privacy", "data": { policy: PrivacyPolicy, expected_policy_revision: Revision, } } | { "kind": "save_week", "data": { week: WeekEdit, expected_week_revision: Revision, } } | { "kind": "apply_plan_proposal", "data": { proposal: PlanProposal, context_stamp: ContextStamp, } } | { "kind": "confirm_essentials", "data": { confirmations: Array<EssentialsConfirmation>, } } | { "kind": "approve_plan", "data": { week_id: WeekId, plan_revision: Revision, derived_digest: PayloadDigest, } } | { "kind": "confirm_order", "data": { confirmation: OrderConfirmation, } } | { "kind": "request_job", "data": { action: Action, scope: ActionScope, } } | { "kind": "cancel_job", "data": { job_id: JobId, } } | { "kind": "record_user_stop", "data": { worker: WorkerIdentity, qualification_id: EvidenceId, procedure_version: Revision, visible_status: VisibleTerminalStatus, } } | { "kind": "request_calendar_publication", "data": { order_id: OrderId, destination_id: CalendarDestinationId, event_batch_digest: Digest, } };
 
 export type AppCommandV1 = { schema_version: SchemaVersion, command_id: CommandId, expected_snapshot_revision: Revision, command: AppCommand, };
 
@@ -195,7 +195,7 @@ export type GuestId = string & { readonly __brand: "GuestId" };
 
 export type HardRequirement = { "kind": "allergen_exclusion", "data": { code: AllergenCode, } } | { "kind": "diet", "data": { code: DietCode, } } | { "kind": "ingredient_exclusion", "data": { ingredient_id: IngredientId, } };
 
-export type HouseholdDraft = { schema_version: SchemaVersion, household_id: HouseholdId, revision: Revision, completed_stages: Array<HouseholdStage>, diners: Array<Diner>, preferences: Preferences | null, usual_week: UsualWeek | null, connections: Connections | null, };
+export type HouseholdDraft = { schema_version: SchemaVersion, household_id: HouseholdId, revision: Revision, completed_stages: Array<HouseholdStage>, unresolved_restrictions: Array<SetupRestrictionIssue>, diners: Array<Diner>, preferences: Preferences | null, usual_week: UsualWeek | null, connections: Connections | null, };
 
 export type HouseholdId = string & { readonly __brand: "HouseholdId" };
 
@@ -450,6 +450,10 @@ export type SchemaVersion = 1;
 export type SelectionHistory = { week_id: WeekId, slot: SlotId, recipe: RecipeRef, servings: Array<DinerServing>, extras: Array<ExtraSelection>, repeat_authorised: boolean, selected_at: Instant, };
 
 export type SelectionOrigin = "fixed" | "suggested";
+
+export type SetupRestrictionEdit = { "kind": "replace_text", "data": { diner_id: DinerId, } } | { "kind": "resolve", "data": { diner_id: DinerId, } } | { "kind": "remove_diner", "data": { diner_id: DinerId, } };
+
+export type SetupRestrictionIssue = { diner_id: DinerId, supplied_text: Text, };
 
 export type ShopPhase = "observe" | "reconcile" | "mutate";
 

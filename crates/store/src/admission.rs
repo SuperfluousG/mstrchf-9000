@@ -17,7 +17,18 @@ pub(crate) fn prepare(
     command: &AppCommand,
 ) -> Result<PreparedMutation, DomainError> {
     match command {
-        AppCommand::SaveHouseholdDraft { draft } => {
+        AppCommand::SaveHouseholdDraft {
+            draft,
+            restriction_issue_edits,
+        } => {
+            // Temporary ruling005 boundary: native transition/readiness helpers
+            // are not yet integrated. Never discard stored text or ignore edits.
+            if !s.household_draft.unresolved_restrictions.is_empty()
+                || !draft.unresolved_restrictions.is_empty()
+                || !restriction_issue_edits.is_empty()
+            {
+                return Err(unsupported());
+            }
             if draft.household_id != s.household_draft.household_id {
                 return Err(DomainError::new(
                     ErrorCode::IdentityMismatch,

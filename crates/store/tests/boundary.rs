@@ -48,7 +48,7 @@ fn initial_policy() -> PrivacyPolicy {
 }
 
 fn draft_with_connections(policy: &PrivacyPolicy, household_id: &HouseholdId) -> HouseholdDraft {
-    let mut draft = fixture("household-draft.json");
+    let mut draft = fixture("ruling005-current--household-draft.json");
     let profile = fixture("household-profile.json");
     draft["household_id"] = serde_json::to_value(household_id).unwrap();
     draft["completed_stages"] =
@@ -105,6 +105,7 @@ fn household_connections_copy_authoritative_privacy_and_follow_revision_changes(
             1,
             base.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
                 draft: draft_with_connections(&base.privacy, &base.household_draft.household_id),
             },
         ))
@@ -169,14 +170,17 @@ fn null_privacy_copy_survives_revision_two_reopen_and_revision_three_update() {
     })
     .unwrap();
     let initial = store.snapshot().unwrap();
-    let mut draft = fixture("household-draft.json");
+    let mut draft = fixture("ruling005-current--household-draft.json");
     draft["household_id"] = serde_json::to_value(&initial.household_draft.household_id).unwrap();
     let partial: HouseholdDraft = serde_json::from_value(draft).unwrap();
     let saved = store
         .dispatch_ui(command(
             30,
             initial.snapshot_revision.0,
-            AppCommand::SaveHouseholdDraft { draft: partial },
+            AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
+                draft: partial,
+            },
         ))
         .unwrap();
     assert!(saved.household_draft.completed_stages.0.is_empty());
@@ -240,6 +244,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
             1,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
                 draft: foreign_draft,
             },
         ))
@@ -252,6 +257,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
             2,
             before.snapshot_revision.0 + 1,
             AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
                 draft: draft_with_connections(
                     &before.privacy,
                     &before.household_draft.household_id,
@@ -270,6 +276,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
             3,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
                 draft: invalid_draft,
             },
         ))
@@ -284,6 +291,7 @@ fn identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_uncha
             4,
             before.snapshot_revision.0,
             AppCommand::SaveHouseholdDraft {
+                restriction_issue_edits: BoundedVec(vec![]),
                 draft: draft_with_connections(
                     &injected_policy,
                     &before.household_draft.household_id,
@@ -307,8 +315,9 @@ fn exact_replay_returns_original_response_after_intervening_state_change() {
         10,
         initial.snapshot_revision.0,
         AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
             draft: {
-                let mut draft = fixture("household-draft.json");
+                let mut draft = fixture("ruling005-current--household-draft.json");
                 draft["household_id"] =
                     serde_json::to_value(&initial.household_draft.household_id).unwrap();
                 serde_json::from_value(draft).unwrap()
@@ -346,8 +355,9 @@ fn command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict(
         20,
         initial.snapshot_revision.0,
         AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
             draft: {
-                let mut draft = fixture("household-draft.json");
+                let mut draft = fixture("ruling005-current--household-draft.json");
                 draft["household_id"] =
                     serde_json::to_value(&initial.household_draft.household_id).unwrap();
                 serde_json::from_value(draft).unwrap()
@@ -356,7 +366,7 @@ fn command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict(
     );
     let response = store.dispatch_ui(original.clone()).unwrap();
 
-    let mut changed_draft_value = fixture("household-draft.json");
+    let mut changed_draft_value = fixture("ruling005-current--household-draft.json");
     changed_draft_value["household_id"] =
         serde_json::to_value(&initial.household_draft.household_id).unwrap();
     let mut changed_draft: HouseholdDraft = serde_json::from_value(changed_draft_value).unwrap();
@@ -365,6 +375,7 @@ fn command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict(
         20,
         initial.snapshot_revision.0,
         AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
             draft: changed_draft,
         },
     );
@@ -602,7 +613,10 @@ fn every_partial_onboarding_stage_persists_without_profile_promotion() {
             .dispatch_ui(command(
                 step + 1,
                 before.snapshot_revision.0,
-                AppCommand::SaveHouseholdDraft { draft },
+                AppCommand::SaveHouseholdDraft {
+                    restriction_issue_edits: BoundedVec(vec![]),
+                    draft,
+                },
             ))
             .unwrap();
         assert!(result.profile.0.is_none());
@@ -623,7 +637,14 @@ fn invalid_stage_flags_and_imported_command_cannot_mutate() {
     let before = store.snapshot().unwrap();
     let mut draft = before.household_draft.clone();
     draft.completed_stages = BoundedVec(vec![HouseholdStage::Connections]);
-    let c = command(1, 1, AppCommand::SaveHouseholdDraft { draft });
+    let c = command(
+        1,
+        1,
+        AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
+            draft,
+        },
+    );
     assert_eq!(
         store.dispatch_ui(c).unwrap_err().code,
         ErrorCode::InvalidValue
@@ -632,6 +653,7 @@ fn invalid_stage_flags_and_imported_command_cannot_mutate() {
         2,
         1,
         AppCommand::SaveHouseholdDraft {
+            restriction_issue_edits: BoundedVec(vec![]),
             draft: before.household_draft.clone(),
         },
     );
@@ -640,4 +662,55 @@ fn invalid_stage_flags_and_imported_command_cannot_mutate() {
         ImportOutcome::Rejected { .. }
     ));
     assert_eq!(store.snapshot().unwrap(), before);
+}
+
+#[test]
+fn ruling005_public_save_refuses_new_issues_and_edits_and_preserves_state() {
+    let store = store();
+    let before = store.snapshot().unwrap();
+    let profile: HouseholdProfile =
+        serde_json::from_value(fixture("household-profile-confirmed-none.json")).unwrap();
+    for issue_present in [true, false] {
+        let mut draft = before.household_draft.clone();
+        let mut diner = profile.diners[0].clone();
+        diner.restrictions = RestrictionDeclaration::Unconfirmed {};
+        let id = diner.diner_id.clone();
+        draft.diners = BoundedVec(vec![diner]);
+        if issue_present {
+            draft.unresolved_restrictions = BoundedVec(vec![SetupRestrictionIssue {
+                diner_id: id.clone(),
+                supplied_text: Text("synthetic public boundary marker".into()),
+            }]);
+        }
+        let edit = if issue_present {
+            vec![]
+        } else {
+            vec![SetupRestrictionEdit::Resolve { diner_id: id }]
+        };
+        let error = store
+            .dispatch_ui(command(
+                1,
+                1,
+                AppCommand::SaveHouseholdDraft {
+                    draft,
+                    restriction_issue_edits: BoundedVec(edit),
+                },
+            ))
+            .unwrap_err();
+        assert_eq!(error.code, ErrorCode::UnsupportedCapability);
+        assert_eq!(store.snapshot().unwrap(), before);
+    }
+    // Reusing the refused ID for an empty-to-empty save proves no success receipt was retained.
+    let saved = store
+        .dispatch_ui(command(
+            1,
+            1,
+            AppCommand::SaveHouseholdDraft {
+                draft: before.household_draft.clone(),
+                restriction_issue_edits: BoundedVec(vec![]),
+            },
+        ))
+        .unwrap();
+    assert_eq!(saved.snapshot_revision, Revision(2));
+    assert_eq!(saved.household_draft, before.household_draft);
 }

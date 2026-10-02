@@ -249,11 +249,19 @@ record! {
 }
 
 record! {
+    pub struct SetupRestrictionIssue {
+        pub diner_id: DinerId,
+        pub supplied_text: Text,
+    }
+}
+
+record! {
     pub struct HouseholdDraft {
         pub schema_version: SchemaVersion,
         pub household_id: HouseholdId,
         pub revision: Revision,
         pub completed_stages: BoundedVec<HouseholdStage, 0, 4>,
+        pub unresolved_restrictions: BoundedVec<SetupRestrictionIssue, 0, 64>,
         pub diners: BoundedVec<Diner, 0, 64>,
         pub preferences: Nullable<Preferences>,
         pub usual_week: Nullable<UsualWeek>,

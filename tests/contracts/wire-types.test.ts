@@ -81,3 +81,31 @@ const wrongAnchor: ComponentProductionSpec = {kind: 'cooked', data: {first_handl
 // @ts-expect-error source recipe is required
 const incompleteReuse: ReusedComponentInput = {source_component_id: component.component_id};
 void [freshComponent, unknownAnchor, ordinaryRecipe, nullClock, wrongAnchor, incompleteReuse];
+
+import type { HouseholdDraft, SetupRestrictionIssue, SetupRestrictionEdit, AppCommand } from '../../app/generated/contracts';
+type SaveDraft = Extract<AppCommand, { kind: 'save_household_draft' }>;
+type _RequiredIssues = Assert<IsRequired<HouseholdDraft, 'unresolved_restrictions'>>;
+type _RequiredEdits = Assert<IsRequired<SaveDraft['data'], 'restriction_issue_edits'>>;
+declare const setupDraft: HouseholdDraft;
+declare const saveDraft: SaveDraft;
+declare const setupDinerId: DinerId;
+const { unresolved_restrictions: _issues, ...withoutIssues } = setupDraft;
+// @ts-expect-error explicit issue array is required
+const missingIssues: HouseholdDraft = withoutIssues;
+// @ts-expect-error null is not an issue array
+const nullIssues: HouseholdDraft = { ...setupDraft, unresolved_restrictions: null };
+const { restriction_issue_edits: _edits, ...withoutEdits } = saveDraft.data;
+// @ts-expect-error explicit edit array is required
+const missingEdits: SaveDraft['data'] = withoutEdits;
+// @ts-expect-error null is not an edit array
+const nullEdits: SaveDraft['data'] = { ...saveDraft.data, restriction_issue_edits: null };
+const setupEdits: SetupRestrictionEdit[] = [
+ { kind: 'replace_text', data: { diner_id: setupDinerId } },
+ { kind: 'resolve', data: { diner_id: setupDinerId } },
+ { kind: 'remove_diner', data: { diner_id: setupDinerId } },
+];
+// @ts-expect-error no guessed restriction taxonomy
+const guessedEdit: SetupRestrictionEdit = { kind: 'interpret_text', data: { diner_id: setupDinerId } };
+// @ts-expect-error issue owner is required
+const anonymousIssue: SetupRestrictionIssue = { supplied_text: _issues[0].supplied_text };
+void [missingIssues, nullIssues, missingEdits, nullEdits, setupEdits, guessedEdit, anonymousIssue];

@@ -1,0 +1,459 @@
+{
+  "schema_version": 1,
+  "command_id": "cm_00000000000000000000000000000001",
+  "expected_snapshot_revision": "1",
+  "command": {
+    "kind": "save_household_draft",
+    "data": {
+      "draft": {
+        "schema_version": 1,
+        "household_id": "hh_00000000000000000000000000000001",
+        "revision": "1",
+        "completed_stages": [],
+        "diners": [
+          {
+            "diner_id": "dn_00000000000000000000000000000001",
+            "display_name": null,
+            "age_band": "adult",
+            "restrictions": {
+              "kind": "unconfirmed",
+              "data": {}
+            },
+            "dislikes": [],
+            "portions": {
+              "preset": "regular",
+              "adjustment": {
+                "numerator": "1",
+                "denominator": "1"
+              },
+              "meal_overrides": []
+            }
+          },
+          {
+            "diner_id": "dn_00000000000000000000000000000002",
+            "display_name": null,
+            "age_band": "adult",
+            "restrictions": {
+              "kind": "unconfirmed",
+              "data": {}
+            },
+            "dislikes": [],
+            "portions": {
+              "preset": "regular",
+              "adjustment": {
+                "numerator": "1",
+                "denominator": "1"
+              },
+              "meal_overrides": []
+            }
+          }
+        ],
+        "preferences": null,
+        "usual_week": null,
+        "connections": null,
+        "unresolved_restrictions": [
+          {
+            "diner_id": "dn_00000000000000000000000000000001",
+            "supplied_text": "Avoid every purple ingredient; this rule is not in the app vocabulary."
+          },
+          {
+            "diner_id": "dn_00000000000000000000000000000002",
+            "supplied_text": "Avoid every purple ingredient; this rule is not in the app vocabulary."
+          }
+        ]
+      },
+      "restriction_issue_edits": [
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000001"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000002"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000003"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000004"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000005"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000006"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000007"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000008"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000009"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000a"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000b"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000c"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000d"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000e"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000000f"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000010"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000011"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000012"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000013"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000014"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000015"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000016"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000017"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000018"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000019"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001a"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001b"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001c"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001d"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001e"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000001f"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000020"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000021"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000022"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000023"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000024"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000025"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000026"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000027"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000028"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000029"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002a"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002b"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002c"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002d"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002e"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000002f"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000030"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000031"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000032"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000033"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000034"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000035"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000036"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000037"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000038"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000039"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003a"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003b"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003c"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003d"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003e"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_0000000000000000000000000000003f"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000040"
+          }
+        },
+        {
+          "kind": "resolve",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000041"
+          }
+        }
+      ]
+    }
+  }
+}

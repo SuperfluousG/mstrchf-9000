@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "snapshot_revision": "1",
+  "household_draft": {
+    "schema_version": 1,
+    "household_id": "hh_00000000000000000000000000000001",
+    "revision": "1",
+    "completed_stages": [],
+    "diners": [],
+    "preferences": null,
+    "usual_week": null,
+    "connections": null,
+    "unresolved_restrictions": []
+  },
+  "profile": null,
+  "weeks": [],
+  "jobs": [],
+  "conflicts": [],
+  "privacy": {
+    "revision": "1",
+    "use_ai_features": false,
+    "include_household_requirements": false,
+    "confirmed_at": null
+  }
+}

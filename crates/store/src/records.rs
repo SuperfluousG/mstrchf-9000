@@ -33,6 +33,7 @@ pub(crate) fn initial(household_id: HouseholdId) -> Snapshot {
             household_id,
             revision: Revision(1),
             completed_stages: BoundedVec(vec![]),
+            unresolved_restrictions: BoundedVec(vec![]),
             diners: BoundedVec(vec![]),
             preferences: Nullable(None),
             usual_week: Nullable(None),

@@ -1,11 +1,11 @@
 {
   "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
   "hashes": {
-    "app/generated/contracts.ts": "8423e4d5a855706572dcb8e8c0eb9a888d856bf7ea99110450814c4428bd6766",
-    "contracts/v1/app-command.schema.json": "92bfa9eb1208054b83074a67d44cd3a4a51b1bb26c027e96ffc743254a52efe2",
+    "app/generated/contracts.ts": "1d5bdc20fbd5e6e4c08dde4cd453d3be701ad47c93d17a3ba071a2fc339dbeb5",
+    "contracts/v1/app-command.schema.json": "33c0e4f13b3f5ec64636d71d9b56ef929acf251746fc518906068f0b8eae9be2",
     "contracts/v1/derived-plan.schema.json": "14c2a4270d265d75e958b87e93e988a458859b71991d07b5c195f7bed1c485ce",
     "contracts/v1/event-batch.schema.json": "d77ba4db15784d77f3bd58df83d17426bda6ca1ce5c2847c4d5f6d91e55c6c31",
-    "contracts/v1/household-draft.schema.json": "aeb73d3327de48dd7b044cdd48092e0462e318cb25bcf55944b2b88d4497a7af",
+    "contracts/v1/household-draft.schema.json": "f555771e83a71a3cb84077a0bda76b20e815a01bc9e7afd08f7d13457363db56",
     "contracts/v1/household-profile.schema.json": "96af8f00bc7980669e772ee5c524933a02028e7f38817b6c27cad72376b78c9f",
     "contracts/v1/job-request.schema.json": "7e2d7e5e9067a34f1f35dfe5ea1a8ec48b8c4d7315f3fdc2aec4c0da28712e23",
     "contracts/v1/job-result.schema.json": "a319033006e9b30fe3576ba1a5c2104d6f05c8c0c6bfccd7050ae3972fd349a8",
@@ -17,7 +17,7 @@
     "contracts/v1/read-observation.schema.json": "8672f397d51976711b70e44d3e250af6438e3810564fa1386c33d239c9c9d7dd",
     "contracts/v1/recipe-candidate.schema.json": "b44ad0ff00777543d85afedeeb0288eeb71e081ed2a11dc8840559f075edbd2f",
     "contracts/v1/recipe-revision.schema.json": "702d1b011d0d09bca212dde32f7e785c64a5b885d8c57a35433bd295cde4bd90",
-    "contracts/v1/snapshot.schema.json": "93954ff7d06460793c623da3d8e2265344a91b69eebc03065abeca977bdfc2f2",
+    "contracts/v1/snapshot.schema.json": "8c6f67f661a7fbacaccb732ef18ee5bb9610f069a3fff0e5adc3015ed0913bf2",
     "contracts/v1/week-plan.schema.json": "930846e9b5f4750ee3471269aab0036e17b6945402470edd208704c66b6d6c55",
     "contracts/v1/week.schema.json": "e7ab7e2c7e88ce2cb7ca5517a337e064e24adf1af35cc0293ac31be0153261ed",
     "contracts/v1/worker-stop-evidence.schema.json": "d88614d55d5beb3514cf6d5ae8c58b0b521a55283e7cb08637306fb8ae203277"

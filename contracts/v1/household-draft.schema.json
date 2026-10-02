@@ -135,6 +135,14 @@
       "minItems": 0,
       "type": "array"
     },
+    "Array_SetupRestrictionIssue_0_64": {
+      "items": {
+        "$ref": "#/$defs/SetupRestrictionIssue"
+      },
+      "maxItems": 64,
+      "minItems": 0,
+      "type": "array"
+    },
     "Array_boolean_7_7": {
       "items": {
         "type": "boolean"
@@ -822,12 +830,33 @@
       "const": 1,
       "type": "integer"
     },
+    "SetupRestrictionIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "diner_id": {
+          "$ref": "#/$defs/DinerId"
+        },
+        "supplied_text": {
+          "$ref": "#/$defs/Text"
+        }
+      },
+      "required": [
+        "diner_id",
+        "supplied_text"
+      ],
+      "type": "object"
+    },
     "SpendingStyle": {
       "enum": [
         "value",
         "balanced",
         "flexible"
       ],
+      "type": "string"
+    },
+    "Text": {
+      "maxLength": 4000,
+      "minLength": 1,
       "type": "string"
     },
     "UsualWeek": {
@@ -902,6 +931,9 @@
     "schema_version": {
       "$ref": "#/$defs/SchemaVersion"
     },
+    "unresolved_restrictions": {
+      "$ref": "#/$defs/Array_SetupRestrictionIssue_0_64"
+    },
     "usual_week": {
       "$ref": "#/$defs/Nullable_UsualWeek"
     }
@@ -911,6 +943,7 @@
     "household_id",
     "revision",
     "completed_stages",
+    "unresolved_restrictions",
     "diners",
     "preferences",
     "usual_week",

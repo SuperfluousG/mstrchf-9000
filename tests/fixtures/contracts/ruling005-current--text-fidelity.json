@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "household_id": "hh_00000000000000000000000000000001",
+  "revision": "1",
+  "completed_stages": [],
+  "diners": [
+    {
+      "diner_id": "dn_00000000000000000000000000000001",
+      "display_name": null,
+      "age_band": "adult",
+      "restrictions": {
+        "kind": "unconfirmed",
+        "data": {}
+      },
+      "dislikes": [],
+      "portions": {
+        "preset": "regular",
+        "adjustment": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "meal_overrides": []
+      }
+    },
+    {
+      "diner_id": "dn_00000000000000000000000000000002",
+      "display_name": null,
+      "age_band": "adult",
+      "restrictions": {
+        "kind": "unconfirmed",
+        "data": {}
+      },
+      "dislikes": [],
+      "portions": {
+        "preset": "regular",
+        "adjustment": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "meal_overrides": []
+      }
+    }
+  ],
+  "preferences": null,
+  "usual_week": null,
+  "connections": null,
+  "unresolved_restrictions": [
+    {
+      "diner_id": "dn_00000000000000000000000000000001",
+      "supplied_text": "é 🟣\nTab\tinside"
+    },
+    {
+      "diner_id": "dn_00000000000000000000000000000002",
+      "supplied_text": "Avoid every purple ingredient; this rule is not in the app vocabulary."
+    }
+  ]
+}

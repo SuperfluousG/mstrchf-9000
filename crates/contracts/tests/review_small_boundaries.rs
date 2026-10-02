@@ -121,7 +121,7 @@ fn request_job_command_rejects_incompatible_action_and_scope_at_admission() {
 
     for (action_index, (action, _)) in cases.iter().enumerate() {
         for (scope_index, scope) in scopes.iter().enumerate() {
-            let mut command = fixture("app-command.json");
+            let mut command = fixture("ruling005-current--app-command.json");
             command["command"] = json!({
                 "kind": "request_job",
                 "data": {"action": action, "scope": scope}
