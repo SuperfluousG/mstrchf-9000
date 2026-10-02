@@ -82,6 +82,11 @@ fn refuse(code: ErrorCode, path: &str) -> DomainError {
     DomainError::new(code, path)
 }
 pub fn validate_request_shape(r: &JobRequestV1) -> Result<(), DomainError> {
+    if let JobPayload::PersonalisedPlan { requirements, .. } = &r.payload {
+        requirements
+            .validate_shape()
+            .map_err(crate::parse::shape_error)?;
+    }
     validate_stamp(&r.context_stamp)?;
     if r.created_at.0 >= r.expires_at.0 {
         return Err(refuse(ErrorCode::InvalidValue, "/expires_at"));

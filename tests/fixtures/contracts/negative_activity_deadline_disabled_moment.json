@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "meal_requirements": {
+    "slot": {
+      "week_id": "wk_00000000000000000000000000000001",
+      "date": "2026-12-28",
+      "meal_type": "dinner"
+    },
+    "enabled": false,
+    "location": "at_home",
+    "attendees": [],
+    "shared_hard_requirements": [],
+    "equipment": [
+      "hob"
+    ],
+    "mobility": {
+      "reheating": false,
+      "cold_storage": false,
+      "temperature": "either"
+    },
+    "eat_by": {
+      "local_date": "2026-12-28",
+      "local_time": "18:00:00",
+      "zone": "Europe/London",
+      "resolution": "unambiguous",
+      "instant": "2026-12-28T18:00:00Z"
+    },
+    "preferred_hands_on_minutes": 30,
+    "leftovers_allowed": false
+  }
+}

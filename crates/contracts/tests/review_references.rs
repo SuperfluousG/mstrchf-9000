@@ -67,6 +67,7 @@ fn disabled_retained_context() -> Value {
     for requirement in context["requirements"].as_array_mut().unwrap() {
         if requirement["slot"]["week_id"] == week_id {
             requirement["enabled"] = json!(false);
+            requirement["eat_by"] = Value::Null;
         }
     }
     context
@@ -195,6 +196,7 @@ fn f05_disabled_requirements_may_omit_attendees_but_supplied_people_resolve() {
     for requirement in context["requirements"].as_array_mut().unwrap() {
         if requirement["slot"]["week_id"] == week_id {
             requirement["enabled"] = json!(false);
+            requirement["eat_by"] = Value::Null;
             requirement["attendees"] = json!([]);
             requirement["shared_hard_requirements"] = json!([]);
         }

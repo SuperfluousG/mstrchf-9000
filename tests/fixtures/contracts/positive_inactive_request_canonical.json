@@ -1,0 +1,242 @@
+{
+  "input": {
+    "schema_version": 1,
+    "job_id": "jb_00000000000000000000000000000022",
+    "action": "plan",
+    "week_id": "wk_00000000000000000000000000000001",
+    "base_plan_revision": "1",
+    "context_stamp": {
+      "household_revision": "1",
+      "settings_revision": "1",
+      "privacy_revision": "1",
+      "history_revision": "1",
+      "catalogue_revision": "1",
+      "ranking_policy_version": "1",
+      "recipe_refs": [
+        {
+          "recipe_id": "rc_00000000000000000000000000000001",
+          "revision": "1",
+          "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+        },
+        {
+          "recipe_id": "rc_00000000000000000000000000000002",
+          "revision": "1",
+          "digest": "43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017"
+        }
+      ],
+      "read_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "1"
+        },
+        {
+          "week_id": "wk_00000000000000000000000000000002",
+          "revision": "1"
+        }
+      ],
+      "write_weeks": [
+        {
+          "week_id": "wk_00000000000000000000000000000001",
+          "revision": "1"
+        },
+        {
+          "week_id": "wk_00000000000000000000000000000002",
+          "revision": "1"
+        }
+      ]
+    },
+    "privacy_policy_revision": "1",
+    "required_capabilities": [
+      "scoped_file_read"
+    ],
+    "allowed_artefacts": [],
+    "payload": {
+      "kind": "personalised_plan",
+      "data": {
+        "requirements": [
+          {
+            "slot": {
+              "week_id": "wk_00000000000000000000000000000001",
+              "date": "2026-12-28",
+              "meal_type": "breakfast"
+            },
+            "enabled": false,
+            "location": "at_home",
+            "attendees": [],
+            "shared_hard_requirements": [],
+            "equipment": [
+              "hob"
+            ],
+            "mobility": {
+              "reheating": false,
+              "cold_storage": false,
+              "temperature": "either"
+            },
+            "eat_by": null,
+            "preferred_hands_on_minutes": 30,
+            "leftovers_allowed": false
+          },
+          {
+            "slot": {
+              "week_id": "wk_00000000000000000000000000000002",
+              "date": "2027-01-04",
+              "meal_type": "breakfast"
+            },
+            "enabled": true,
+            "location": "at_home",
+            "attendees": [
+              {
+                "person": {
+                  "kind": "diner",
+                  "data": {
+                    "diner_id": "dn_00000000000000000000000000000001"
+                  }
+                },
+                "age_band": "adult",
+                "hard_requirements": [
+                  {
+                    "kind": "diet",
+                    "data": {
+                      "code": "vegetarian"
+                    }
+                  }
+                ],
+                "portion": {
+                  "preset": "regular",
+                  "adjustment": {
+                    "numerator": "1",
+                    "denominator": "1"
+                  },
+                  "meal_overrides": []
+                }
+              },
+              {
+                "person": {
+                  "kind": "diner",
+                  "data": {
+                    "diner_id": "dn_00000000000000000000000000000002"
+                  }
+                },
+                "age_band": "teen",
+                "hard_requirements": [
+                  {
+                    "kind": "allergen_exclusion",
+                    "data": {
+                      "code": "cereals_containing_gluten"
+                    }
+                  }
+                ],
+                "portion": {
+                  "preset": "larger",
+                  "adjustment": {
+                    "numerator": "1",
+                    "denominator": "1"
+                  },
+                  "meal_overrides": []
+                }
+              }
+            ],
+            "shared_hard_requirements": [
+              {
+                "kind": "allergen_exclusion",
+                "data": {
+                  "code": "cereals_containing_gluten"
+                }
+              },
+              {
+                "kind": "diet",
+                "data": {
+                  "code": "vegetarian"
+                }
+              }
+            ],
+            "equipment": [
+              "hob"
+            ],
+            "mobility": {
+              "reheating": false,
+              "cold_storage": false,
+              "temperature": "either"
+            },
+            "eat_by": {
+              "local_date": "2027-01-04",
+              "local_time": "18:00:00",
+              "zone": "Europe/London",
+              "resolution": "unambiguous",
+              "instant": "2027-01-04T18:00:00Z"
+            },
+            "preferred_hands_on_minutes": 30,
+            "leftovers_allowed": false
+          }
+        ],
+        "recipe_refs": [
+          {
+            "recipe_id": "rc_00000000000000000000000000000001",
+            "revision": "1",
+            "digest": "8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652"
+          }
+        ],
+        "preferences": {
+          "spending_style": "balanced",
+          "higher_protein": false,
+          "more_variety": true,
+          "quick_meals": false,
+          "whole_food_preference": true,
+          "preferred_hands_on_minutes": 30
+        },
+        "history": {
+          "selected_recipe_refs": [],
+          "ordered_recipe_refs": [],
+          "hidden_recipe_ids": [],
+          "feedback": []
+        },
+        "other_weeks": []
+      }
+    },
+    "scope": {
+      "kind": "plan",
+      "data": {
+        "mode": "fill_open",
+        "slots": [
+          {
+            "week_id": "wk_00000000000000000000000000000001",
+            "date": "2026-12-28",
+            "meal_type": "breakfast"
+          },
+          {
+            "week_id": "wk_00000000000000000000000000000002",
+            "date": "2027-01-04",
+            "meal_type": "breakfast"
+          }
+        ]
+      }
+    },
+    "created_at": "2026-12-28T10:00:00Z",
+    "expires_at": "2026-12-28T20:00:00Z"
+  },
+  "expected_canonical": "{\"action\":\"plan\",\"allowed_artefacts\":[],\"base_plan_revision\":\"1\",\"context_stamp\":{\"catalogue_revision\":\"1\",\"history_revision\":\"1\",\"household_revision\":\"1\",\"privacy_revision\":\"1\",\"ranking_policy_version\":\"1\",\"read_weeks\":[{\"revision\":\"1\",\"week_id\":\"wk_00000000000000000000000000000001\"},{\"revision\":\"1\",\"week_id\":\"wk_00000000000000000000000000000002\"}],\"recipe_refs\":[{\"digest\":\"8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652\",\"recipe_id\":\"rc_00000000000000000000000000000001\",\"revision\":\"1\"},{\"digest\":\"43e35d83926b39750f531bf7c1160750abc6cfafaafe5b9c85565cdcaade5017\",\"recipe_id\":\"rc_00000000000000000000000000000002\",\"revision\":\"1\"}],\"settings_revision\":\"1\",\"write_weeks\":[{\"revision\":\"1\",\"week_id\":\"wk_00000000000000000000000000000001\"},{\"revision\":\"1\",\"week_id\":\"wk_00000000000000000000000000000002\"}]},\"created_at\":\"2026-12-28T10:00:00Z\",\"expires_at\":\"2026-12-28T20:00:00Z\",\"job_id\":\"jb_00000000000000000000000000000022\",\"payload\":{\"data\":{\"history\":{\"feedback\":[],\"hidden_recipe_ids\":[],\"ordered_recipe_refs\":[],\"selected_recipe_refs\":[]},\"other_weeks\":[],\"preferences\":{\"higher_protein\":false,\"more_variety\":true,\"preferred_hands_on_minutes\":30,\"quick_meals\":false,\"spending_style\":\"balanced\",\"whole_food_preference\":true},\"recipe_refs\":[{\"digest\":\"8debcfda93a4664bd65c8b9373228418b558d76ba40d6759e2c181423dd78652\",\"recipe_id\":\"rc_00000000000000000000000000000001\",\"revision\":\"1\"}],\"requirements\":[{\"attendees\":[],\"eat_by\":null,\"enabled\":false,\"equipment\":[\"hob\"],\"leftovers_allowed\":false,\"location\":\"at_home\",\"mobility\":{\"cold_storage\":false,\"reheating\":false,\"temperature\":\"either\"},\"preferred_hands_on_minutes\":30,\"shared_hard_requirements\":[],\"slot\":{\"date\":\"2026-12-28\",\"meal_type\":\"breakfast\",\"week_id\":\"wk_00000000000000000000000000000001\"}},{\"attendees\":[{\"age_band\":\"adult\",\"hard_requirements\":[{\"data\":{\"code\":\"vegetarian\"},\"kind\":\"diet\"}],\"person\":{\"data\":{\"diner_id\":\"dn_00000000000000000000000000000001\"},\"kind\":\"diner\"},\"portion\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"regular\"}},{\"age_band\":\"teen\",\"hard_requirements\":[{\"data\":{\"code\":\"cereals_containing_gluten\"},\"kind\":\"allergen_exclusion\"}],\"person\":{\"data\":{\"diner_id\":\"dn_00000000000000000000000000000002\"},\"kind\":\"diner\"},\"portion\":{\"adjustment\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"meal_overrides\":[],\"preset\":\"larger\"}}],\"eat_by\":{\"instant\":\"2027-01-04T18:00:00Z\",\"local_date\":\"2027-01-04\",\"local_time\":\"18:00:00\",\"resolution\":\"unambiguous\",\"zone\":\"Europe/London\"},\"enabled\":true,\"equipment\":[\"hob\"],\"leftovers_allowed\":false,\"location\":\"at_home\",\"mobility\":{\"cold_storage\":false,\"reheating\":false,\"temperature\":\"either\"},\"preferred_hands_on_minutes\":30,\"shared_hard_requirements\":[{\"data\":{\"code\":\"cereals_containing_gluten\"},\"kind\":\"allergen_exclusion\"},{\"data\":{\"code\":\"vegetarian\"},\"kind\":\"diet\"}],\"slot\":{\"date\":\"2027-01-04\",\"meal_type\":\"breakfast\",\"week_id\":\"wk_00000000000000000000000000000002\"}}]},\"kind\":\"personalised_plan\"},\"privacy_policy_revision\":\"1\",\"required_capabilities\":[\"scoped_file_read\"],\"schema_version\":1,\"scope\":{\"data\":{\"mode\":\"fill_open\",\"slots\":[{\"date\":\"2026-12-28\",\"meal_type\":\"breakfast\",\"week_id\":\"wk_00000000000000000000000000000001\"},{\"date\":\"2027-01-04\",\"meal_type\":\"breakfast\",\"week_id\":\"wk_00000000000000000000000000000002\"}]},\"kind\":\"plan\"},\"week_id\":\"wk_00000000000000000000000000000001\"}",
+  "expected_sha256": "7387126571344d6016618a98174a4643d830b6f49b43e660dd57e8b6745b1b7a",
+  "variants": [
+    {
+      "variant": "null",
+      "eat_by": null,
+      "expected_sha256": "7387126571344d6016618a98174a4643d830b6f49b43e660dd57e8b6745b1b7a"
+    },
+    {
+      "variant": "moment",
+      "eat_by": {
+        "local_date": "2026-12-28",
+        "local_time": "18:00:00",
+        "zone": "Europe/London",
+        "resolution": "unambiguous",
+        "instant": "2026-12-28T18:00:00Z"
+      },
+      "expected_sha256": "942eef62cf0669849ee64689c22c5d22ec5b68ee0b971256b2728c68c1e2d3a6"
+    },
+    {
+      "variant": "omitted",
+      "eat_by": null,
+      "expected_sha256": "42ea667af24e450de8d3e3f03c6c51fc961fa85ee612703ea3654dd91600561a"
+    }
+  ]
+}

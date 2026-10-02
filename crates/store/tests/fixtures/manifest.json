@@ -1,0 +1,163 @@
+{
+  "suite": "mstrchf-store-b1",
+  "coverage_status": "executable_mapping",
+  "result_status": "not_a_test_run_report",
+  "cases": [
+    {
+      "id": "S01",
+      "tests": [
+        "fresh_database_has_real_policy_and_no_onboarding",
+        "fresh_store_has_private_empty_state_and_reopens_identically"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S02",
+      "tests": [
+        "existing_empty_foreign_corrupt_databases_are_unchanged"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S03",
+      "tests": [
+        "sole_owner_process_lock_survives_filename"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S04",
+      "tests": [
+        "initialisation_crash_boundaries",
+        "interrupted_initialisation_cannot_adopt_replaced_stage_or_overwrite_live"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S05",
+      "tests": [
+        "full_u64_counters_overflow_and_sql_grammar"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S08",
+      "tests": [
+        "every_partial_onboarding_stage_persists_without_profile_promotion",
+        "identity_cas_invalid_value_and_privacy_injection_rejections_leave_state_unchanged",
+        "invalid_stage_flags_and_imported_command_cannot_mutate"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S09",
+      "tests": [
+        "detached_snapshot_and_competing_cas_are_coherent",
+        "exact_response_bytes_survive_later_commands_and_reopen",
+        "command_id_reuse_with_changed_data_or_expected_revision_is_a_replay_conflict",
+        "command_crash_boundaries_and_exact_fresh_replay",
+        "commit_return_error_resolves_receipt_without_reapplying",
+        "rollback_rejections_preserve_all_records_and_receipts",
+        "unreadable_uncertain_commit_blocks_mutation_until_reopen"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S10",
+      "tests": [
+        "null_privacy_copy_survives_revision_two_reopen_and_revision_three_update",
+        "household_connections_copy_authoritative_privacy_and_follow_revision_changes",
+        "present_profile_privacy_is_synchronised_without_a_profile_producer",
+        "privacy_quarantines_live_without_releasing_resource",
+        "privacy_copy_and_resource_crashes_are_wholly_old_or_new"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S11",
+      "tests": [
+        "caller_authority_matrix_matches_all_contract_command_kinds",
+        "nine_unsupported_ui_commands_are_rejected_without_state_changes",
+        "invalid_stage_flags_and_imported_command_cannot_mutate"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S12",
+      "tests": [
+        "nine_unsupported_ui_commands_are_rejected_without_state_changes",
+        "unrequested_import_result_is_rejected_without_state_changes"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S13",
+      "tests": [
+        "sqlite_read_transaction_holds_coherent_old_state",
+        "detached_snapshot_and_competing_cas_are_coherent"
+      ],
+      "scope": "B1 draft/privacy read transactions; multiweek mechanism deferred to B2"
+    },
+    {
+      "id": "S14",
+      "tests": [
+        "job_bounds_and_deterministic_terminal_projection",
+        "rollback_rejections_preserve_all_records_and_receipts"
+      ],
+      "scope": "B1 job projection and response bound; week/history projection deferred"
+    },
+    {
+      "id": "S21",
+      "tests": [
+        "local_cancellation_preserves_terminal_and_quarantines_live",
+        "unknown_cancellation_and_foreign_draft_references_leave_no_receipt"
+      ],
+      "scope": "Synthetic local cancellation only; result application deferred to B2"
+    },
+    {
+      "id": "S25",
+      "tests": [
+        "identity_projection_and_foreign_key_fail_closed",
+        "unknown_cancellation_and_foreign_draft_references_leave_no_receipt",
+        "cancellation_validates_job_projection_outside_visible_history"
+      ],
+      "scope": "B1 projections and FK only; recipe/order/context references deferred"
+    },
+    {
+      "id": "S31",
+      "tests": [
+        "downstream_consumers_cannot_reach_internal_mutation_or_test_modules"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    },
+    {
+      "id": "S34",
+      "tests": [
+        "migration_ledger_and_future_version_refuse_unchanged"
+      ],
+      "scope": "Applicable B1 boundary from revised storage fixture matrix"
+    }
+  ],
+  "deferred": [
+    {
+      "id": "S06",
+      "scope": "recipe producer mechanisms"
+    },
+    {
+      "id": "S07",
+      "scope": "asset producer mechanisms"
+    },
+    {
+      "id": "B2/C1/C2",
+      "scope": "later build phases"
+    },
+    {
+      "id": "ST-R1-03/ST-R1-04/ST-R1-05",
+      "scope": "Immutable approval inputs, candidates/independent hides, inert operation intent/baseline/outcome history"
+    },
+    {
+      "id": "evidence-closure",
+      "scope": "Typed evidence-registry payload and reference closure before full-content producers/export"
+    }
+  ]
+}

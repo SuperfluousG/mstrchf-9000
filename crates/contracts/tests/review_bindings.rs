@@ -202,8 +202,13 @@ fn f01_complete_record_subset_is_valid() {
     {
         let mut extra = requirements[0].clone();
         extra.slot.date = LocalDate("2026-12-29".into());
-        extra.eat_by.local_date = extra.slot.date.clone();
-        extra.eat_by.instant = Instant("2026-12-29T18:00:00Z".into());
+        let moment = extra
+            .eat_by
+            .0
+            .as_mut()
+            .expect("active fixture has a deadline");
+        moment.local_date = extra.slot.date.clone();
+        moment.instant = Instant("2026-12-29T18:00:00Z".into());
         requirements.0.push(extra.clone());
         recipe_refs.0.push(req.context_stamp.recipe_refs[1].clone());
         history.selected_recipe_refs = recipe_refs.clone();

@@ -566,6 +566,28 @@ pub fn validate_stamp(s: &ContextStamp) -> Result<(), DomainError> {
 fn unique_slots(cells: &[Cell]) -> Result<(), DomainError> {
     unique(&cells.iter().map(|c| &c.slot).collect::<Vec<_>>(), "/cells")
 }
+/// Active cells, including unoccupied slots, in civil date and meal order.
+pub fn active_slots(week: &Week) -> Result<Vec<SlotId>, DomainError> {
+    week.validate_shape().map_err(crate::parse::shape_error)?;
+    let mut slots: Vec<_> = week
+        .cells
+        .iter()
+        .filter(|cell| cell_enabled(week, cell))
+        .map(|cell| cell.slot.clone())
+        .collect();
+    slots.sort_by_key(|slot| {
+        (
+            slot.date.clone(),
+            match slot.meal_type {
+                MealType::Breakfast => 0,
+                MealType::Lunch => 1,
+                MealType::Dinner => 2,
+            },
+        )
+    });
+    Ok(slots)
+}
+
 pub fn active_selections(w: &Week) -> Vec<&MealSelection> {
     w.plan
         .selections
@@ -655,6 +677,20 @@ fn union(items: impl Iterator<Item = HardRequirement>) -> Vec<String> {
 }
 fn validate_requirements(r: &MealRequirements) -> Result<(), DomainError> {
     require(
+        r.enabled == r.eat_by.0.is_some(),
+        ErrorCode::InvalidValue,
+        "/eat_by",
+    )?;
+    if let Some(moment) = &r.eat_by.0 {
+        // Validate the child, never recursively validate this requirement here.
+        moment.validate_shape().map_err(|mut issues| {
+            for issue in &mut issues {
+                issue.path = format!("/eat_by{}", issue.path);
+            }
+            crate::parse::shape_error(issues)
+        })?;
+    }
+    require(
         !r.enabled || r.location == MealLocation::Skip || !r.attendees.is_empty(),
         ErrorCode::InvalidValue,
         "/attendees",
@@ -678,6 +714,14 @@ pub fn validate_context(c: &PlanningContext) -> Result<(), Vec<ValidationIssue>>
     validate_context_inner(c).map_err(|e| e.issues.0)
 }
 fn validate_context_inner(c: &PlanningContext) -> Result<(), DomainError> {
+    // Public callers may construct malformed primitives directly. Check children
+    // before cross-record lookup/activity checks, without recursing into context.
+    c.weeks
+        .validate_shape()
+        .map_err(crate::parse::shape_error)?;
+    c.requirements
+        .validate_shape()
+        .map_err(crate::parse::shape_error)?;
     validate_stamp(&c.stamp)?;
     require(
         c.stamp.household_revision == c.household.revision

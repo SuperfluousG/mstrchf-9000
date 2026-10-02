@@ -259,7 +259,7 @@ record! {
         pub shared_hard_requirements: BoundedVec<HardRequirement, 0, 64>,
         pub equipment: BoundedVec<EquipmentCode, 0, 9>,
         pub mobility: Mobility,
-        pub eat_by: ZonedMoment,
+        pub eat_by: Nullable<ZonedMoment>,
         pub preferred_hands_on_minutes: u16,
         pub leftovers_allowed: bool,
     }

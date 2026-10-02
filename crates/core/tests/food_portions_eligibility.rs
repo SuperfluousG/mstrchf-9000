@@ -474,14 +474,16 @@ fn extra_case() -> (
     guest.portion.adjustment = p(1, 2);
     m.attendees.0.extend([b, guest]);
     m.slot.date = LocalDate("2026-10-09".into());
-    m.eat_by = ZonedMoment::new(
-        LocalDate("2026-10-09".into()),
-        LocalTime("18:00:00".into()),
-        ZoneId("Europe/London".into()),
-        Resolution::Unambiguous,
-        Instant("2026-10-09T17:00:00Z".into()),
-    )
-    .unwrap();
+    m.eat_by = Nullable(Some(
+        ZonedMoment::new(
+            LocalDate("2026-10-09".into()),
+            LocalTime("18:00:00".into()),
+            ZoneId("Europe/London".into()),
+            Resolution::Unambiguous,
+            Instant("2026-10-09T17:00:00Z".into()),
+        )
+        .unwrap(),
+    ));
     m.shared_hard_requirements = BoundedVec(vec![vegetarian(), gf(), sesame()]);
     let selected = ExtraSelection {
         extra_id,

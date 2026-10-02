@@ -1,0 +1,145 @@
+use serde_json::Value;
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::process::{Command, Output};
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static NEXT_TEMP: AtomicU64 = AtomicU64::new(0);
+
+const PUBLIC_CONTROL_SOURCE: &str = r#"
+fn main() {
+    let _: Option<mstrchf_store::Store> = None;
+    let _: Option<mstrchf_store::StoreConfig> = None;
+}
+"#;
+
+const TESTS_MODULE_SOURCE: &str = r#"
+fn main() {
+    mstrchf_store::tests::fresh_database_has_real_policy_and_no_onboarding();
+}
+"#;
+
+fn unique_temp_root() -> PathBuf {
+    let nonce = NEXT_TEMP.fetch_add(1, Ordering::Relaxed);
+    std::env::temp_dir().join(format!(
+        "mstrchf-s31-api-boundary-{}-{}-{nonce}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ))
+}
+
+fn fixture_path(relative: &str) -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/api-boundary")
+        .join(relative)
+}
+
+fn write_downstream_fixture(temp_root: &Path, source_override: Option<&str>) -> PathBuf {
+    let source_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let fixture_manifest = fs::read_to_string(fixture_path("Cargo.toml")).unwrap();
+    let store_path = source_root.to_string_lossy().replace('\\', "/");
+    let fixture_manifest =
+        fixture_manifest.replace("path = \"../..\"", &format!("path = \"{store_path}\""));
+    assert_ne!(
+        fixture_manifest,
+        fs::read_to_string(fixture_path("Cargo.toml")).unwrap()
+    );
+
+    let source_main = fs::read_to_string(fixture_path("src/main.rs")).unwrap();
+    assert!(!source_main.trim().is_empty());
+    fs::create_dir_all(temp_root.join("src")).unwrap();
+    fs::write(temp_root.join("Cargo.toml"), fixture_manifest).unwrap();
+    fs::write(
+        temp_root.join("src/main.rs"),
+        source_override.unwrap_or(&source_main),
+    )
+    .unwrap();
+    temp_root.join("Cargo.toml")
+}
+
+fn cargo_check(manifest: &Path, target_dir: &Path) -> Output {
+    Command::new(env!("CARGO"))
+        .arg("check")
+        .arg("--offline")
+        .arg("--manifest-path")
+        .arg(manifest)
+        .arg("--target-dir")
+        .arg(target_dir)
+        .arg("--message-format=json")
+        .env("CARGO_TERM_COLOR", "never")
+        .output()
+        .expect("run downstream cargo check")
+}
+
+fn diagnostic_errors(output: &Output) -> Vec<(Option<String>, String)> {
+    String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .filter_map(|line| serde_json::from_str::<Value>(line).ok())
+        .filter(|message| message["reason"] == "compiler-message")
+        .filter_map(|message| {
+            let diagnostic = &message["message"];
+            (diagnostic["level"] == "error").then(|| {
+                (
+                    diagnostic["code"]["code"].as_str().map(str::to_owned),
+                    diagnostic["rendered"]
+                        .as_str()
+                        .unwrap_or_default()
+                        .to_owned(),
+                )
+            })
+        })
+        .collect()
+}
+
+fn assert_success(output: &Output) {
+    assert!(
+        output.status.success(),
+        "downstream public API control failed:\n{}\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+fn assert_only_error_code(output: &Output, expected: &str, diagnostic_hint: &str) {
+    assert!(
+        !output.status.success(),
+        "negative compile unexpectedly passed"
+    );
+    let errors = diagnostic_errors(output);
+    assert!(
+        !errors.is_empty(),
+        "no rustc errors found in cargo JSON output"
+    );
+    for (code, rendered) in &errors {
+        assert_eq!(code.as_deref(), Some(expected), "{rendered}");
+        assert!(
+            rendered
+                .to_lowercase()
+                .contains(&diagnostic_hint.to_lowercase()),
+            "expected diagnostic containing {diagnostic_hint:?}, got {rendered}"
+        );
+    }
+    println!(
+        "downstream negative: expected {expected}, observed {} matching compiler error(s)",
+        errors.len()
+    );
+}
+
+#[test]
+fn downstream_consumers_cannot_reach_internal_mutation_or_test_modules() {
+    let temp_root = unique_temp_root();
+    let target_dir = temp_root.join("target");
+    let manifest =
+        write_downstream_fixture(&temp_root.join("consumer"), Some(PUBLIC_CONTROL_SOURCE));
+    assert_success(&cargo_check(&manifest, &target_dir));
+    println!("downstream public control compiled with resolved dependencies");
+
+    let manifest = write_downstream_fixture(&temp_root.join("consumer"), None);
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0603", "private");
+
+    let manifest = write_downstream_fixture(&temp_root.join("consumer"), Some(TESTS_MODULE_SOURCE));
+    assert_only_error_code(&cargo_check(&manifest, &target_dir), "E0433", "tests");
+}
