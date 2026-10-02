@@ -57,6 +57,59 @@ pub struct PreparedCalendar {
     pub drafts: Vec<EventDraft>,
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SavedCalendarEvent {
+    pub event: CalendarEvent,
+    pub contributors: Vec<SessionContribution>,
+    pub sequence: u32,
+    pub revised_at: Instant,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CalendarIdentity {
+    pub key: CalendarEventLogicalKey,
+    pub event_id: CalendarEventId,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[allow(clippy::large_enum_variant)] // Keep the adopted native custody API; scope is capped at 256 rows.
+pub enum PriorEventState {
+    NeverVersioned,
+    Retained(SavedCalendarEvent),
+    Unavailable,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum UpdateDisposition {
+    Upsert,
+    Remove,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ScopedEvent {
+    pub key: CalendarEventLogicalKey,
+    pub prior: PriorEventState,
+    pub disposition: UpdateDisposition,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SessionIdentity {
+    pub week_id: WeekId,
+    pub session_id: PrepSessionId,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ContributorTransition {
+    pub member: SessionIdentity,
+    pub before: Option<CalendarEventLogicalKey>,
+    pub after: Option<CalendarEventLogicalKey>,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CalendarUpdateProjection {
+    pub scope: Vec<ScopedEvent>,
+    pub membership: Vec<ContributorTransition>,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CalendarSnapshot {
+    pub subject_order_id: OrderId,
+    pub evaluated_at: Instant,
+    pub reports: Vec<ContinuationReport>,
+    pub events: Vec<SavedCalendarEvent>,
+}
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum CalendarFailure {
     Invalid(DomainError),
     Blocked(Vec<ContinuationReport>),
