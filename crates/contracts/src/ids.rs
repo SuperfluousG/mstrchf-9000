@@ -99,7 +99,9 @@ text_type!(NameText, 80, false);
 text_type!(LongText, 65536, true);
 wire_string!(
     HttpUrl,
-    "^(?:http://[^\\s\\u0000-\\u001f]{1,2041}|https://[^\\s\\u0000-\\u001f]{1,2040})$",
+    // Explicit Rust control/White_Space set, rather than ECMAScript's different
+    // whitespace shorthand. The final assertion also forbids trailing newlines.
+    "^https?://[^\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]+(?![\\s\\S])",
     |s: &str| s.chars().count() <= 2048
         && (s.starts_with("https://") || s.starts_with("http://"))
         && s.split_once("://").is_some_and(|(_, a)| !a.is_empty())

@@ -401,6 +401,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "mstrchf-core"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "chrono-tz",
+ "mstrchf-contracts",
+ "serde_json",
+]
+
+[[package]]
 name = "mstrchf-store"
 version = "0.1.0"
 dependencies = [
