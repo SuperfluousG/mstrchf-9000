@@ -1,0 +1,6 @@
+[
+ {"case_id":"AT11","date":"2026-12-29","time":"18:00:00","zone":"Europe/London","resolution":"unambiguous","instant":"2026-12-29T18:00:00Z"},
+ {"case_id":"AT05-earlier","date":"2026-10-25","time":"01:30:00","zone":"Europe/London","resolution":"earlier","instant":"2026-10-25T00:30:00Z"},
+ {"case_id":"AT05-later","date":"2026-10-25","time":"01:30:00","zone":"Europe/London","resolution":"later","instant":"2026-10-25T01:30:00Z"},
+ {"case_id":"A17","date":"2026-03-29","time":"02:30:00","zone":"Europe/London","resolution":"unambiguous","instant":"2026-03-29T01:30:00Z"}
+]
