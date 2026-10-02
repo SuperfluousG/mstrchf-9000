@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "meal_requirements": {
+    "slot": {
+      "week_id": "wk_00000000000000000000000000000001",
+      "date": "2026-12-28",
+      "meal_type": "dinner"
+    },
+    "enabled": true,
+    "location": "at_home",
+    "attendees": [
+      {
+        "person": {
+          "kind": "diner",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000001"
+          }
+        },
+        "age_band": "adult",
+        "hard_requirements": [
+          {
+            "kind": "diet",
+            "data": {
+              "code": "vegetarian"
+            }
+          }
+        ],
+        "portion": {
+          "preset": "regular",
+          "adjustment": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "meal_overrides": []
+        }
+      },
+      {
+        "person": {
+          "kind": "diner",
+          "data": {
+            "diner_id": "dn_00000000000000000000000000000002"
+          }
+        },
+        "age_band": "teen",
+        "hard_requirements": [
+          {
+            "kind": "allergen_exclusion",
+            "data": {
+              "code": "cereals_containing_gluten"
+            }
+          }
+        ],
+        "portion": {
+          "preset": "larger",
+          "adjustment": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "meal_overrides": []
+        }
+      }
+    ],
+    "shared_hard_requirements": [
+      {
+        "kind": "allergen_exclusion",
+        "data": {
+          "code": "cereals_containing_gluten"
+        }
+      },
+      {
+        "kind": "diet",
+        "data": {
+          "code": "vegetarian"
+        }
+      }
+    ],
+    "equipment": [
+      "hob"
+    ],
+    "mobility": {
+      "reheating": false,
+      "cold_storage": false,
+      "temperature": "either"
+    },
+    "eat_by": null,
+    "preferred_hands_on_minutes": 30,
+    "leftovers_allowed": false
+  }
+}

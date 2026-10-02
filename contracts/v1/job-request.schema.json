@@ -1807,7 +1807,7 @@
           "$ref": "#/$defs/Array_AttendeeRequirement_0_64"
         },
         "eat_by": {
-          "$ref": "#/$defs/ZonedMoment"
+          "$ref": "#/$defs/Nullable_ZonedMoment"
         },
         "enabled": {
           "type": "boolean"
@@ -2026,6 +2026,16 @@
       "anyOf": [
         {
           "$ref": "#/$defs/WeekId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_ZonedMoment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ZonedMoment"
         },
         {
           "type": "null"

@@ -2850,6 +2850,76 @@
       "stage": "semantic",
       "file": "snapshot-profile-privacy-mismatch.json",
       "expected": "context_stale"
+    },
+    {
+      "id": "positive_inactive_requirement",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "positive_inactive_requirement.json",
+      "expected": "ok"
+    },
+    {
+      "id": "negative_activity_deadline_disabled_moment",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "negative_activity_deadline_disabled_moment.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "negative_activity_deadline_enabled_null",
+      "root": "meal-requirements",
+      "stage": "semantic",
+      "file": "negative_activity_deadline_enabled_null.json",
+      "expected": "invalid_value"
+    },
+    {
+      "id": "missing_activity_deadline_false",
+      "root": "meal-requirements",
+      "stage": "wire",
+      "file": "missing_activity_deadline_false.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "missing_activity_deadline_true",
+      "root": "meal-requirements",
+      "stage": "wire",
+      "file": "missing_activity_deadline_true.json",
+      "expected": "missing_field"
+    },
+    {
+      "id": "positive_mixed_activity_context",
+      "root": "planning-context",
+      "stage": "semantic",
+      "file": "positive_mixed_activity_context.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_request",
+      "root": "job-request",
+      "stage": "semantic",
+      "file": "positive_inactive_request.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_requirement_canonical",
+      "root": "meal-requirements",
+      "stage": "canonical",
+      "file": "positive_inactive_requirement_canonical.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_context_canonical",
+      "root": "planning-context",
+      "stage": "canonical",
+      "file": "positive_inactive_context_canonical.json",
+      "expected": "ok"
+    },
+    {
+      "id": "positive_inactive_request_canonical",
+      "root": "job-request",
+      "stage": "canonical",
+      "file": "positive_inactive_request_canonical.json",
+      "expected": "ok"
     }
   ]
 }

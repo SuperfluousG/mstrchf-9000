@@ -1,0 +1,49 @@
+{
+  "input": {
+    "slot": {
+      "week_id": "wk_00000000000000000000000000000001",
+      "date": "2026-12-28",
+      "meal_type": "dinner"
+    },
+    "enabled": false,
+    "location": "at_home",
+    "attendees": [],
+    "shared_hard_requirements": [],
+    "equipment": [
+      "hob"
+    ],
+    "mobility": {
+      "reheating": false,
+      "cold_storage": false,
+      "temperature": "either"
+    },
+    "eat_by": null,
+    "preferred_hands_on_minutes": 30,
+    "leftovers_allowed": false
+  },
+  "expected_canonical": "{\"attendees\":[],\"eat_by\":null,\"enabled\":false,\"equipment\":[\"hob\"],\"leftovers_allowed\":false,\"location\":\"at_home\",\"mobility\":{\"cold_storage\":false,\"reheating\":false,\"temperature\":\"either\"},\"preferred_hands_on_minutes\":30,\"shared_hard_requirements\":[],\"slot\":{\"date\":\"2026-12-28\",\"meal_type\":\"dinner\",\"week_id\":\"wk_00000000000000000000000000000001\"}}",
+  "expected_sha256": "a8d7691917da9427d372983b885710ebde3f33ae40754b08526edec8a487ab66",
+  "variants": [
+    {
+      "variant": "null",
+      "eat_by": null,
+      "expected_sha256": "a8d7691917da9427d372983b885710ebde3f33ae40754b08526edec8a487ab66"
+    },
+    {
+      "variant": "moment",
+      "eat_by": {
+        "local_date": "2026-12-28",
+        "local_time": "18:00:00",
+        "zone": "Europe/London",
+        "resolution": "unambiguous",
+        "instant": "2026-12-28T18:00:00Z"
+      },
+      "expected_sha256": "2abce4e68bb1aa2c8133b7f54211ab64e7ee0499728b35ba89e3f1d6807ff527"
+    },
+    {
+      "variant": "omitted",
+      "eat_by": null,
+      "expected_sha256": "ddbf32187a96c76ba7e1620378d1eac05a8a2260344e6f3fcefdc55f4fdfe2ce"
+    }
+  ]
+}

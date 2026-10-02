@@ -252,7 +252,7 @@
           "$ref": "#/$defs/Array_AttendeeRequirement_0_64"
         },
         "eat_by": {
-          "$ref": "#/$defs/ZonedMoment"
+          "$ref": "#/$defs/Nullable_ZonedMoment"
         },
         "enabled": {
           "type": "boolean"
@@ -331,6 +331,16 @@
         "either"
       ],
       "type": "string"
+    },
+    "Nullable_ZonedMoment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "OccasionId": {
       "pattern": "^oc_(?!0{32}$)[0-9a-f]{32}$",
