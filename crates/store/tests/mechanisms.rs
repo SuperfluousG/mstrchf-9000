@@ -371,6 +371,33 @@ fn migration_ledger_and_future_version_refuse_unchanged() {
         .unwrap();
     assert_eq!(rows, 1);
 }
+
+#[test]
+fn schema_validation_rejects_inert_sqlite_like_ordinary_tables() {
+    for name in [
+        "sqliteX_control",
+        "SQLITEX_control",
+        "sqlite",
+        "ordinary_control",
+    ] {
+        let p = root("schema name control");
+        drop(open(&p));
+        let c = Connection::open(p.join("planner.sqlite")).unwrap();
+        // Fixed harmless names: an empty table only, with no triggers or data changes.
+        c.execute_batch(&format!("CREATE TABLE {name}(value TEXT) STRICT;"))
+            .unwrap();
+        drop(c);
+        let before = std::fs::read(p.join("planner.sqlite")).unwrap();
+        let result = Store::open(StoreConfig {
+            app_data_root: p.clone(),
+        });
+        assert!(
+            matches!(result, Err(ref e) if e.code == ErrorCode::StorageFailure),
+            "unexpected schema accepted: {name}"
+        );
+        assert_eq!(std::fs::read(p.join("planner.sqlite")).unwrap(), before);
+    }
+}
 #[test]
 fn full_u64_counters_overflow_and_sql_grammar() {
     for value in [1u64 << 63, u64::MAX] {

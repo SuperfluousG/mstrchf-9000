@@ -2,6 +2,9 @@ use crate::{records::*, snapshot};
 use mstrchf_contracts::*;
 use rusqlite::{Connection, params};
 pub(crate) const SQL: &str = include_str!("../migrations/001_initial.sql");
+// GLOB treats '_' literally and is case-sensitive. SQLite-generated internal
+// objects use the reserved lowercase sqlite_ prefix.
+const INTERNAL_SCHEMA_GLOB: &str = "sqlite_*";
 
 pub(crate) fn initialise(c: &mut Connection, lineage: &str) -> Result<(), DomainError> {
     let tx = c.transaction().map_err(storage)?;
@@ -34,11 +37,17 @@ pub(crate) fn initialise(c: &mut Connection, lineage: &str) -> Result<(), Domain
 }
 
 fn schema(c: &Connection) -> Result<Vec<(String, String, String)>, DomainError> {
-    let mut s=c.prepare("SELECT type,name,sql FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY type,name").map_err(storage)?;
-    s.query_map([], |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)))
-        .map_err(storage)?
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(storage)
+    let mut s = c
+        .prepare(
+            "SELECT type,name,sql FROM sqlite_schema WHERE name NOT GLOB ?1 ORDER BY type,name",
+        )
+        .map_err(storage)?;
+    s.query_map([INTERNAL_SCHEMA_GLOB], |r| {
+        Ok((r.get(0)?, r.get(1)?, r.get(2)?))
+    })
+    .map_err(storage)?
+    .collect::<Result<Vec<_>, _>>()
+    .map_err(storage)
 }
 pub(crate) fn verify(c: &Connection) -> Result<(), DomainError> {
     let version: i64 = c
@@ -82,4 +91,50 @@ pub(crate) fn verify(c: &Connection) -> Result<(), DomainError> {
     }
     snapshot::load(c)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn internal_schema_pattern_requires_literal_lowercase_prefix() {
+        let c = Connection::open_in_memory().unwrap();
+        for (name, expected) in [
+            ("sqlite_autoindex_household_1", true),
+            ("sqlite_stat1", true),
+            ("sqlite_sequence", true),
+            ("sqliteX_control", false),
+            ("SQLITEX_control", false),
+            ("SQLITE_autoindex_household_1", false),
+            ("sqlite", false),
+            ("xsqlite_autoindex_household_1", false),
+        ] {
+            let actual: bool = c
+                .query_row("SELECT ?1 GLOB ?2", [name, INTERNAL_SCHEMA_GLOB], |r| {
+                    r.get(0)
+                })
+                .unwrap();
+            assert_eq!(actual, expected, "{name}");
+        }
+    }
+
+    #[test]
+    fn actual_generated_autoindex_is_excluded_but_its_table_is_retained() {
+        let c = Connection::open_in_memory().unwrap();
+        c.execute_batch("CREATE TABLE ordinary_control(value TEXT UNIQUE) STRICT;")
+            .unwrap();
+        let internal: String = c
+            .query_row(
+                "SELECT name FROM sqlite_schema WHERE type='index'",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(internal, "sqlite_autoindex_ordinary_control_1");
+        let objects = schema(&c).unwrap();
+        assert_eq!(objects.len(), 1);
+        assert_eq!(objects[0].0, "table");
+        assert_eq!(objects[0].1, "ordinary_control");
+    }
 }
