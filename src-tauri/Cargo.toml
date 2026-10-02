@@ -1,0 +1,38 @@
+[package]
+name = "mstrchf-shell"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+default-run = "mstrchf-9000"
+autotests = false
+
+[features]
+default = ["native-shell"]
+native-shell = ["dep:tauri", "store-boundary"]
+store-boundary = ["dep:mstrchf-contracts", "dep:mstrchf-store"]
+synthetic-development = ["native-shell"]
+native-tests = ["synthetic-development", "tauri/test"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[dependencies]
+tauri = { version = "=2.11.5", optional = true , features = [] }
+mstrchf-contracts = { path = "../crates/contracts", optional = true }
+mstrchf-store = { path = "../crates/store", optional = true }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.151"
+ts-rs = "=12.0.1"
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[[bin]]
+name = "mstrchf-9000"
+path = "src/main.rs"
+required-features = ["native-shell"]
+
+[[bin]]
+name = "shell-types"
+path = "src/bin/shell-types.rs"
+
+[dev-dependencies]
+rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled", "backup"] }
