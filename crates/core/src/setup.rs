@@ -22,6 +22,10 @@ pub fn validate_setup_draft_transition(
     }
     draft_bounds(current)?;
     draft_bounds(proposed)?;
+    // Admit every native edit child before semantic or relational comparisons.
+    for edit in edits {
+        shape(edit)?;
+    }
     validate_draft_progress(current, policy, evaluated_at)?;
     validate_draft_progress(proposed, policy, evaluated_at)?;
     same_household(&current.household_id, &proposed.household_id)?;
@@ -29,7 +33,6 @@ pub fn validate_setup_draft_transition(
 
     let mut owners = BTreeSet::new();
     for edit in edits {
-        shape(edit)?;
         if !owners.insert(edit_owner(edit)) {
             return Err(edit_error());
         }

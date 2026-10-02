@@ -887,3 +887,79 @@ fn binding_validates_native_candidate_before_comparing_identity_and_revision() {
         Some("/household_id"),
     );
 }
+
+#[test]
+fn sn_r1_malformed_edit_precedes_stale_revision() {
+    let current = issue_draft();
+    let mut proposed = current.clone();
+    proposed.revision = Revision(8);
+    let edits = [SetupRestrictionEdit::Resolve {
+        diner_id: DinerId("malformed".into()),
+    }];
+    error(
+        transition(&current, &proposed, &edits),
+        ErrorCode::InvalidValue,
+        Some("/data/diner_id"),
+    );
+}
+
+#[test]
+fn sn_r1_malformed_edit_precedes_foreign_household() {
+    let current = issue_draft();
+    let mut proposed = current.clone();
+    proposed.household_id = HouseholdId("hh_ffffffffffffffffffffffffffffffff".into());
+    let edits = [SetupRestrictionEdit::Resolve {
+        diner_id: DinerId("malformed".into()),
+    }];
+    error(
+        transition(&current, &proposed, &edits),
+        ErrorCode::InvalidValue,
+        Some("/data/diner_id"),
+    );
+}
+
+#[test]
+fn sn_r1_all_native_edits_precede_semantic_admission_and_owner_comparisons() {
+    let current = issue_draft();
+    let malformed = SetupRestrictionEdit::Resolve {
+        diner_id: DinerId("malformed".into()),
+    };
+    let mut proposed = current.clone();
+    proposed.connections.0.as_mut().unwrap().privacy.revision = Revision(2);
+    error(
+        transition(&current, &proposed, std::slice::from_ref(&malformed)),
+        ErrorCode::InvalidValue,
+        Some("/data/diner_id"),
+    );
+    let duplicate = SetupRestrictionEdit::Resolve { diner_id: id(1) };
+    error(
+        transition(
+            &current,
+            &current,
+            &[duplicate.clone(), duplicate, malformed],
+        ),
+        ErrorCode::InvalidValue,
+        Some("/data/diner_id"),
+    );
+}
+
+#[test]
+fn sn_r1_collection_bounds_still_precede_native_edit_validation() {
+    let current = issue_draft();
+    let malformed = SetupRestrictionEdit::Resolve {
+        diner_id: DinerId("malformed".into()),
+    };
+    error(
+        transition(&current, &current, &vec![malformed.clone(); 65]),
+        ErrorCode::LimitExceeded,
+        Some(EDITS),
+    );
+    let mut proposed = current.clone();
+    proposed.unresolved_restrictions =
+        BoundedVec(vec![proposed.unresolved_restrictions[0].clone(); 65]);
+    error(
+        transition(&current, &proposed, &[malformed]),
+        ErrorCode::LimitExceeded,
+        Some("/unresolved_restrictions"),
+    );
+}
