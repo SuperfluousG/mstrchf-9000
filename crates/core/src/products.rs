@@ -168,9 +168,15 @@ pub enum MatchAssessment {
 }
 /// Only the assessment route can construct a candidate. Reassess against current
 /// native state before consuming a retained result; it is not an authority token.
-/// ```compile_fail
-/// use mstrchf_core::products::MatchedCandidate;
-/// let candidate = MatchedCandidate {};
+/// Every field is supplied so this fails for privacy, not missing fields.
+/// ```compile_fail,E0451
+/// use mstrchf_contracts::{PayloadDigest, ProductObservation};
+/// use mstrchf_core::products::{MatchBasis, MatchedCandidate};
+/// fn forge(basis: MatchBasis, observation: ProductObservation, digest: PayloadDigest)
+///     -> MatchedCandidate
+/// {
+///     MatchedCandidate { basis, observation, digest }
+/// }
 /// ```
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct MatchedCandidate {
@@ -189,6 +195,20 @@ impl MatchedCandidate {
         &self.digest
     }
 }
+/// Only validated current native state can create a matching context.
+/// ```compile_fail,E0451
+/// use mstrchf_contracts::{Instant, PayloadDigest, PlanningContext, DerivedPlan};
+/// use mstrchf_core::food::{SavedFoodBasis, UseGraph};
+/// use mstrchf_core::products::{MatchContext, MatchPolicy, SupplyOrigin};
+/// fn forge<'a>(
+///     current: &'a PlanningContext, saved: &'a SavedFoodBasis,
+///     derived: &'a DerivedPlan, policy: &'a MatchPolicy, evaluated_at: Instant,
+///     saved_digest: PayloadDigest, graph: UseGraph, origins: Vec<SupplyOrigin>,
+/// ) -> MatchContext<'a> {
+///     MatchContext { current, saved, derived, policy, evaluated_at,
+///         saved_digest, graph, origins }
+/// }
+/// ```
 #[derive(Debug)]
 pub struct MatchContext<'a> {
     current: &'a PlanningContext,
@@ -200,6 +220,21 @@ pub struct MatchContext<'a> {
     graph: UseGraph,
     origins: Vec<SupplyOrigin>,
 }
+/// Only source and meaning admission can create an assessed product.
+/// ```compile_fail,E0451
+/// use mstrchf_contracts::{Instant, PayloadDigest, ProductObservation};
+/// use mstrchf_core::products::{
+///     ProductReadBasis, ProductMeaning, ProductMeaningAdmission, ReviewedProduct,
+/// };
+/// fn forge<'a>(
+///     source: &'a ProductReadBasis<'a>, item: &'a ProductObservation,
+///     meaning: Option<&'a ProductMeaning>, admission: Option<&'a ProductMeaningAdmission>,
+///     context_digest: PayloadDigest, evaluated_at: Instant, policy_digest: PayloadDigest,
+/// ) -> ReviewedProduct<'a> {
+///     ReviewedProduct { source, item, meaning, admission,
+///         context_digest, evaluated_at, policy_digest }
+/// }
+/// ```
 #[derive(Debug)]
 pub struct ReviewedProduct<'a> {
     source: &'a ProductReadBasis<'a>,
@@ -601,7 +636,15 @@ pub fn match_product(
                 }
             })
             .unwrap_or(ClaimState::Unknown);
-        match raw_state(product.item, &rule.required_fields, state) {
+        // An admitted claim may cite more sources than the policy minimum.
+        // Every cited dependency remains relevant to its interpretation.
+        let mut fields = rule.required_fields.clone();
+        if let Some(claim) = claim {
+            fields.extend_from_slice(&claim.source_fields);
+        }
+        fields.sort();
+        fields.dedup();
+        match raw_state(product.item, &fields, state) {
             ClaimState::Supported => (),
             ClaimState::Refuted => issues.add(
                 MatchReason::RefutedRequirement,
