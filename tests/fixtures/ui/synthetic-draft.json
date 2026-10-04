@@ -6,6 +6,7 @@
     "food_preferences"
   ],
   "diners": [],
+  "unresolved_restrictions": [],
   "preferences": {
     "spending_style": "balanced",
     "higher_protein": false,

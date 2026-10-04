@@ -1,5 +1,7 @@
 import type { AppCommand, AppCommandV1, CommandId, DomainError, Snapshot } from '../generated/contracts';
 import type { PlannerClient } from './PlannerClient';
+import type { ShellCommandReceipt } from '../generated/shell';
+import { decodeReceipt, householdId, requestBinding, requestDigest, revision } from './receipt';
 type Disposition = 'idle' | 'pending' | 'committed' | 'refused' | 'unknown';
 export type SessionState = {
   snapshot: Snapshot | null;
@@ -7,12 +9,9 @@ export type SessionState = {
   readError: string | null;
   disposition: Disposition;
   pending: AppCommandV1 | null;
+  lastReceipt: ShellCommandReceipt | null;
   message: string;
 };
-function revision(value: string): bigint {
-  if (!/^[1-9][0-9]*$/.test(value)) throw new Error('Invalid snapshot revision');
-  return BigInt(value);
-}
 function stable(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
   if (value !== null && typeof value === 'object') {
@@ -33,23 +32,30 @@ export function newCommandId(): CommandId {
   do { crypto.getRandomValues(bytes); } while (bytes.every(byte => byte === 0));
   return `cm_${Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')}` as CommandId;
 }
-function definiteRefusal(value: unknown): boolean {
+function definiteRefusal(value: unknown, kind: AppCommand['kind']): boolean {
   if (!value || typeof value !== 'object') return false;
   const error = value as Partial<DomainError>;
-  // Only audited admission codes on contracts003. Receipt/parse failures,
-  // ReplayConflict and every unclassified failure remain unknown regardless of Retry.
-  if (!Array.isArray(error.issues) || error.issues.length !== 1 || error.truncated !== false) return false;
+  // Only exact audited pre-mutation paths. Recovery failures are never definite.
+  if (Object.keys(error).sort().join(',') !== 'code,issues,retry,truncated' || error.retry !== 'never'
+    || !Array.isArray(error.issues) || error.issues.length !== 1 || error.truncated !== false) return false;
   const issue = error.issues[0];
-  if (issue.code !== error.code) return false;
-  if (error.code === 'unsupported_capability' || error.code === 'authority_denied') return issue.path === '/command';
-  return error.code === 'context_stale' && ['/expected_snapshot_revision', '/command/data/draft/revision',
-    '/command/data/draft/connections/privacy', '/command/data/policy/revision'].includes(issue.path);
+  if (!issue || Object.keys(issue).sort().join(',') !== 'code,entity_id,path' || issue.entity_id !== null
+    || issue.code !== error.code || typeof issue.path !== 'string') return false;
+  if (error.code === 'authority_denied') return issue.path === '/command';
+  if (error.code === 'unsupported_capability') return issue.path === '/command'
+    && !['save_household_draft','set_privacy','cancel_job'].includes(kind);
+  if (error.code === 'context_stale') return issue.path === '/expected_snapshot_revision'
+    || (kind === 'save_household_draft' && ['/revision','/connections/privacy'].includes(issue.path))
+    || (kind === 'set_privacy' && issue.path === '/command/data/policy/revision');
+  return (kind === 'save_household_draft' && error.code === 'invalid_value' && issue.path === '/command/data/restriction_issue_edits')
+    || (kind === 'cancel_job' && error.code === 'missing_reference' && issue.path === '/command/data/job_id');
 }
 export class PlannerSession {
-  private current: SessionState = { snapshot: null, read: 'loading', readError: null, disposition: 'idle', pending: null, message: '' };
+  private current: SessionState = { snapshot: null, read: 'loading', readError: null, disposition: 'idle', pending: null, lastReceipt: null, message: '' };
   private listeners = new Set<() => void>();
   private query = 0;
   private busy = false;
+  private pendingHousehold: string | null = null;
   constructor(private readonly client: PlannerClient) {}
   get state(): SessionState { return this.current; }
   get canMutate(): boolean {
@@ -62,10 +68,13 @@ export class PlannerSession {
     this.current = { ...this.current, ...change };
     this.listeners.forEach(listener => listener());
   }
-  private accept(incoming: Snapshot): boolean {
+  private accept(incoming: Snapshot, minimum?: string): boolean {
     const next = revision(incoming.snapshot_revision);
+    if (!householdId(incoming.household_draft.household_id)) throw new Error('Invalid household identity');
+    if (minimum !== undefined && next < revision(minimum)) return false;
     const saved = this.current.snapshot;
     if (saved) {
+      if (incoming.household_draft.household_id !== saved.household_draft.household_id) throw new Error('Household changed');
       const existing = revision(saved.snapshot_revision);
       if (next < existing) return false;
       if (next === existing && stable(incoming) !== stable(saved)) throw new Error('Inconsistent snapshot at the same revision');
@@ -74,12 +83,15 @@ export class PlannerSession {
     return true;
   }
   async refresh(): Promise<boolean> {
+    return this.readCurrent();
+  }
+  private async readCurrent(minimum?: string): Promise<boolean> {
     const request = ++this.query;
     this.set({ read: 'loading' });
     try {
       const incoming = await this.client.loadSnapshot();
-      const accepted = this.accept(incoming);
       if (request !== this.query) return false;
+      const accepted = this.accept(incoming, minimum);
       if (!accepted) throw new Error('Current saved state could not be confirmed');
       this.set({ read: 'ready', readError: null });
       return true;
@@ -92,7 +104,8 @@ export class PlannerSession {
     if (!this.canMutate) throw new Error('Review or recover the current action before another mutation');
     const envelope = freeze(structuredClone({ schema_version: 1 as const, command_id: newCommandId(),
       expected_snapshot_revision: this.current.snapshot!.snapshot_revision, command }));
-    this.set({ pending: envelope, disposition: 'pending', message: '' });
+    this.pendingHousehold = this.current.snapshot!.household_draft.household_id;
+    this.set({ pending: envelope, lastReceipt: null, disposition: 'pending', message: '' });
     await this.send(envelope, false);
   }
   async recover(): Promise<void> {
@@ -108,11 +121,12 @@ export class PlannerSession {
     this.busy = true;
     this.set({ disposition: 'pending' });
     try {
-      let receipt: Snapshot;
+      let receipt: ShellCommandReceipt;
       try {
         receipt = await this.client.dispatch(envelope);
       } catch (error) {
-        if (!recovery && definiteRefusal(error)) {
+        if (!recovery && definiteRefusal(error, envelope.command.kind)) {
+          this.pendingHousehold = null;
           this.set({ pending: null, disposition: 'refused', message: 'The action was refused. Your edit is retained; compare it with current saved state before trying again.' });
           await this.refresh();
         } else {
@@ -122,10 +136,16 @@ export class PlannerSession {
         }
         return;
       }
-      // Replay receipts can be historical. Never regress the current cache.
-      this.accept(receipt);
-      const refreshed = await this.refresh();
-      if (refreshed) this.set({ pending: null, disposition: 'committed', message: 'Action acknowledged; current saved state loaded.' });
+      // Defence at the session boundary also covers alternate PlannerClient implementations.
+      const text = JSON.stringify(envelope);
+      const verified = decodeReceipt(receipt, { ...requestBinding(text, 'current_json'),
+        request_digest: await requestDigest(text), household_id: this.pendingHousehold! }, this.current.lastReceipt);
+      this.set({ lastReceipt: verified });
+      const refreshed = await this.readCurrent(verified.receipt_snapshot_revision);
+      if (refreshed) {
+        this.pendingHousehold = null;
+        this.set({ pending: null, disposition: 'committed', message: 'Action acknowledged; current saved state loaded.' });
+      }
       else this.set({ disposition: 'unknown', message: 'The action was acknowledged, but follow-up verification failed. Recover the same action or restart the app normally.' });
     } catch {
       this.set({ disposition: 'unknown', message: 'The response could not be verified. Recover the exact action; a normal app restart may be required.' });
