@@ -72,6 +72,8 @@ export class PlannerSession {
     const next = revision(incoming.snapshot_revision);
     if (!householdId(incoming.household_draft.household_id)) throw new Error('Invalid household identity');
     if (minimum !== undefined && next < revision(minimum)) return false;
+    const acknowledged = this.current.lastReceipt;
+    if (acknowledged && next < revision(acknowledged.receipt_snapshot_revision)) return false;
     const saved = this.current.snapshot;
     if (saved) {
       if (incoming.household_draft.household_id !== saved.household_draft.household_id) throw new Error('Household changed');

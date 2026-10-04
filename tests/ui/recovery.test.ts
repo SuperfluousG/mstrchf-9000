@@ -293,3 +293,46 @@ describe('immutable receipt recovery fingerprint',()=>{
   expect(session.state.disposition).toBe('unknown');expect(session.canMutate).toBe(false);expect(invoke).toHaveBeenCalledTimes(4);
  });
 });
+
+
+describe('USA-J1-01 retained receipt floor on every current read',()=>{
+  it.each(['failed follow-up','superseding manual'] as const)('rejects manual revision1 after receipt2: %s',async schedule=>{
+    const {invoke,session}=harness();invoke.mockResolvedValueOnce(snapshot());await session.refresh();
+    const cached=session.state.snapshot;const automatic=barrier<unknown>();
+    invoke.mockImplementationOnce(ack);
+    if(schedule==='failed follow-up')invoke.mockRejectedValueOnce('automatic read unavailable');
+    else invoke.mockReturnValueOnce(automatic.promise);
+    const submit=session.submit(privacy);
+    await vi.waitFor(()=>expect(invoke).toHaveBeenCalledTimes(3));
+    if(schedule==='failed follow-up')await submit;
+    const pending=session.state.pending;const receipt=session.state.lastReceipt;const sent=invoke.mock.calls[1];
+    expect(receipt?.receipt_snapshot_revision).toBe('2');
+    invoke.mockResolvedValueOnce(snapshot('1'));expect(await session.refresh()).toBe(false);
+    if(schedule==='superseding manual'){automatic.resolve(snapshot('2'));await submit;}
+    expect(session.state.snapshot).toBe(cached);expect(session.state.read).toBe('failed');
+    expect(session.state.readError).toContain('cannot currently be read');expect(session.state.lastReceipt).toBe(receipt);
+    expect(session.state.pending).toBe(pending);expect(session.state.disposition).toBe('unknown');expect(session.canMutate).toBe(false);
+    invoke.mockImplementationOnce(ack).mockResolvedValueOnce(snapshot('2'));await session.recover();
+    expect(invoke.mock.calls[4]).toEqual(sent);expect(session.state.pending).toBeNull();expect(session.canMutate).toBe(true);
+  });
+  it.each([
+    ['failed follow-up','2'],['failed follow-up','3'],['superseding manual','2'],['superseding manual','3'],
+  ] as const)('valid manual read preserves exact intent: %s revision%s',async(schedule,rev)=>{
+    const {invoke,session}=harness();invoke.mockResolvedValueOnce(snapshot());await session.refresh();
+    const automatic=barrier<unknown>();invoke.mockImplementationOnce(ack);
+    if(schedule==='failed follow-up')invoke.mockRejectedValueOnce('automatic read unavailable');
+    else invoke.mockReturnValueOnce(automatic.promise);
+    const submit=session.submit(privacy);await vi.waitFor(()=>expect(invoke).toHaveBeenCalledTimes(3));
+    if(schedule==='failed follow-up')await submit;
+    const pending=session.state.pending;const receipt=session.state.lastReceipt;const sent=invoke.mock.calls[1];
+    invoke.mockResolvedValueOnce(snapshot(rev));expect(await session.refresh()).toBe(true);
+    if(schedule==='superseding manual'){automatic.resolve(snapshot('2'));await submit;}
+    expect(session.state.snapshot?.snapshot_revision).toBe(rev);expect(session.state.read).toBe('ready');
+    expect(session.state.readError).toBeNull();expect(session.state.lastReceipt).toBe(receipt);
+    expect(session.state.pending).toBe(pending);expect(session.state.disposition).toBe('unknown');
+    expect(session.state.message).toContain('follow-up verification failed');expect(session.canMutate).toBe(false);
+    await expect(session.submit(privacy)).rejects.toThrow();
+    invoke.mockImplementationOnce(ack).mockResolvedValueOnce(snapshot(rev));await session.recover();
+    expect(invoke.mock.calls[4]).toEqual(sent);expect(session.state.pending).toBeNull();expect(session.canMutate).toBe(true);
+  });
+});
