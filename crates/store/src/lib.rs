@@ -43,6 +43,9 @@ mod startup;
 mod upgrade;
 mod windows_fs;
 
+#[cfg(all(debug_assertions, feature = "synthetic-development"))]
+pub mod development;
+
 #[cfg(test)]
 #[path = "../tests/backup_upgrade_tests.rs"]
 mod backup_upgrade_tests;

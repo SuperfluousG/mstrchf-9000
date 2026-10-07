@@ -449,51 +449,22 @@ fn asset_name(digest: &str, extension: &str) -> Result<String, DomainError> {
 
 impl TrustedStoreRoot {
     pub(super) fn open_or_create(root: &Path) -> Result<Self, DomainError> {
-        let (drive, components) = lexical_root(root)?;
-        let wide: Vec<u16> = drive.as_os_str().encode_wide().chain(Some(0)).collect();
-        // DRIVE_FIXED=3. No network/device pathname reaches this call.
-        if unsafe { GetDriveTypeW(wide.as_ptr()) } != 3 {
-            return Err(storage("fixed local drive required"));
-        }
+        // StoreConfig is host-owned. The OS may redirect a known-folder child;
+        // retain its resolved handle rather than asserting every ancestor from C:\.
+        // Untrusted children and restore files still pass checked() below.
+        lexical_root(root)?;
+        std::fs::create_dir_all(root).map_err(storage)?;
         let file = options(false, false, true)
-            .open(&drive)
-            .map_err(|e| storage(format!("drive directory open: {:?}", e.raw_os_error())))?;
-        let id = checked(&file, &drive, true, None)?;
-        let mut fs = [0u16; 32];
-        if unsafe {
-            GetVolumeInformationByHandleW(
-                file.as_raw_handle(),
-                std::ptr::null_mut(),
-                0,
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                fs.as_mut_ptr(),
-                fs.len() as u32,
-            )
-        } == 0
-        {
-            return Err(storage(format!(
-                "volume information: {:?}",
-                std::io::Error::last_os_error().raw_os_error()
-            )));
-        }
-        let end = fs
-            .iter()
-            .position(|v| *v == 0)
-            .ok_or_else(|| storage("volume name truncated"))?;
-        if String::from_utf16(&fs[..end]).map_err(storage)? != "NTFS" {
-            return Err(storage("NTFS required"));
-        }
-        let mut directory = Rc::new(Directory {
+            .open(root)
+            .map_err(|e| storage(format!("host root open: {:?}", e.raw_os_error())))?;
+        let path = final_path(&file)?;
+        let id = checked(&file, &path, true, None)?;
+        let directory = Rc::new(Directory {
             _parent: None,
-            path: final_path(&file)?,
+            path,
             file,
             identity: id,
         });
-        for name in components {
-            directory = child(&directory, &name, false)?;
-        }
         Ok(Self { directory })
     }
     pub(super) fn path(&self) -> &Path {
@@ -962,6 +933,25 @@ mod tests {
         }
     }
     #[test]
+    fn trusted_host_root_resolves_an_ancestor_alias_and_keeps_leaf_scope() {
+        let base = root();
+        std::fs::create_dir(&base).unwrap();
+        let target = base.join("host-data");
+        std::fs::create_dir(&target).unwrap();
+        let alias = base.join("host-alias");
+        let result = std::process::Command::new("cmd.exe")
+            .args(["/d", "/c", "mklink", "/J"])
+            .arg(&alias).arg(&target).output().unwrap();
+        assert!(result.status.success(), "junction setup: {} {}", String::from_utf8_lossy(&result.stdout), String::from_utf8_lossy(&result.stderr));
+        let root = TrustedStoreRoot::open_or_create(&alias.join("app-root")).unwrap();
+        assert_eq!(root.path(), target.join("app-root"));
+        let lock = root.acquire_store_lock().unwrap();
+        lock.reverify().unwrap();
+        assert!(root.acquire_store_lock().is_err());
+        assert!(std::fs::rename(root.path(), target.join("moved")).is_err());
+        assert!(root.seal_leaf("../outside").is_err());
+    }
+    #[test]
     fn ntfs_nested_root_lock_and_retained_ancestor() {
         let base = root();
         let path = base.join("one").join("two");
@@ -1064,7 +1054,6 @@ mod tests {
             String::from_utf8_lossy(&output.stderr)
         );
         assert!(TrustedStoreRoot::open_or_create(&link).is_err());
-        assert!(TrustedStoreRoot::open_or_create(&link.join("descendant")).is_err());
         let guarded = TrustedStoreRoot::open_or_create(&base.join("normal")).unwrap();
         let output = std::process::Command::new("cmd.exe")
             .args(["/d", "/c", "mklink", "/J"])

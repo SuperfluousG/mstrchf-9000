@@ -1,0 +1,15 @@
+{
+  "identifier": "development-main",
+  "description": "Four local synthetic-development commands; three producers and exact receipt lookup.",
+  "local": true,
+  "windows": [
+    "development-main"
+  ],
+  "permissions": [
+    "allow-planner-snapshot",
+    "allow-planner-dispatch",
+    "allow-planner-features",
+    "allow-planner-replay-receipt",
+    "allow-planner-development-board"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "productName": "MSTRCHF 9000 Development",
+  "identifier": "uk.bayes.mstrchf9000.development",
+  "build": {
+    "beforeDevCommand": "npm run dev:ui",
+    "devUrl": "http://127.0.0.1:1420",
+    "frontendDist": "../../dist/development",
+    "features": [
+      "synthetic-development"
+    ]
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "development-main",
+        "title": "Development — synthetic data | MSTRCHF 9000",
+        "width": 1280,
+        "height": 850
+      }
+    ],
+    "security": {
+      "capabilities": [
+        "development-main"
+      ],
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src ipc: http://ipc.localhost; base-uri 'none'; form-action 'none'; frame-src 'none'",
+      "devCsp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ipc: http://ipc.localhost http://127.0.0.1:1420 ws://127.0.0.1:1420; base-uri 'none'; form-action 'none'; frame-src 'none'"
+    }
+  },
+  "version": "0.1.0",
+  "bundle": {
+    "active": false,
+    "icon": ["../icons/icon.ico"]
+  }
+}

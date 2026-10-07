@@ -1,0 +1,1 @@
+{"command":{"data":{"expected_policy_revision":"1","policy":{"confirmed_at":null,"include_household_requirements":false,"revision":"1","use_ai_features":false}},"kind":"set_privacy"},"command_id":"cm_00000000000000000000000000000011","expected_snapshot_revision":"2","schema_version":1}

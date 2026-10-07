@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MSTRCHF 9000 — Not ready",
+  "version": "0.1.0",
+  "identifier": "uk.bayes.mstrchf9000.notready",
+  "build": { "frontendDist": "not-ready" },
+  "app": {
+    "windows": [{ "label": "not-ready", "title": "MSTRCHF 9000 — Not ready", "width": 800, "height": 560 }],
+    "security": {
+      "capabilities": ["not-ready"],
+      "csp": "default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-src 'none'"
+    }
+  },
+  "bundle": { "active": false }
+}

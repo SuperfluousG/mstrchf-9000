@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { exactToolchain } from './exact-toolchain.mjs';
 
 const projectRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const fixtureRoot = resolve(projectRoot, 'tests/fixtures/contracts');
@@ -15,8 +16,8 @@ const expectedRoots = [
   'event-batch', 'read-observation',
 ];
 
-function run(command, args) {
-  const result = spawnSync(command, args, { cwd: projectRoot, stdio: 'inherit', env: process.env });
+function run(command, args, env = process.env) {
+  const result = spawnSync(command, args, { cwd: projectRoot, stdio: 'inherit', env });
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
@@ -72,11 +73,9 @@ try {
   const manifest = JSON.parse(readFileSync(resolve(fixtureRoot, 'manifest.json'), 'utf8'));
   const ids = new Set(manifest.cases.map(c => c.id));
   if (required.length !== 90 || required.some(id => !ids.has(id))) throw new Error(`missing required fixture rows: ${required.filter(id => !ids.has(id)).join(', ')}`);
-  const rustc = spawnSync('rustc', ['+stable-x86_64-pc-windows-msvc', '--version'], { cwd: projectRoot, encoding: 'utf8', env: process.env });
-  if (rustc.error || rustc.status !== 0 || !rustc.stdout.startsWith('rustc 1.94.0 ')) {
-    throw new Error('Rust 1.94.0 is required for deterministic generation');
-  }
-  run('cargo', ['+stable-x86_64-pc-windows-msvc', 'run', '--locked', '-p', 'mstrchf-contracts', '--bin', 'generate-contracts', '--', '--check']);
+  const toolchain = exactToolchain(projectRoot);
+  for (const identity of toolchain.identities) console.log(`${identity.path}\n${identity.version}`);
+  run(toolchain.cargo, ['run', '--locked', '--offline', '-p', 'mstrchf-contracts', '--bin', 'generate-contracts', '--', '--check'], toolchain.env);
   const tsc = resolve(projectRoot, 'node_modules/typescript/bin/tsc');
   run(process.execPath, [tsc, '--project', 'tests/contracts/tsconfig.json', '--noEmit']);
   console.log('Generated contracts and TypeScript parity verified.');
