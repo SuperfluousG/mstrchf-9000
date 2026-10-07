@@ -223,6 +223,8 @@ record! {
         pub day_enabled: DayEnabled,
         pub meal_type_enabled: MealTypeEnabled,
         pub cells: BoundedVec<Cell, 21, 21>,
+        // Null retains the existing plan; a supplied plan is validated by the native writer.
+        pub plan: Nullable<WeekPlan>,
     }
 }
 

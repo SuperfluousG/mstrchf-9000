@@ -493,7 +493,7 @@ export type Week = { schema_version: SchemaVersion, range: WeekRange, revision: 
 
 export type WeekChange = { week_id: WeekId, base_revision: Revision, replace_slots: Array<ProposedSelection>, };
 
-export type WeekEdit = { week_id: WeekId, defaults_snapshot: UsualWeek, day_enabled: Array<boolean>, meal_type_enabled: MealTypeEnabled, cells: Array<Cell>, };
+export type WeekEdit = { week_id: WeekId, defaults_snapshot: UsualWeek, day_enabled: Array<boolean>, meal_type_enabled: MealTypeEnabled, cells: Array<Cell>, plan: WeekPlan | null, };
 
 export type WeekId = string & { readonly __brand: "WeekId" };
 

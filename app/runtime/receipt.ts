@@ -38,9 +38,9 @@ export function decodeReceipt(value: unknown, binding: ReceiptBinding, prior?: S
   const row = value as Record<string, unknown>;
   if (Object.keys(row).length !== keys.length || keys.some(key => !Object.hasOwn(row,key))
     || row.format_version !== 1 || !['applied','replayed'].includes(row.disposition as string)
-    || !['B1RetainedV1','B1Draft005'].includes(row.receipt_profile as string)
+    || !['B1RetainedV1','B1Draft005','DevelopmentCurrent'].includes(row.receipt_profile as string)
     || !['current_json','canonical_receipt_json'].includes(row.request_encoding as string)
-    || !['save_household_draft','set_privacy','cancel_job'].includes(row.command_kind as string)
+    || !['save_household_draft','set_privacy','cancel_job','update_profile','save_week'].includes(row.command_kind as string)
     || typeof row.command_id !== 'string' || !/^cm_(?!0{32}$)[0-9a-f]{32}$/.test(row.command_id)
     || !householdId(row.household_id)) throw new Error('Invalid receipt shape');
   for (const key of ['request_digest','command_digest','response_digest']) {
@@ -50,7 +50,7 @@ export function decodeReceipt(value: unknown, binding: ReceiptBinding, prior?: S
     if (row[key] !== expected) throw new Error('Receipt does not match request');
   }
   if (revision(row.receipt_snapshot_revision) !== revision(row.expected_snapshot_revision) + 1n
-    || (row.disposition === 'applied' && row.receipt_profile !== 'B1Draft005')
+    || (row.disposition === 'applied' && !['B1Draft005','DevelopmentCurrent'].includes(row.receipt_profile as string))
     || (row.request_encoding === 'canonical_receipt_json'
       && (row.disposition !== 'replayed' || row.request_digest !== row.command_digest))) throw new Error('Invalid receipt relationship');
   if (prior && (keys.some(key => key !== 'disposition' && row[key] !== prior[key as keyof ShellCommandReceipt])

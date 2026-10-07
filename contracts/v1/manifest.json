@@ -1,8 +1,8 @@
 {
   "$comment": "Generated from mstrchf-contracts; run cargo run --locked -p mstrchf-contracts --bin generate-contracts",
   "hashes": {
-    "app/generated/contracts.ts": "1d5bdc20fbd5e6e4c08dde4cd453d3be701ad47c93d17a3ba071a2fc339dbeb5",
-    "contracts/v1/app-command.schema.json": "33c0e4f13b3f5ec64636d71d9b56ef929acf251746fc518906068f0b8eae9be2",
+    "app/generated/contracts.ts": "638b78393996549234025b85946d3a7c83d4ad76ff6aa6398636cd038d12e40a",
+    "contracts/v1/app-command.schema.json": "b847b70ddfcdfcc99fb260bda303ad2b70aa2c605480584c9bfc023f04521784",
     "contracts/v1/derived-plan.schema.json": "14c2a4270d265d75e958b87e93e988a458859b71991d07b5c195f7bed1c485ce",
     "contracts/v1/event-batch.schema.json": "d77ba4db15784d77f3bd58df83d17426bda6ca1ce5c2847c4d5f6d91e55c6c31",
     "contracts/v1/household-draft.schema.json": "f555771e83a71a3cb84077a0bda76b20e815a01bc9e7afd08f7d13457363db56",

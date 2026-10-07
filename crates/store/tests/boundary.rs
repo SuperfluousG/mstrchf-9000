@@ -479,6 +479,7 @@ fn nine_unsupported_ui_commands_are_rejected_without_state_changes() {
                 day_enabled: week.day_enabled,
                 meal_type_enabled: week.meal_type_enabled,
                 cells: week.cells,
+                plan: Nullable(None),
             },
             expected_week_revision: Revision(1),
         },

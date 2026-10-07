@@ -12,6 +12,7 @@ pub enum ShellReceiptDisposition {
 pub enum ShellReceiptProfile {
     B1RetainedV1,
     B1Draft005,
+    DevelopmentCurrent,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[serde(rename_all = "snake_case")]
@@ -107,6 +108,12 @@ mod projection {
                 s.household_draft().household_id().value().to_owned(),
                 s.snapshot_revision().value().to_owned(),
             ),
+            #[cfg(feature = "synthetic-development")]
+            ReceiptSnapshot::DevelopmentCurrent(s) => (
+                ShellReceiptProfile::DevelopmentCurrent,
+                s.household_draft.household_id.0.clone(),
+                s.snapshot_revision.0.to_string(),
+            ),
         };
         let disposition = match outcome.disposition() {
             CommandDisposition::Applied => ShellReceiptDisposition::Applied,
@@ -120,13 +127,18 @@ mod projection {
             "save_household_draft" => SupportedCommand::SaveHouseholdDraft,
             "set_privacy" => SupportedCommand::SetPrivacy,
             "cancel_job" => SupportedCommand::CancelJob,
+            "update_profile" => SupportedCommand::UpdateProfile,
+            "save_week" => SupportedCommand::SaveWeek,
             _ => return Err(fail()),
         };
         if !id(command_id, "cm_")
             || !id(&household, "hh_")
             || revision(expected)?.checked_add(1) != Some(revision(&receipt_revision)?)
             || (disposition == ShellReceiptDisposition::Applied
-                && profile != ShellReceiptProfile::B1Draft005)
+                && !matches!(
+                    profile,
+                    ShellReceiptProfile::B1Draft005 | ShellReceiptProfile::DevelopmentCurrent
+                ))
         {
             return Err(fail());
         }

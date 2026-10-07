@@ -180,6 +180,10 @@ fn intent(catalogue: startup::Catalogue, from: u32) -> Value {
         })
     };
     let (target, entries) = match catalogue {
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        startup::Catalogue::Development => {
+            panic!("M1 development has no backup or upgrade intent")
+        }
         startup::Catalogue::B1 => (1, vec![entry(1, crate::migrate::SQL, "b1-v1-no-assets")]),
         startup::Catalogue::Fixture => (
             2,

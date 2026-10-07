@@ -28,6 +28,8 @@ fn dispatch_with(
         mstrchf_contracts::AppCommand::SaveHouseholdDraft { .. }
             | mstrchf_contracts::AppCommand::SetPrivacy { .. }
             | mstrchf_contracts::AppCommand::CancelJob { .. }
+            | mstrchf_contracts::AppCommand::UpdateProfile { .. }
+            | mstrchf_contracts::AppCommand::SaveWeek { .. }
     ) {
         return Err(DomainError::new(
             mstrchf_contracts::ErrorCode::UnsupportedCapability,

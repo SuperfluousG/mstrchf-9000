@@ -56,6 +56,12 @@ impl Database {
         }
         Ok(db)
     }
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    pub(crate) fn open_development(path: &Path) -> Result<Self, DomainError> {
+        let mut db = Self::open_catalogue(path, Catalogue::Development)?;
+        crate::current::initialise(&mut db.connection)?;
+        Ok(db)
+    }
     pub(crate) fn open_catalogue(path: &Path, catalogue: Catalogue) -> Result<Self, DomainError> {
         let root = TrustedStoreRoot::open_or_create(path)?;
         let lock = root.acquire_store_lock()?;
@@ -79,6 +85,7 @@ impl Database {
         if self.recovery_only {
             return Err(storage("recovery required"));
         }
+        self.verify_owner()?;
         snapshot::read(&mut self.connection)
     }
     pub(crate) fn dispatch_outcome(
@@ -89,6 +96,9 @@ impl Database {
         if self.recovery_only {
             return Err(storage("recovery required"));
         }
+        // Parent directories are OS-owned rather than pinned individually. The
+        // live and lock handles must still resolve to this scoped root on every operation.
+        self.verify_owner()?;
         let result = crate::commands::execute_outcome(&mut self.connection, command, bytes);
         if result
             .as_ref()
@@ -111,6 +121,13 @@ impl Database {
             self.connection = startup::writable_query_only(&self.path)?;
             // Preserve B1 command recovery: this retained owner is not fresh
             // startup recognition or a verified-backup maintenance session.
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            if crate::current::active(&self.connection)? {
+                crate::current::audit(&self.connection)?;
+            } else {
+                crate::migrate::verify(&self.connection)?;
+            }
+            #[cfg(not(all(debug_assertions, feature = "synthetic-development")))]
             crate::migrate::verify(&self.connection)?;
             startup::configure(&self.connection)?;
             let receipt = crate::receipts::lookup(&self.connection, command, bytes)?;
@@ -129,6 +146,7 @@ impl Database {
         if self.recovery_only {
             return Err(storage("recovery required"));
         }
+        self.verify_owner()?;
         let tx = self.connection.transaction().map_err(storage)?;
         crate::receipts::lookup_id(&tx, id, bytes)?
             .ok_or_else(|| DomainError::new(ErrorCode::MissingReference, "/command_id"))

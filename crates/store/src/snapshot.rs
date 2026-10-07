@@ -65,7 +65,16 @@ pub(crate) fn load(c: &Connection) -> Result<Snapshot, DomainError> {
         privacy,
         household_draft: draft,
         profile: Nullable(profile),
-        weeks: BoundedVec(vec![]),
+        weeks: {
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            {
+                BoundedVec(crate::current::weeks(c)?)
+            }
+            #[cfg(not(all(debug_assertions, feature = "synthetic-development")))]
+            {
+                BoundedVec(vec![])
+            }
+        },
         jobs: BoundedVec(jobs),
         conflicts: BoundedVec(vec![]),
     };

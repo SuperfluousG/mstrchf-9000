@@ -46,7 +46,10 @@ function definiteRefusal(value: unknown, kind: AppCommand['kind']): boolean {
     && !['save_household_draft','set_privacy','cancel_job'].includes(kind);
   if (error.code === 'context_stale') return issue.path === '/expected_snapshot_revision'
     || (kind === 'save_household_draft' && ['/revision','/connections/privacy'].includes(issue.path))
-    || (kind === 'set_privacy' && issue.path === '/command/data/policy/revision');
+    || (kind === 'set_privacy' && issue.path === '/command/data/policy/revision')
+    || (kind === 'save_week' && ['/revision','/command/data/week/plan/revision'].includes(issue.path))
+    || (kind === 'update_profile' && ['/revision','/command/data/expected_profile_revision'].includes(issue.path));
+  if (kind === 'save_week' && error.code === 'domain_conflict') return issue.path === '/command/data/week/plan/restrictions';
   return (kind === 'save_household_draft' && error.code === 'invalid_value' && issue.path === '/command/data/restriction_issue_edits')
     || (kind === 'cancel_job' && error.code === 'missing_reference' && issue.path === '/command/data/job_id');
 }

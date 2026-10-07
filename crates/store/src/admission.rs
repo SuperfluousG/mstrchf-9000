@@ -7,6 +7,10 @@ pub(crate) enum PreparedMutation {
     Draft(Box<HouseholdDraft>),
     Privacy(PrivacyPolicy),
     Cancel(JobSummary),
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    Profile(Box<HouseholdProfile>),
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    Week(Box<Week>),
 }
 fn stale(path: &str) -> DomainError {
     DomainError::new(ErrorCode::ContextStale, path)
@@ -70,9 +74,86 @@ pub(crate) fn prepare(
             }
             Ok(PreparedMutation::Cancel(job))
         }
-        AppCommand::UpdateProfile { .. }
-        | AppCommand::SaveWeek { .. }
-        | AppCommand::ApplyPlanProposal { .. }
+        AppCommand::UpdateProfile {
+            profile,
+            expected_profile_revision,
+        } => {
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            if crate::current::active(c)? {
+                let at = writer_time(c)?;
+                if profile.household_id != s.household_draft.household_id {
+                    return Err(DomainError::new(
+                        ErrorCode::IdentityMismatch,
+                        "/command/data/profile/household_id",
+                    ));
+                }
+                mstrchf_core::household::validate_profile(profile, &s.privacy, &at)?;
+                // M1 establishes one fixed engineering input. Household editing belongs to M2.
+                if s.profile.0.is_some() || *profile != crate::development::seed_profile(s)? {
+                    return Err(unsupported());
+                }
+                if *expected_profile_revision != Revision(1) {
+                    return Err(stale("/command/data/expected_profile_revision"));
+                }
+                return Ok(PreparedMutation::Profile(Box::new(profile.clone())));
+            }
+            let _ = (profile, expected_profile_revision);
+            Err(unsupported())
+        }
+        AppCommand::SaveWeek {
+            week,
+            expected_week_revision,
+        } => {
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            if crate::current::active(c)? {
+                let at = writer_time(c)?;
+                let profile = s
+                    .profile
+                    .0
+                    .as_ref()
+                    .ok_or_else(|| DomainError::new(ErrorCode::MissingField, "/profile"))?;
+                let existing = s.weeks.iter().find(|w| w.range.week_id == week.week_id);
+                if existing.is_none() && !s.weeks.is_empty() {
+                    return Err(unsupported());
+                }
+                let seed = crate::development::seed_week(s, &at)?;
+                let current = existing.unwrap_or(&seed);
+                if week.defaults_snapshot != current.defaults_snapshot
+                    || week.cells != current.cells
+                    || week.day_enabled != current.day_enabled
+                    || week.meal_type_enabled != current.meal_type_enabled
+                {
+                    return Err(unsupported());
+                }
+                let mut next = mstrchf_core::availability::prepare_week_edit(
+                    current,
+                    week,
+                    *expected_week_revision,
+                    profile,
+                    &at,
+                )?
+                .candidate;
+                if let Some(plan) = &week.plan.0 {
+                    if plan.revision != current.plan.revision {
+                        return Err(stale("/command/data/week/plan/revision"));
+                    }
+                    next.plan = plan.clone();
+                }
+                crate::development::validate_saved_plan(s, profile, &next)?;
+                if existing.is_some() {
+                    next.revision = next.revision.checked_increment()?;
+                    next.plan.revision = next.plan.revision.checked_increment()?;
+                }
+                next.approved_plan = Nullable(None);
+                next.confirmed_order = Nullable(None);
+                next.publication = current.publication.clone();
+                let _: Week = parse_document(&canonical_bytes(&next)?)?;
+                return Ok(PreparedMutation::Week(Box::new(next)));
+            }
+            let _ = (week, expected_week_revision);
+            Err(unsupported())
+        }
+        AppCommand::ApplyPlanProposal { .. }
         | AppCommand::ConfirmEssentials { .. }
         | AppCommand::ApprovePlan { .. }
         | AppCommand::ConfirmOrder { .. }
@@ -87,6 +168,18 @@ pub(crate) fn commit_mutation(
     mutation: PreparedMutation,
 ) -> Result<(), DomainError> {
     match mutation {
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        PreparedMutation::Profile(profile) => {
+            c.execute(
+                "UPDATE household SET profile=?1,profile_revision=?2 WHERE singleton=1",
+                params![canonical_bytes(&profile)?, profile.revision.0.to_string()],
+            )
+            .map_err(storage)?;
+        }
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        PreparedMutation::Week(week) => {
+            c.execute("INSERT INTO weeks(week_id,revision,body) VALUES(?1,?2,?3) ON CONFLICT(week_id) DO UPDATE SET revision=excluded.revision,body=excluded.body",params![week.range.week_id.0,week.revision.0.to_string(),canonical_bytes(&week)?]).map_err(storage)?;
+        }
         PreparedMutation::Draft(draft) => {
             c.execute(
                 "UPDATE household SET draft=?1,draft_revision=?2 WHERE singleton=1",

@@ -17,6 +17,8 @@ pub(crate) const SOURCE_ID: &str =
 #[derive(Clone, Copy)]
 pub(crate) enum Catalogue {
     B1,
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    Development,
     #[cfg(test)]
     Fixture,
     #[cfg(test)]
@@ -30,6 +32,8 @@ impl Catalogue {
     pub(crate) fn audit(self, c: &Connection) -> Result<AuditedRows, DomainError> {
         match self {
             Self::B1 => audit::audit_b1(c),
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            Self::Development => crate::current::audit(c),
             #[cfg(test)]
             Self::Fixture => {
                 let v: i64 = c

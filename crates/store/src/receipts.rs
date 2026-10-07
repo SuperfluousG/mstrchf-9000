@@ -18,6 +18,10 @@ pub(crate) fn lookup_id(
     id: &str,
     bytes: &[u8],
 ) -> Result<Option<UiCommandOutcome>, DomainError> {
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    if crate::current::active(c)? {
+        return crate::current::lookup(c, id, bytes);
+    }
     #[cfg(test)]
     let fixture = fixture_catalogue(c)?;
     #[cfg(not(test))]
@@ -78,6 +82,10 @@ pub(crate) fn insert(
     snapshot: &Snapshot,
     response: &[u8],
 ) -> Result<(), DomainError> {
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    if crate::current::active(c)? {
+        return crate::current::insert(c, command, input, snapshot, response);
+    }
     c.execute(
         "INSERT INTO command_receipts VALUES(?1,?2,?3,?4,?5,?6)",
         params![

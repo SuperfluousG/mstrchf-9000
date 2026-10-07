@@ -11,6 +11,7 @@ assert(releaseFiles.some(path => path.endsWith('index.html')), 'release UI build
 for (const path of releaseFiles) {
   const bytes = readFileSync(path, 'utf8');
   for (const marker of ['planner_dispatch', 'planner_snapshot', 'planner_features', 'planner_replay_receipt',
+    'planner_development_board', 'DevelopmentCurrent', 'loop001-m1',
     'ShellCommandReceipt', 'B1RetainedV1', 'B1Draft005', 'synthetic_development',
     'Save synthetic draft', 'Recover exact action', 'loop001-u1-contracts003', 'loop001-u1-contracts005']) {
     assert(!bytes.includes(marker), `development marker ${marker} in release asset ${path}`);
@@ -28,5 +29,5 @@ assert.deepEqual(development.app.security.capabilities, ['development-main']);
 const devCapability = JSON.parse(readFileSync(join(root, 'src-tauri/capabilities/development-main.json'), 'utf8'));
 assert.deepEqual(devCapability.windows, ['development-main']);
 assert.equal(devCapability.remote, undefined);
-assert.deepEqual([...devCapability.permissions].sort(), ['allow-planner-dispatch', 'allow-planner-features', 'allow-planner-replay-receipt', 'allow-planner-snapshot']);
+assert.deepEqual([...devCapability.permissions].sort(), ['allow-planner-development-board', 'allow-planner-dispatch', 'allow-planner-features', 'allow-planner-replay-receipt', 'allow-planner-snapshot']);
 console.log(`Release asset separation checked across ${releaseFiles.length} files; explicit capability configuration checked. This is not native ACL or launch evidence.`);

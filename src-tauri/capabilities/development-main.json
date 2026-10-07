@@ -1,6 +1,6 @@
 {
   "identifier": "development-main",
-  "description": "Four local synthetic-development commands; three producers and exact receipt lookup.",
+  "description": "Five local synthetic-development handlers for current state, native commands, support, receipts and eligible meal choices.",
   "local": true,
   "windows": [
     "development-main"

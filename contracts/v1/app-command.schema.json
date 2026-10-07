@@ -606,6 +606,14 @@
       "pattern": "^au_(?!0{32}$)[0-9a-f]{32}$",
       "type": "string"
     },
+    "Array_BatchLink_0_256": {
+      "items": {
+        "$ref": "#/$defs/BatchLink"
+      },
+      "maxItems": 256,
+      "minItems": 0,
+      "type": "array"
+    },
     "Array_CalendarEventId_0_256": {
       "items": {
         "$ref": "#/$defs/CalendarEventId"
@@ -636,6 +644,14 @@
       },
       "maxItems": 21,
       "minItems": 21,
+      "type": "array"
+    },
+    "Array_ComponentAllocation_1_128": {
+      "items": {
+        "$ref": "#/$defs/ComponentAllocation"
+      },
+      "maxItems": 128,
+      "minItems": 1,
       "type": "array"
     },
     "Array_ComponentId_1_128": {
@@ -755,6 +771,14 @@
         "$ref": "#/$defs/MealPortionOverride"
       },
       "maxItems": 3,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Array_MealSelection_0_21": {
+      "items": {
+        "$ref": "#/$defs/MealSelection"
+      },
+      "maxItems": 21,
       "minItems": 0,
       "type": "array"
     },
@@ -914,6 +938,30 @@
       "pattern": "^ba_(?!0{32}$)[0-9a-f]{32}$",
       "type": "string"
     },
+    "BatchLink": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_id": {
+          "$ref": "#/$defs/BatchId"
+        },
+        "components": {
+          "$ref": "#/$defs/Array_ComponentAllocation_1_128"
+        },
+        "source_slot": {
+          "$ref": "#/$defs/SlotId"
+        },
+        "target_slot": {
+          "$ref": "#/$defs/SlotId"
+        }
+      },
+      "required": [
+        "batch_id",
+        "source_slot",
+        "target_slot",
+        "components"
+      ],
+      "type": "object"
+    },
     "BatchUse": {
       "oneOf": [
         {
@@ -1037,6 +1085,22 @@
     "CommandId": {
       "pattern": "^cm_(?!0{32}$)[0-9a-f]{32}$",
       "type": "string"
+    },
+    "ComponentAllocation": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "$ref": "#/$defs/ComponentId"
+        },
+        "quantity": {
+          "$ref": "#/$defs/Quantity"
+        }
+      },
+      "required": [
+        "component_id",
+        "quantity"
+      ],
+      "type": "object"
     },
     "ComponentId": {
       "pattern": "^co_(?!0{32}$)[0-9a-f]{32}$",
@@ -1875,6 +1939,16 @@
       "anyOf": [
         {
           "$ref": "#/$defs/UsualWeek"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Nullable_WeekPlan": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WeekPlan"
         },
         {
           "type": "null"
@@ -2761,6 +2835,9 @@
         "meal_type_enabled": {
           "$ref": "#/$defs/MealTypeEnabled"
         },
+        "plan": {
+          "$ref": "#/$defs/Nullable_WeekPlan"
+        },
         "week_id": {
           "$ref": "#/$defs/WeekId"
         }
@@ -2770,13 +2847,38 @@
         "defaults_snapshot",
         "day_enabled",
         "meal_type_enabled",
-        "cells"
+        "cells",
+        "plan"
       ],
       "type": "object"
     },
     "WeekId": {
       "pattern": "^wk_(?!0{32}$)[0-9a-f]{32}$",
       "type": "string"
+    },
+    "WeekPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_links": {
+          "$ref": "#/$defs/Array_BatchLink_0_256"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "selections": {
+          "$ref": "#/$defs/Array_MealSelection_0_21"
+        },
+        "week_id": {
+          "$ref": "#/$defs/WeekId"
+        }
+      },
+      "required": [
+        "week_id",
+        "revision",
+        "selections",
+        "batch_links"
+      ],
+      "type": "object"
     },
     "WeekRevision": {
       "additionalProperties": false,

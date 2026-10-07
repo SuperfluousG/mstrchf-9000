@@ -23,6 +23,7 @@ fn edit(w: &Week) -> WeekEdit {
         day_enabled: w.day_enabled.clone(),
         meal_type_enabled: w.meal_type_enabled.clone(),
         cells: w.cells.clone(),
+        plan: Nullable(None),
     }
 }
 fn apply(w: &Week, e: &WeekEdit, p: &HouseholdProfile) -> Result<WeekEditEffect, DomainError> {

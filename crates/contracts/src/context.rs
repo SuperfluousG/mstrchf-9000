@@ -205,6 +205,11 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
         "WeekEdit" => {
             let w: WeekEdit = decoded(v)?;
             require(
+                w.plan.0.as_ref().is_none_or(|p| p.week_id == w.week_id),
+                ErrorCode::ForeignReference,
+                "/plan/week_id",
+            )?;
+            require(
                 w.cells.iter().all(|c| c.slot.week_id == w.week_id),
                 ErrorCode::ForeignReference,
                 "/cells",

@@ -983,6 +983,7 @@ fn every_command_variant_has_all_three_caller_rules() {
                 day_enabled: week.day_enabled,
                 meal_type_enabled: week.meal_type_enabled,
                 cells: week.cells,
+                plan: Nullable(None),
             },
             expected_week_revision: Revision(1),
         },

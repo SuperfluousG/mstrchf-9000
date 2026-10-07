@@ -197,17 +197,6 @@ fn advertised_support_does_not_bypass_store_admission() {
 
 #[test]
 fn unsupported_current_command_is_refused_before_store_entry() {
-    let valid = command(
-        1,
-        1,
-        AppCommand::UpdateProfile {
-            profile: parse_document(include_bytes!(
-                "../../tests/fixtures/contracts/household-profile.json"
-            ))
-            .unwrap(),
-            expected_profile_revision: Revision(1),
-        },
-    );
     let request: JobRequestV1 = parse_document(include_bytes!(
         "../../tests/fixtures/contracts/ruling004-current--job-request-product-observation.json"
     ))
@@ -220,7 +209,16 @@ fn unsupported_current_command_is_refused_before_store_entry() {
             scope: request.scope,
         },
     );
-    for valid in [valid, request_job] {
+    let publish_calendar = command(
+        3,
+        1,
+        AppCommand::RequestCalendarPublication {
+            order_id: OrderId("or_00000000000000000000000000000001".into()),
+            destination_id: CalendarDestinationId("cd_00000000000000000000000000000001".into()),
+            event_batch_digest: Digest("a".repeat(64)),
+        },
+    );
+    for valid in [request_job, publish_calendar] {
         let mut entered = false;
         let error = dispatch_with(&valid, |_| {
             entered = true;

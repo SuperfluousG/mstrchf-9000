@@ -214,7 +214,7 @@ fn budget(started: Clock) -> Result<(), DomainError> {
     }
 }
 
-fn database_size(pages: i64, page_size: i64) -> Result<u64, DomainError> {
+pub(super) fn database_size(pages: i64, page_size: i64) -> Result<u64, DomainError> {
     let pages = u64::try_from(pages).map_err(|_| limit())?;
     let page_size = u64::try_from(page_size).map_err(|_| limit())?;
     let bytes = pages.checked_mul(page_size).ok_or_else(limit)?;
@@ -225,7 +225,7 @@ fn database_size(pages: i64, page_size: i64) -> Result<u64, DomainError> {
 }
 
 type SchemaRows = Vec<(String, String, String)>;
-fn schema(c: &Connection) -> Result<SchemaRows, DomainError> {
+pub(super) fn schema(c: &Connection) -> Result<SchemaRows, DomainError> {
     let mut statement = c
         .prepare(
             "SELECT type,name,sql FROM sqlite_schema WHERE name NOT GLOB ?1 ORDER BY type,name",
@@ -248,7 +248,7 @@ fn schema(c: &Connection) -> Result<SchemaRows, DomainError> {
     Ok(result)
 }
 
-fn integrity(c: &Connection) -> Result<(), DomainError> {
+pub(super) fn integrity(c: &Connection) -> Result<(), DomainError> {
     let mut statement = c.prepare("PRAGMA integrity_check").map_err(storage)?;
     let mut rows = statement.query([]).map_err(storage)?;
     let first = rows.next().map_err(storage)?.ok_or_else(fail)?;
@@ -571,7 +571,7 @@ fn table_queries(catalogue: Catalogue) -> Vec<TableQuery> {
     tables
 }
 
-fn meta(c: &Connection) -> Result<(Counters, String), DomainError> {
+pub(super) fn meta(c: &Connection) -> Result<(Counters, String), DomainError> {
     let mut statement = c.prepare("SELECT singleton,lineage,snapshot_revision,settings_revision,history_revision,catalogue_revision FROM app_meta").map_err(storage)?;
     let mut rows = statement.query([]).map_err(storage)?;
     let row = rows.next().map_err(storage)?.ok_or_else(fail)?;

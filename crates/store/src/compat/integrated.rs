@@ -75,6 +75,8 @@ pub enum CommandDisposition {
 pub enum ReceiptSnapshot {
     B1RetainedV1(b1_v1::B1RetainedV1),
     B1Draft005(draft005::B1Draft005),
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    DevelopmentCurrent(Box<mstrchf_contracts::Snapshot>),
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct UiCommandOutcome {
@@ -86,6 +88,21 @@ pub struct UiCommandOutcome {
     response_digest: Digest,
 }
 impl UiCommandOutcome {
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    pub(crate) fn development(
+        command: Vec<u8>,
+        bytes: Vec<u8>,
+        snapshot: mstrchf_contracts::Snapshot,
+    ) -> Self {
+        Self {
+            disposition: CommandDisposition::Replayed,
+            response: ReceiptSnapshot::DevelopmentCurrent(Box::new(snapshot)),
+            command_digest: mstrchf_contracts::bytes_digest(&command),
+            response_digest: mstrchf_contracts::bytes_digest(&bytes),
+            command,
+            bytes,
+        }
+    }
     pub fn disposition(&self) -> CommandDisposition {
         self.disposition
     }

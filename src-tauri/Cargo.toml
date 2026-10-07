@@ -28,11 +28,15 @@ tauri-build = { version = "=2.6.3", features = [] }
 [[bin]]
 name = "mstrchf-9000"
 path = "src/main.rs"
+test = false
 required-features = ["native-shell"]
 
 [[bin]]
 name = "shell-types"
 path = "src/bin/shell-types.rs"
+test = false
 
 [dev-dependencies]
+chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+chrono-tz = "=0.10.4"
 rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled", "backup"] }

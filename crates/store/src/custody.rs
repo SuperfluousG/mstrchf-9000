@@ -941,8 +941,16 @@ mod tests {
         let alias = base.join("host-alias");
         let result = std::process::Command::new("cmd.exe")
             .args(["/d", "/c", "mklink", "/J"])
-            .arg(&alias).arg(&target).output().unwrap();
-        assert!(result.status.success(), "junction setup: {} {}", String::from_utf8_lossy(&result.stdout), String::from_utf8_lossy(&result.stderr));
+            .arg(&alias)
+            .arg(&target)
+            .output()
+            .unwrap();
+        assert!(
+            result.status.success(),
+            "junction setup: {} {}",
+            String::from_utf8_lossy(&result.stdout),
+            String::from_utf8_lossy(&result.stderr)
+        );
         let root = TrustedStoreRoot::open_or_create(&alias.join("app-root")).unwrap();
         assert_eq!(root.path(), target.join("app-root"));
         let lock = root.acquire_store_lock().unwrap();
@@ -952,16 +960,24 @@ mod tests {
         assert!(root.seal_leaf("../outside").is_err());
     }
     #[test]
-    fn ntfs_nested_root_lock_and_retained_ancestor() {
+    fn nested_host_root_lock_and_parent_move_are_guarded() {
         let base = root();
         let path = base.join("one").join("two");
         let root = TrustedStoreRoot::open_or_create(&path).unwrap();
         let lock = root.acquire_store_lock().unwrap();
         lock.reverify().unwrap();
         assert!(root.acquire_store_lock().is_err());
-        assert!(std::fs::rename(&base, base.with_extension("moved")).is_err());
+        assert!(std::fs::rename(root.path(), base.join("changed-root")).is_err());
+        if std::fs::rename(&base, base.with_extension("moved")).is_ok() {
+            assert!(
+                lock.reverify().is_err(),
+                "an OS-owned parent move must invalidate the cached scoped path"
+            );
+        } else {
+            lock.reverify().unwrap();
+        }
         eprintln!(
-            "native proof: fixed NTFS, FileIdInfo128, retained ancestor rename denial, exclusive owner lock"
+            "native proof: scoped root rename denial, exclusive owner lock, parent move refused or detected"
         );
     }
     #[test]

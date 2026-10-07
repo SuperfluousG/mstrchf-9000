@@ -89,6 +89,7 @@ a { color: inherit; }
 .meal-facts dd { margin: 0; font-size: var(--sys-type-label); overflow-wrap: anywhere; }
 .meal-notices { padding: var(--component-error-padding); padding-inline-start: var(--sys-padding); background: var(--component-notice-bg); border-inline-start: var(--sys-border-accent) solid var(--component-notice-border); font-size: var(--sys-type-label); }
 .meal-notices li + li { margin-top: var(--sys-gap-tight); }
+.meal-choices { display: grid; gap: var(--sys-gap); margin-top: var(--sys-gap); }
 .day-slips { grid-column: 1; grid-row: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: var(--component-slip-gap); list-style: none; margin: 0; padding: 0; }
 .day-slip {
   min-width: 0;

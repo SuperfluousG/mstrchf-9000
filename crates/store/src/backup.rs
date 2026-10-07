@@ -102,6 +102,8 @@ impl<'db> Maintenance<'db> {
             .map_err(storage)?;
         let target = match catalogue {
             Catalogue::B1 => 2,
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            Catalogue::Development => return Err(crate::records::unsupported()),
             #[cfg(test)]
             Catalogue::Fixture => 2,
             #[cfg(test)]
@@ -239,6 +241,8 @@ fn catalogue_digest(catalogue: Catalogue) -> Result<String, DomainError> {
         closure: &'static str,
     }
     let entries = match catalogue {
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        Catalogue::Development => return Err(crate::records::unsupported()),
         Catalogue::B1 => vec![
             Entry {
                 version: 1,
@@ -286,6 +290,8 @@ fn catalogue_digest(catalogue: Catalogue) -> Result<String, DomainError> {
         }],
     };
     let transform = match catalogue {
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        Catalogue::Development => return Err(crate::records::unsupported()),
         Catalogue::B1 => Some((
             bytes_digest(include_bytes!("upgrade.rs")),
             bytes_digest(include_bytes!("compat/b1_v1.rs")),

@@ -100,14 +100,17 @@ pub(crate) fn builder<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<
 
 #[tauri::command]
 async fn planner_development_board<R: Runtime>(
-    window: WebviewWindow<R>, state: State<'_, Arc<Store>>,
-) -> Result<mstrchf_contracts::Week, DomainError> {
+    window: WebviewWindow<R>,
+    state: State<'_, Arc<Store>>,
+) -> Result<mstrchf_store::development::DevelopmentBoard, DomainError> {
     check_window(&window)?;
     let store = Arc::clone(state.inner());
     tauri::async_runtime::spawn_blocking(move || {
         let snapshot = store.snapshot()?;
-        mstrchf_store::development::seed_week(&snapshot, &mstrchf_store::development::now()?)
-    }).await.map_err(|_| DomainError::new(ErrorCode::StorageFailure, "/shell/task"))?
+        mstrchf_store::development::board(&snapshot)
+    })
+    .await
+    .map_err(|_| DomainError::new(ErrorCode::StorageFailure, "/shell/task"))?
 }
 
 pub(crate) fn run() {
@@ -115,9 +118,10 @@ pub(crate) fn run() {
         .setup(|app| {
             // No env override, renderer path, or normal household root is reachable here.
             let root = development_root(&app.path().local_data_dir()?);
-            let store = Store::open(StoreConfig {
+            let store = Store::open_development(StoreConfig {
                 app_data_root: root,
             })?;
+            mstrchf_store::development::seed_runtime(&store)?;
             app.manage(Arc::new(store));
             Ok(())
         })

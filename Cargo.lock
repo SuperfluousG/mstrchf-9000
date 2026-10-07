@@ -2085,6 +2085,8 @@ dependencies = [
 name = "mstrchf-shell"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "chrono-tz",
  "mstrchf-contracts",
  "mstrchf-store",
  "rusqlite",

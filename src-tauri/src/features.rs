@@ -12,6 +12,8 @@ pub enum SupportedCommand {
     SaveHouseholdDraft,
     SetPrivacy,
     CancelJob,
+    UpdateProfile,
+    SaveWeek,
 }
 
 /// Shell-local support information, never command authority or domain eligibility.
@@ -20,7 +22,7 @@ pub struct ShellFeatures {
     #[ts(type = "1")]
     pub format_version: u8,
     pub data_mode: SyntheticDataMode,
-    pub supported_commands: [SupportedCommand; 3],
+    pub supported_commands: [SupportedCommand; 5],
     #[ts(type = "false")]
     pub production_runtime_enabled: bool,
 }
@@ -33,6 +35,8 @@ impl ShellFeatures {
                 SupportedCommand::SaveHouseholdDraft,
                 SupportedCommand::SetPrivacy,
                 SupportedCommand::CancelJob,
+                SupportedCommand::UpdateProfile,
+                SupportedCommand::SaveWeek,
             ],
             production_runtime_enabled: false,
         }
@@ -56,7 +60,7 @@ mod tests {
             serde_json::to_value(super::ShellFeatures::synthetic()).unwrap(),
             serde_json::json!({
                 "format_version": 1, "data_mode": "synthetic_development",
-                "supported_commands": ["save_household_draft", "set_privacy", "cancel_job"],
+                "supported_commands": ["save_household_draft", "set_privacy", "cancel_job", "update_profile", "save_week"],
                 "production_runtime_enabled": false
             })
         );

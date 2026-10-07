@@ -297,11 +297,13 @@ fn fresh_005_root_preserves_sibling_sentinels_and_exact_metadata() {
         std::fs::create_dir_all(p).unwrap();
         std::fs::write(p.join("sentinel"), b"unchanged").unwrap();
     }
-    let p = development_root(&base);
+    // Retained B1 metadata belongs to the literal 005 fixture, not the new M1 schema.
+    let p = base.join("MSTRCHF9000-Development/loop001-u1-contracts005");
     assert_eq!(
-        p,
-        base.join("MSTRCHF9000-Development/loop001-u1-contracts005")
+        development_root(&base),
+        base.join("MSTRCHF9000-Development/loop001-m1")
     );
+    assert_ne!(p, development_root(&base));
     let s = open(&p);
     let first = snapshot(&s);
     assert_eq!(first["snapshot_revision"], "1");

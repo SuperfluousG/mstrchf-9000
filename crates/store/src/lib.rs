@@ -33,6 +33,8 @@ pub mod draft005_receipt {
     };
 }
 
+#[cfg(all(debug_assertions, feature = "synthetic-development"))]
+mod current;
 mod database;
 mod migrate;
 mod receipts;
@@ -45,6 +47,9 @@ mod windows_fs;
 
 #[cfg(all(debug_assertions, feature = "synthetic-development"))]
 pub mod development;
+#[cfg(all(test, debug_assertions, feature = "synthetic-development"))]
+#[path = "../tests/development.rs"]
+mod development_tests;
 
 #[cfg(test)]
 #[path = "../tests/backup_upgrade_tests.rs"]
@@ -85,12 +90,32 @@ enum Request {
 }
 impl Store {
     pub fn open(config: StoreConfig) -> Result<Self, DomainError> {
+        Self::open_mode(config, false)
+    }
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    pub fn open_development(config: StoreConfig) -> Result<Self, DomainError> {
+        Self::open_mode(config, true)
+    }
+    fn open_mode(config: StoreConfig, development: bool) -> Result<Self, DomainError> {
         let (sender, receiver) = mpsc::sync_channel(64);
         let (ready, opened) = mpsc::sync_channel(1);
         let owner = std::thread::Builder::new()
             .name("mstrchf-store".into())
             .spawn(move || {
-                let mut db = match database::Database::open(&config.app_data_root) {
+                let opened = {
+                    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+                    if development {
+                        database::Database::open_development(&config.app_data_root)
+                    } else {
+                        database::Database::open(&config.app_data_root)
+                    }
+                    #[cfg(not(all(debug_assertions, feature = "synthetic-development")))]
+                    {
+                        let _ = development;
+                        database::Database::open(&config.app_data_root)
+                    }
+                };
+                let mut db = match opened {
                     Ok(db) => db,
                     Err(e) => {
                         let _ = ready.send(Err(e));
