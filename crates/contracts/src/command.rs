@@ -5,6 +5,7 @@ tagged! {pub enum SetupRestrictionEdit {
 }}
 
 tagged! {pub enum AppCommand {
+ OpenPlanningHorizon{},
  SaveHouseholdDraft{draft:HouseholdDraft,restriction_issue_edits:BoundedVec<SetupRestrictionEdit,0,64>},UpdateProfile{profile:HouseholdProfile,expected_profile_revision:Revision},SetPrivacy{policy:PrivacyPolicy,expected_policy_revision:Revision},SaveWeek{week:WeekEdit,expected_week_revision:Revision},ApplyPlanProposal{proposal:PlanProposal,context_stamp:ContextStamp},ConfirmEssentials{confirmations:BoundedVec<EssentialsConfirmation,1,4096>},ApprovePlan{week_id:WeekId,plan_revision:Revision,derived_digest:PayloadDigest},ConfirmOrder{confirmation:OrderConfirmation},RequestJob{action:Action,scope:ActionScope},CancelJob{job_id:JobId},RecordUserStop{worker:WorkerIdentity,qualification_id:EvidenceId,procedure_version:Revision,visible_status:VisibleTerminalStatus},RequestCalendarPublication{order_id:OrderId,destination_id:CalendarDestinationId,event_batch_digest:Digest}
 }}
 record! {pub struct AppCommandV1 {pub schema_version:SchemaVersion,pub command_id:CommandId,pub expected_snapshot_revision:Revision,pub command:AppCommand}}
@@ -17,6 +18,7 @@ pub enum CallerClass {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum CommandKind {
+    OpenPlanningHorizon,
     SaveHouseholdDraft,
     UpdateProfile,
     SetPrivacy,
@@ -31,7 +33,8 @@ pub enum CommandKind {
     RequestCalendarPublication,
 }
 impl CommandKind {
-    pub const ALL: [Self; 12] = [
+    pub const ALL: [Self; 13] = [
+        Self::OpenPlanningHorizon,
         Self::SaveHouseholdDraft,
         Self::UpdateProfile,
         Self::SetPrivacy,
@@ -49,6 +52,7 @@ impl CommandKind {
 impl AppCommand {
     pub fn kind(&self) -> CommandKind {
         match self {
+            Self::OpenPlanningHorizon { .. } => CommandKind::OpenPlanningHorizon,
             Self::SaveHouseholdDraft { .. } => CommandKind::SaveHouseholdDraft,
             Self::UpdateProfile { .. } => CommandKind::UpdateProfile,
             Self::SetPrivacy { .. } => CommandKind::SetPrivacy,
@@ -95,6 +99,7 @@ pub fn authorize_command(kind: CommandKind, caller: CallerClass) -> Result<(), D
         CallerClass::ExchangeImport => false,
         CallerClass::QualifiedAdapter => matches!(kind, CommandKind::ConfirmOrder),
         CallerClass::LocalUi => match kind {
+            CommandKind::OpenPlanningHorizon => true,
             CommandKind::SaveHouseholdDraft
             | CommandKind::UpdateProfile
             | CommandKind::SetPrivacy

@@ -353,7 +353,14 @@ pub fn validate_saved_plan(
     ))
 }
 pub fn board(s: &Snapshot) -> Result<DevelopmentBoard, DomainError> {
-    let week = seed_week(s, &now()?)?;
+    board_for(s,None,None)
+}
+pub fn board_for(s:&Snapshot,week_id:Option<&WeekId>,slot:Option<&SlotId>)->Result<DevelopmentBoard,DomainError>{
+    let week = match week_id {
+        Some(id)=>s.weeks.iter().find(|w|&w.range.week_id==id).cloned().ok_or_else(||DomainError::new(ErrorCode::ForeignReference,"/week_id"))?,
+        None=>seed_week(s,&now()?)?,
+    };
+    let slot=slot.cloned().unwrap_or_else(||week.cells[2].slot.clone());
     let profile = s.profile.0.clone().map_or_else(|| seed_profile(s), Ok)?;
     let c = context(s, &profile, &week, catalogue()?)?;
     let inputs = c
@@ -383,7 +390,7 @@ pub fn board(s: &Snapshot) -> Result<DevelopmentBoard, DomainError> {
         };
         if let ChoiceAssessment::Suitable(selection) = assess_choice(
             &c,
-            &week.cells[2].slot,
+            &slot,
             &choice,
             SelectionOrigin::Fixed,
             false,
@@ -391,11 +398,10 @@ pub fn board(s: &Snapshot) -> Result<DevelopmentBoard, DomainError> {
         )? {
             let mut candidate = week.clone();
             candidate.plan.selections = BoundedVec(vec![selection.clone()]);
-            validate_saved_plan(s, &profile, &candidate)?;
-            choices.push(DevelopmentChoice {
+            if validate_saved_plan(s, &profile, &candidate).is_ok(){choices.push(DevelopmentChoice {
                 title: r.title.0.clone(),
                 selection,
-            });
+            });}
         }
     }
     Ok(DevelopmentBoard { week, choices })

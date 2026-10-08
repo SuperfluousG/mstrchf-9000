@@ -9,6 +9,7 @@ pub enum SyntheticDataMode {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
 #[serde(rename_all = "snake_case")]
 pub enum SupportedCommand {
+    OpenPlanningHorizon,
     SaveHouseholdDraft,
     SetPrivacy,
     CancelJob,
@@ -22,7 +23,7 @@ pub struct ShellFeatures {
     #[ts(type = "1")]
     pub format_version: u8,
     pub data_mode: SyntheticDataMode,
-    pub supported_commands: [SupportedCommand; 5],
+    pub supported_commands: [SupportedCommand; 6],
     #[ts(type = "false")]
     pub production_runtime_enabled: bool,
 }
@@ -32,6 +33,7 @@ impl ShellFeatures {
             format_version: 1,
             data_mode: SyntheticDataMode::SyntheticDevelopment,
             supported_commands: [
+                SupportedCommand::OpenPlanningHorizon,
                 SupportedCommand::SaveHouseholdDraft,
                 SupportedCommand::SetPrivacy,
                 SupportedCommand::CancelJob,
@@ -60,7 +62,7 @@ mod tests {
             serde_json::to_value(super::ShellFeatures::synthetic()).unwrap(),
             serde_json::json!({
                 "format_version": 1, "data_mode": "synthetic_development",
-                "supported_commands": ["save_household_draft", "set_privacy", "cancel_job", "update_profile", "save_week"],
+                "supported_commands": ["open_planning_horizon", "save_household_draft", "set_privacy", "cancel_job", "update_profile", "save_week"],
                 "production_runtime_enabled": false
             })
         );

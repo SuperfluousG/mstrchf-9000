@@ -241,6 +241,24 @@
           "properties": {
             "data": {
               "additionalProperties": false,
+              "type": "object"
+            },
+            "kind": {
+              "const": "open_planning_horizon",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
               "properties": {
                 "draft": {
                   "$ref": "#/$defs/HouseholdDraft"

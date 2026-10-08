@@ -11,6 +11,8 @@ pub(crate) enum PreparedMutation {
     Profile(Box<HouseholdProfile>),
     #[cfg(all(debug_assertions, feature = "synthetic-development"))]
     Week(Box<Week>),
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    Horizon(Vec<Week>),
 }
 fn stale(path: &str) -> DomainError {
     DomainError::new(ErrorCode::ContextStale, path)
@@ -21,6 +23,31 @@ pub(crate) fn prepare(
     command: &AppCommand,
 ) -> Result<PreparedMutation, DomainError> {
     match command {
+        AppCommand::OpenPlanningHorizon {} => {
+            #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+            if crate::current::m2(c)? {
+                let p=s.profile.0.as_ref().ok_or_else(||DomainError::new(ErrorCode::MissingField,"/profile"))?;
+                let at=writer_time(c)?;
+                let today=mstrchf_core::weeks::local_planning_date(&at,&p.usual_week.zone)?;
+                let ids=[1,2,3,4].map(|n|WeekId(format!("wk_{n:032x}")));
+                let ranges=mstrchf_core::weeks::planning_horizon(&today,&p.usual_week.zone,&ids)?;
+                let retained=crate::current::all_weeks(c)?;
+                let mut weeks=Vec::new();
+                for mut range in ranges {
+                    if let Some(existing)=retained.iter().find(|w|w.range.monday==range.monday && w.range.zone==range.zone) {
+                        weeks.push(existing.clone());
+                    } else {
+                        range.week_id=WeekId(format!("wk_{}",crate::records::random_id()?));
+                        weeks.push(mstrchf_core::weeks::new_week(p,&s.privacy,&at,&range)?);
+                    }
+                }
+                if retained.len()+weeks.iter().filter(|w|!retained.iter().any(|old|old.range.week_id==w.range.week_id)).count()>4096 {
+                    return Err(DomainError::new(ErrorCode::LimitExceeded,"/weeks/archive"));
+                }
+                return Ok(PreparedMutation::Horizon(weeks));
+            }
+            Err(unsupported())
+        }
         AppCommand::SaveHouseholdDraft {
             draft,
             restriction_issue_edits,
@@ -88,14 +115,22 @@ pub(crate) fn prepare(
                     ));
                 }
                 mstrchf_core::household::validate_profile(profile, &s.privacy, &at)?;
-                // M1 establishes one fixed engineering input. Household editing belongs to M2.
-                if s.profile.0.is_some() || *profile != crate::development::seed_profile(s)? {
-                    return Err(unsupported());
+                let mut next=profile.clone();
+                if let Some(current)=&s.profile.0 {
+                    let retained=crate::current::all_weeks(c)?;
+                    for batch in retained.chunks(4) {
+                        mstrchf_core::household::prepare_profile_update(current,profile,*expected_profile_revision,&s.privacy,&at,batch)?;
+                    }
+                    if retained.is_empty() {mstrchf_core::household::prepare_profile_update(current,profile,*expected_profile_revision,&s.privacy,&at,&[])?;}
+                    next.revision=current.revision.checked_increment()?;
+                } else {
+                    if *expected_profile_revision!=Revision(1) || profile.revision!=Revision(1) {return Err(stale("/command/data/expected_profile_revision"));}
+                    if *profile!=crate::development::seed_profile(s)? {
+                        let bound=mstrchf_core::household::profile_from_draft(&s.household_draft,&s.privacy,&at)?;
+                        if next!=bound {return Err(DomainError::new(ErrorCode::IdentityMismatch,"/profile/draft"));}
+                    }
                 }
-                if *expected_profile_revision != Revision(1) {
-                    return Err(stale("/command/data/expected_profile_revision"));
-                }
-                return Ok(PreparedMutation::Profile(Box::new(profile.clone())));
+                return Ok(PreparedMutation::Profile(Box::new(next)));
             }
             let _ = (profile, expected_profile_revision);
             Err(unsupported())
@@ -113,18 +148,9 @@ pub(crate) fn prepare(
                     .as_ref()
                     .ok_or_else(|| DomainError::new(ErrorCode::MissingField, "/profile"))?;
                 let existing = s.weeks.iter().find(|w| w.range.week_id == week.week_id);
-                if existing.is_none() && !s.weeks.is_empty() {
-                    return Err(unsupported());
-                }
+                if existing.is_none() && !s.weeks.is_empty() {return Err(DomainError::new(ErrorCode::ForeignReference,"/week_id"));}
                 let seed = crate::development::seed_week(s, &at)?;
                 let current = existing.unwrap_or(&seed);
-                if week.defaults_snapshot != current.defaults_snapshot
-                    || week.cells != current.cells
-                    || week.day_enabled != current.day_enabled
-                    || week.meal_type_enabled != current.meal_type_enabled
-                {
-                    return Err(unsupported());
-                }
                 let mut next = mstrchf_core::availability::prepare_week_edit(
                     current,
                     week,
@@ -139,7 +165,9 @@ pub(crate) fn prepare(
                     }
                     next.plan = plan.clone();
                 }
-                crate::development::validate_saved_plan(s, profile, &next)?;
+                // Retain existing selections during availability/settings changes;
+                // newly supplied selections still require native food admission.
+                if next.plan!=current.plan {crate::development::validate_saved_plan(s, profile, &next)?;}
                 if existing.is_some() {
                     next.revision = next.revision.checked_increment()?;
                     next.plan.revision = next.plan.revision.checked_increment()?;
@@ -169,6 +197,14 @@ pub(crate) fn commit_mutation(
 ) -> Result<(), DomainError> {
     match mutation {
         #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+        PreparedMutation::Horizon(weeks) => {
+            c.execute("DELETE FROM active_weeks",[]).map_err(storage)?;
+            for (index,week) in weeks.into_iter().enumerate() {
+                c.execute("INSERT INTO weeks VALUES(?1,?2,?3) ON CONFLICT(week_id) DO NOTHING",params![week.range.week_id.0,week.revision.0.to_string(),canonical_bytes(&week)?]).map_err(storage)?;
+                c.execute("INSERT INTO active_weeks VALUES(?1,?2)",params![index as i64,week.range.week_id.0]).map_err(storage)?;
+            }
+        }
+        #[cfg(all(debug_assertions, feature = "synthetic-development"))]
         PreparedMutation::Profile(profile) => {
             c.execute(
                 "UPDATE household SET profile=?1,profile_revision=?2 WHERE singleton=1",
@@ -179,6 +215,7 @@ pub(crate) fn commit_mutation(
         #[cfg(all(debug_assertions, feature = "synthetic-development"))]
         PreparedMutation::Week(week) => {
             c.execute("INSERT INTO weeks(week_id,revision,body) VALUES(?1,?2,?3) ON CONFLICT(week_id) DO UPDATE SET revision=excluded.revision,body=excluded.body",params![week.range.week_id.0,week.revision.0.to_string(),canonical_bytes(&week)?]).map_err(storage)?;
+            if crate::current::m2(c)? {c.execute("INSERT INTO active_weeks(position,week_id) SELECT 0,?1 WHERE NOT EXISTS(SELECT 1 FROM active_weeks)",[&week.range.week_id.0]).map_err(storage)?;}
         }
         PreparedMutation::Draft(draft) => {
             c.execute(

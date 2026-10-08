@@ -40,7 +40,7 @@ export function decodeReceipt(value: unknown, binding: ReceiptBinding, prior?: S
     || row.format_version !== 1 || !['applied','replayed'].includes(row.disposition as string)
     || !['B1RetainedV1','B1Draft005','DevelopmentCurrent'].includes(row.receipt_profile as string)
     || !['current_json','canonical_receipt_json'].includes(row.request_encoding as string)
-    || !['save_household_draft','set_privacy','cancel_job','update_profile','save_week'].includes(row.command_kind as string)
+    || !['open_planning_horizon','save_household_draft','set_privacy','cancel_job','update_profile','save_week'].includes(row.command_kind as string)
     || typeof row.command_id !== 'string' || !/^cm_(?!0{32}$)[0-9a-f]{32}$/.test(row.command_id)
     || !householdId(row.household_id)) throw new Error('Invalid receipt shape');
   for (const key of ['request_digest','command_digest','response_digest']) {

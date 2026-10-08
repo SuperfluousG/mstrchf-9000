@@ -102,12 +102,14 @@ pub(crate) fn builder<R: Runtime>(builder: tauri::Builder<R>) -> tauri::Builder<
 async fn planner_development_board<R: Runtime>(
     window: WebviewWindow<R>,
     state: State<'_, Arc<Store>>,
+    week_id: Option<mstrchf_contracts::WeekId>,
+    slot: Option<mstrchf_contracts::SlotId>,
 ) -> Result<mstrchf_store::development::DevelopmentBoard, DomainError> {
     check_window(&window)?;
     let store = Arc::clone(state.inner());
     tauri::async_runtime::spawn_blocking(move || {
         let snapshot = store.snapshot()?;
-        mstrchf_store::development::board(&snapshot)
+        mstrchf_store::development::board_for(&snapshot,week_id.as_ref(),slot.as_ref())
     })
     .await
     .map_err(|_| DomainError::new(ErrorCode::StorageFailure, "/shell/task"))?

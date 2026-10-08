@@ -59,7 +59,7 @@ pub(crate) fn load(c: &Connection) -> Result<Snapshot, DomainError> {
         }
         jobs.push(job);
     }
-    let snapshot = Snapshot {
+    let mut snapshot = Snapshot {
         schema_version: SchemaVersion,
         snapshot_revision: parse_document(&canonical_bytes(&rev)?)?,
         privacy,
@@ -78,6 +78,8 @@ pub(crate) fn load(c: &Connection) -> Result<Snapshot, DomainError> {
         jobs: BoundedVec(jobs),
         conflicts: BoundedVec(vec![]),
     };
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    {snapshot.conflicts=BoundedVec(crate::current::conflicts(c,&snapshot)?);}
     let bytes = canonical_bytes(&snapshot)?;
     parse_document(&bytes)
 }

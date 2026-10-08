@@ -7,6 +7,12 @@ const SQL: &str = "CREATE TABLE m1_development(singleton INTEGER PRIMARY KEY CHE
 CREATE TABLE weeks(week_id TEXT PRIMARY KEY NOT NULL COLLATE BINARY, revision TEXT NOT NULL, body BLOB NOT NULL) STRICT;
 CREATE TABLE local_command_receipts(command_id TEXT PRIMARY KEY NOT NULL COLLATE BINARY, command_digest TEXT NOT NULL, command BLOB NOT NULL, response BLOB NOT NULL, response_digest TEXT NOT NULL, snapshot_revision TEXT NOT NULL) STRICT;";
 
+const SQL_M2: &str = "CREATE TABLE active_weeks(position INTEGER PRIMARY KEY CHECK(position>=0 AND position<4), week_id TEXT NOT NULL UNIQUE REFERENCES weeks(week_id)) STRICT;";
+
+pub(crate) fn m2(c: &Connection) -> Result<bool, DomainError> {
+    Ok(c.pragma_query_value::<i64,_>(None,"user_version",|r|r.get(0)).map_err(storage)? == 1002)
+}
+
 pub(crate) fn active(c: &Connection) -> Result<bool, DomainError> {
     c.query_row(
         "SELECT EXISTS(SELECT 1 FROM sqlite_schema WHERE type='table' AND name='m1_development')",
@@ -33,6 +39,17 @@ fn empty_source(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
 pub(crate) fn initialise(c: &mut Connection) -> Result<(), DomainError> {
     if active(c)? {
         audit(c)?;
+        if !m2(c)? {
+            let tx=c.transaction().map_err(storage)?;
+            let retained=all_weeks(&tx)?;
+            tx.execute_batch(SQL_M2).map_err(storage)?;
+            for (index,w) in retained.iter().enumerate() {
+                tx.execute("INSERT INTO active_weeks VALUES(?1,?2)",params![index as i64,w.range.week_id.0]).map_err(storage)?;
+            }
+            tx.pragma_update(None,"user_version",1002).map_err(storage)?;
+            audit(&tx)?;
+            tx.commit().map_err(storage)?;
+        }
         return Ok(());
     }
     let tx = c.transaction().map_err(storage)?;
@@ -43,23 +60,31 @@ pub(crate) fn initialise(c: &mut Connection) -> Result<(), DomainError> {
     tx.pragma_update(None, "user_version", 1001)
         .map_err(storage)?;
     audit(&tx)?;
-    tx.commit().map_err(storage)
+    tx.commit().map_err(storage)?;
+    initialise(c)
 }
 pub(crate) fn weeks(c: &Connection) -> Result<Vec<Week>, DomainError> {
+    let all=all_weeks(c)?;
+    if !m2(c)? {return Ok(all);}
+    let mut q=c.prepare("SELECT week_id FROM active_weeks ORDER BY position").map_err(storage)?;
+    let ids=q.query_map([],|r|r.get::<_,String>(0)).map_err(storage)?.collect::<Result<Vec<_>,_>>().map_err(storage)?;
+    ids.into_iter().map(|id|all.iter().find(|w|w.range.week_id.0==id).cloned().ok_or_else(||storage("missing active week"))).collect()
+}
+pub(crate) fn all_weeks(c: &Connection) -> Result<Vec<Week>, DomainError> {
     if !active(c)? {
         return Ok(vec![]);
     }
     let count: i64 = c
         .query_row("SELECT count(*) FROM weeks", [], |r| r.get(0))
         .map_err(storage)?;
-    if count > 1 {
+    if count > if m2(c)? {4096} else {1} {
         return Err(DomainError::new(
             ErrorCode::LimitExceeded,
             "/development/weeks",
         ));
     }
     let mut q = c
-        .prepare("SELECT week_id,revision,body FROM weeks ORDER BY week_id")
+        .prepare("SELECT week_id,revision,body FROM weeks ORDER BY json_extract(CAST(body AS TEXT),'$.range.monday'),week_id")
         .map_err(storage)?;
     let rows = q
         .query_map([], |r| {
@@ -80,6 +105,22 @@ pub(crate) fn weeks(c: &Connection) -> Result<Vec<Week>, DomainError> {
     })
     .collect()
 }
+
+pub(crate) fn conflicts(c:&Connection,s:&Snapshot)->Result<Vec<Conflict>,DomainError>{
+    if !m2(c)? {return Ok(vec![]);}
+    let Some(p)=&s.profile.0 else{return Ok(vec![]);};
+    let mut result=Vec::new();
+    for mut w in all_weeks(c)? {
+        let active=mstrchf_core::availability::eligible_slots(&w)?;
+        w.plan.selections.0.retain(|selection|active.contains(&selection.slot));
+        if w.plan.selections.is_empty() && w.plan.batch_links.is_empty(){continue;}
+        if let Err(error)=crate::development::validate_saved_plan(s,p,&w) {
+            if result.len()==100 {break;}
+            result.push(Conflict{code:error.code,week_ids:BoundedVec(vec![w.range.week_id.clone()]),slot_ids:BoundedVec(w.plan.selections.iter().map(|selection|selection.slot.clone()).collect()),recipe_refs:BoundedVec(w.plan.selections.iter().map(|selection|selection.recipe.clone()).collect()),evidence_ids:BoundedVec(vec![]),blocking:true});
+        }
+    }
+    Ok(result)
+}
 pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     if !active(c)? {
         return empty_source(c);
@@ -87,7 +128,7 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     let version: i64 = c
         .pragma_query_value(None, "user_version", |r| r.get(0))
         .map_err(storage)?;
-    if version != 1001 {
+    if version != 1001 && version != 1002 {
         return Err(DomainError::new(
             ErrorCode::UnsupportedVersion,
             "/development/schema",
@@ -107,6 +148,7 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
         .execute_batch(crate::migrate::SQL_002)
         .map_err(storage)?;
     expected.execute_batch(SQL).map_err(storage)?;
+    if version==1002 {expected.execute_batch(SQL_M2).map_err(storage)?;}
     let schema = audit::schema(c)?;
     if schema != audit::schema(&expected)? {
         return Err(storage("current schema differs"));
@@ -162,7 +204,7 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     }
     let mut contents = Vec::new();
     let mut counts = Vec::new();
-    for table in [
+    let mut tables=vec![
         "app_meta",
         "household",
         "schema_migrations",
@@ -174,7 +216,9 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
         "m1_development",
         "weeks",
         "local_command_receipts",
-    ] {
+    ];
+    if version==1002 {tables.push("active_weeks");}
+    for table in tables {
         let sql = format!("SELECT * FROM {table} ORDER BY 1"); // Closed identifiers above.
         let mut q = c.prepare(&sql).map_err(storage)?;
         let columns = q.column_count();
@@ -234,28 +278,37 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     if let Some(profile) = &state.profile.0 {
         let mut expected = crate::development::seed_profile(&state)?;
         expected.revision = profile.revision;
-        if *profile != expected {
+        if version==1001 && *profile != expected {
             return Err(storage("fixed synthetic profile"));
         }
         let evaluated_at = crate::development::now()?;
         mstrchf_core::household::validate_profile(profile, &state.privacy, &evaluated_at)?;
-        for w in &state.weeks.0 {
+        for w in &all_weeks(c)? {
             let fixed =
                 mstrchf_core::weeks::new_week(profile, &state.privacy, &evaluated_at, &w.range)?;
-            if w.defaults_snapshot != fixed.defaults_snapshot
+            if version==1001 && (w.defaults_snapshot != fixed.defaults_snapshot
                 || w.cells != fixed.cells
                 || w.day_enabled != fixed.day_enabled
-                || w.meal_type_enabled != fixed.meal_type_enabled
+                || w.meal_type_enabled != fixed.meal_type_enabled)
             {
                 return Err(storage("fixed synthetic week"));
             }
-            crate::development::validate_saved_plan(&state, profile, w)?;
+            if version==1001 {crate::development::validate_saved_plan(&state, profile, w)?;}
+            else {
+                let edit=WeekEdit{week_id:w.range.week_id.clone(),defaults_snapshot:w.defaults_snapshot.clone(),day_enabled:w.day_enabled.clone(),meal_type_enabled:w.meal_type_enabled.clone(),cells:w.cells.clone(),plan:Nullable(None)};
+                mstrchf_core::availability::prepare_week_edit(w,&edit,w.revision,profile,&evaluated_at)?;
+                for selection in &w.plan.selections.0 {
+                    if !crate::development::catalogue()?.iter().any(|r|crate::development::recipe_reference(r).as_ref()==Ok(&selection.recipe)) {
+                        return Err(storage("unavailable saved recipe revision"));
+                    }
+                }
+            }
         }
     } else if !state.weeks.is_empty() {
         return Err(storage("week without profile"));
     }
     Ok(audit::AuditedRows {
-        version: 1001,
+        version: version as u32,
         reader: "DevelopmentCurrent",
         closure: "synthetic-m1-no-assets",
         counters,
@@ -304,6 +357,7 @@ pub(crate) fn lookup(
     if !matches!(
         command.command.kind(),
         CommandKind::UpdateProfile
+            | CommandKind::OpenPlanningHorizon
             | CommandKind::SaveWeek
             | CommandKind::SetPrivacy
             | CommandKind::SaveHouseholdDraft

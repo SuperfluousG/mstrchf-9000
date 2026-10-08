@@ -124,6 +124,7 @@ mod projection {
         let expected = field(&v, "expected_snapshot_revision")?;
         let kind = field(v.get("command").ok_or_else(fail)?, "kind")?;
         let command_kind = match kind {
+            "open_planning_horizon" => SupportedCommand::OpenPlanningHorizon,
             "save_household_draft" => SupportedCommand::SaveHouseholdDraft,
             "set_privacy" => SupportedCommand::SetPrivacy,
             "cancel_job" => SupportedCommand::CancelJob,

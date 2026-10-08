@@ -26,6 +26,7 @@ fn dispatch_with(
     if !matches!(
         &command.command,
         mstrchf_contracts::AppCommand::SaveHouseholdDraft { .. }
+            | mstrchf_contracts::AppCommand::OpenPlanningHorizon { .. }
             | mstrchf_contracts::AppCommand::SetPrivacy { .. }
             | mstrchf_contracts::AppCommand::CancelJob { .. }
             | mstrchf_contracts::AppCommand::UpdateProfile { .. }

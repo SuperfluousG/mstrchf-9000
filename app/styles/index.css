@@ -90,6 +90,17 @@ a { color: inherit; }
 .meal-notices { padding: var(--component-error-padding); padding-inline-start: var(--sys-padding); background: var(--component-notice-bg); border-inline-start: var(--sys-border-accent) solid var(--component-notice-border); font-size: var(--sys-type-label); }
 .meal-notices li + li { margin-top: var(--sys-gap-tight); }
 .meal-choices { display: grid; gap: var(--sys-gap); margin-top: var(--sys-gap); }
+.planner-toolbar, .week-tabs, .meal-view-switch { display:flex; flex-wrap:wrap; gap:var(--sys-gap); margin:var(--sys-gap) auto; max-width:var(--component-board-width); }
+.week-tabs [aria-selected='true'], .meal-view-switch [aria-pressed='true'] { background:var(--sys-selection); border-color:var(--sys-selection-outline); font-weight:var(--sys-weight-strong); }
+.planner-panel { max-width:var(--component-board-width); margin:var(--sys-gap) auto; padding:var(--component-panel-padding); background:var(--component-panel-bg); border:var(--sys-border) solid var(--sys-outline); }
+.planner-panel header { display:flex; justify-content:space-between; align-items:center; gap:var(--sys-gap); }
+.planner-panel fieldset { margin-block:var(--sys-gap); border:var(--sys-border) solid var(--sys-outline); padding:var(--sys-gap); min-width:0; }
+.planner-panel label { display:inline-flex; align-items:center; gap:var(--sys-gap-tight); margin:var(--sys-gap-tight); min-height:var(--sys-target); }
+.planner-panel input, .planner-panel select, .planner-panel textarea { max-width:100%; min-height:var(--sys-target); background:var(--sys-surface-raised); color:var(--sys-on-surface); border:var(--sys-border) solid var(--sys-control-outline); border-radius:var(--sys-radius); padding:var(--sys-gap-tight); }
+.planner-panel input[type='checkbox'] { min-height:auto; accent-color:var(--sys-action); }
+.availability-scroll { overflow-x:auto; }
+.availability-scroll table { width:100%; border-collapse:collapse; }
+.availability-scroll th,.availability-scroll td { padding:var(--sys-gap-tight); border:var(--sys-border) solid var(--sys-outline); }
 .day-slips { grid-column: 1; grid-row: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: var(--component-slip-gap); list-style: none; margin: 0; padding: 0; }
 .day-slip {
   min-width: 0;

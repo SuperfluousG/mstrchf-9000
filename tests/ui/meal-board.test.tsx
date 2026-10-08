@@ -22,6 +22,28 @@ function choice(s:Snapshot):MealSelection {
  c.batch_use={kind:'new_batch',data:{batch_id:'ba_00000000000000000000000000000001' as BatchId,production_servings:{numerator:'1',denominator:'1'}}};
  return c;
 }
+
+it('navigates four saved weeks without creating renderer dates or changing another plan',async()=>{
+ const saved=initial();
+ saved.weeks=Array.from({length:4},(_,i)=>{const w=structuredClone(saved.weeks[0]!);w.range.week_id=`wk_${(i+1).toString(16).padStart(32,'0')}` as Week['range']['week_id'];w.range.monday=['2026-12-28','2027-01-04','2027-01-11','2027-01-18'][i]!;return w;});
+ const loadBoard=vi.fn(async()=>({week:saved.weeks[0]!,choices:[]}));
+ render(<PlannerProvider client={createPlannerClient(async()=>saved)}><DevelopmentMealBoard loadBoard={loadBoard}/></PlannerProvider>);
+ const tabs=await screen.findAllByRole('tab');
+ expect(tabs).toHaveLength(4);
+ expect(tabs[1]!.textContent).toContain('4 Jan');
+ fireEvent.click(tabs[1]!);
+ await waitFor(()=>expect(loadBoard.mock.calls.length).toBeGreaterThan(1));
+ expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
+});
+
+it('exposes breakfast lunch dinner and retained three-by-seven availability',async()=>{
+ const saved=initial();
+ render(<PlannerProvider client={createPlannerClient(async()=>saved)}><DevelopmentMealBoard loadBoard={async()=>({week:saved.weeks[0]!,choices:[]})}/></PlannerProvider>);
+ await screen.findByRole('button',{name:'Breakfast'});
+ expect(screen.getByRole('button',{name:'Lunch'})).toBeTruthy();
+ fireEvent.click(screen.getByRole('button',{name:'Availability'}));
+ expect(screen.getAllByRole('combobox',{name:/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday) (breakfast|lunch|dinner)$/})).toHaveLength(21);
+});
 it.each(['saved','write-failed','reload-failed'] as const)('uses current saved state and reports %s honestly',async outcome=>{
  let saved=initial();let reads=0;
  const selected=choice(saved);

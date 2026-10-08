@@ -46,8 +46,96 @@ fn seeded() -> (PathBuf, Store) {
     development::seed_runtime(&store).unwrap();
     (p, store)
 }
+
 #[test]
-fn development_only_admits_the_exact_synthetic_profile_seed() {
+fn m2_editable_profile_survives_reopen_without_replacing_saved_week() {
+    let (p, store) = seeded();
+    let before = store.snapshot().unwrap();
+    let mut profile = before.profile.0.clone().unwrap();
+    profile.preferences.spending_style = SpendingStyle::Flexible;
+    profile.preferences.higher_protein = true;
+    profile.diners[0].display_name = Nullable(Some(NameText("Engineering diner edit".into())));
+    store.dispatch_ui(AppCommandV1 {
+        schema_version: SchemaVersion, command_id: CommandId(format!("cm_{:032x}",8001)),
+        expected_snapshot_revision: before.snapshot_revision,
+        command: AppCommand::UpdateProfile { expected_profile_revision: profile.revision, profile },
+    }).unwrap();
+    let saved = store.snapshot().unwrap();
+    assert_eq!(saved.weeks, before.weeks);
+    assert_eq!(saved.profile.0.as_ref().unwrap().revision, Revision(2));
+    drop(store);
+    let reopened = Store::open_development(StoreConfig {app_data_root:p}).unwrap();
+    assert_eq!(reopened.snapshot().unwrap(), saved);
+}
+
+#[test]
+fn m2_four_native_weeks_survive_reopen_and_preserve_m1_selection() {
+    let (p, store) = seeded();
+    let before = store.snapshot().unwrap();
+    let choice = development::board(&before).unwrap().choices.remove(0).selection;
+    let mut week = before.weeks[0].clone();
+    week.plan.selections = BoundedVec(vec![choice.clone()]);
+    store.dispatch_ui(save_command(&before,week,8002)).unwrap();
+    let before = store.snapshot().unwrap();
+    let command:AppCommandV1 = parse_document(&serde_json::to_vec(&serde_json::json!({
+        "schema_version":1,"command_id":format!("cm_{:032x}",8003),
+        "expected_snapshot_revision":before.snapshot_revision,
+        "command":{"kind":"open_planning_horizon","data":{}}
+    })).unwrap()).unwrap();
+    store.dispatch_ui(command).unwrap();
+    let saved = store.snapshot().unwrap();
+    assert_eq!(saved.weeks.len(),4);
+    assert_eq!(saved.weeks[0],before.weeks[0]);
+    assert_eq!(saved.weeks[0].plan.selections[0],choice);
+    for pair in saved.weeks.windows(2) {
+        let a=chrono::NaiveDate::parse_from_str(&pair[0].range.monday.0,"%Y-%m-%d").unwrap();
+        let b=chrono::NaiveDate::parse_from_str(&pair[1].range.monday.0,"%Y-%m-%d").unwrap();
+        assert_eq!(b-a,chrono::Duration::days(7));
+        assert_ne!(pair[0].range.week_id,pair[1].range.week_id);
+    }
+    drop(store);
+    let reopened=Store::open_development(StoreConfig{app_data_root:p}).unwrap();
+    assert_eq!(reopened.snapshot().unwrap(),saved);
+}
+
+#[test]
+fn m2_restriction_change_preserves_meal_and_reports_current_conflict() {
+    let (_,store)=seeded();
+    let before=store.snapshot().unwrap();
+    let mut w=before.weeks[0].clone();
+    w.plan.selections=BoundedVec(vec![development::board(&before).unwrap().choices.remove(0).selection]);
+    store.dispatch_ui(save_command(&before,w,8010)).unwrap();
+    let before=store.snapshot().unwrap();
+    let mut p=before.profile.0.clone().unwrap();
+    p.diners[0].restrictions=RestrictionDeclaration::Confirmed{confirmed_at:development::now().unwrap(),requirements:BoundedVec(vec![HardRequirement::AllergenExclusion{code:AllergenCode::Milk}])};
+    store.dispatch_ui(AppCommandV1{schema_version:SchemaVersion,command_id:CommandId(format!("cm_{:032x}",8011)),expected_snapshot_revision:before.snapshot_revision,command:AppCommand::UpdateProfile{expected_profile_revision:p.revision,profile:p}}).unwrap();
+    let after=store.snapshot().unwrap();
+    assert_eq!(after.weeks,before.weeks);
+    assert!(!after.conflicts.is_empty(),"unknown milk evidence must remain a visible blocking conflict");
+    assert!(after.conflicts.iter().all(|c|c.blocking));
+}
+
+#[test]
+fn m2_overlapping_exclusions_retain_selection_and_restore_in_either_order(){
+    for day_first in [true,false]{
+        let (p,store)=seeded();let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();
+        w.plan.selections=BoundedVec(vec![development::board(&s).unwrap().choices.remove(0).selection]);
+        store.dispatch_ui(save_command(&s,w,8020)).unwrap();
+        let original=store.snapshot().unwrap().weeks[0].plan.selections.clone();
+        for (n,enabled) in [false,false,true,true].into_iter().enumerate(){
+            let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();
+            if (n%2==0)==day_first {w.day_enabled[0]=enabled;}else{w.meal_type_enabled.dinner=enabled;}
+            store.dispatch_ui(save_command(&s,w,8021+n as u64)).unwrap();
+            let s=store.snapshot().unwrap();assert_eq!(s.weeks[0].plan.selections,original);
+            let active=mstrchf_core::availability::eligible_slots(&s.weeks[0]).unwrap();
+            assert_eq!(active.contains(&original[0].slot),n==3);
+        }
+        let saved=store.snapshot().unwrap();drop(store);
+        assert_eq!(Store::open_development(StoreConfig{app_data_root:p}).unwrap().snapshot().unwrap(),saved);
+    }
+}
+#[test]
+fn m2_initial_profile_requires_a_bound_draft_then_allows_valid_settings_edits() {
     let p = root();
     let store = Store::open_development(StoreConfig { app_data_root: p }).unwrap();
     let before = store.snapshot().unwrap();
@@ -59,7 +147,7 @@ fn development_only_admits_the_exact_synthetic_profile_seed() {
     }
     assert_eq!(
         store.dispatch_ui(wrong).unwrap_err().code,
-        ErrorCode::UnsupportedCapability
+        ErrorCode::MissingField
     );
     assert_eq!(store.snapshot().unwrap(), before);
     store.dispatch_ui(profile_command(&before, 2)).unwrap();
@@ -70,12 +158,10 @@ fn development_only_admits_the_exact_synthetic_profile_seed() {
             confirmed_at: Instant("2026-01-01T12:00:00Z".into()),
         };
     }
-    assert_eq!(
-        store.dispatch_ui(wrong).unwrap_err().code,
-        ErrorCode::UnsupportedCapability
-    );
-    assert_eq!(store.snapshot().unwrap(), before);
-    assert_eq!(development::board(&before).unwrap().choices.len(), 2);
+    store.dispatch_ui(wrong).unwrap();
+    let saved=store.snapshot().unwrap();
+    assert_eq!(saved.profile.0.as_ref().unwrap().revision,Revision(2));
+    assert_eq!(development::board(&saved).unwrap().choices.len(),3);
 }
 #[test]
 fn development_reopen_refuses_an_altered_synthetic_profile() {
@@ -87,6 +173,8 @@ fn development_reopen_refuses_an_altered_synthetic_profile() {
     };
     let path = p.join("planner.sqlite");
     let c = rusqlite::Connection::open(&path).unwrap();
+    // Preserve the M1-only source admission rule before the additive M2 upgrade.
+    c.execute_batch("DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
     c.execute(
         "UPDATE household SET profile=?1",
         [canonical_bytes(&profile).unwrap()],
@@ -130,6 +218,7 @@ fn development_reopen_refuses_altered_week_structure_without_writing() {
         assert_eq!(parse_document::<Week>(&body).unwrap(), week);
         let path = p.join("planner.sqlite");
         let c = rusqlite::Connection::open(&path).unwrap();
+        c.execute_batch("DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
         c.execute("UPDATE weeks SET body=?1", [body]).unwrap();
         drop(c);
         let before = std::fs::read(&path).unwrap();
@@ -161,10 +250,10 @@ fn development_reopen_keeps_a_valid_saved_range_without_reseeding() {
     assert_eq!(store.snapshot().unwrap(), saved);
 }
 #[test]
-fn development_refuses_guest_cell_order_and_availability_edits() {
+fn m2_admits_scoped_guest_and_availability_edits_without_replacing_choices() {
     let (_, store) = seeded();
-    let before = store.snapshot().unwrap();
     for variant in 0..4 {
+        let before = store.snapshot().unwrap();
         let mut w = before.weeks[0].clone();
         match variant {
             0 => {
@@ -187,16 +276,11 @@ fn development_refuses_guest_cell_order_and_availability_edits() {
             2 => w.day_enabled[0] = false,
             _ => w.meal_type_enabled.dinner = false,
         }
-        assert_eq!(
-            store
-                .dispatch_ui(save_command(&before, w, 10 + variant))
-                .unwrap_err()
-                .code,
-            ErrorCode::UnsupportedCapability
-        );
-        assert_eq!(store.snapshot().unwrap(), before);
+        store.dispatch_ui(save_command(&before,w.clone(),10+variant)).unwrap();
+        let saved=store.snapshot().unwrap();
+        assert_eq!(saved.weeks[0].cells,w.cells);
+        assert_eq!(saved.weeks[0].plan.selections,before.weeks[0].plan.selections);
     }
-    assert_eq!(development::board(&before).unwrap().choices.len(), 2);
 }
 #[test]
 fn development_refuses_dangling_batch_links_even_with_no_selections() {
