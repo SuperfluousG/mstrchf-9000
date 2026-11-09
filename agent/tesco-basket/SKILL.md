@@ -50,6 +50,8 @@ Either the pasted "Order with Claude" instructions, or a `mstrchf-basket-<week>.
 - When an item is out of stock, broaden the search (`red peppers` → `peppers`). Make up the count with the nearest sensible alternative, e.g. a mixed 3-pack plus one single.
 - If `need` is far below the planned pack (curry paste: need about 90 g, planned 283 g jar), buy the smaller pack when one exists.
 - Baskets under £50 carry a £5 minimum-basket charge. Mention it if the total is close.
+- **Work in one tab, one item at a time.** On the second run (9 Nov 2026), searching in six tabs at once got the browser blocked by Tesco's security checks after about 20 items. Tesco then returned HTTP 403 "your browser has failed some security checks" on every page, including the basket.
+- **If Tesco shows a security, CAPTCHA or "failed some security checks" page, stop immediately.** Do not retry, switch tabs or try to get round it. Report what was added so far (unverified if the basket cannot be read) and the remaining items, and hand back to the user.
 
 ## Notes
 
