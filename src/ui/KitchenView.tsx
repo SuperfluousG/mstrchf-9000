@@ -6,6 +6,7 @@ import {
 } from '../domain/profile';
 import type { Allergen, Diet, MealType } from '../domain/types';
 import { saveProfile, toggleFavourite, toggleHidden } from '../state/actions';
+import { useFileStatus } from '../state/fileSync';
 import { exportBackup, importBackup, resetAll, setState, useAppState } from '../state/store';
 import { Heat, Stepper } from './bits';
 
@@ -144,6 +145,7 @@ export function Onboarding({ onDone }: { onDone: () => void }) {
 
 export function KitchenView({ openRecipe }: { openRecipe: (id: string) => void }) {
   const s = useAppState();
+  const fileStatus = useFileStatus();
   const file = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState('');
   if (!s.profile) return null;
@@ -179,7 +181,9 @@ export function KitchenView({ openRecipe }: { openRecipe: (id: string) => void }
 
       <section className="data">
         <h2>Your data</h2>
-        <p className="muted small">Everything is saved in this browser only. Download a backup to keep it safe or move it to another device.</p>
+        {fileStatus.kind === 'browser-only'
+          ? <p className="muted small">This copy of the app saves in this browser only. Download a backup to keep it safe or move it to another device.</p>
+          : <p className="muted small">Saved on this computer in <code>{'path' in fileStatus ? fileStatus.path : 'kitchen.json'}</code> as well as in this browser, so clearing the browser loses nothing. A dated copy is kept in the <code>backups</code> folder next to it each day (last 14 days).</p>}
         <div className="row-btns">
           <button type="button" className="btn ghost" onClick={() => {
             const url = URL.createObjectURL(new Blob([exportBackup()], { type: 'application/json' }));

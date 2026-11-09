@@ -3,6 +3,7 @@ import { EMPTY_FOCUS, type Focus, type Rating } from '../domain/planner';
 import type { Profile } from '../domain/profile';
 import type { MealType } from '../domain/types';
 import { weeksBetween } from '../domain/weeks';
+import { chooseState, readKitchenFile, scheduleSave } from './fileSync';
 
 export interface Pick {
   uid: string;
@@ -33,6 +34,8 @@ export interface AppState {
   ratings: Record<string, Rating>;
   /** Long-life ingredients the user keeps in stock (spices, rice, oils). */
   cupboard: string[];
+  /** When this state was last changed (ms since epoch); used to pick the newer of browser and file copies. */
+  savedAt?: number;
 }
 
 const KEY = 'mstrchf9000:v2';
@@ -57,15 +60,41 @@ const listeners = new Set<() => void>();
 export function getState(): AppState { return state; }
 export function getSaveError(): string | null { return saveError; }
 
-export function setState(update: (s: AppState) => AppState): void {
-  state = update(state);
+function writeBrowser(): void {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
     saveError = null;
   } catch (e) {
     saveError = e instanceof Error ? e.message : 'Could not save';
   }
+}
+
+export function setState(update: (s: AppState) => AppState, opts: { reset?: boolean } = {}): void {
+  state = { ...update(state), savedAt: Date.now() };
+  writeBrowser();
+  scheduleSave(state, state.savedAt!, opts.reset);
   listeners.forEach(l => l());
+}
+
+export function isEmptyState(s: AppState): boolean {
+  return !s.profile && Object.keys(s.weeks).length === 0;
+}
+
+/**
+ * Loads the kitchen file (if the local server provides one) and keeps whichever of the
+ * browser and file copies is newer. Call once before the first render.
+ */
+export async function hydrate(): Promise<void> {
+  const file = await readKitchenFile<AppState>();
+  if (!file) return;
+  const choice = chooseState<AppState>({ state, savedAt: state.savedAt ?? 0 }, file, isEmptyState);
+  if (choice.from === 'file' && choice.state) {
+    state = { ...EMPTY_STATE, ...choice.state };
+    writeBrowser();
+    listeners.forEach(l => l());
+  } else if (choice.pushToFile) {
+    scheduleSave(state, state.savedAt ?? Date.now());
+  }
 }
 
 function subscribe(l: () => void) { listeners.add(l); return () => listeners.delete(l); }
@@ -110,5 +139,5 @@ export function importBackup(text: string): void {
 }
 
 export function resetAll(): void {
-  setState(() => EMPTY_STATE);
+  setState(() => EMPTY_STATE, { reset: true });
 }

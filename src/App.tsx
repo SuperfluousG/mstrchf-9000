@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { MealType } from './domain/types';
 import { addWeeks, mondayOf, weekLabel } from './domain/weeks';
 import { planWeekAction } from './state/actions';
+import { useFileStatus } from './state/fileSync';
 import { getSaveError, newWeek, useAppState } from './state/store';
 import { KitchenView, Onboarding } from './ui/KitchenView';
 import { MenuView } from './ui/MenuView';
@@ -25,6 +26,27 @@ const NAV: { view: Route['view']; label: string }[] = [
   { view: 'shop', label: 'Shop' },
   { view: 'kitchen', label: 'Kitchen' },
 ];
+
+function fileName(path: string): string {
+  return path.split(/[\\/]/).pop() ?? path;
+}
+
+/** Small "Saved to kitchen.json" note so it's clear the plan is safe outside the browser. */
+function SaveStatus() {
+  const f = useFileStatus();
+  const text = f.kind === 'saved' ? `Saved to ${fileName(f.path)}`
+    : f.kind === 'saving' ? 'Saving…'
+    : f.kind === 'browser-only' ? 'Saved in this browser only'
+    : f.kind === 'error' ? 'Not saved to file' : '';
+  if (!text) return null;
+  return <span className={`save-status ${f.kind}`} role="status" title={'path' in f ? f.path : undefined}>{text}</span>;
+}
+
+function FileError() {
+  const f = useFileStatus();
+  if (f.kind !== 'error') return null;
+  return <p className="notice warn" role="alert">Your changes are saved in this browser but not to {f.path}: {f.message}</p>;
+}
 
 export function App() {
   const s = useAppState();
@@ -56,6 +78,7 @@ export function App() {
     <>
       <header className="topbar">
         <a className="wordmark" href="#/week" aria-label="MasterChef 9000, your week">MasterChef<sup>9000</sup></a>
+        <SaveStatus />
         <nav aria-label="Main">
           {NAV.map(n => (
             <a key={n.view} href={`#/${n.view}`} className={route.view === n.view ? 'on' : ''} aria-current={route.view === n.view ? 'page' : undefined}>{n.label}</a>
@@ -77,6 +100,7 @@ export function App() {
         </div>
       )}
       {saveError && <p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
+      <FileError />
       <main className="shell">
         {route.view === 'week' && <WeekView weekId={weekId} openRecipe={setRecipeId} go={go} />}
         {route.view === 'menu' && <MenuView key={route.meal ?? 'all'} weekId={weekId} initialMeal={route.meal} openRecipe={setRecipeId} />}

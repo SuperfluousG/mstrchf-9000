@@ -37,6 +37,12 @@ export function weekLabel(id: string): string {
     : `${s.getDate()} ${MONTHS[s.getMonth()]} – ${e.getDate()} ${MONTHS[e.getMonth()]}`;
 }
 
+/** Whole days from the week's Monday to `now` (negative before the week, over 6 after it). */
+export function daysSinceMonday(id: string, now = new Date()): number {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((today.getTime() - parse(id).getTime()) / DAY);
+}
+
 export function dayDate(id: string, day: number): string {
   const d = parse(id);
   d.setDate(d.getDate() + day);

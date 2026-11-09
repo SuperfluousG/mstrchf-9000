@@ -46,6 +46,13 @@ button, input, select { font: inherit; color: inherit; }
 }
 .wordmark { font: 400 1.9rem/1 var(--display); color: var(--ink); text-decoration: none; }
 .wordmark sup { font: 600 0.62rem var(--mono); color: var(--olive); margin-left: 3px; vertical-align: 1.1em; }
+.save-status { font: 0.74rem var(--mono); color: var(--ink-soft); margin-right: auto; display: inline-flex; align-items: center; gap: 6px; }
+.save-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
+.save-status.saving::before { background: var(--butter); }
+.save-status.browser-only::before { background: var(--line); box-shadow: inset 0 0 0 1px var(--ink-soft); }
+.save-status.error { color: var(--chilli); }
+.save-status.error::before { background: var(--chilli); }
+code { font: 0.85em var(--mono); background: var(--linen-deep); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
 nav { display: flex; gap: 4px; }
 nav a { text-decoration: none; color: var(--ink-soft); padding: 8px 14px; border-radius: 99px; font-weight: 600; }
 nav a:hover { color: var(--ink); }
@@ -111,6 +118,9 @@ select, input[type=search], input:not([type]), .craving {
 .mood-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 .craving { flex: 1 1 340px; font-size: 1.12rem; padding: 13px 16px; border-radius: 99px; }
 .focus-read { margin: 12px 0 0; color: var(--ink-soft); }
+.mood.ordered .display { margin-bottom: 10px; }
+.next-meal { font-size: 1.15rem; margin: 0 0 8px; }
+.next-meal .link { font-size: inherit; }
 .focus-read strong { color: var(--olive); }
 .empty-week { background: var(--paper); border-radius: var(--radius); padding: 24px; max-width: 70ch; margin-top: 20px; }
 

@@ -24,6 +24,7 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const [order, setOrder] = useState(false);
   const [copied, setCopied] = useState('');
   const people = s.profile?.people ?? 2;
+  const ordered = w.status === 'ordered';
   const meals = w.picks.map(p => catalogue.byId.get(p.recipeId)).filter((r): r is Recipe => !!r).map(r => r.title);
   const basket = buildBasket(list, weekId, people, meals);
 
@@ -55,11 +56,11 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
     <div className="shop">
       <header className="shop-head">
         <div>
-          <p className="eyebrow">Week of {weekLabel(weekId)} · {meals.length} meals for {people}</p>
-          <h1 className="display">Shopping list</h1>
+          <p className="eyebrow">Week of {weekLabel(weekId)} · {meals.length} meals for {people}{ordered && <span className="badge">Ordered</span>}</p>
+          <h1 className="display">{ordered ? 'What you ordered' : 'Shopping list'}</h1>
         </div>
         <div className="shop-total">
-          <span className="muted small">Estimated basket</span>
+          <span className="muted small">{ordered ? 'Estimated at planning' : 'Estimated basket'}</span>
           <strong className="mono big">{money(list.total)}</strong>
           {list.groupingSaving > 0.05 && <span className="saving small">sharing ingredients saves {money(list.groupingSaving)}</span>}
         </div>
@@ -82,10 +83,20 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
             </div>
           )}
           {pantry.length > 0 && <p className="muted small pantry">Assumed in the cupboard: {pantry.map(l => inlineName(l.ingredient.name)).join(', ')}.</p>}
-          <p className="muted small">Prices are rough supermarket estimates, not live Tesco prices. Tick “Got it” for anything you already have; long-life items stay ticked for future weeks.</p>
-          {list.total > 0 && list.total < 50 && <p className="small warn">Tesco adds a £5 charge to baskets under £50. Adding a meal or a few cupboard staples may cost less than the charge.</p>}
+          {!ordered && <p className="muted small">Prices are rough supermarket estimates, not live Tesco prices. Tick “Got it” for anything you already have; long-life items stay ticked for future weeks.</p>}
+          {!ordered && list.total > 0 && list.total < 50 && <p className="small warn">Tesco adds a £5 charge to baskets under £50. Adding a meal or a few cupboard staples may cost less than the charge.</p>}
         </section>
 
+        {ordered ? (
+          <aside className="order-panel">
+            <h2>Ordered</h2>
+            <p>This week's shopping is ordered. The list stays here so you can check the delivery against it.</p>
+            <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
+            <hr />
+            <button type="button" className="link" onClick={() => setStatus(weekId, 'draft')}>Mark as not ordered</button>
+            <p className="muted small">Do this to change meals or shop again for this week.</p>
+          </aside>
+        ) : (
         <aside className="order-panel">
           <h2>Get it delivered</h2>
           <p>Hand the basket to Claude with browser access and it fills your Tesco basket, then stops for you to choose a slot and pay.</p>
@@ -93,11 +104,10 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
           <button type="button" className="btn ghost wide" onClick={() => download(`mstrchf-basket-${weekId}.json`, JSON.stringify(basket, null, 2))}>Download basket file</button>
           <hr />
-          {w.status === 'ordered'
-            ? <><p className="small">Marked as ordered.</p><button type="button" className="link" onClick={() => setStatus(weekId, 'draft')}>Mark as not ordered</button></>
-            : <button type="button" className="btn ghost wide" onClick={() => setStatus(weekId, 'ordered')}>Mark as ordered</button>}
+          <button type="button" className="btn ghost wide" onClick={() => setStatus(weekId, 'ordered')}>Mark as ordered</button>
           {copied === 'failed' && <p className="warn small">Copying was blocked by the browser. Use Download instead.</p>}
         </aside>
+        )}
       </div>
 
       <Sheet open={order} onClose={() => setOrder(false)} label="Order with Claude">

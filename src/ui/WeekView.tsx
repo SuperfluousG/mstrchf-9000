@@ -4,7 +4,7 @@ import { amount, inlineName, money } from '../domain/format';
 import { alternatives, FOCUS_TAGS } from '../domain/planner';
 import { buildShoppingList } from '../domain/shopping';
 import type { MealType, Recipe } from '../domain/types';
-import { DAYS, dayDate, weekLabel } from '../domain/weeks';
+import { DAYS, dayDate, daysSinceMonday, weekLabel } from '../domain/weeks';
 import { contextFor, focusFor, moveDay, planWeekAction, removePick, setCraving, swapPick, toggleFocusTag, toggleLock } from '../state/actions';
 import { newWeek, useAppState, type Pick } from '../state/store';
 import { Meta } from './bits';
@@ -35,9 +35,11 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
   ];
   const meals = (['dinner', 'lunch', 'breakfast'] as MealType[]).filter(m => w.picks.some(p => p.meal === m) || (s.profile?.meals[m] ?? 0) > 0);
   const empty = w.picks.length === 0;
+  const ordered = w.status === 'ordered' && !empty;
 
   return (
     <div className="week">
+      {ordered ? <OrderedHeader weekId={weekId} picks={w.picks} openRecipe={openRecipe} /> : (
       <section className="mood" aria-labelledby="mood-h">
         <p className="eyebrow">Week of {weekLabel(weekId)}{w.status === 'ordered' && <span className="badge">Ordered</span>}</p>
         <h1 id="mood-h" className="display">What are you in the mood for?</h1>
@@ -61,6 +63,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
         </div>
         {focusWords.length > 0 && <p className="focus-read">Planning around <strong>{focusWords.join(' · ')}</strong></p>}
       </section>
+      )}
 
       {empty ? (
         <section className="empty-week">
@@ -76,7 +79,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
               <section key={meal} className="meal-group" aria-labelledby={`h-${meal}`}>
                 <div className="group-head">
                   <h2 id={`h-${meal}`}>{MEAL_TITLES[meal]}</h2>
-                  <button type="button" className="link" onClick={() => go(`menu/${meal}`)}>Add {meal === 'lunch' ? 'a lunch' : `a ${meal}`}</button>
+                  {!ordered && <button type="button" className="link" onClick={() => go(`menu/${meal}`)}>Add {meal === 'lunch' ? 'a lunch' : `a ${meal}`}</button>}
                 </div>
                 {picks.length === 0 && <p className="muted">No {MEAL_TITLES[meal].toLowerCase()} this week.</p>}
                 <ol className={`cards ${meal}`}>
@@ -97,12 +100,12 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
                           </label>
                           <h3><button type="button" className="title-btn" onClick={() => openRecipe(r.id)}>{r.title}</button></h3>
                           <Meta recipe={r} />
-                          {p.reasons[0] && <p className="why">{p.reasons[0]}</p>}
-                          <div className="card-actions">
+                          {!ordered && p.reasons[0] && <p className="why">{p.reasons[0]}</p>}
+                          {!ordered && <div className="card-actions">
                             <button type="button" className="btn small" onClick={() => setSwapFor(p)}>Swap</button>
                             <button type="button" className={`btn small ghost${p.locked ? ' active' : ''}`} aria-pressed={!!p.locked} onClick={() => toggleLock(weekId, p.uid)} title="Kept meals stay when you re-plan">{p.locked ? 'Kept' : 'Keep'}</button>
                             <button type="button" className="btn small ghost" onClick={() => removePick(weekId, p.uid)} aria-label={`Remove ${r.title}`}>Remove</button>
-                          </div>
+                          </div>}
                         </div>
                       </li>
                     );
@@ -111,13 +114,13 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
               </section>
             );
           })}
-          <div className="summary-bar" role="region" aria-label="Week summary">
+          {!ordered && <div className="summary-bar" role="region" aria-label="Week summary">
             <span><strong>{w.picks.length}</strong> meals</span>
             <span className="n-items"><strong>{list.lines.filter(l => l.status === 'buy').length}</strong> things to buy</span>
             <span>est. <strong>{money(list.total)}</strong></span>
             {list.groupingSaving > 0.05 && <span className="saving">sharing saves {money(list.groupingSaving)}</span>}
             <button type="button" className="btn primary" onClick={() => go('shop')}>Shopping list</button>
-          </div>
+          </div>}
         </>
       )}
 
@@ -125,6 +128,31 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
         {swapFor && <SwapList weekId={weekId} pick={swapFor} onPick={(id, reasons) => { swapPick(weekId, swapFor.uid, id, reasons); setSwapFor(null); }} onBrowse={() => { setSwapFor(null); go(`menu/${swapFor.meal}`); }} openRecipe={openRecipe} />}
       </Sheet>
     </div>
+  );
+}
+
+const MEAL_ORDER: MealType[] = ['breakfast', 'lunch', 'dinner'];
+
+/** Shown instead of the planning controls once the shopping is ordered. */
+function OrderedHeader({ weekId, picks, openRecipe }: { weekId: string; picks: Pick[]; openRecipe: (id: string) => void }) {
+  const today = daysSinceMonday(weekId);
+  const sorted = [...picks].sort((a, b) => a.day - b.day || MEAL_ORDER.indexOf(a.meal) - MEAL_ORDER.indexOf(b.meal));
+  const next = sorted.find(p => p.day >= today);
+  const recipe = next ? catalogue.byId.get(next.recipeId) : undefined;
+  const first = sorted[0];
+  return (
+    <section className="mood ordered" aria-labelledby="mood-h">
+      <p className="eyebrow">Week of {weekLabel(weekId)}<span className="badge">Ordered</span></p>
+      <h1 id="mood-h" className="display">Your week is ordered.</h1>
+      {next && recipe ? (
+        <p className="next-meal">
+          <span className="muted">{first && first.day > today ? 'First up' : 'Next up'}:</span>{' '}
+          {next.day === today ? 'today' : next.day === today + 1 ? 'tomorrow' : `${DAYS[next.day]} ${dayDate(weekId, next.day)}`}, {next.meal} —{' '}
+          <button type="button" className="link" onClick={() => openRecipe(recipe.id)}>{recipe.title}</button>
+        </p>
+      ) : <p className="next-meal muted">All of this week's meals are behind you.</p>}
+      <p className="muted small">Moving a meal to another day is fine; the shopping already covers it. To change meals, mark the week as not ordered on the Shop page.</p>
+    </section>
   );
 }
 

@@ -1,8 +1,22 @@
-import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { kitchenFileMiddleware } from './server/kitchenFile';
+
+// Where kitchen.json lives. Defaults to ./data (git-ignored); set MSTRCHF_DATA_DIR to move it.
+const dataDir = process.env.MSTRCHF_DATA_DIR ?? fileURLToPath(new URL('./data', import.meta.url));
+
+function kitchenFile(): Plugin {
+  const middleware = kitchenFileMiddleware(dataDir);
+  return {
+    name: 'mstrchf-kitchen-file',
+    configureServer(server) { server.middlewares.use(middleware); },
+    configurePreviewServer(server) { server.middlewares.use(middleware); },
+  };
+}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), kitchenFile()],
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],
