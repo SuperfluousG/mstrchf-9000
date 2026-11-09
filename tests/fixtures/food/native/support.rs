@@ -254,12 +254,17 @@ record!(ComponentReheatCount {
     planned_reheats,
     evidence_ids
 });
+record!(PortableColdMethod {
+    packing_prep_id,
+    service_prep_id
+});
 record!(MethodPhases {
     recipe,
     kind,
     prep_ids,
     direct_reuse_counts,
-    evidence_ids
+    evidence_ids,
+    portable_cold
 });
 record!(FoodEvidence {
     catalogue_revision,

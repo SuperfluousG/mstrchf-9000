@@ -17,6 +17,115 @@ fn parse<T: serde::de::DeserializeOwned + ValidateShape>(v: &Value) -> Result<T,
     parse_document(&serde_json::to_vec(v).unwrap())
 }
 
+fn reuse_only_recipe() -> Value {
+    let mut value = fixture("wire-addition-only-recipe");
+    value["ingredients"] = json!([]);
+    for component in value["components"].as_array_mut().unwrap() {
+        component["ingredient_ids"] = json!([]);
+    }
+    for step in value["steps"].as_array_mut().unwrap() {
+        step["ingredient_ids"] = json!([]);
+    }
+    for prep in value["prep"].as_array_mut().unwrap() {
+        prep["ingredient_ids"] = json!([]);
+    }
+    value
+}
+
+#[test]
+fn exact_original_component_can_be_served_without_new_ingredients() {
+    let value = reuse_only_recipe();
+    let recipe: RecipeRevision = parse(&value).unwrap();
+    assert!(recipe.ingredients.is_empty());
+    assert_eq!(recipe.reused_inputs.len(), 1);
+    assert_eq!(serde_json::to_value(&recipe).unwrap(), value);
+    assert_eq!(
+        parse::<RecipeRevision>(&serde_json::to_value(recipe).unwrap())
+            .unwrap()
+            .reused_inputs,
+        parse::<RecipeRevision>(&fixture("wire-addition-only-recipe"))
+            .unwrap()
+            .reused_inputs
+    );
+}
+
+#[test]
+fn empty_recipe_cannot_claim_a_shopping_capability() {
+    let mut value = reuse_only_recipe();
+    value["reused_inputs"] = json!([]);
+    let error = parse::<RecipeRevision>(&value).unwrap_err();
+    assert!(
+        error
+            .issues
+            .iter()
+            .any(|issue| issue.path == "/ingredients")
+    );
+    value["capabilities"]["shopping"] = json!(false);
+    assert!(parse::<RecipeRevision>(&value).is_err());
+}
+
+#[test]
+fn reuse_only_recipe_preserves_original_input_reference_guards() {
+    for mutation in 0..5 {
+        let mut value = reuse_only_recipe();
+        match mutation {
+            0 => {
+                value["reused_inputs"][0]["source_recipe"] = json!({
+                "recipe_id":value["recipe_id"], "revision":value["revision"], "digest":"a".repeat(64)})
+            }
+            1 => {
+                value["reused_inputs"][0]["quantity_per_recipe_yield"]["amount"]["numerator"] =
+                    json!("0")
+            }
+            2 => value["reused_inputs"][0]["step_ids"] = json!([256]),
+            3 => value["reused_inputs"][0]["evidence_ids"] = json!([]),
+            _ => value["reused_inputs"][0]["source_recipe"]["digest"] = json!("unbound"),
+        }
+        assert!(
+            parse::<RecipeRevision>(&value).is_err(),
+            "mutation {mutation}"
+        );
+    }
+}
+
+#[test]
+fn generated_recipe_schema_requires_fresh_or_reused_food_and_keeps_closed_fields() {
+    let schema = mstrchf_contracts::schema::schema_for::<RecipeRevision>();
+    let validator = jsonschema::validator_for(&schema).unwrap();
+    assert!(validator.is_valid(&fixture("recipe")));
+    assert!(validator.is_valid(&fixture("wire-addition-only-recipe")));
+    let mut value = reuse_only_recipe();
+    assert!(validator.is_valid(&value));
+    value["reused_inputs"] = json!([]);
+    assert!(!validator.is_valid(&value));
+    assert!(parse::<RecipeRevision>(&value).is_err());
+    for mutation in 0..4 {
+        let mut invalid = reuse_only_recipe();
+        match mutation {
+            0 => invalid["extra_field"] = json!(true),
+            1 => {
+                invalid.as_object_mut().unwrap().remove("title");
+            }
+            2 => {
+                invalid["reused_inputs"][0]["quantity_per_recipe_yield"]["amount"]["numerator"] =
+                    json!("0")
+            }
+            _ => invalid["ingredients"] = Value::Null,
+        }
+        assert!(!validator.is_valid(&invalid), "schema mutation {mutation}");
+        assert!(
+            parse::<RecipeRevision>(&invalid).is_err(),
+            "native mutation {mutation}"
+        );
+    }
+    // The same type-local constraint is present when a recipe is nested.
+    let context_schema = mstrchf_contracts::schema::schema_for::<PlanningContext>();
+    assert_eq!(
+        context_schema["$defs"]["RecipeRevision"]["allOf"],
+        schema["allOf"]
+    );
+}
+
 #[test]
 fn complete_independent_wire_vectors_decode_and_hash() {
     let source: RecipeRevision = parse(&fixture("recipe")).unwrap();

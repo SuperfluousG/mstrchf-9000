@@ -27,6 +27,12 @@ function freeze<T>(value: T): T {
   }
   return value;
 }
+const backupCapacityMessages: Record<string,string> = {
+  '/device_backup/product_notes': 'Product history has reached the kitchen backup limit. Your edit is retained. Export your backup, then archive retained product notes under Saved data and recovery before trying again.',
+  '/device_backup/source_reads': 'Product read history has reached the kitchen backup limit. Your edit is retained. Export your backup, then archive product read history from Product comparisons before trying again.',
+  '/device_backup/semantic_reviews': 'Interpretation history has reached the kitchen backup limit. Your edit is retained. Export your backup, then archive interpretation history under Saved data and recovery before trying again.',
+  '/device_backup/basket_reads': 'Basket read history has reached the kitchen backup limit. Your edit is retained. Export your backup, then archive basket read history from Basket review before trying again.',
+};
 export function newCommandId(): CommandId {
   const bytes = new Uint8Array(16);
   do { crypto.getRandomValues(bytes); } while (bytes.every(byte => byte === 0));
@@ -42,14 +48,21 @@ function definiteRefusal(value: unknown, kind: AppCommand['kind']): boolean {
   if (!issue || Object.keys(issue).sort().join(',') !== 'code,entity_id,path' || issue.entity_id !== null
     || issue.code !== error.code || typeof issue.path !== 'string') return false;
   if (error.code === 'authority_denied') return issue.path === '/command';
+  // Browser owner rejects only these exact local size paths before committing.
+  // The original kitchen is unchanged; each journal has fenced local archival.
+  if (error.code === 'invalid_value' && Object.hasOwn(backupCapacityMessages,issue.path)) return true;
   if (error.code === 'unsupported_capability') return issue.path === '/command'
-    && !['save_household_draft','set_privacy','cancel_job'].includes(kind);
+    && !['save_household_draft','set_privacy','set_privacy_preserving_essentials','cancel_job'].includes(kind);
   if (error.code === 'context_stale') return issue.path === '/expected_snapshot_revision'
     || (kind === 'save_household_draft' && ['/revision','/connections/privacy'].includes(issue.path))
-    || (kind === 'set_privacy' && issue.path === '/command/data/policy/revision')
+    || (['set_privacy','set_privacy_preserving_essentials'].includes(kind) && issue.path === '/command/data/policy/revision')
     || (kind === 'save_week' && ['/revision','/command/data/week/plan/revision'].includes(issue.path))
     || (kind === 'update_profile' && ['/revision','/command/data/expected_profile_revision'].includes(issue.path));
   if (kind === 'save_week' && error.code === 'domain_conflict') return issue.path === '/command/data/week/plan/restrictions';
+  // The pure suggestion planner refuses this exact path before commit_week.
+  if (kind === 'suggest_meals' && error.code === 'domain_conflict') return issue.path === '/suggest/no_fit_or_permission';
+  if (kind === 'suggest_planning_horizon' && error.code === 'domain_conflict') return issue.path === '/suggest_horizon/no_fit_or_permission';
+  if (kind === 'suggest_planning_horizon' && error.code === 'scope_violation') return ['/suggest_horizon/mode','/suggest_horizon/ordered_week_ids'].includes(issue.path);
   return (kind === 'save_household_draft' && error.code === 'invalid_value' && issue.path === '/command/data/restriction_issue_edits')
     || (kind === 'cancel_job' && error.code === 'missing_reference' && issue.path === '/command/data/job_id');
 }
@@ -132,7 +145,10 @@ export class PlannerSession {
       } catch (error) {
         if (!recovery && definiteRefusal(error, envelope.command.kind)) {
           this.pendingHousehold = null;
-          this.set({ pending: null, disposition: 'refused', message: 'The action was refused. Your edit is retained; compare it with current saved state before trying again.' });
+          this.set({ pending: null, disposition: 'refused', message: backupCapacityMessages[(error as DomainError).issues[0]?.path]
+            ?? (['/suggest/no_fit_or_permission','/suggest_horizon/no_fit_or_permission'].includes((error as DomainError).issues[0]?.path)
+              ? 'No checked suggestion fits the selected meals and repeat permission. The saved meals are unchanged. Review the saved kitchen, then check availability, diners and recipe scope, or explicitly allow repeats for a new request.'
+            : 'The action was refused. Your edit is retained; compare it with current saved state before trying again.') });
           await this.refresh();
         } else {
           this.set({ disposition: 'unknown', message: recovery

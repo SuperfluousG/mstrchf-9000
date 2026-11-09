@@ -379,12 +379,12 @@
       "minItems": 0,
       "type": "array"
     },
-    "Array_RecipeIngredient_1_256": {
+    "Array_RecipeIngredient_0_256": {
       "items": {
         "$ref": "#/$defs/RecipeIngredient"
       },
       "maxItems": 256,
-      "minItems": 1,
+      "minItems": 0,
       "type": "array"
     },
     "Array_RecipeRef_0_512": {
@@ -503,6 +503,17 @@
       },
       "maxItems": 256,
       "minItems": 0,
+      "type": "array"
+    },
+    "Array_uint16_1_128": {
+      "items": {
+        "format": "uint16",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 128,
+      "minItems": 1,
       "type": "array"
     },
     "Array_uint16_1_256": {
@@ -768,6 +779,45 @@
             },
             "kind": {
               "const": "cooked",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "data"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "data": {
+              "additionalProperties": false,
+              "properties": {
+                "completion_prep_id": {
+                  "format": "uint16",
+                  "maximum": 65535,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "cooling_prep_ids": {
+                  "$ref": "#/$defs/Array_uint16_1_128"
+                },
+                "max_cooling_seconds": {
+                  "format": "uint32",
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "completion_prep_id",
+                "cooling_prep_ids",
+                "max_cooling_seconds"
+              ],
+              "type": "object"
+            },
+            "kind": {
+              "const": "cooked_with_cooling",
               "type": "string"
             }
           },
@@ -1630,6 +1680,9 @@
         "origin": {
           "$ref": "#/$defs/SelectionOrigin"
         },
+        "portable_cold": {
+          "$ref": "#/$defs/PortableColdJourney"
+        },
         "recipe": {
           "$ref": "#/$defs/RecipeRef"
         },
@@ -2194,6 +2247,47 @@
       ],
       "type": "object"
     },
+    "PortableChillingDeclaration": {
+      "additionalProperties": false,
+      "description": "Version 1 records the owner's plan to maintain/check 0–5°C through\nservice, with an insulated bag/frozen packs and a fridge on arrival.\nIt is never evidence of actual temperatures or earlier safe handling.",
+      "properties": {
+        "confirmed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "journey_digest": {
+          "$ref": "#/$defs/PayloadDigest"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        }
+      },
+      "required": [
+        "schema_version",
+        "confirmed_at",
+        "journey_digest"
+      ],
+      "type": "object"
+    },
+    "PortableColdJourney": {
+      "additionalProperties": false,
+      "properties": {
+        "declaration": {
+          "$ref": "#/$defs/PortableChillingDeclaration"
+        },
+        "depart_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "packing_complete_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "packing_complete_at",
+        "depart_at",
+        "declaration"
+      ],
+      "type": "object"
+    },
     "PortionPreference": {
       "additionalProperties": false,
       "properties": {
@@ -2611,6 +2705,26 @@
     },
     "RecipeRevision": {
       "additionalProperties": false,
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "ingredients": {
+                  "minItems": 1
+                }
+              }
+            },
+            {
+              "properties": {
+                "reused_inputs": {
+                  "minItems": 1
+                }
+              }
+            }
+          ]
+        }
+      ],
       "properties": {
         "active_minutes": {
           "format": "uint16",
@@ -2643,7 +2757,7 @@
           "$ref": "#/$defs/Nullable_ImageRecord"
         },
         "ingredients": {
-          "$ref": "#/$defs/Array_RecipeIngredient_1_256"
+          "$ref": "#/$defs/Array_RecipeIngredient_0_256"
         },
         "meal_types": {
           "$ref": "#/$defs/Array_MealType_1_3"

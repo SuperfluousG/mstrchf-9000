@@ -446,6 +446,9 @@ fn validate_selection_membership(
 ) -> Result<(), DomainError> {
     let recipe_allowed =
         |recipe: &RecipeRef| allowed.contains(recipe) && stamp.recipe_refs.contains(recipe);
+    if selection.portable_cold.is_some() {
+        return Err(refuse(ErrorCode::AuthorityDenied, &format!("{path}/portable_cold")));
+    }
     if !recipe_allowed(&selection.recipe) {
         return Err(refuse(
             ErrorCode::MissingReference,

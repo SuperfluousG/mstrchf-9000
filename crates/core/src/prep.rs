@@ -247,6 +247,12 @@ fn topological(edges: &[Vec<usize>]) -> Result<Vec<usize>, DomainError> {
     Ok(out)
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum PortableRole {
+    Packing,
+    Service,
+}
+
 #[derive(Clone)]
 struct Phase {
     key: PhaseKey,
@@ -259,6 +265,7 @@ struct Phase {
     duration: i64,
     deadline: i64,
     dependencies: Vec<PhaseKey>,
+    portable_role: Option<PortableRole>,
 }
 fn phase_index(phases: &[Phase], key: &PhaseKey) -> Result<usize, DomainError> {
     phases
@@ -266,6 +273,25 @@ fn phase_index(phases: &[Phase], key: &PhaseKey) -> Result<usize, DomainError> {
         .position(|p| &p.key == key)
         .ok_or_else(|| error(ErrorCode::ForeignReference, "/phase"))
 }
+
+// Production quantities are independent of the diners served at this occasion.
+// Cooling handles the original remainder, including unallocated portions.
+fn retains_portions(occurrence: &Occurrence) -> Result<bool, DomainError> {
+    let mut consumed = Rational::new(0, 1)?;
+    for serving in &occurrence.servings {
+        consumed = consumed.checked_add(&serving.servings.0)?;
+    }
+    let produced = occurrence.scaled.produced_servings.0;
+    let left = u128::from(consumed.numerator.0) * u128::from(produced.denominator.0);
+    let right = u128::from(produced.numerator.0) * u128::from(consumed.denominator.0);
+    ensure(
+        left <= right,
+        ErrorCode::DomainConflict,
+        "/cooling/production_servings",
+    )?;
+    Ok(left < right)
+}
+
 fn model(
     plan: &WeekPlan,
     context: &PlanningContext,
@@ -301,8 +327,86 @@ fn model(
             ErrorCode::NoncanonicalValue,
             "/methods/prep_ids",
         )?;
+        // The admitted method names the only two portable roles. The owner
+        // declaration is validated by occurrences; this model enforces the
+        // actual task clocks, including saved-output revalidation.
+        let portable = method
+            .portable_cold
+            .as_ref()
+            .map(|method| {
+                let journey = plan
+                    .selections
+                    .iter()
+                    .find(|selection| {
+                        selection.slot == occurrence.key.slot
+                            && selection.recipe == occurrence.key.recipe
+                            && occurrence.key.extra_id.is_none()
+                    })
+                    .and_then(|selection| selection.portable_cold.as_ref())
+                    .ok_or_else(|| error(ErrorCode::MissingReference, "/portable_cold/journey"))?;
+                let packing_complete = seconds(&journey.packing_complete_at)?;
+                let departure = seconds(&journey.depart_at)?;
+                ensure(
+                    packing_complete <= departure && departure <= seconds(&occurrence.use_at)?,
+                    ErrorCode::DomainConflict,
+                    "/portable_cold/chronology",
+                )?;
+                Ok::<_, DomainError>((method, journey, packing_complete, departure))
+            })
+            .transpose()?;
+        let mut cooling_limits = BTreeMap::new();
+        for component in recipe.components.iter() {
+            if let Some(ComponentProductionSpec::CookedWithCooling {
+                completion_prep_id,
+                cooling_prep_ids,
+                max_cooling_seconds,
+            }) = &component.production.0
+            {
+                let completion = recipe.prep.iter()
+                    .find(|phase| phase.prep_id == *completion_prep_id)
+                    .ok_or_else(|| error(ErrorCode::MissingReference, "/cooling/completion"))?;
+                let endpoint = i64::from(completion.earliest_offset_seconds)
+                    + i64::from(completion.elapsed_minutes) * 60;
+                for &id in cooling_prep_ids.iter() {
+                    ensure(
+                        cooling_limits.insert(id, (endpoint, *max_cooling_seconds)).is_none(),
+                        ErrorCode::DomainConflict,
+                        "/cooling/roles",
+                    )?;
+                }
+                if method.kind == MethodKind::Production {
+                    ensure(
+                        occurrence.is_source && occurrence.key.extra_id.is_none(),
+                        ErrorCode::UnsupportedCapability,
+                        "/cooling/source",
+                    )?;
+                    ensure(
+                        method.prep_ids.contains(completion_prep_id)
+                            && cooling_prep_ids
+                                .iter()
+                                .all(|id| method.prep_ids.contains(id)),
+                        ErrorCode::MissingReference,
+                        "/cooling/method",
+                    )?;
+                } else {
+                    ensure(
+                        cooling_prep_ids
+                            .iter()
+                            .all(|id| !method.prep_ids.contains(id)),
+                        ErrorCode::DomainConflict,
+                        "/cooling/reuse_method",
+                    )?;
+                }
+            }
+        }
+        let needs_cooling =
+            !cooling_limits.is_empty() && occurrence.is_source && retains_portions(occurrence)?;
         let mut steps = BTreeSet::new();
         for &id in &method.prep_ids {
+            let cooling_limit = cooling_limits.get(&id).copied();
+            if cooling_limit.is_some() && !needs_cooling {
+                continue;
+            }
             let spec = recipe
                 .prep
                 .iter()
@@ -394,17 +498,48 @@ fn model(
                 ErrorCode::DomainConflict,
                 "/equipment",
             )?;
-            let deadline = seconds(&occurrence.use_at)?;
+            let meal_time = seconds(&occurrence.use_at)?;
+            let portable_role = match portable {
+                Some((method, ..)) if id == method.packing_prep_id => Some(PortableRole::Packing),
+                Some((method, ..)) if id == method.service_prep_id => Some(PortableRole::Service),
+                Some(_) => {
+                    return Err(error(ErrorCode::ForeignReference, "/portable_cold/phase").into());
+                }
+                None => None,
+            };
+            let anchor = match (portable_role, portable) {
+                (Some(PortableRole::Packing), Some((_, _, packing_complete, _))) => {
+                    packing_complete
+                }
+                _ => meal_time,
+            };
+            let deadline = match cooling_limit {
+                Some((endpoint, limit)) => add(add(meal_time, endpoint)?, i64::from(limit))?,
+                None => anchor,
+            };
             let duration = i64::from(spec.elapsed_minutes) * 60;
-            let earliest = add(deadline, i64::from(spec.earliest_offset_seconds))?;
-            let latest = add(deadline, i64::from(spec.latest_offset_seconds))?
-                .min(add(deadline, -duration)?);
+            let mut earliest = add(anchor, i64::from(spec.earliest_offset_seconds))?;
+            let mut latest =
+                add(anchor, i64::from(spec.latest_offset_seconds))?.min(add(deadline, -duration)?);
+            if let Some((_, _, packing_complete, departure)) = portable {
+                match portable_role {
+                    Some(PortableRole::Packing) => {
+                        // A saved completion time names the actual endpoint,
+                        // rather than silently allowing earlier packing.
+                        let start = add(packing_complete, -duration)?;
+                        earliest = earliest.max(start);
+                        latest = latest.min(start);
+                    }
+                    Some(PortableRole::Service) => earliest = earliest.max(departure),
+                    None => {}
+                }
+            }
             ensure(
                 earliest <= latest,
                 ErrorCode::DomainConflict,
                 "/prep/window",
             )?;
-            let dependencies = spec
+            let mut dependencies: Vec<_> = spec
                 .depends_on
                 .iter()
                 .map(|id| PhaseKey {
@@ -412,6 +547,12 @@ fn model(
                     prep_id: *id,
                 })
                 .collect();
+            if let (Some(PortableRole::Service), Some((method, ..))) = (portable_role, portable) {
+                dependencies.push(PhaseKey {
+                    occurrence: occurrence.key.clone(),
+                    prep_id: method.packing_prep_id,
+                });
+            }
             // Only ingredients produced locally require new raw ingredients here.
             // Reused source ingredients retain their original procurement/use graph.
             let ingredient_ids = occurrence
@@ -420,6 +561,7 @@ fn model(
                 .iter()
                 .filter(|ingredient| {
                     occurrence.kind == MethodKind::Production
+                        && cooling_limit.is_none()
                         && (spec.ingredient_ids.contains(&ingredient.ingredient_id)
                             || recipe.steps.iter().any(|step| {
                                 spec.step_ids.contains(&step.step_id)
@@ -437,12 +579,18 @@ fn model(
                 spec,
                 ingredient_ids,
                 equipment: resources.equipment.clone(),
-                zone: occurrence.use_at.zone.clone(),
+                zone: match (portable_role, portable) {
+                    (Some(PortableRole::Packing), Some((_, journey, ..))) => {
+                        journey.packing_complete_at.zone.clone()
+                    }
+                    _ => occurrence.use_at.zone.clone(),
+                },
                 earliest,
                 latest,
                 duration,
                 deadline,
                 dependencies,
+                portable_role,
             });
             ensure(phases.len() <= 4096, ErrorCode::LimitExceeded, "/phases")?;
         }
@@ -482,19 +630,51 @@ fn model(
                 .iter()
                 .find(|c| &c.component_id == component)
                 .ok_or_else(|| error(ErrorCode::ForeignReference, "/component"))?;
-            let prep_id = match &spec.production.0 {
-                Some(ComponentProductionSpec::Cooked { completion_prep_id }) => *completion_prep_id,
+            if matches!(
+                spec.production.0,
+                Some(ComponentProductionSpec::CookedWithCooling { .. })
+            ) {
+                let consuming = crate::food::reviewed(context, evidence, &occurrence.key.recipe)?;
+                ensure(
+                    phases
+                        .iter()
+                        .filter(|p| p.key.occurrence == occurrence.key)
+                        .any(|phase| {
+                            consuming.recipe().steps.iter().any(|step| {
+                                phase.spec.step_ids.contains(&step.step_id)
+                                    && step.component_ids.contains(component)
+                            })
+                        }),
+                    ErrorCode::MissingReference,
+                    "/cooling/consuming_phase",
+                )?;
+            }
+            let prep_ids = match &spec.production.0 {
+                Some(ComponentProductionSpec::Cooked { completion_prep_id }) => {
+                    vec![*completion_prep_id]
+                }
+                Some(ComponentProductionSpec::CookedWithCooling {
+                    completion_prep_id,
+                    cooling_prep_ids,
+                    ..
+                }) => {
+                    let mut ids = vec![*completion_prep_id];
+                    ids.extend(cooling_prep_ids.iter().copied());
+                    ids
+                }
                 Some(ComponentProductionSpec::Unheated {
                     first_handling_prep_id,
-                }) => *first_handling_prep_id,
+                }) => vec![*first_handling_prep_id],
                 None => return Err(error(ErrorCode::UnsupportedCapability, "/production").into()),
             };
-            let key = PhaseKey {
-                occurrence: source.key.clone(),
-                prep_id,
-            };
-            phase_index(&phases, &key)?;
-            deps.push((component.clone(), key));
+            for prep_id in prep_ids {
+                let key = PhaseKey {
+                    occurrence: source.key.clone(),
+                    prep_id,
+                };
+                phase_index(&phases, &key)?;
+                deps.push((component.clone(), key));
+            }
         }
         let consuming = crate::food::reviewed(context, evidence, &occurrence.key.recipe)?;
         for phase in phases
@@ -504,10 +684,11 @@ fn model(
             phase.dependencies.extend(
                 deps.iter()
                     .filter(|(component, _)| {
-                        consuming.recipe().steps.iter().any(|step| {
-                            phase.spec.step_ids.contains(&step.step_id)
-                                && step.component_ids.contains(component)
-                        })
+                        phase.portable_role == Some(PortableRole::Packing)
+                            || consuming.recipe().steps.iter().any(|step| {
+                                phase.spec.step_ids.contains(&step.step_id)
+                                    && step.component_ids.contains(component)
+                            })
                     })
                     .map(|(_, key)| key.clone()),
             );
@@ -612,6 +793,20 @@ fn layout_keys(
     sessions.sort_by(session_cmp);
     for key in &sessions {
         let routes: Vec<_> = layout.routes.iter().filter(|r| &r.session == key).collect();
+        let mut packing = false;
+        let mut service = false;
+        for route in &routes {
+            match phases[phase_index(phases, &route.phase)?].portable_role {
+                Some(PortableRole::Packing) => packing = true,
+                Some(PortableRole::Service) => service = true,
+                None => {}
+            }
+        }
+        ensure(
+            !(packing && service),
+            ErrorCode::DomainConflict,
+            "/portable_cold/sessions",
+        )?;
         ensure(
             routes.len() <= 256,
             ErrorCode::LimitExceeded,
@@ -664,6 +859,13 @@ fn layout_keys(
             .iter()
             .filter(|r| r.session == attachment.session)
         {
+            ensure(
+                phases[phase_index(phases, &r.phase)?]
+                    .portable_role
+                    .is_none(),
+                ErrorCode::UnsupportedCapability,
+                "/portable_cold/attachments",
+            )?;
             ensure(
                 phases[phase_index(phases, &r.phase)?]
                     .spec

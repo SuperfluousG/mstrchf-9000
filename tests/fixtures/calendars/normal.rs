@@ -216,6 +216,7 @@ pub fn normal() -> Fixture {
         evidence.recipes.push(basis);
         evidence.classes.push(classes);
         evidence.methods.push(MethodPhases {
+            portable_cold: None,
             recipe: refs[index].clone(),
             kind: MethodKind::Production,
             prep_ids: recipe.prep.iter().map(|p| p.prep_id).collect(),

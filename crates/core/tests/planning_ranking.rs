@@ -120,6 +120,7 @@ fn choices(v: &Value) -> Vec<ChoiceSpec> {
         .unwrap()
         .iter()
         .map(|c| ChoiceSpec {
+            portable_cold: None,
             recipe: field!(c, "recipe"),
             batch_use: field!(c, "batch_use"),
             meal_overrides: field!(c, "meal_overrides"),
@@ -405,6 +406,60 @@ fn base() -> (
 }
 fn rehash(ev: &mut RankingEvidence) {
     ev.digest = canonical_digest(&ranking_evidence_material(ev).unwrap()).unwrap();
+}
+
+#[test]
+fn repeated_context_never_reuses_time_dependent_ranking_admission() {
+    let (ctx,i,ch,e,at)=base();assert!(run(&ctx,&i,&ch,&e,&at).is_ok());
+    let earlier=Instant("2020-01-01T00:00:00Z".into());
+    let (cold_context,cold_intent,cold_choices,cold_evidence,cold_time)=(ctx.clone(),i.clone(),ch.clone(),e.clone(),earlier.clone());
+    let cold=std::thread::spawn(move||run(&cold_context,&cold_intent,&cold_choices,&cold_evidence,&cold_time)).join().unwrap();
+    assert!(cold.is_err());assert_eq!(run(&ctx,&i,&ch,&e,&earlier),cold);
+    assert!(run(&ctx,&i,&ch,&e,&at).is_ok());
+}
+
+#[test]
+fn local_repeat_authorisation_preserves_full_pool_scoring_and_strict_intent() {
+    let (ctx, mut i, ch, mut e, at) = base();
+    i.slots.truncate(1);
+    i.repeat_permissions.clear();
+    e.purchase.clear();
+    rehash(&mut e);
+    let (bases, classes) = admitted(&load("inputs/admission.json"));
+    let reviewed: Vec<_> = ctx.recipes.iter().map(|r| {
+        let n = bases.iter().position(|b| b.recipe.recipe_id == r.recipe_id && b.recipe.revision == r.revision).unwrap();
+        assess_revision(r, &bases[n], &classes[n]).unwrap()
+    }).collect();
+    let ordinary = rank_candidates(&ctx,&i.slots[0],&i,&ch,&reviewed,&e,&at).unwrap();
+    let explicit = rank_candidates_with_repeat_authorisation(&ctx,&i.slots[0],&i,&ch,&reviewed,&e,&at).unwrap();
+    assert!(explicit.ranked.len() > 1);
+    assert_ne!(ordinary.pool_digest, explicit.pool_digest);
+    for (old,new) in ordinary.ranked.iter().zip(&explicit.ranked) {
+        assert_eq!(old.selection.recipe,new.selection.recipe);
+        assert_eq!(old.score,new.score);
+        assert_eq!(old.metrics,new.metrics);
+        assert!(new.selection.repeat_authorised);
+    }
+    let mut reversed=ch.clone();reversed.reverse();
+    let reordered=rank_candidates_with_repeat_authorisation(&ctx,&i.slots[0],&i,&reversed,&reviewed,&e,&at).unwrap();
+    assert_eq!(explicit.ranked,reordered.ranked);assert_eq!(explicit.pool_digest,reordered.pool_digest);
+    let mut invalid=i.clone();invalid.repeat_permissions=ch[..2].iter().map(|c|RepeatPermission{slot:i.slots[0].clone(),recipe:c.recipe.clone()}).collect();
+    assert_eq!(rank_candidates(&ctx,&i.slots[0],&invalid,&ch,&reviewed,&e,&at).unwrap_err(),DomainError::new(ErrorCode::InvalidValue,"/intent/repeat_permissions"));
+    assert!(rank_candidates_with_repeat_authorisation(&ctx,&i.slots[0],&invalid,&ch,&reviewed,&e,&at).is_err());
+}
+
+#[test]
+fn local_repeat_authorisation_consults_ordered_dinner_and_never_overrides_hidden_food() {
+    let (mut ctx, mut i, ch, mut e, at)=base();i.slots.truncate(1);i.repeat_permissions.clear();e.purchase.clear();rehash(&mut e);
+    let a:MealSelection=serde_json::from_value(load("canonical/choice-A2.jcs.json")).unwrap();
+    let mut slot=i.slots[0].clone();slot.week_id=WeekId("wk_00000000000000000000000000000099".into());slot.date=LocalDate("2026-12-21".into());
+    ctx.history.ordered.0.push(OrderedHistory{selection:SelectionHistory{week_id:slot.week_id.clone(),slot,recipe:a.recipe.clone(),servings:a.servings.clone(),extras:a.extras.clone(),repeat_authorised:false,selected_at:Instant("2026-12-13T12:00:00Z".into())},order_id:OrderId("or_00000000000000000000000000000099".into()),ordered_at:Instant("2026-12-13T13:00:00Z".into())});
+    let normal=run(&ctx,&i,&ch,&e,&at).unwrap();assert!(normal.withheld.iter().any(|w|w.selection.recipe==a.recipe&&w.reason==WithheldReason::RepeatNeedsPermission));
+    let (bases,classes)=admitted(&load("inputs/admission.json"));
+    let reviewed:Vec<_>=ctx.recipes.iter().map(|r|{let n=bases.iter().position(|b|b.recipe.recipe_id==r.recipe_id&&b.recipe.revision==r.revision).unwrap();assess_revision(r,&bases[n],&classes[n]).unwrap()}).collect();
+    let explicit=rank_candidates_with_repeat_authorisation(&ctx,&i.slots[0],&i,&ch,&reviewed,&e,&at).unwrap();assert!(explicit.ranked.iter().any(|r|r.selection.recipe==a.recipe&&r.selection.repeat_authorised));
+    ctx.history.hidden_recipe_ids.0.push(a.recipe.recipe_id.clone());
+    let hidden=rank_candidates_with_repeat_authorisation(&ctx,&i.slots[0],&i,&ch,&reviewed,&e,&at).unwrap();assert!(!hidden.ranked.iter().any(|r|r.selection.recipe==a.recipe));assert!(hidden.withheld.iter().any(|w|w.selection.recipe==a.recipe&&w.reason==WithheldReason::Hidden));
 }
 #[test]
 fn malformed_native_evidence_cannot_be_downgraded_to_unknown() {

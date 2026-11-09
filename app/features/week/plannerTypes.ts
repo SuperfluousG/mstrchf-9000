@@ -1,0 +1,15 @@
+import type {Week,WeekPlan,MealSelection,RecipeRevision,RecipeCandidate,RecipeRef,ReviewedRecipePacketRef,PlanningHistory,DerivedPlan,EssentialsConfirmation,Revision,MealOverrides,PersonRef,SlotId,Resolution,ErrorCode,OrderId,ZonedMoment,Instant} from '../../generated/contracts';
+import type {ShoppingListProjection} from './shoppingList';
+export type LibraryEntry={recipe:RecipeRevision|null;candidate:RecipeCandidate|null;reference:RecipeRef;admission:string;notices:string[]};
+export const isReviewedEntry=(entry:LibraryEntry|null|undefined):entry is LibraryEntry&{admission:'personal_reviewed'|'public_reviewed'}=>entry?.admission==='personal_reviewed'||entry?.admission==='public_reviewed';
+export type ReviewedSource={packet:ReviewedRecipePacketRef;recipe:RecipeRevision;scope:string[];admitted:boolean};
+export type EffectiveDelivery={order_id:OrderId;delivery_start:ZonedMoment;delivery_end:ZonedMoment;correction_count:number;last_corrected_at:Instant|null};
+export type SelectedRecipeQuantities={slot:SlotId;recipe_reference:RecipeRef;source_servings:{numerator:string;denominator:string};requested_servings:{numerator:string;denominator:string};multiplier:{numerator:string;denominator:string};ingredients:{ingredient_id:string;name:string;quantity:RecipeRevision['ingredients'][number]['quantity']}[];equipment:RecipeRevision['equipment']};
+export type PlannerDetails={library:LibraryEntry[];history:PlanningHistory;derived:DerivedPlan|null;essentials:EssentialsConfirmation[];food_error:ErrorCode|null;catalogue_revision?:Revision;reviewed_sources?:ReviewedSource[];shopping_list?:ShoppingListProjection|null;test_kitchen?:boolean;effective_delivery?:EffectiveDelivery|null;selected_recipe_quantities?:SelectedRecipeQuantities|null};
+export type DevelopmentBoard={week:Week;choices:{title:string;selection:MealSelection;plan?:WeekPlan|null}[];snapshot_revision?:Revision;details?:PlannerDetails|null};
+export type PortableColdOptions={packingCompleteTime:string;packingResolution:Resolution;departTime:string;departureResolution:Resolution;chillingConfirmed:boolean};
+export type BoardOptions={mealOverrides?:MealOverrides;extraRecipients?:PersonRef[];makeExtra?:boolean;leftoverSource?:SlotId|null;eatByTime?:string|null;timeResolution?:Resolution;portableCold?:PortableColdOptions};
+export const human=(s:string)=>s.replaceAll('_',' ');
+export const rational=(r:{numerator:string;denominator:string})=>r.denominator==='1'?r.numerator:`${r.numerator}/${r.denominator}`;
+export const slotKey=(s:SlotId)=>`${s.week_id}/${s.date}/${s.meal_type}`;
+export const titleFor=(details:PlannerDetails|undefined|null,ref:RecipeRef)=>details?.library.find(v=>v.reference.recipe_id===ref.recipe_id&&v.reference.revision===ref.revision&&v.reference.digest===ref.digest)?.recipe?.title??'Saved recipe';

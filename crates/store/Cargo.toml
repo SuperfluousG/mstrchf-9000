@@ -18,6 +18,7 @@ path = "tests/api_boundary.rs"
 
 [dependencies]
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+chrono-tz = "=0.10.4"
 mstrchf-contracts = { path = "../contracts" }
 mstrchf-core = { path = "../core" }
 rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled", "backup"] }

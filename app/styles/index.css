@@ -25,7 +25,7 @@ button:active:not(:disabled) { background: var(--sys-pressed); }
 button:disabled { background: var(--sys-disabled); color: var(--sys-on-surface-muted); cursor: not-allowed; }
 .button-primary { background: var(--component-primary-bg); color: var(--component-primary-text); border-color: var(--component-primary-bg); font-weight: var(--sys-weight-strong); }
 .button-primary:hover:not(:disabled), .button-primary:active:not(:disabled) { color: var(--sys-on-surface); }
-:where(button, input, select, textarea, a, [tabindex]):focus-visible {
+:where(button, input, select, textarea, a, summary, [tabindex]):focus-visible {
   outline: var(--sys-focus-width) solid var(--component-focus-ring);
   outline-offset: var(--sys-focus-offset);
 }
@@ -98,6 +98,18 @@ a { color: inherit; }
 .planner-panel label { display:inline-flex; align-items:center; gap:var(--sys-gap-tight); margin:var(--sys-gap-tight); min-height:var(--sys-target); }
 .planner-panel input, .planner-panel select, .planner-panel textarea { max-width:100%; min-height:var(--sys-target); background:var(--sys-surface-raised); color:var(--sys-on-surface); border:var(--sys-border) solid var(--sys-control-outline); border-radius:var(--sys-radius); padding:var(--sys-gap-tight); }
 .planner-panel input[type='checkbox'] { min-height:auto; accent-color:var(--sys-action); }
+.meal-controls fieldset { border:var(--sys-border) solid var(--sys-outline); padding:var(--sys-gap); margin-block:var(--sys-gap); min-width:0; }
+.meal-controls label, .meal-choices details > label { display:flex; align-items:center; gap:var(--sys-gap-tight); margin-block:var(--sys-gap-tight); }
+.meal-controls select, .meal-controls input, .meal-choices select { max-width:100%; min-height:var(--sys-target); background:var(--sys-surface-raised); color:var(--sys-on-surface); }
+.meal-controls label:has(select, input:not([type='checkbox']), textarea) { display:grid; grid-template-columns:minmax(0,1fr); min-width:0; }
+.meal-controls label > :is(select, input:not([type='checkbox']), textarea) { width:100%; min-width:0; box-sizing:border-box; }
+.meal-choices details { margin-block:var(--sys-gap); }
+.suggest-controls > label:has(select) { display:grid; grid-template-columns:minmax(0,1fr); }
+.suggest-controls > label > select { width:100%; min-width:0; }
+.planner-panel article { border-bottom:var(--sys-border) solid var(--sys-outline); padding-block:var(--sys-gap); }
+.planner-panel details { padding-block:var(--sys-gap); }
+.planner-panel textarea { width:100%; }
+.recipe-placeholder { padding:var(--sys-gap); background:var(--sys-surface-raised); border:var(--sys-border) solid var(--sys-outline); }
 .availability-scroll { overflow-x:auto; }
 .availability-scroll table { width:100%; border-collapse:collapse; }
 .availability-scroll th,.availability-scroll td { padding:var(--sys-gap-tight); border:var(--sys-border) solid var(--sys-outline); }
@@ -153,6 +165,11 @@ a { color: inherit; }
 }
 @media (max-width: 500px) {
   .week-board, .state-workbench { padding: var(--sys-gap); }
+  .settings-panel label:has(select, input:not([type='checkbox']), textarea) { display:grid; grid-template-columns:minmax(0,1fr); width:100%; min-width:0; margin-inline:0; }
+  .settings-panel label > :is(select, input:not([type='checkbox']), textarea) { width:100%; min-width:0; box-sizing:border-box; }
+}
+@media (forced-colors: active) {
+  :is(input, select, textarea, button):disabled { color:GrayText; border-color:GrayText; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

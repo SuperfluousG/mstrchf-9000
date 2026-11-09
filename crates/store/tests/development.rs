@@ -48,6 +48,93 @@ fn seeded() -> (PathBuf, Store) {
 }
 
 #[test]
+fn m2_manual_all_meal_types_and_two_weeks_survive_reopen() {
+    let (path,store)=seeded();
+    let s=store.snapshot().unwrap();
+    store.dispatch_ui(AppCommandV1{schema_version:SchemaVersion,command_id:CommandId(format!("cm_{:032x}",8100)),expected_snapshot_revision:s.snapshot_revision,command:AppCommand::OpenPlanningHorizon{}}).unwrap();
+    for (n,(week_index,cell_index)) in [(0,2),(0,3),(0,4),(1,5)].into_iter().enumerate(){
+        let s=store.snapshot().unwrap();let mut w=s.weeks[week_index].clone();let slot=w.cells[cell_index].slot.clone();
+        let mut board=development::board_for(&s,Some(&w.range.week_id),Some(&slot)).unwrap();
+        assert!(!board.choices.is_empty(),"native choice required for {:?}",slot);
+        let chosen=board.choices.remove(0).selection;
+        assert_eq!(chosen.slot,slot);
+        w.plan.selections.0.push(chosen);
+        store.dispatch_ui(save_command(&s,w,8101+n as u64)).unwrap();
+    }
+    let saved=store.snapshot().unwrap();assert_eq!(saved.weeks[0].plan.selections.len(),3);assert_eq!(saved.weeks[1].plan.selections.len(),1);
+    let food=development::validate_saved_plan(&saved,saved.profile.0.as_ref().unwrap(),&saved.weeks[0]).unwrap().unwrap();
+    assert_eq!(food.plan.batches.len(),3);assert_eq!(food.plan.prep_sessions.len(),3);
+    assert_eq!(food.plan.demand.lines[0].quantity.amount,PositiveRational::new(600,1).unwrap());
+    drop(store);assert_eq!(Store::open_development(StoreConfig{app_data_root:path}).unwrap().snapshot().unwrap(),saved);
+}
+
+#[test]
+fn m2_reviewed_large_portion_is_native_and_exact() {
+    let (_,store)=seeded();let s=store.snapshot().unwrap();let mut p=s.profile.0.clone().unwrap();p.diners[0].portions.preset=PortionPresetName::Larger;
+    store.dispatch_ui(AppCommandV1{schema_version:SchemaVersion,command_id:CommandId(format!("cm_{:032x}",8110)),expected_snapshot_revision:s.snapshot_revision,command:AppCommand::UpdateProfile{expected_profile_revision:p.revision,profile:p}}).unwrap();
+    let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();let board=development::board(&s).unwrap();
+    assert!(!board.choices.is_empty(),"a recipe with its own reviewed large premise is required");
+    let choice=board.choices[0].selection.clone();assert_eq!(choice.servings[0].servings,PositiveRational::new(3,2).unwrap());
+    w.plan.selections=BoundedVec(vec![choice]);store.dispatch_ui(save_command(&s,w,8111)).unwrap();
+    let s=store.snapshot().unwrap();let food=development::validate_saved_plan(&s,s.profile.0.as_ref().unwrap(),&s.weeks[0]).unwrap().unwrap();
+    assert_eq!(food.plan.demand.lines[0].quantity.amount,PositiveRational::new(300,1).unwrap());
+}
+
+#[test]
+fn m2_native_suggestion_keeps_a_fixed_meal_and_saves_an_open_slot(){
+    let (_,store)=seeded();let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();
+    w.plan.selections=BoundedVec(vec![development::board(&s).unwrap().choices.remove(0).selection]);
+    store.dispatch_ui(save_command(&s,w,8120)).unwrap();let before=store.snapshot().unwrap();
+    let command:AppCommandV1=parse_document(&serde_json::to_vec(&serde_json::json!({"schema_version":1,"command_id":format!("cm_{:032x}",8121),"expected_snapshot_revision":before.snapshot_revision,"command":{"kind":"suggest_meals","data":{"week_id":before.weeks[0].range.week_id,"mode":"fill_open","slots":[before.weeks[0].cells[3].slot],"allow_repeats":false}}})).unwrap()).unwrap();
+    store.dispatch_ui(command).unwrap();let saved=store.snapshot().unwrap();
+    assert_eq!(saved.weeks[0].plan.selections[0],before.weeks[0].plan.selections[0]);
+    assert!(saved.weeks[0].plan.selections.iter().any(|v|v.slot==before.weeks[0].cells[3].slot&&v.origin==SelectionOrigin::Suggested));
+}
+
+#[test]
+fn m2_manual_leftover_keeps_original_batch_and_demand_once(){
+    let (_,store)=seeded();let s=store.snapshot().unwrap();let p=s.profile.0.as_ref().unwrap();let mut w=s.weeks[0].clone();
+    assert!(!w.defaults_snapshot.suggest_leftovers);
+    let source=crate::planner::custom_choices(&s,p,&w,&w.cells[2].slot,crate::planner::ChoiceOptions{make_extra:true,..Default::default()}).unwrap().remove(0).selection;
+    let batch=match &source.batch_use{BatchUse::NewBatch{batch_id,production_servings}=>{assert_eq!(*production_servings,PositiveRational::new(2,1).unwrap());batch_id.clone()},_=>panic!("new batch")};
+    let mut target=development::board_for(&s,Some(&w.range.week_id),Some(&w.cells[5].slot)).unwrap().choices.remove(0).selection;
+    target.batch_use=BatchUse::Leftover{batch_id:batch.clone(),component_ids:BoundedVec(vec![ComponentId(format!("co_{:032x}",1))])};
+    w.plan.batch_links=BoundedVec(vec![BatchLink{batch_id:batch,source_slot:source.slot.clone(),target_slot:target.slot.clone(),components:BoundedVec(vec![ComponentAllocation{component_id:ComponentId(format!("co_{:032x}",1)),quantity:Quantity{amount:PositiveRational::new(200,1).unwrap(),unit:Unit::G,form:IngredientForm::Cooked}}])}]);
+    w.plan.selections=BoundedVec(vec![source,target]);
+    store.dispatch_ui(save_command(&s,w,8130)).unwrap();let saved=store.snapshot().unwrap();let food=development::validate_saved_plan(&saved,saved.profile.0.as_ref().unwrap(),&saved.weeks[0]).unwrap().unwrap();
+    assert_eq!(food.plan.batches.len(),1);assert_eq!(food.plan.demand.lines[0].quantity.amount,PositiveRational::new(400,1).unwrap());assert_eq!(saved.weeks[0].plan.batch_links.len(),1);
+}
+
+#[test]
+fn m2_personal_recipe_is_an_immutable_candidate_without_invented_quantity(){
+    let (path,store)=seeded();let s=store.snapshot().unwrap();
+    let mut candidate=RecipeCandidate{schema_version:SchemaVersion,candidate_id:RecipeId(format!("rc_{:032x}",999)),proposed_revision:Revision(1),title:Title("Personal pasted recipe".into()),source:crate::planner::catalogue().unwrap()[0].source.clone(),ingredients:BoundedVec(vec![CandidateIngredient{ingredient_id:Nullable(None),name:Text("A personal ingredient".into()),quantity:Nullable(None),component_id:Nullable(None),source_text:Text("A personal ingredient".into())}]),r#yield:Nullable(None),steps:BoundedVec(vec![]),unresolved:BoundedVec(vec![]),image:Nullable(None)};
+    let raw=serde_json::json!({"schema_version":1,"command_id":format!("cm_{:032x}",8140),"expected_snapshot_revision":s.snapshot_revision,"command":{"kind":"save_personal_recipe","data":{"candidate":candidate,"previous":null}}});
+    store.dispatch_ui(parse_document(&serde_json::to_vec(&raw).unwrap()).unwrap()).unwrap();
+    let board=store.planner_board(None,None,Default::default()).unwrap();let saved=board.details.unwrap().library.into_iter().find(|v|v.admission=="personal_candidate").unwrap();
+    let bytes=canonical_bytes(&saved).unwrap();drop(store);
+    let store=Store::open_development(StoreConfig{app_data_root:path}).unwrap();let s=store.snapshot().unwrap();
+    candidate.title=Title("Personal edit".into());
+    let raw=serde_json::json!({"schema_version":1,"command_id":format!("cm_{:032x}",8141),"expected_snapshot_revision":s.snapshot_revision,"command":{"kind":"save_personal_recipe","data":{"candidate":candidate,"previous":saved.reference}}});
+    store.dispatch_ui(parse_document(&serde_json::to_vec(&raw).unwrap()).unwrap()).unwrap();
+    let board=store.planner_board(None,None,Default::default()).unwrap();let entries=board.details.unwrap().library;
+    assert!(entries.iter().any(|v|canonical_bytes(v).unwrap()==bytes));
+    assert_eq!(entries.iter().filter(|v|v.admission=="personal_candidate").count(),2);
+    assert!(board.choices.iter().all(|v|v.selection.recipe.recipe_id!=saved.reference.recipe_id));
+}
+
+#[test]
+fn m2_excluded_choice_still_reports_a_new_hard_restriction(){
+    let (_,store)=seeded();let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();w.plan.selections=BoundedVec(vec![development::board(&s).unwrap().choices.remove(0).selection]);
+    store.dispatch_ui(save_command(&s,w,8150)).unwrap();let s=store.snapshot().unwrap();let mut w=s.weeks[0].clone();w.day_enabled[0]=false;store.dispatch_ui(save_command(&s,w,8151)).unwrap();
+    let s=store.snapshot().unwrap();let mut p=s.profile.0.clone().unwrap();p.diners[0].restrictions=RestrictionDeclaration::Confirmed{confirmed_at:Instant("2026-01-01T12:00:00Z".into()),requirements:BoundedVec(vec![HardRequirement::Diet{code:DietCode::Vegan}])};
+    store.dispatch_ui(AppCommandV1{schema_version:SchemaVersion,command_id:CommandId(format!("cm_{:032x}",8152)),expected_snapshot_revision:s.snapshot_revision,command:AppCommand::UpdateProfile{expected_profile_revision:p.revision,profile:p}}).unwrap();let saved=store.snapshot().unwrap();
+    assert_eq!(saved.weeks[0].plan.selections,s.weeks[0].plan.selections);
+    assert!(!saved.conflicts.is_empty(),"excluded choices still require hard restriction review");
+    assert!(development::validate_saved_plan(&saved,saved.profile.0.as_ref().unwrap(),&saved.weeks[0]).unwrap().unwrap().plan.demand.lines.is_empty());
+}
+
+#[test]
 fn m2_editable_profile_survives_reopen_without_replacing_saved_week() {
     let (p, store) = seeded();
     let before = store.snapshot().unwrap();
@@ -161,7 +248,7 @@ fn m2_initial_profile_requires_a_bound_draft_then_allows_valid_settings_edits() 
     store.dispatch_ui(wrong).unwrap();
     let saved=store.snapshot().unwrap();
     assert_eq!(saved.profile.0.as_ref().unwrap().revision,Revision(2));
-    assert_eq!(development::board(&saved).unwrap().choices.len(),3);
+    assert_eq!(development::board(&saved).unwrap().choices.len(),5);
 }
 #[test]
 fn development_reopen_refuses_an_altered_synthetic_profile() {
@@ -174,7 +261,7 @@ fn development_reopen_refuses_an_altered_synthetic_profile() {
     let path = p.join("planner.sqlite");
     let c = rusqlite::Connection::open(&path).unwrap();
     // Preserve the M1-only source admission rule before the additive M2 upgrade.
-    c.execute_batch("DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
+    c.execute_batch("DROP TABLE essentials; DROP TABLE recipe_library; DROP TABLE planner_history; DROP TABLE local_assets; DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
     c.execute(
         "UPDATE household SET profile=?1",
         [canonical_bytes(&profile).unwrap()],
@@ -218,7 +305,7 @@ fn development_reopen_refuses_altered_week_structure_without_writing() {
         assert_eq!(parse_document::<Week>(&body).unwrap(), week);
         let path = p.join("planner.sqlite");
         let c = rusqlite::Connection::open(&path).unwrap();
-        c.execute_batch("DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
+        c.execute_batch("DROP TABLE essentials; DROP TABLE recipe_library; DROP TABLE planner_history; DROP TABLE local_assets; DROP TABLE active_weeks; PRAGMA user_version=1001;").unwrap();
         c.execute("UPDATE weeks SET body=?1", [body]).unwrap();
         drop(c);
         let before = std::fs::read(&path).unwrap();
@@ -305,10 +392,10 @@ fn development_refuses_dangling_batch_links_even_with_no_selections() {
             .dispatch_ui(save_command(&before, w, 1))
             .unwrap_err()
             .code,
-        ErrorCode::UnsupportedCapability
+        ErrorCode::MissingReference
     );
     assert_eq!(store.snapshot().unwrap(), before);
-    assert_eq!(development::board(&before).unwrap().choices.len(), 2);
+    assert_eq!(development::board(&before).unwrap().choices.len(), 4);
 }
 #[test]
 fn development_privacy_change_keeps_the_exact_saved_meal_after_reopen() {
@@ -338,7 +425,7 @@ fn development_privacy_change_keeps_the_exact_saved_meal_after_reopen() {
     drop(store);
     let store = Store::open_development(StoreConfig { app_data_root: p }).unwrap();
     assert_eq!(store.snapshot().unwrap(), saved);
-    assert_eq!(development::board(&saved).unwrap().choices.len(), 2);
+    assert_eq!(development::board(&saved).unwrap().choices.len(), 4);
 }
 #[test]
 fn development_refuses_existing_user_state_without_changing_it() {

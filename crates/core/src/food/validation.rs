@@ -86,6 +86,12 @@ pub(crate) fn validate_method(v: &MethodPhases) -> Result<(), DomainError> {
     ids(&v.evidence_ids)?;
     limit(v.prep_ids.len(), 128, "/prep_ids")?;
     ordered(&v.prep_ids, Ord::cmp, "/prep_ids")?;
+    if let Some(portable) = &v.portable_cold {
+        require(v.prep_ids.len() == 2 && portable.packing_prep_id != portable.service_prep_id
+            && v.prep_ids.contains(&portable.packing_prep_id)
+            && v.prep_ids.contains(&portable.service_prep_id),
+            ErrorCode::InvalidValue, "/methods/portable_cold")?;
+    }
     for id in &v.prep_ids {
         require((1..=128).contains(id), ErrorCode::InvalidValue, "/prep_id")?;
     }

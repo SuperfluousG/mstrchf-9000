@@ -144,6 +144,52 @@ pub(crate) fn occurrences(
     context: &PlanningContext,
     evidence: &FoodEvidence,
 ) -> Result<Vec<Occurrence>, FoodFailure> {
+    // Repeated stages of one derivation use these same complete inputs. Only a
+    // successful, fully checked result enters this process-local one-entry cache.
+    // Exact structural equality includes every supplied value, not claimed
+    // revisions/digests. A cold call or any changed input executes every guard.
+    // Occurrence reconstruction has no clock, IO or other implicit input;
+    // schedule and time-sensitive feasibility remain separately checked.
+    if let Some(hit) = OCCURRENCE_CACHE.with(|cache| {
+        cache
+            .borrow()
+            .as_ref()
+            .filter(|saved| {
+                &saved.plan == plan && &saved.context == context && &saved.evidence == evidence
+            })
+            .map(|saved| saved.occurrences.clone())
+    }) {
+        return Ok(hit);
+    }
+    let result = occurrences_uncached(plan, context, evidence)?;
+    OCCURRENCE_CACHE.with(|cache| {
+        *cache.borrow_mut() = Some(OccurrenceProof {
+            plan: plan.clone(),
+            context: context.clone(),
+            evidence: evidence.clone(),
+            occurrences: result.clone(),
+        })
+    });
+    Ok(result)
+}
+
+struct OccurrenceProof {
+    plan: WeekPlan,
+    context: PlanningContext,
+    evidence: FoodEvidence,
+    occurrences: Vec<Occurrence>,
+}
+thread_local! {
+    // One owned, shape-bounded successful proof per execution thread. It is
+    // never serialised, imported, shared with another thread or persisted.
+    static OCCURRENCE_CACHE: std::cell::RefCell<Option<OccurrenceProof>> = const { std::cell::RefCell::new(None) };
+}
+
+fn occurrences_uncached(
+    plan: &WeekPlan,
+    context: &PlanningContext,
+    evidence: &FoodEvidence,
+) -> Result<Vec<Occurrence>, FoodFailure> {
     shape(plan)?;
     shape(context)?;
     validate_evidence_shape(evidence)?;
@@ -161,6 +207,7 @@ pub(crate) fn occurrences(
     // method retained for a recipe even when this plan does not execute it.
     for basis in &evidence.recipes {
         let r = reviewed(context, evidence, &basis.recipe)?;
+        crate::portable::method(r.recipe(), evidence)?;
         for method in evidence.methods.iter().filter(|m| m.recipe == basis.recipe) {
             require(
                 method
@@ -216,7 +263,28 @@ pub(crate) fn occurrences(
             continue;
         }
         let r = reviewed(context, evidence, &s.recipe)?;
-        eligibility_result(crate::eligibility::eligible(&r, meal)?)?;
+        if s.portable_cold.is_some()
+            || evidence
+                .methods
+                .iter()
+                .any(|method| method.recipe == s.recipe && method.portable_cold.is_some())
+        {
+            // A same-week source cannot be substituted in the supplied plan
+            // while the declaration is checked against a stale context source.
+            if let BatchUse::Leftover { batch_id, .. } = &s.batch_use {
+                for source in plan.selections.iter().filter(|source|
+                    matches!(&source.batch_use, BatchUse::NewBatch {batch_id: id, ..} if id == batch_id))
+                {
+                    require(context.weeks.iter().flat_map(|week| week.plan.selections.iter()).any(|saved| saved == source),
+                        ErrorCode::ContextStale, "/portable_cold/source")?;
+                }
+            }
+            eligibility_result(crate::eligibility::eligible_with_food(
+                &r, meal, s, context, evidence,
+            )?)?;
+        } else {
+            eligibility_result(crate::eligibility::eligible(&r, meal)?)?;
+        }
         let servings = crate::portions::resolve_servings(&r, meal, &s.meal_overrides).map_err(
             |conflicts| FoodFailure::Blocked {
                 conflicts,
@@ -263,7 +331,7 @@ pub(crate) fn occurrences(
             }
             BatchUse::Leftover { batch_id, .. } => {
                 require(
-                    meal.leftovers_allowed,
+                    meal.leftovers_allowed || s.origin == SelectionOrigin::Fixed,
                     ErrorCode::DomainConflict,
                     "/leftovers_allowed",
                 )?;
@@ -484,13 +552,33 @@ fn check_identity_keys(
     )?;
     Ok(())
 }
+/// In-memory proof of one exact core reconstruction. Fields and construction stay
+/// inside food; callers can only borrow its immutable values. No wire or stored
+/// digest can create this proof, and feasibility is deliberately not part of it.
+pub(crate) struct VerifiedCore<'a> {
+    derived: &'a DerivedPlan,
+    saved: &'a SavedFoodBasis,
+    bindings: Vec<TaskBinding>,
+}
+impl VerifiedCore<'_> {
+    pub(crate) fn derived(&self) -> &DerivedPlan {
+        self.derived
+    }
+    pub(crate) fn saved(&self) -> &SavedFoodBasis {
+        self.saved
+    }
+    pub(crate) fn bindings(&self) -> &[TaskBinding] {
+        &self.bindings
+    }
+}
+
 fn core_plan(
     plan: &WeekPlan,
     context: &PlanningContext,
     evidence: &FoodEvidence,
     identities: &FoodIdentities,
     schedule: &ScheduleInputs,
-) -> Result<DerivedPlan, FoodFailure> {
+) -> Result<(DerivedPlan, Vec<TaskBinding>), FoodFailure> {
     check_identity_keys(plan, context, evidence, identities, schedule)?;
     let input_plan_digest = plan_input_digest(&PlanInputMaterial {
         schema_version: SchemaVersion,
@@ -523,14 +611,14 @@ fn core_plan(
     };
     derived.digest = derived_digest(&DerivedMaterial::from(&derived))?;
     shape(&derived)?;
-    Ok(derived)
+    Ok((derived, bindings))
 }
 pub fn derive_plan(
     plan: &WeekPlan,
     context: &PlanningContext,
     inputs: &FoodInputs<'_>,
 ) -> Result<FoodDerivation, FoodFailure> {
-    let derived = core_plan(
+    let (derived, bindings) = core_plan(
         plan,
         context,
         inputs.evidence,
@@ -544,7 +632,16 @@ pub fn derive_plan(
         identities: inputs.identities.clone(),
         schedule: inputs.schedule.clone(),
     };
-    let feasibility = crate::demand::assess_feasibility(&derived, &saved, inputs.feasibility)?;
+    // Keep the same saved-basis shape/digest checks as the public verification
+    // path. The complete core and its schedule bindings were just reconstructed
+    // above from these exact inputs, so no second reconstruction is necessary.
+    validate_saved_shape(&saved)?;
+    let checked = VerifiedCore {
+        derived: &derived,
+        saved: &saved,
+        bindings,
+    };
+    let feasibility = crate::demand::assess_verified_feasibility(&checked, inputs.feasibility)?;
     if !feasibility.blocking.is_empty() {
         return Err(FoodFailure::Blocked {
             conflicts: feasibility
@@ -566,12 +663,12 @@ pub fn derive_plan(
         feasibility,
     })
 }
-pub(crate) fn verify_core(
-    derived: &DerivedPlan,
-    saved: &SavedFoodBasis,
-) -> Result<(), DomainError> {
+pub(crate) fn verify_core<'a>(
+    derived: &'a DerivedPlan,
+    saved: &'a SavedFoodBasis,
+) -> Result<VerifiedCore<'a>, DomainError> {
     validate_saved_shape(saved)?;
-    let expected = core_plan(
+    let (expected, bindings) = core_plan(
         &saved.plan,
         &saved.context,
         &saved.evidence,
@@ -579,6 +676,11 @@ pub(crate) fn verify_core(
         &saved.schedule,
     )
     .map_err(FoodFailure::into_domain)?;
-    require(&expected == derived, ErrorCode::DigestMismatch, "/derived")
+    require(&expected == derived, ErrorCode::DigestMismatch, "/derived")?;
+    Ok(VerifiedCore {
+        derived,
+        saved,
+        bindings,
+    })
 }
 pub use crate::demand::{assess_feasibility, project_essentials};

@@ -23,6 +23,19 @@ pub fn eligible_slots(week: &Week) -> Result<Vec<SlotId>, DomainError> {
     active_slots(week)
 }
 
+/// Hard declarations for a retained cell; availability remains unchanged.
+/// An optional recipient list checks the people of a saved extra separately.
+pub fn retained_hard_requirements(profile:&HouseholdProfile,week:&Week,slot:&SlotId,recipients:Option<&[PersonRef]>)->Result<Vec<HardRequirement>,DomainError>{
+    shape(profile)?;shape(week)?;references(profile,week,false)?;
+    let cell=week.cells.iter().find(|c|&c.slot==slot).ok_or_else(||err(ErrorCode::ForeignReference,"/retained/slot"))?;
+    let mut people=Vec::new();
+    for id in &cell.attendee_ids.0 {let d=profile.diners.iter().find(|d|&d.diner_id==id).ok_or_else(||err(ErrorCode::ForeignReference,"/retained/diner"))?;people.push((PersonRef::Diner{diner_id:id.clone()},&d.restrictions));}
+    if let Some(o)=&cell.occasion.0 {for g in &o.guests.0 {people.push((PersonRef::Guest{occasion_id:o.occasion_id.clone(),guest_id:g.guest_id.clone()},&g.restrictions));}}
+    if let Some(given)=recipients {if given.len()>64||given.iter().any(|p|!people.iter().any(|(a,_)|a==p)){return Err(err(ErrorCode::ForeignReference,"/retained/recipients"));}}
+    let mut result=BTreeMap::new();for (person,declaration) in people {if recipients.is_none_or(|r|r.contains(&person)){for r in hard(declaration,"/retained/restrictions")? {result.insert(canonical_bytes(&r)?,r);}}}
+    if result.len()>64{return Err(err(ErrorCode::LimitExceeded,"/retained/requirements"));}Ok(result.into_values().collect())
+}
+
 pub fn prepare_week_edit(
     current: &Week,
     edit: &WeekEdit,

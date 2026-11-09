@@ -27,6 +27,11 @@ fn dispatch_with(
         &command.command,
         mstrchf_contracts::AppCommand::SaveHouseholdDraft { .. }
             | mstrchf_contracts::AppCommand::OpenPlanningHorizon { .. }
+            | mstrchf_contracts::AppCommand::SuggestMeals { .. }
+            | mstrchf_contracts::AppCommand::SavePersonalRecipe { .. }
+            | mstrchf_contracts::AppCommand::RecordFeedback { .. }
+            | mstrchf_contracts::AppCommand::RestoreHiddenRecipe { .. }
+            | mstrchf_contracts::AppCommand::ConfirmEssentials { .. }
             | mstrchf_contracts::AppCommand::SetPrivacy { .. }
             | mstrchf_contracts::AppCommand::CancelJob { .. }
             | mstrchf_contracts::AppCommand::UpdateProfile { .. }

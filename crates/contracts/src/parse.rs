@@ -4,24 +4,99 @@ use serde::{
     de::{DeserializeOwned, DeserializeSeed, MapAccess, SeqAccess, Visitor},
 };
 use serde_json::Value;
-use std::collections::BTreeMap;
-pub trait ValidateShape: Serialize + schemars::JsonSchema {
+use sha2::{Digest as _, Sha256};
+use std::{
+    any::TypeId,
+    cell::RefCell,
+    collections::{BTreeMap, HashMap, HashSet, VecDeque},
+    sync::Arc,
+};
+
+thread_local! {
+    // Schemas are immutable and determined by the concrete Rust type. Cache only
+    // their construction; every supplied value still passes the complete walk.
+    static WIRE_SCHEMAS: RefCell<HashMap<TypeId, Arc<Value>>> = RefCell::new(HashMap::new());
+    static VALID_TYPED_VALUES: RefCell<(HashSet<(TypeId, [u8; 32])>, VecDeque<(TypeId, [u8; 32])>)> = RefCell::new((HashSet::new(), VecDeque::new()));
+}
+fn wire_schema<T: schemars::JsonSchema + 'static>() -> Arc<Value> {
+    WIRE_SCHEMAS.with(|schemas| {
+        let mut schemas = schemas.borrow_mut();
+        schemas
+            .entry(TypeId::of::<T>())
+            .or_insert_with(|| {
+                Arc::new(
+                    schemars::generate::SchemaSettings::draft2020_12()
+                        .into_generator()
+                        .into_root_schema_for::<T>()
+                        .to_value(),
+                )
+            })
+            .clone()
+    })
+}
+
+#[cfg(test)]
+mod cached_shape_admission_tests {
+    use super::*;
+    #[derive(Serialize, schemars::JsonSchema)]
+    #[serde(deny_unknown_fields)]
+    struct UpToTwo {
+        #[schemars(length(min = 1, max = 2))]
+        values: Vec<u8>,
+    }
+    #[derive(Serialize, schemars::JsonSchema)]
+    #[serde(deny_unknown_fields)]
+    struct ExactlyTwo {
+        #[schemars(length(min = 2, max = 2))]
+        values: Vec<u8>,
+    }
+    #[test]
+    fn cached_valid_body_cannot_authorise_changed_body_type_or_incoming_wire() {
+        assert!(UpToTwo { values: vec![1] }.validate_shape().is_ok());
+        assert!(UpToTwo { values: vec![1] }.validate_shape().is_ok());
+        assert!(
+            UpToTwo {
+                values: vec![1, 2, 3]
+            }
+            .validate_shape()
+            .is_err()
+        );
+        assert!(ExactlyTwo { values: vec![1] }.validate_shape().is_err());
+        assert!(UpToTwo::validate_wire(&serde_json::json!({"values":[1],"extra":true})).is_err());
+    }
+}
+pub trait ValidateShape: Serialize + schemars::JsonSchema + 'static {
     fn validate_shape(&self) -> Result<(), Vec<ValidationIssue>>;
     fn validate_wire(_value: &Value) -> Result<(), Vec<ValidationIssue>> {
         Ok(())
     }
 }
-impl<T: Serialize + schemars::JsonSchema> ValidateShape for T {
+impl<T: Serialize + schemars::JsonSchema + 'static> ValidateShape for T {
     fn validate_shape(&self) -> Result<(), Vec<ValidationIssue>> {
         let v = serde_json::to_value(self).map_err(|_| vec![issue("", ErrorCode::InvalidValue)])?;
-        Self::validate_wire(&v)
+        let bytes = serde_json::to_vec(&v).map_err(|_| vec![issue("", ErrorCode::InvalidValue)])?;
+        let key = (TypeId::of::<Self>(), Sha256::digest(&bytes).into());
+        if VALID_TYPED_VALUES.with(|cache| cache.borrow().0.contains(&key)) {
+            return Ok(());
+        }
+        // Only exact, successfully checked internal typed values are memoised.
+        // Untrusted wire admission still runs validate_wire and bounded parsing.
+        Self::validate_wire(&v)?;
+        VALID_TYPED_VALUES.with(|cache| {
+            let mut cache = cache.borrow_mut();
+            if cache.0.insert(key) {
+                cache.1.push_back(key);
+                if cache.1.len() > 512 {
+                    if let Some(oldest) = cache.1.pop_front() {
+                        cache.0.remove(&oldest);
+                    }
+                }
+            }
+        });
+        Ok(())
     }
     fn validate_wire(v: &Value) -> Result<(), Vec<ValidationIssue>> {
-        let settings = schemars::generate::SchemaSettings::draft2020_12();
-        let schema = settings
-            .into_generator()
-            .into_root_schema_for::<T>()
-            .to_value();
+        let schema = wire_schema::<T>();
         let mut errors = Vec::new();
         walk_schema(&schema, &schema, v, "", &T::schema_name(), &mut errors);
         if errors.is_empty() {

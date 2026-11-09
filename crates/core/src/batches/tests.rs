@@ -82,6 +82,7 @@ fn fixture() -> (
         methods: array(&e["methods"])
             .iter()
             .map(|m| MethodPhases {
+                portable_cold: None,
                 recipe: wire!(m["recipe"], RecipeRef),
                 kind: match m["kind"]["kind"].as_str().unwrap() {
                     "production" => MethodKind::Production,

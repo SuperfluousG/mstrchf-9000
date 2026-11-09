@@ -4,23 +4,8 @@ pub fn reconstruct_use_graph(
     derived: &DerivedPlan,
     saved: &SavedFoodBasis,
 ) -> Result<UseGraph, DomainError> {
-    verify_core(derived, saved)?;
-    reconstruct_verified(derived, saved)
-}
-
-pub(super) fn bindings(
-    derived: &DerivedPlan,
-    saved: &SavedFoodBasis,
-) -> Result<Vec<TaskBinding>, DomainError> {
-    crate::prep::validate_schedule(
-        &saved.plan,
-        &saved.context,
-        &saved.evidence,
-        &saved.identities,
-        &saved.schedule,
-        &derived.prep_sessions,
-    )
-    .map_err(FoodFailure::into_domain)
+    let checked = verify_core(derived, saved)?;
+    reconstruct_verified(&checked)
 }
 
 pub(super) fn task_at<'a>(
@@ -46,13 +31,12 @@ pub(super) fn task_at<'a>(
         .start)
 }
 
-pub(super) fn reconstruct_verified(
-    derived: &DerivedPlan,
-    saved: &SavedFoodBasis,
-) -> Result<UseGraph, DomainError> {
+pub(super) fn reconstruct_verified(checked: &VerifiedCore<'_>) -> Result<UseGraph, DomainError> {
+    let derived = checked.derived();
+    let saved = checked.saved();
     let occurrences = occurrences(&saved.plan, &saved.context, &saved.evidence)
         .map_err(FoodFailure::into_domain)?;
-    let bindings = bindings(derived, saved)?;
+    let bindings = checked.bindings();
     let mut uses = vec![];
     for occurrence in &occurrences {
         let admitted = reviewed(&saved.context, &saved.evidence, &occurrence.key.recipe)?;
@@ -69,7 +53,7 @@ pub(super) fn reconstruct_verified(
                 .iter()
                 .find(|p| p.prep_id == binding.phase.prep_id)
                 .ok_or_else(|| err(ErrorCode::MissingReference, "/use/prep"))?;
-            let at = task_at(derived, &bindings, &binding.phase)?;
+            let at = task_at(derived, bindings, &binding.phase)?;
             let key = UseKey::Preparation {
                 phase: binding.phase.clone(),
             };

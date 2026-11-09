@@ -96,6 +96,33 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
         }
     }
     match name {
+        "PortableChillingDeclaration" => {
+            let declaration: PortableChillingDeclaration = decoded(v)?;
+            require(declaration.schema_version == SchemaVersion, ErrorCode::UnsupportedVersion, "/schema_version")
+        }
+        "PortableColdJourney" => {
+            let journey: PortableColdJourney = decoded(v)?;
+            require(journey.packing_complete_at.zone == journey.depart_at.zone
+                && journey.packing_complete_at.local_date == journey.depart_at.local_date,
+                ErrorCode::IdentityMismatch, "/depart_at")?;
+            require(journey.declaration.confirmed_at <= journey.packing_complete_at.instant
+                && journey.packing_complete_at.instant <= journey.depart_at.instant,
+                ErrorCode::InvalidValue, "/packing_complete_at")
+        }
+        "MealSelection" => {
+            require(v.get("portable_cold") != Some(&Value::Null), ErrorCode::NoncanonicalValue, "/portable_cold")?;
+            let selection: MealSelection = decoded(v)?;
+            if let Some(journey) = &selection.portable_cold {
+                require(selection.origin == SelectionOrigin::Fixed
+                    && selection.slot.meal_type == MealType::Lunch
+                    && selection.extras.is_empty()
+                    && matches!(&selection.batch_use, BatchUse::Leftover {component_ids, ..} if component_ids.len() == 1),
+                    ErrorCode::UnsupportedCapability, "/portable_cold")?;
+                require(journey.packing_complete_at.local_date == selection.slot.date,
+                    ErrorCode::IdentityMismatch, "/portable_cold/packing_complete_at")?;
+            }
+            Ok(())
+        }
         "ContextStamp" => validate_stamp(&decoded(v)?),
         "Snapshot" => {
             let snapshot: Snapshot = decoded(v)?;
@@ -257,6 +284,22 @@ pub(crate) fn validate_local(name: &str, v: &Value) -> Result<(), DomainError> {
             let anchor: ComponentProductionSpec = decoded(v)?;
             let id = match anchor {
                 ComponentProductionSpec::Cooked { completion_prep_id } => completion_prep_id,
+                ComponentProductionSpec::CookedWithCooling {
+                    completion_prep_id,
+                    cooling_prep_ids,
+                    max_cooling_seconds,
+                } => {
+                    require(
+                        (1..=7200).contains(&max_cooling_seconds)
+                            && cooling_prep_ids
+                                .iter()
+                                .all(|id| (1..=128).contains(id) && *id != completion_prep_id)
+                            && cooling_prep_ids.windows(2).all(|pair| pair[0] < pair[1]),
+                        ErrorCode::InvalidValue,
+                        "/data/cooling",
+                    )?;
+                    completion_prep_id
+                }
                 ComponentProductionSpec::Unheated {
                     first_handling_prep_id,
                 } => first_handling_prep_id,
@@ -1182,6 +1225,14 @@ fn acyclic(edges: &cxx::Edges, path: &str) -> Result<(), DomainError> {
     Ok(())
 }
 fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
+    // Serving an existing batch requires no invented garnish or duplicate
+    // ingredient demand. Empty food definitions remain invalid; reused inputs
+    // retain their exact source, quantity, step and evidence checks below.
+    require(
+        !r.ingredients.is_empty() || !r.reused_inputs.is_empty(),
+        ErrorCode::MissingReference,
+        "/ingredients",
+    )?;
     require(
         r.active_minutes <= r.elapsed_minutes && r.elapsed_minutes <= 10080,
         ErrorCode::InvalidValue,
@@ -1245,10 +1296,15 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
             "/reused_inputs/evidence_ids",
         )?;
     }
+    let mut cooling_roles = BTreeSet::new();
+    let mut cooling_steps = BTreeSet::new();
     for component in r.components.iter() {
         if let Some(anchor) = &component.production.0 {
             let id = match anchor {
                 ComponentProductionSpec::Cooked { completion_prep_id } => completion_prep_id,
+                ComponentProductionSpec::CookedWithCooling {
+                    completion_prep_id, ..
+                } => completion_prep_id,
                 ComponentProductionSpec::Unheated {
                     first_handling_prep_id,
                 } => first_handling_prep_id,
@@ -1266,6 +1322,76 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
                 ErrorCode::MissingReference,
                 "/components/production",
             )?;
+            if let ComponentProductionSpec::CookedWithCooling {
+                completion_prep_id,
+                cooling_prep_ids,
+                max_cooling_seconds,
+            } = anchor
+            {
+                let completion = r
+                    .prep
+                    .iter()
+                    .find(|phase| phase.prep_id == *completion_prep_id)
+                    .unwrap();
+                // A fixed endpoint may precede service for portioning. Bound
+                // that lead and every cooling phase by the original endpoint;
+                // serving or refrigeration never starts a new cooling clock.
+                let endpoint = i64::from(completion.earliest_offset_seconds)
+                    + i64::from(completion.elapsed_minutes) * 60;
+                require(
+                    r.reused_inputs.is_empty()
+                        && !component.storage_rule_ids.is_empty()
+                        && completion.elapsed_minutes > 0
+                        && completion.earliest_offset_seconds == completion.latest_offset_seconds
+                        && (-i64::from(*max_cooling_seconds)..=0).contains(&endpoint)
+                        && !completion.can_attach_to_prior_session,
+                    ErrorCode::UnsupportedCapability,
+                    "/components/cooling/completion",
+                )?;
+                for cooling_id in cooling_prep_ids.iter() {
+                    require(
+                        cooling_roles.insert(*cooling_id),
+                        ErrorCode::DomainConflict,
+                        "/components/cooling/roles",
+                    )?;
+                    let phase = r
+                        .prep
+                        .iter()
+                        .find(|phase| phase.prep_id == *cooling_id)
+                        .ok_or_else(|| {
+                            err(ErrorCode::MissingReference, "/components/cooling/prep_ids")
+                        })?;
+                    require(
+                        phase.elapsed_minutes > 0
+                            && i64::from(phase.earliest_offset_seconds) >= endpoint
+                            && phase.latest_offset_seconds >= phase.earliest_offset_seconds
+                            && i64::from(phase.latest_offset_seconds)
+                                + i64::from(phase.elapsed_minutes) * 60
+                                <= endpoint + i64::from(*max_cooling_seconds)
+                            && phase.ingredient_ids.is_empty()
+                            && !phase.can_attach_to_prior_session
+                            && !phase.depends_on.is_empty()
+                            && phase.depends_on.iter().all(|id| {
+                                *id == *completion_prep_id || cooling_prep_ids.contains(id)
+                            })
+                            && phase.step_ids.iter().all(|id| {
+                                r.steps.iter().any(|step| {
+                                    step.step_id == *id
+                                        && step.ingredient_ids.is_empty()
+                                        && step.component_ids.len() == 1
+                                        && step.component_ids[0] == component.component_id
+                                })
+                            }),
+                        ErrorCode::DomainConflict,
+                        "/components/cooling/phase",
+                    )?;
+                    require(
+                        phase.step_ids.iter().all(|id| cooling_steps.insert(*id)),
+                        ErrorCode::DomainConflict,
+                        "/components/cooling/roles",
+                    )?;
+                }
+            }
         }
         require(
             component
@@ -1357,6 +1483,31 @@ fn validate_recipe(r: &RecipeRevision) -> Result<(), DomainError> {
                 && p.ingredient_ids.iter().all(|i| ingredients.contains(i)),
             ErrorCode::MissingReference,
             "/prep",
+        )?;
+        if !cooling_roles.contains(&p.prep_id) {
+            require(
+                p.depends_on.iter().all(|id| !cooling_roles.contains(id))
+                    && p.step_ids.iter().all(|id| !cooling_steps.contains(id)),
+                ErrorCode::DomainConflict,
+                "/components/cooling/roles",
+            )?;
+        }
+    }
+    for component in r.components.iter() {
+        let anchor = match &component.production.0 {
+            Some(ComponentProductionSpec::Cooked { completion_prep_id })
+            | Some(ComponentProductionSpec::CookedWithCooling {
+                completion_prep_id, ..
+            }) => Some(completion_prep_id),
+            Some(ComponentProductionSpec::Unheated {
+                first_handling_prep_id,
+            }) => Some(first_handling_prep_id),
+            None => None,
+        };
+        require(
+            anchor.is_none_or(|id| !cooling_roles.contains(id)),
+            ErrorCode::DomainConflict,
+            "/components/cooling/roles",
         )?;
     }
     if r.capabilities.shopping {

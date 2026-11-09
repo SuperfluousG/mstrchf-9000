@@ -117,3 +117,40 @@ record! {
         pub user_changed: bool,
     }
 }
+
+tagged! {
+    pub enum CalendarPublicationConfirmationSource {
+        UserReviewedGoogleRead {
+            read_id: Text,
+            read_digest: Digest,
+        },
+    }
+}
+
+record! {
+    /// Exact content observed for one explicitly mapped Google event. This is
+    /// retained user-reviewed evidence, not independently authenticated IO.
+    pub struct PublishedCalendarEvent {
+        pub event_id: CalendarEventId,
+        pub provider_event_id: Text,
+        pub title: Title,
+        pub body: LongText,
+        pub start: Instant,
+        pub end: Instant,
+        pub zone: ZoneId,
+        pub observed_at: Instant,
+    }
+}
+
+record! {
+    pub struct CalendarPublicationConfirmation {
+        pub preparation_command_id: CommandId,
+        pub order_id: OrderId,
+        pub destination_id: CalendarDestinationId,
+        pub event_batch_digest: Digest,
+        pub calendar_id: Text,
+        pub source: CalendarPublicationConfirmationSource,
+        pub observed_at: Instant,
+        pub events: BoundedVec<PublishedCalendarEvent, 1, 256>,
+    }
+}

@@ -13,6 +13,45 @@ pub fn eligible(
     recipe: &ReviewedRecipe<'_>,
     meal: &MealRequirements,
 ) -> Result<Eligibility, DomainError> {
+    eligible_internal(recipe, meal, false)
+}
+
+/// Only the exact admitted packing/service closure can qualify home equipment
+/// for an on-the-move meal. The ordinary two-argument API remains conservative.
+pub fn eligible_with_food(
+    recipe: &ReviewedRecipe<'_>,
+    meal: &MealRequirements,
+    selection: &MealSelection,
+    context: &PlanningContext,
+    evidence: &crate::food::FoodEvidence,
+) -> Result<Eligibility, DomainError> {
+    crate::food::validate_evidence_shape(evidence)?;
+    let assessed = recipe.recipe();
+    if selection.recipe.recipe_id != assessed.recipe_id
+        || selection.recipe.revision != assessed.revision
+        || selection.recipe.digest != recipe_digest(assessed)?
+    {
+        return Err(DomainError::new(ErrorCode::IdentityMismatch, "/portable_cold/recipe"));
+    }
+    if evidence.catalogue_revision != context.stamp.catalogue_revision
+        || crate::food::food_evidence_digest(evidence)? != evidence.catalogue_digest
+        || context.requirements.iter().find(|m| m.slot == selection.slot) != Some(meal)
+    {
+        return Err(DomainError::new(ErrorCode::ContextStale, "/portable_cold/food_evidence"));
+    }
+    let method = crate::portable::method(recipe.recipe(), evidence)?;
+    if method.is_some() != selection.portable_cold.is_some() {
+        return Err(DomainError::new(ErrorCode::UnsupportedCapability, "/portable_cold/method"));
+    }
+    crate::portable::validate_journey(context, selection)?;
+    eligible_internal(recipe, meal, method.is_some())
+}
+
+fn eligible_internal(
+    recipe: &ReviewedRecipe<'_>,
+    meal: &MealRequirements,
+    portable_home_packing: bool,
+) -> Result<Eligibility, DomainError> {
     check_meal(meal)?;
     if !recipe.assessment().capabilities.shopping {
         return Ok(Eligibility::Unresolved(vec![conflict(
@@ -23,9 +62,61 @@ pub fn eligible(
         )?]));
     }
     let r = recipe.recipe();
-    let mut known = Vec::new();
-    let mut missing = Vec::new();
-    for requirement in meal.shared_hard_requirements.iter() {
+    let (mut known,mut missing)=hard_conflicts(recipe,&meal.slot,&meal.shared_hard_requirements.0)?;
+    if !r.meal_types.contains(&meal.slot.meal_type)
+        || (!portable_home_packing && r.equipment.iter().any(|e| !meal.equipment.contains(e)))
+    {
+        known.push(conflict(recipe, meal, ErrorCode::DomainConflict, vec![])?);
+    }
+    // Equipment has no phase/location dimension in this contract. Its presence
+    // cannot prove that an earlier preparation appliance is available on the move.
+    if meal.location == MealLocation::OnTheMove && !r.equipment.is_empty() && !portable_home_packing {
+        missing.push(conflict(recipe,meal,ErrorCode::UnsupportedCapability,vec![])?);
+    }
+    let portability = &r.portability;
+    // An explicit recipe Fridge requirement is home equipment, rather than
+    // evidence of an on-the-move cold route. Keep no-Fridge recipes on their
+    // original mobility predicates so historical catalogue proofs do not drift.
+    let home_fridge = meal.location == MealLocation::AtHome
+        && r.equipment.contains(&EquipmentCode::Fridge);
+    // Mobility describes access while travelling. An explicitly admitted home
+    // Fridge/Hob method can reheat on the actual home Hob without that claim.
+    // Keep no-Fridge recipes on their frozen mobility predicates.
+    let home_reheating = home_fridge
+        && r.equipment.contains(&EquipmentCode::Hob)
+        && meal.equipment.contains(&EquipmentCode::Hob);
+    let needs_portability = meal.location == MealLocation::OnTheMove
+        || (!home_fridge && meal.mobility.temperature == MobilityTemperature::Cold)
+        || portability.reheating_required || portability.cold_storage_required;
+    if needs_portability {
+        if portability.evidence_ids.is_empty() {missing.push(conflict(recipe,meal,ErrorCode::UnsupportedCapability,vec![])?);} else {
+            if (portability.reheating_required && !home_reheating && !meal.mobility.reheating)
+                || (!home_fridge && meal.mobility.temperature == MobilityTemperature::Cold && !portability.cold_suitable) {
+                known.push(conflict(recipe,meal,ErrorCode::DomainConflict,portability.evidence_ids.0.clone())?);
+            }
+            let cold_storage = if home_fridge {
+                meal.equipment.contains(&EquipmentCode::Fridge)
+            } else {
+                meal.mobility.cold_storage
+            };
+            if portability.cold_storage_required && !cold_storage {
+                missing.push(conflict(recipe,meal,ErrorCode::UnsupportedCapability,portability.evidence_ids.0.clone())?);
+            }
+        }
+    }
+    coalesce(known,missing)
+}
+
+/// Checks hard requirements of a retained choice, without activating its cell,
+/// resolving a meal time, calculating a portion or producing ingredient demand.
+pub fn eligible_retained(recipe:&ReviewedRecipe<'_>,slot:&SlotId,requirements:&[HardRequirement])->Result<Eligibility,DomainError>{
+    shape(slot,"/slot")?;bound(requirements.len(),0,64,"/requirements")?;
+    for r in requirements {shape(r,"/requirements")?;}
+    let (known,missing)=hard_conflicts(recipe,slot,requirements)?;coalesce(known,missing)
+}
+fn hard_conflicts(recipe:&ReviewedRecipe<'_>,slot:&SlotId,requirements:&[HardRequirement])->Result<(Vec<Conflict>,Vec<Conflict>),DomainError>{
+    let r=recipe.recipe();let mut known=Vec::new();let mut missing=Vec::new();
+    for requirement in requirements {
         let facts: Vec<_> = r
             .dietary_evidence
             .iter()
@@ -38,67 +129,19 @@ pub fn eligible(
                 .iter()
                 .any(|e| e.verdict == DietaryVerdict::Conflicting)
         {
-            known.push(conflict(recipe, meal, ErrorCode::DomainConflict, ids)?);
+            known.push(conflict_at(recipe, slot, ErrorCode::DomainConflict, ids)?);
         } else if facts.is_empty() || facts.iter().any(|e| e.verdict != DietaryVerdict::Supported) {
-            missing.push(conflict(
+            missing.push(conflict_at(
                 recipe,
-                meal,
+                slot,
                 ErrorCode::UnsupportedCapability,
                 ids,
             )?);
         }
     }
-    if !r.meal_types.contains(&meal.slot.meal_type)
-        || r.equipment.iter().any(|e| !meal.equipment.contains(e))
-    {
-        known.push(conflict(recipe, meal, ErrorCode::DomainConflict, vec![])?);
-    }
-    // Equipment has no phase/location dimension in this contract. Its presence
-    // cannot prove that an earlier preparation appliance is available on the move.
-    if meal.location == MealLocation::OnTheMove && !r.equipment.is_empty() {
-        missing.push(conflict(
-            recipe,
-            meal,
-            ErrorCode::UnsupportedCapability,
-            vec![],
-        )?);
-    }
-    let portability = &r.portability;
-    let needs_portability = meal.location == MealLocation::OnTheMove
-        || meal.mobility.temperature == MobilityTemperature::Cold
-        || portability.reheating_required
-        || portability.cold_storage_required;
-    if needs_portability {
-        if portability.evidence_ids.is_empty() {
-            missing.push(conflict(
-                recipe,
-                meal,
-                ErrorCode::UnsupportedCapability,
-                vec![],
-            )?);
-        } else {
-            if (portability.reheating_required && !meal.mobility.reheating)
-                || (meal.mobility.temperature == MobilityTemperature::Cold
-                    && !portability.cold_suitable)
-            {
-                known.push(conflict(
-                    recipe,
-                    meal,
-                    ErrorCode::DomainConflict,
-                    portability.evidence_ids.0.clone(),
-                )?);
-            }
-            // F08: absent required cold storage leaves this candidate unresolved.
-            if portability.cold_storage_required && !meal.mobility.cold_storage {
-                missing.push(conflict(
-                    recipe,
-                    meal,
-                    ErrorCode::UnsupportedCapability,
-                    portability.evidence_ids.0.clone(),
-                )?);
-            }
-        }
-    }
+    Ok((known,missing))
+}
+fn coalesce(known:Vec<Conflict>,missing:Vec<Conflict>)->Result<Eligibility,DomainError>{
     // Coalesce identical scoped diagnostics; bounded inputs yield at most 68.
     let mut all = known.clone();
     all.extend(missing);
@@ -325,12 +368,7 @@ pub(crate) fn check_meal(meal: &MealRequirements) -> Result<(), DomainError> {
     Ok(())
 }
 pub(crate) fn recipe_ref(recipe: &ReviewedRecipe<'_>) -> Result<RecipeRef, DomainError> {
-    let r = recipe.recipe();
-    Ok(RecipeRef {
-        recipe_id: r.recipe_id.clone(),
-        revision: r.revision,
-        digest: recipe_digest(r)?,
-    })
+    Ok(recipe.reference().clone())
 }
 pub(crate) fn conflict(
     recipe: &ReviewedRecipe<'_>,
@@ -338,13 +376,16 @@ pub(crate) fn conflict(
     code: ErrorCode,
     mut ids: Vec<EvidenceId>,
 ) -> Result<Conflict, DomainError> {
+    conflict_at(recipe,&meal.slot,code,ids)
+}
+fn conflict_at(recipe:&ReviewedRecipe<'_>,slot:&SlotId,code:ErrorCode,mut ids:Vec<EvidenceId>)->Result<Conflict,DomainError>{
     ids.sort();
     ids.dedup();
     bound(ids.len(), 0, 256, "/conflict/evidence_ids")?;
     Ok(Conflict {
         code,
-        week_ids: BoundedVec(vec![meal.slot.week_id.clone()]),
-        slot_ids: BoundedVec(vec![meal.slot.clone()]),
+        week_ids: BoundedVec(vec![slot.week_id.clone()]),
+        slot_ids: BoundedVec(vec![slot.clone()]),
         recipe_refs: BoundedVec(vec![recipe_ref(recipe)?]),
         evidence_ids: BoundedVec(ids),
         blocking: true,

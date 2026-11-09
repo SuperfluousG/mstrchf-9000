@@ -15,22 +15,23 @@ export interface WeekBoardProps {
   onSelectSlot: (slotId: string) => void;
   nextAction: NextActionStripProps;
   mealActions?: ReactNode;
+  mainContent?: ReactNode;
 }
 
 /** A controlled presentation only. The caller supplies dates, status and selected identity. */
-export function WeekBoard({ heading, days, selectedSlotId, selectedMeal, onSelectSlot, nextAction, mealActions }: WeekBoardProps) {
+export function WeekBoard({ heading, days, selectedSlotId, selectedMeal, onSelectSlot, nextAction, mealActions, mainContent }: WeekBoardProps) {
   const detailRegionId = useId();
   const headingId = useId();
   return <section className="week-board" aria-labelledby={headingId}>
-    <h1 id={headingId}>{heading}</h1>
+    <header className="week-board-heading"><p className="week-board-eyebrow">Your week, at a glance</p><h1 id={headingId}>{heading}</h1></header>
     <NextActionStrip {...nextAction} />
     <div className="week-worktop">
       {/* Keep reading/focus order stable at every width; CSS only places the wide columns. */}
       <SelectedMealRegion id={detailRegionId} meal={selectedMeal?.slotId === selectedSlotId ? selectedMeal : null}>{mealActions}</SelectedMealRegion>
-      <ol className="day-slips" aria-label="Seven day meal board">
+      {mainContent ?? <ol className="day-slips" aria-label="Seven day meal board">
         {days.map(day => <DaySlip key={day.slotId} day={day} selected={day.slotId === selectedSlotId}
           detailRegionId={detailRegionId} onSelect={onSelectSlot} />)}
-      </ol>
+      </ol>}
     </div>
   </section>;
 }

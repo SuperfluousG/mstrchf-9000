@@ -19,7 +19,7 @@ export type Allocation = { allocation_id: AllocationId, batch_id: BatchId, compo
 
 export type AllocationId = string & { readonly __brand: "AllocationId" };
 
-export type AppCommand = { "kind": "open_planning_horizon", "data": Record<symbol, never> } | { "kind": "save_household_draft", "data": { draft: HouseholdDraft, restriction_issue_edits: Array<SetupRestrictionEdit>, } } | { "kind": "update_profile", "data": { profile: HouseholdProfile, expected_profile_revision: Revision, } } | { "kind": "set_privacy", "data": { policy: PrivacyPolicy, expected_policy_revision: Revision, } } | { "kind": "save_week", "data": { week: WeekEdit, expected_week_revision: Revision, } } | { "kind": "apply_plan_proposal", "data": { proposal: PlanProposal, context_stamp: ContextStamp, } } | { "kind": "confirm_essentials", "data": { confirmations: Array<EssentialsConfirmation>, } } | { "kind": "approve_plan", "data": { week_id: WeekId, plan_revision: Revision, derived_digest: PayloadDigest, } } | { "kind": "confirm_order", "data": { confirmation: OrderConfirmation, } } | { "kind": "request_job", "data": { action: Action, scope: ActionScope, } } | { "kind": "cancel_job", "data": { job_id: JobId, } } | { "kind": "record_user_stop", "data": { worker: WorkerIdentity, qualification_id: EvidenceId, procedure_version: Revision, visible_status: VisibleTerminalStatus, } } | { "kind": "request_calendar_publication", "data": { order_id: OrderId, destination_id: CalendarDestinationId, event_batch_digest: Digest, } };
+export type AppCommand = { "kind": "open_planning_horizon", "data": Record<symbol, never> } | { "kind": "suggest_meals", "data": { week_id: WeekId, mode: PlanMode, slots: Array<SlotId>, allow_repeats: boolean, } } | { "kind": "suggest_planning_horizon", "data": { ordered_week_ids: Array<WeekId>, mode: PlanMode, allow_repeats: boolean, } } | { "kind": "save_personal_recipe", "data": { candidate: RecipeCandidate, previous: RecipeRef | null, } } | { "kind": "admit_reviewed_recipe", "data": { packet: ReviewedRecipePacketRef, expected_catalogue_revision: Revision, } } | { "kind": "record_feedback", "data": { feedback: Feedback, } } | { "kind": "restore_hidden_recipe", "data": { recipe_id: RecipeId, } } | { "kind": "correct_order_delivery", "data": { order_id: OrderId, delivery_start: ZonedMoment, delivery_end: ZonedMoment, } } | { "kind": "confirm_calendar_publication", "data": { confirmation: CalendarPublicationConfirmation, } } | { "kind": "set_privacy_preserving_essentials", "data": { policy: PrivacyPolicy, expected_policy_revision: Revision, } } | { "kind": "save_household_draft", "data": { draft: HouseholdDraft, restriction_issue_edits: Array<SetupRestrictionEdit>, } } | { "kind": "update_profile", "data": { profile: HouseholdProfile, expected_profile_revision: Revision, } } | { "kind": "set_privacy", "data": { policy: PrivacyPolicy, expected_policy_revision: Revision, } } | { "kind": "save_week", "data": { week: WeekEdit, expected_week_revision: Revision, } } | { "kind": "apply_plan_proposal", "data": { proposal: PlanProposal, context_stamp: ContextStamp, } } | { "kind": "confirm_essentials", "data": { confirmations: Array<EssentialsConfirmation>, } } | { "kind": "approve_plan", "data": { week_id: WeekId, plan_revision: Revision, derived_digest: PayloadDigest, } } | { "kind": "confirm_order", "data": { confirmation: OrderConfirmation, } } | { "kind": "request_job", "data": { action: Action, scope: ActionScope, } } | { "kind": "cancel_job", "data": { job_id: JobId, } } | { "kind": "record_user_stop", "data": { worker: WorkerIdentity, qualification_id: EvidenceId, procedure_version: Revision, visible_status: VisibleTerminalStatus, } } | { "kind": "request_calendar_publication", "data": { order_id: OrderId, destination_id: CalendarDestinationId, event_batch_digest: Digest, } };
 
 export type AppCommandV1 = { schema_version: SchemaVersion, command_id: CommandId, expected_snapshot_revision: Revision, command: AppCommand, };
 
@@ -75,6 +75,10 @@ export type CalendarObservation = { event_id: CalendarEventId, provider_event_re
 
 export type CalendarObservationState = "present" | "absent" | "unknown";
 
+export type CalendarPublicationConfirmation = { preparation_command_id: CommandId, order_id: OrderId, destination_id: CalendarDestinationId, event_batch_digest: Digest, calendar_id: Text, source: CalendarPublicationConfirmationSource, observed_at: Instant, events: Array<PublishedCalendarEvent>, };
+
+export type CalendarPublicationConfirmationSource = { "kind": "user_reviewed_google_read", "data": { read_id: Text, read_digest: Digest, } };
+
 export type CandidateIngredient = { ingredient_id: IngredientId | null, name: Text, quantity: Quantity | null, component_id: ComponentId | null, source_text: Text, };
 
 export type CandidateIssue = { code: CandidateIssueCode, path: Text, evidence_ids: Array<EvidenceId>, };
@@ -97,7 +101,7 @@ export type ComponentAllocation = { component_id: ComponentId, quantity: Quantit
 
 export type ComponentId = string & { readonly __brand: "ComponentId" };
 
-export type ComponentProductionSpec = { "kind": "cooked", "data": { completion_prep_id: number, } } | { "kind": "unheated", "data": { first_handling_prep_id: number, } };
+export type ComponentProductionSpec = { "kind": "cooked", "data": { completion_prep_id: number, } } | { "kind": "cooked_with_cooling", "data": { completion_prep_id: number, cooling_prep_ids: Array<number>, max_cooling_seconds: number, } } | { "kind": "unheated", "data": { first_handling_prep_id: number, } };
 
 export type ComponentSpec = { component_id: ComponentId, title: Title, ingredient_ids: Array<IngredientId>, storage_rule_ids: Array<EvidenceId>, production: ComponentProductionSpec | null, };
 
@@ -247,7 +251,7 @@ export type MealRequirements = { slot: SlotId, enabled: boolean, location: MealL
 
 export type MealRequirementsDocumentV1 = { schema_version: SchemaVersion, meal_requirements: MealRequirements, };
 
-export type MealSelection = { slot: SlotId, recipe: RecipeRef, origin: SelectionOrigin, repeat_authorised: boolean, servings: Array<DinerServing>, extras: Array<ExtraSelection>, batch_use: BatchUse, meal_overrides: MealOverrides, };
+export type MealSelection = { slot: SlotId, recipe: RecipeRef, origin: SelectionOrigin, repeat_authorised: boolean, servings: Array<DinerServing>, extras: Array<ExtraSelection>, batch_use: BatchUse, meal_overrides: MealOverrides, portable_cold?: PortableColdJourney, };
 
 export type MealTime = { meal_type: MealType, time: LocalTime, };
 
@@ -321,6 +325,10 @@ export type PlanningHistory = { revision: Revision, selected: Array<SelectionHis
 
 export type PortabilityEvidence = { cold_suitable: boolean, reheating_required: boolean, cold_storage_required: boolean, evidence_ids: Array<EvidenceId>, };
 
+export type PortableChillingDeclaration = { schema_version: SchemaVersion, confirmed_at: Instant, journey_digest: PayloadDigest, };
+
+export type PortableColdJourney = { packing_complete_at: ZonedMoment, depart_at: ZonedMoment, declaration: PortableChillingDeclaration, };
+
 export type PortionPreference = { preset: PortionPresetName, adjustment: PositiveRational, meal_overrides: Array<MealPortionOverride>, };
 
 export type PortionPreset = { preset: PortionPresetName, age_band: AgeBand, meal_type: MealType, servings: PositiveRational, evidence_ids: Array<EvidenceId>, };
@@ -356,6 +364,8 @@ export type ProposedSelection = { slot: SlotId, selection: MealSelection | null,
 export type Provider = "codex_local" | "claude_cowork";
 
 export type PublicationState = "not_requested" | "prepared" | "exported_manual_import_required" | "publishing" | "published" | "needs_user" | "failed";
+
+export type PublishedCalendarEvent = { event_id: CalendarEventId, provider_event_id: Text, title: Title, body: LongText, start: Instant, end: Instant, zone: ZoneId, observed_at: Instant, };
 
 export type Quantity = { amount: PositiveRational, unit: Unit, form: IngredientForm, };
 
@@ -434,6 +444,8 @@ export type ReviewActor = "human" | "automated";
 export type ReviewKind = "source_review" | "quantity_review" | "dietary_review" | "cook_test";
 
 export type ReviewRecord = { evidence_id: EvidenceId, kind: ReviewKind, actor: ReviewActor, at: Instant, note: Text, };
+
+export type ReviewedRecipePacketRef = { recipe: RecipeRef, packet_digest: Digest, };
 
 export type Revision = string;
 

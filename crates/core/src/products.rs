@@ -810,6 +810,21 @@ fn check_pack_quantities(item: &ProductObservation) -> Result<(), DomainError> {
 }
 type ScopedRequirements<'a> = Vec<(&'a DemandUse, Vec<HardRequirement>)>;
 impl MatchContext<'_> {
+    /// Read-only inputs for one actual derived line. The caller supplies only
+    /// its identity; transported quantities, requirements or origins cannot
+    /// replace this prepared context. These clones confer no product authority.
+    pub fn line_context(
+        &self,
+        line_id: &DemandLineId,
+    ) -> Result<(DemandLine, Vec<(DemandUse, Vec<HardRequirement>)>, Vec<SupplyOrigin>), DomainError> {
+        shape(line_id)?;
+        let line = self.derived.demand.lines.iter().find(|line| &line.line_id == line_id)
+            .ok_or_else(|| err(ErrorCode::MissingReference, "/products/line"))?;
+        let uses = self.line_uses(line)?.into_iter()
+            .map(|(demand_use, requirements)| (demand_use.clone(), requirements)).collect();
+        Ok((line.clone(), uses, self.line_origins(line)))
+    }
+
     fn line_origins(&self, line: &DemandLine) -> Vec<SupplyOrigin> {
         self.origins
             .iter()

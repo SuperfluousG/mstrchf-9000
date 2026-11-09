@@ -516,6 +516,7 @@ fn derivation_fixture(overnight: bool) -> Fixture {
         week_id: selected_slot.week_id.clone(),
         revision: Revision(1),
         selections: BoundedVec(vec![MealSelection {
+            portable_cold: None,
             slot: selected_slot.clone(),
             recipe: rf.clone(),
             origin: SelectionOrigin::Fixed,
@@ -540,6 +541,7 @@ fn derivation_fixture(overnight: bool) -> Fixture {
         recipes: vec![basis],
         classes: vec![classes],
         methods: vec![MethodPhases {
+            portable_cold: None,
             recipe: rf.clone(),
             kind: MethodKind::Production,
             prep_ids: (1..=durations.len() as u16).collect(),
@@ -951,6 +953,7 @@ fn extra_fixture() -> Fixture {
     f.evidence.recipes.push(eb);
     f.evidence.classes.push(ec);
     f.evidence.methods.push(MethodPhases {
+        portable_cold: None,
         recipe: er.clone(),
         kind: MethodKind::Production,
         prep_ids: vec![1],

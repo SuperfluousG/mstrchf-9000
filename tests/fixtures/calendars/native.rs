@@ -224,6 +224,7 @@ pub fn direct_reuse(reheated: bool) -> Fixture {
     saved.plan.batch_links[0].components[0].quantity.amount = p(200, 1);
     let evidence_ids = saved.evidence.methods[0].evidence_ids.clone();
     saved.evidence.methods.push(MethodPhases {
+        portable_cold: None,
         recipe: reference.clone(),
         kind: MethodKind::Reuse,
         prep_ids: vec![2],

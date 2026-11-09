@@ -125,6 +125,11 @@ mod projection {
         let kind = field(v.get("command").ok_or_else(fail)?, "kind")?;
         let command_kind = match kind {
             "open_planning_horizon" => SupportedCommand::OpenPlanningHorizon,
+            "suggest_meals" => SupportedCommand::SuggestMeals,
+            "save_personal_recipe" => SupportedCommand::SavePersonalRecipe,
+            "record_feedback" => SupportedCommand::RecordFeedback,
+            "restore_hidden_recipe" => SupportedCommand::RestoreHiddenRecipe,
+            "confirm_essentials" => SupportedCommand::ConfirmEssentials,
             "save_household_draft" => SupportedCommand::SaveHouseholdDraft,
             "set_privacy" => SupportedCommand::SetPrivacy,
             "cancel_job" => SupportedCommand::CancelJob,

@@ -476,13 +476,19 @@ projection!(ComponentReheatCount {
     planned_reheats,
     evidence_ids
 });
-projection!(MethodPhases {
-    recipe,
-    kind,
-    prep_ids,
-    direct_reuse_counts,
-    evidence_ids
-});
+projection!(PortableColdMethod { packing_prep_id, service_prep_id });
+impl NativeValue for MethodPhases {
+    fn native(&self) -> Value {
+        let mut value = json!({"recipe":self.recipe,"kind":self.kind.native(),
+            "prep_ids":self.prep_ids,"direct_reuse_counts":self.direct_reuse_counts.native(),
+            "evidence_ids":self.evidence_ids});
+        if let Some(portable) = &self.portable_cold {
+            value.as_object_mut().expect("method projection is an object")
+                .insert("portable_cold".into(), portable.native());
+        }
+        value
+    }
+}
 projection!(FoodEvidence {
     catalogue_revision,
     catalogue_digest,

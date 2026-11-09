@@ -172,6 +172,7 @@ pub fn fixture() -> SavedFoodBasis {
         evidence.recipes.push(basis);
         evidence.classes.push(classes);
         evidence.methods.push(MethodPhases {
+            portable_cold: None,
             recipe: reference.clone(),
             kind: MethodKind::Production,
             prep_ids: vec![1],
@@ -211,6 +212,7 @@ pub fn fixture() -> SavedFoodBasis {
     };
     for index in 0..3 {
         plan.selections.0.push(MealSelection {
+            portable_cold: None,
             slot: slots[index].clone(),
             recipe: refs[index].clone(),
             origin: SelectionOrigin::Fixed,

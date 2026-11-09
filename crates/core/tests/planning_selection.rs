@@ -99,8 +99,44 @@ fn context(recipes: Vec<RecipeRevision>, count: usize) -> PlanningContext {
         },
     }
 }
+
+fn context_cache_assess(c: &PlanningContext) -> Result<ChoiceAssessment,DomainError> {
+    let r=recipe();let (basis,classes)=inputs(&r);
+    let reviewed=vec![assess_revision(&r,&basis,&classes).unwrap()];
+    assess_choice(c,&c.weeks[0].cells[2].slot,&choice(&r),SelectionOrigin::Suggested,false,&reviewed)
+}
+
+fn cold_context_cache_assess(c: &PlanningContext) -> Result<ChoiceAssessment,DomainError> {
+    let c=c.clone();std::thread::spawn(move||context_cache_assess(&c)).join().unwrap()
+}
+
+#[test]
+fn repeated_context_admission_preserves_warm_cold_choice_and_revalidates_all_changed_inputs() {
+    let c=context(vec![recipe()],2);let expected=cold_context_cache_assess(&c);
+    assert!(matches!(expected,Ok(ChoiceAssessment::Suitable(_))));
+    assert_eq!(context_cache_assess(&c),expected);
+    assert_eq!(context_cache_assess(&c),expected);
+    let mutations:Vec<(&str,fn(&mut PlanningContext))>=vec![
+        ("requirements",|v|v.requirements[2].attendees[0].portion.adjustment=p(4,1)),
+        ("household projection",|v|v.household.diners[0].restrictions=RestrictionDeclaration::Unconfirmed{}),
+        ("recipe bytes",|v|v.recipes[0].ingredients[0].name=NameText("Changed recipe bytes".into())),
+        ("history",|v|v.history.hidden_recipe_ids.0.push(RecipeId("invalid".into()))),
+        ("privacy",|v|v.privacy.revision=Revision(0)),
+        ("context stamp",|v|v.stamp.history_revision=Revision(0)),
+        ("explicit meal clock",|v|v.requirements[2].eat_by.0.as_mut().unwrap().instant=Instant("2000-01-01T00:00:00Z".into())),
+    ];
+    for (label,mutate) in mutations {
+        assert_eq!(context_cache_assess(&c),expected);
+        let mut changed=c.clone();mutate(&mut changed);
+        let cold=cold_context_cache_assess(&changed);assert!(cold.is_err(),"{label}");
+        assert_eq!(context_cache_assess(&changed),cold,"{label}");
+        assert_eq!(context_cache_assess(&changed),cold,"repeat failure {label}");
+        assert_eq!(context_cache_assess(&c),expected,"prior proof after invalid {label}");
+    }
+}
 fn choice(r: &RecipeRevision) -> ChoiceSpec {
     ChoiceSpec {
+        portable_cold: None,
         recipe: reference(r),
         extras: vec![],
         meal_overrides: MealOverrides {

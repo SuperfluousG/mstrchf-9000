@@ -13,3 +13,7 @@
 !.env.example
 /private/
 /artifacts/local/
+/.sites-local/
+
+**/target/
+/sites/

@@ -9,3 +9,6 @@ mstrchf-contracts = { path = "../contracts" }
 mstrchf-core = { path = "../core" }
 serde_json = "=1.0.151"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+
+[dev-dependencies]
+chrono-tz = "=0.10.4"

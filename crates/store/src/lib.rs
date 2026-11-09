@@ -47,6 +47,10 @@ mod windows_fs;
 
 #[cfg(all(debug_assertions, feature = "synthetic-development"))]
 pub mod development;
+#[cfg(all(debug_assertions, feature = "synthetic-development"))]
+pub mod planner;
+#[cfg(all(debug_assertions, feature = "synthetic-development"))]
+mod planner_state;
 #[cfg(all(test, debug_assertions, feature = "synthetic-development"))]
 #[path = "../tests/development.rs"]
 mod development_tests;
@@ -73,6 +77,8 @@ pub struct Store {
     owner: Option<JoinHandle<()>>,
 }
 enum Request {
+    #[cfg(all(debug_assertions,feature="synthetic-development"))]
+    Board(Option<WeekId>,Option<SlotId>,planner::ChoiceOptions,SyncSender<Result<development::DevelopmentBoard,DomainError>>),
     Snapshot(SyncSender<Result<Snapshot, DomainError>>),
     Command(
         Box<AppCommandV1>,
@@ -127,6 +133,8 @@ impl Store {
                 }
                 while let Ok(request) = receiver.recv() {
                     match request {
+                        #[cfg(all(debug_assertions,feature="synthetic-development"))]
+                        Request::Board(week,slot,options,reply)=>{let result=db.verify_owner().and_then(|_|planner_state::board(&mut db.connection,week,slot,options));let _=reply.send(result);}
                         Request::Snapshot(reply) => {
                             let _ = reply.send(db.snapshot());
                         }
@@ -163,6 +171,10 @@ impl Store {
             .try_send(Request::Snapshot(reply))
             .map_err(records::storage)?;
         receive.recv().map_err(records::storage)?
+    }
+    #[cfg(all(debug_assertions,feature="synthetic-development"))]
+    pub fn planner_board(&self,week:Option<WeekId>,slot:Option<SlotId>,options:planner::ChoiceOptions)->Result<development::DevelopmentBoard,DomainError>{
+        let (reply,receive)=mpsc::sync_channel(1);self.sender.try_send(Request::Board(week,slot,options,reply)).map_err(records::storage)?;receive.recv().map_err(records::storage)?
     }
     pub fn dispatch_ui(&self, command: AppCommandV1) -> Result<UiCommandOutcome, DomainError> {
         let bytes = canonical_bytes(&command)?;

@@ -5,9 +5,17 @@ pub fn assess_feasibility(
     saved: &SavedFoodBasis,
     inputs: &FeasibilityInputs,
 ) -> Result<FeasibilityReport, DomainError> {
-    verify_core(derived, saved)?;
-    let graph = super::uses::reconstruct_verified(derived, saved)?;
-    let bindings = super::uses::bindings(derived, saved)?;
+    let checked = verify_core(derived, saved)?;
+    assess_verified_feasibility(&checked, inputs)
+}
+
+pub(crate) fn assess_verified_feasibility(
+    checked: &VerifiedCore<'_>,
+    inputs: &FeasibilityInputs,
+) -> Result<FeasibilityReport, DomainError> {
+    let derived = checked.derived();
+    let graph = super::uses::reconstruct_verified(checked)?;
+    let bindings = checked.bindings();
     validate_inputs(inputs)?;
     require(
         digest_product_uses(&inputs.products)? == inputs.products.digest,
@@ -88,7 +96,7 @@ pub fn assess_feasibility(
                                 Some(at)
                             }
                             OpeningAnchor::PlannedPhaseStart { phase } => {
-                                Some(super::uses::task_at(derived, &bindings, phase)?)
+                                Some(super::uses::task_at(derived, bindings, phase)?)
                             }
                         };
                         if let Some(at) = at {

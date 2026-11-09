@@ -6,11 +6,14 @@ use mstrchf_core::{food::*, recipes::*, selection::*};
 pub struct DevelopmentChoice {
     pub title: String,
     pub selection: MealSelection,
+    pub plan: Option<WeekPlan>,
 }
 #[derive(serde::Serialize)]
 pub struct DevelopmentBoard {
     pub week: Week,
     pub choices: Vec<DevelopmentChoice>,
+    pub snapshot_revision:Revision,
+    pub details:Option<crate::planner_state::PlannerDetails>,
 }
 
 pub fn recipe_reference(r: &RecipeRevision) -> Result<RecipeRef, DomainError> {
@@ -21,6 +24,10 @@ pub fn recipe_reference(r: &RecipeRevision) -> Result<RecipeRef, DomainError> {
     })
 }
 pub fn catalogue() -> Result<Vec<RecipeRevision>, DomainError> {
+    static CATALOGUE:std::sync::OnceLock<Result<Vec<RecipeRevision>,DomainError>>=std::sync::OnceLock::new();
+    CATALOGUE.get_or_init(build_catalogue).clone()
+}
+fn build_catalogue() -> Result<Vec<RecipeRevision>, DomainError> {
     let original: RecipeRevision = parse_document(include_bytes!(
         "../../../tests/fixtures/food/admission/ruling004-current--complete-synthetic.json"
     ))?;
@@ -66,11 +73,11 @@ pub fn catalogue() -> Result<Vec<RecipeRevision>, DomainError> {
         })
         .collect()
 }
-fn evidence_inputs(r: &RecipeRevision) -> Result<(EvidenceBasis, ComponentClassView), DomainError> {
+pub(crate) fn evidence_inputs(r: &RecipeRevision) -> Result<(EvidenceBasis, ComponentClassView), DomainError> {
     let rf = recipe_reference(r)?;
     let pins=(1..=8).map(|n| {let id=EvidenceId(format!("ev_{n:032x}"));Ok(EvidencePin{evidence_id:id.clone(),revision:Revision(1),digest:canonical_digest(&serde_json::json!({"fixture":"m1-host-owned-synthetic-v1","recipe":rf,"evidence_id":id,"statement":"Synthetic engineering premise only; no production food or rights admission."}))?})}).collect::<Result<Vec<_>,DomainError>>()?;
     Ok((
-        EvidenceBasis::new(rf.clone(), pins, vec![AssetDigest("a".repeat(64))])?,
+        EvidenceBasis::new(rf.clone(), pins, r.image.0.iter().map(|v|v.digest.clone()).collect())?,
         ComponentClassView::new(
             rf.clone(),
             vec![ComponentClassEvidence {
@@ -82,7 +89,7 @@ fn evidence_inputs(r: &RecipeRevision) -> Result<(EvidenceBasis, ComponentClassV
         )?,
     ))
 }
-fn context(
+pub(crate) fn context(
     s: &Snapshot,
     p: &HouseholdProfile,
     w: &Week,
@@ -142,7 +149,7 @@ fn food_error(e: FoodFailure) -> DomainError {
     }
 }
 
-pub fn validate_saved_plan(
+fn validate_m1_saved_plan(
     s: &Snapshot,
     p: &HouseholdProfile,
     w: &Week,
@@ -179,6 +186,7 @@ pub fn validate_saved_plan(
         .map(|(r, (b, k))| assess_revision(r, b, k))
         .collect::<Result<Vec<_>, _>>()?;
     let choice = ChoiceSpec {
+        portable_cold: None,
         recipe: selected.recipe.clone(),
         extras: vec![],
         meal_overrides: selected.meal_overrides.clone(),
@@ -224,6 +232,7 @@ pub fn validate_saved_plan(
     };
     let ev = vec![EvidenceId(format!("ev_{:032x}", 8))];
     evidence.methods.push(MethodPhases {
+        portable_cold: None,
         recipe: selected.recipe.clone(),
         kind: MethodKind::Production,
         prep_ids: vec![1],
@@ -352,6 +361,10 @@ pub fn validate_saved_plan(
         .map_err(food_error)?,
     ))
 }
+pub fn validate_saved_plan(s:&Snapshot,p:&HouseholdProfile,w:&Week)->Result<Option<FoodDerivation>,DomainError>{
+    crate::planner::derive(s,p,w)
+}
+pub(crate) fn validate_legacy_plan(s:&Snapshot,p:&HouseholdProfile,w:&Week)->Result<Option<FoodDerivation>,DomainError>{validate_m1_saved_plan(s,p,w)}
 pub fn board(s: &Snapshot) -> Result<DevelopmentBoard, DomainError> {
     board_for(s,None,None)
 }
@@ -362,49 +375,8 @@ pub fn board_for(s:&Snapshot,week_id:Option<&WeekId>,slot:Option<&SlotId>)->Resu
     };
     let slot=slot.cloned().unwrap_or_else(||week.cells[2].slot.clone());
     let profile = s.profile.0.clone().map_or_else(|| seed_profile(s), Ok)?;
-    let c = context(s, &profile, &week, catalogue()?)?;
-    let inputs = c
-        .recipes
-        .iter()
-        .map(evidence_inputs)
-        .collect::<Result<Vec<_>, _>>()?;
-    let reviewed = c
-        .recipes
-        .iter()
-        .zip(&inputs)
-        .map(|(r, (b, k))| assess_revision(r, b, k))
-        .collect::<Result<Vec<_>, _>>()?;
-    let mut choices = vec![];
-    for r in &c.recipes.0 {
-        let choice = ChoiceSpec {
-            recipe: recipe_reference(r)?,
-            extras: vec![],
-            meal_overrides: MealOverrides {
-                portions: BoundedVec(vec![]),
-                eat_by: Nullable(None),
-            },
-            batch_use: BatchUse::NewBatch {
-                batch_id: BatchId(format!("ba_{:032x}", 1)),
-                production_servings: PositiveRational::new(1, 1)?,
-            },
-        };
-        if let ChoiceAssessment::Suitable(selection) = assess_choice(
-            &c,
-            &slot,
-            &choice,
-            SelectionOrigin::Fixed,
-            false,
-            &reviewed,
-        )? {
-            let mut candidate = week.clone();
-            candidate.plan.selections = BoundedVec(vec![selection.clone()]);
-            if validate_saved_plan(s, &profile, &candidate).is_ok(){choices.push(DevelopmentChoice {
-                title: r.title.0.clone(),
-                selection,
-            });}
-        }
-    }
-    Ok(DevelopmentBoard { week, choices })
+    let choices=crate::planner::choices(s,&profile,&week,&slot,MealOverrides{portions:BoundedVec(vec![]),eat_by:Nullable(None)})?;
+    Ok(DevelopmentBoard { week, choices,snapshot_revision:s.snapshot_revision,details:None })
 }
 
 pub fn now() -> Result<Instant, DomainError> {
@@ -510,7 +482,7 @@ mod tests {
         let w = seed_week(&s, &Instant("2026-10-07T12:00:00Z".into())).unwrap();
         s.weeks = BoundedVec(vec![w]);
         let choices = board(&s).unwrap();
-        assert_eq!(choices.choices.len(), 2);
+        assert_eq!(choices.choices.len(), 4);
         assert_eq!(
             choices.choices[0].selection.recipe.recipe_id.0,
             "rc_00000000000000000000000000000001"

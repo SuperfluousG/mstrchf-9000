@@ -104,12 +104,17 @@ async fn planner_development_board<R: Runtime>(
     state: State<'_, Arc<Store>>,
     week_id: Option<mstrchf_contracts::WeekId>,
     slot: Option<mstrchf_contracts::SlotId>,
+    meal_overrides:Option<mstrchf_contracts::MealOverrides>,
+    extra_recipients:Option<Vec<mstrchf_contracts::PersonRef>>,
+    make_extra:Option<bool>,
+    leftover_source:Option<mstrchf_contracts::SlotId>,
+    eat_by_time:Option<mstrchf_contracts::LocalTime>,
+    time_resolution:Option<mstrchf_contracts::Resolution>,
 ) -> Result<mstrchf_store::development::DevelopmentBoard, DomainError> {
     check_window(&window)?;
     let store = Arc::clone(state.inner());
     tauri::async_runtime::spawn_blocking(move || {
-        let snapshot = store.snapshot()?;
-        mstrchf_store::development::board_for(&snapshot,week_id.as_ref(),slot.as_ref())
+        store.planner_board(week_id,slot,mstrchf_store::planner::ChoiceOptions{overrides:meal_overrides.unwrap_or_else(||mstrchf_store::planner::ChoiceOptions::default().overrides),extra_recipients:extra_recipients.unwrap_or_default(),make_extra:make_extra.unwrap_or(false),leftover_source,eat_by_time,time_resolution:time_resolution.unwrap_or(mstrchf_contracts::Resolution::Unambiguous)})
     })
     .await
     .map_err(|_| DomainError::new(ErrorCode::StorageFailure, "/shell/task"))?

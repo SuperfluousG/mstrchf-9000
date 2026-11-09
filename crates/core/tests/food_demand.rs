@@ -413,6 +413,7 @@ fn full_fixture(ingredients: usize) -> (SavedFoodBasis, FeasibilityInputs, FoodD
     };
     let servings = resolve_servings(&admitted, &meal, &overrides).unwrap();
     let selection = MealSelection {
+        portable_cold: None,
         slot: meal.slot.clone(),
         recipe: reference.clone(),
         origin: SelectionOrigin::Fixed,
@@ -441,6 +442,7 @@ fn full_fixture(ingredients: usize) -> (SavedFoodBasis, FeasibilityInputs, FoodD
         recipes: vec![basis],
         classes: vec![classes],
         methods: vec![MethodPhases {
+            portable_cold: None,
             recipe: reference.clone(),
             kind: MethodKind::Production,
             prep_ids: vec![1],
@@ -1129,6 +1131,7 @@ fn rebind_fixture(saved: &mut SavedFoodBasis) {
     saved.evidence.methods = refs
         .iter()
         .map(|r| MethodPhases {
+            portable_cold: None,
             recipe: r.clone(),
             kind: MethodKind::Production,
             prep_ids: vec![1],

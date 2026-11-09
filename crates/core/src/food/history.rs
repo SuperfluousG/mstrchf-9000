@@ -59,6 +59,7 @@ fn method_semantics(a: &MethodPhases, b: &MethodPhases) -> bool {
     a.recipe == b.recipe
         && a.kind == b.kind
         && a.prep_ids == b.prep_ids
+        && a.portable_cold == b.portable_cold
         && a.direct_reuse_counts
             .iter()
             .map(|r| (&r.component_id, r.planned_reheats))
@@ -209,6 +210,22 @@ pub fn assess_continuation(
         }
     }
     fresh.catalogue_digest = food_evidence_digest(&fresh)?;
+    // Retained allocation portions stay fixed as before. Other current
+    // requirements must still match the owner's portable declaration, including
+    // the original source meal, rather than borrowing its historical context.
+    let mut fresh_context = saved.context.clone();
+    for current_meal in &current.requirements.meals {
+        let old = fresh_context.requirements.iter_mut().find(|old| old.slot == current_meal.slot)
+            .ok_or_else(|| err(ErrorCode::MissingReference, "/historical/requirements"))?;
+        let mut meal = current_meal.clone();
+        meal.preferred_hands_on_minutes = old.preferred_hands_on_minutes;
+        for attendee in meal.attendees.iter_mut() {
+            if let Some(previous) = old.attendees.iter().find(|old| old.person == attendee.person) {
+                attendee.portion = previous.portion.clone();
+            }
+        }
+        *old = meal;
+    }
     for m in &current.requirements.meals {
         let old = saved
             .context
@@ -237,7 +254,9 @@ pub fn assess_continuation(
             || m.eat_by != old.eat_by
             || m.location != old.location
             || m.mobility != old.mobility
-            || (!m.leftovers_allowed && matches!(selected.batch_use, BatchUse::Leftover { .. }))
+            || (!m.leftovers_allowed
+                && selected.origin != SelectionOrigin::Fixed
+                && matches!(selected.batch_use, BatchUse::Leftover { .. }))
         {
             checks.push(conflict(
                 week,
@@ -257,7 +276,11 @@ pub fn assess_continuation(
             Ok(base) => {
                 record_eligibility(
                     &mut checks,
-                    crate::eligibility::eligible(&base, &meal),
+                    if selected.portable_cold.is_some() {
+                        crate::eligibility::eligible_with_food(&base, &meal, selected, &fresh_context, &fresh)
+                    } else {
+                        crate::eligibility::eligible(&base, &meal)
+                    },
                     week,
                     &m.slot,
                     &selected.recipe,

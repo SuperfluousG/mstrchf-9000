@@ -188,16 +188,40 @@ record! {
 }
 
 record! {
-    pub struct MealSelection {
-        pub slot: SlotId,
-        pub recipe: RecipeRef,
-        pub origin: SelectionOrigin,
-        pub repeat_authorised: bool,
-        pub servings: BoundedVec<DinerServing, 1, 64>,
-        pub extras: BoundedVec<ExtraSelection, 0, 64>,
-        pub batch_use: BatchUse,
-        pub meal_overrides: MealOverrides,
+    /// Version 1 records the owner's plan to maintain/check 0–5°C through
+    /// service, with an insulated bag/frozen packs and a fridge on arrival.
+    /// It is never evidence of actual temperatures or earlier safe handling.
+    pub struct PortableChillingDeclaration {
+        pub schema_version: SchemaVersion,
+        pub confirmed_at: Instant,
+        pub journey_digest: PayloadDigest,
     }
+}
+
+record! {
+    pub struct PortableColdJourney {
+        pub packing_complete_at: ZonedMoment,
+        pub depart_at: ZonedMoment,
+        pub declaration: PortableChillingDeclaration,
+    }
+}
+
+// Omission preserves the exact bytes and hashes of historical selections.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize, schemars::JsonSchema, ts_rs::TS)]
+#[serde(deny_unknown_fields)]
+pub struct MealSelection {
+    pub slot: SlotId,
+    pub recipe: RecipeRef,
+    pub origin: SelectionOrigin,
+    pub repeat_authorised: bool,
+    pub servings: BoundedVec<DinerServing, 1, 64>,
+    pub extras: BoundedVec<ExtraSelection, 0, 64>,
+    pub batch_use: BatchUse,
+    pub meal_overrides: MealOverrides,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(with = "PortableColdJourney")]
+    #[ts(optional)]
+    pub portable_cold: Option<PortableColdJourney>,
 }
 
 record! {

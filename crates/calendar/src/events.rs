@@ -513,7 +513,7 @@ fn binding_task<'a>(
     ))
 }
 /// Core validates source edges; additionally bind every out-of-method instruction dependency
-/// to the exact selected component anchor, not a coincident step in another recipe.
+/// to the exact selected component production/cooling phases, not a coincident step in another recipe.
 fn check_external_dependencies(o: &Owner<'_>, occ: &Occurrence) -> Result<(), CalendarFailure> {
     let r = recipe(o.input.historical, &occ.key.recipe)?;
     let method = o
@@ -625,11 +625,20 @@ fn source_components<'a>(
             .iter()
             .find(|c| c.component_id == *id)
             .ok_or_else(|| error(ErrorCode::MissingReference, "/source/component_spec"))?;
-        let prep_id = match spec.production.0 {
-            Some(ComponentProductionSpec::Cooked { completion_prep_id }) => completion_prep_id,
+        let prep_ids = match &spec.production.0 {
+            Some(ComponentProductionSpec::Cooked { completion_prep_id }) => {
+                vec![*completion_prep_id]
+            }
+            Some(ComponentProductionSpec::CookedWithCooling {
+                completion_prep_id,
+                cooling_prep_ids,
+                ..
+            }) => std::iter::once(*completion_prep_id)
+                .chain(cooling_prep_ids.iter().copied())
+                .collect(),
             Some(ComponentProductionSpec::Unheated {
                 first_handling_prep_id,
-            }) => first_handling_prep_id,
+            }) => vec![*first_handling_prep_id],
             None => {
                 return Err(error(
                     ErrorCode::UnsupportedCapability,
@@ -637,14 +646,51 @@ fn source_components<'a>(
                 ));
             }
         };
-        let phase = PhaseKey {
-            occurrence: source.clone(),
-            prep_id,
-        };
-        binding_task(o, &phase)?;
-        out.push((c, source.clone(), phase));
+        for prep_id in prep_ids {
+            let phase = PhaseKey {
+                occurrence: source.clone(),
+                prep_id,
+            };
+            binding_task(o, &phase)?;
+            out.push((c, source.clone(), phase));
+        }
     }
     Ok(out)
+}
+
+fn cooling_phase_limit(recipe: &RecipeRevision, prep_id: u16) -> Option<u32> {
+    recipe
+        .components
+        .iter()
+        .filter_map(|component| match &component.production.0 {
+            Some(ComponentProductionSpec::CookedWithCooling {
+                cooling_prep_ids,
+                max_cooling_seconds,
+                ..
+            }) if cooling_prep_ids.contains(&prep_id) => Some(*max_cooling_seconds),
+            _ => None,
+        })
+        .min()
+}
+
+fn cooling_duration(seconds: u32) -> String {
+    if seconds % 60 == 0 {
+        format!("{} minutes", seconds / 60)
+    } else {
+        format!("{seconds} seconds")
+    }
+}
+
+// Only the newly permitted earlier endpoint changes prose. A zero-offset
+// original retains its exact historical calendar wording and receipts.
+fn earlier_cooking_endpoint(recipe: &RecipeRevision, cooling_id: Option<u16>) -> Option<u16> {
+    recipe.components.iter().find_map(|component| {
+        let Some(ComponentProductionSpec::CookedWithCooling { completion_prep_id, cooling_prep_ids, .. }) = &component.production.0 else {return None;};
+        if cooling_id.is_some_and(|id| !cooling_prep_ids.contains(&id)) {return None;}
+        let completion = recipe.prep.iter().find(|phase| phase.prep_id == *completion_prep_id)?;
+        (i64::from(completion.earliest_offset_seconds) + i64::from(completion.elapsed_minutes)*60 < 0)
+            .then_some(*completion_prep_id)
+    })
 }
 
 struct Body {
@@ -910,8 +956,23 @@ fn session_draft(
             .ok_or_else(|| error(ErrorCode::MissingReference, "/body/occurrence"))?;
         let r = recipe(o.input.historical, &key.recipe)?;
         titles.push(r.title.0.clone());
+        let service_label = if occ.method == MethodKind::Production
+            && r.components.iter().any(|component| {
+                matches!(
+                    &component.production.0,
+                    Some(ComponentProductionSpec::CookedWithCooling { .. })
+                )
+            }) {
+            if earlier_cooking_endpoint(r, None).is_some() {
+                "Hot meal service (original cooking ends earlier; portioning/cooling is scheduled separately)"
+            } else {
+                "Hot meal service (cooling of remaining shares follows when scheduled)"
+            }
+        } else {
+            "Eat by"
+        };
         body.line(format!(
-            "\n{} — {} {:?}{}\nEat by: {}",
+            "\n{} — {} {:?}{}\n{}: {}",
             r.title.0,
             key.slot.date.0,
             key.slot.meal_type,
@@ -920,6 +981,7 @@ fn session_draft(
             } else {
                 ""
             },
+            service_label,
             moment(&occ.eat_by)
         ))?;
         body.line(format!(
@@ -980,6 +1042,25 @@ fn session_draft(
                 "active"
             }
         ))?;
+        if let Some(limit) = cooling_phase_limit(r, b.phase.prep_id) {
+            let occurrence = o
+                .occurrences
+                .iter()
+                .find(|occurrence| occurrence.key == b.phase.occurrence)
+                .ok_or_else(|| error(ErrorCode::MissingReference, "/cooling/occurrence"))?;
+            if let Some(prep_id) = earlier_cooking_endpoint(r, Some(b.phase.prep_id)) {
+                let phase = PhaseKey {occurrence:b.phase.occurrence.clone(),prep_id};
+                let (_, completion) = binding_task(o, &phase)?;
+                body.line(format!(
+                    "Portioning/cooling/put-away after original cooking at {}. Hot service: {}. Finish cooling and refrigeration within {} of that cooking endpoint. These times are planned; follow the recipe handling instructions.",
+                    moment(&completion.elapsed.end), moment(&occurrence.eat_by), cooling_duration(limit)
+                ))?;
+            } else { body.line(format!(
+                "After-service cooling/put-away of remaining portions. Hot service: {}. Cool and refrigerate the remaining portions within {} of cooking. These times are planned; follow the recipe handling instructions.",
+                moment(&occurrence.eat_by),
+                cooling_duration(limit)
+            ))?; }
+        }
         for active in t.active_intervals.iter() {
             body.line(format!(
                 "Active: {} to {}",
@@ -1027,20 +1108,42 @@ fn session_draft(
                     .any(|(n, v, _)| *n == *owner && v.phase == b.phase)
         }) {
             let (_, t) = binding_task(o, &b.phase)?;
-            body.line(format!(
-                "Preparation scheduled elsewhere for {} {:?}: phase {}, {} to {}; required by {}",
-                key.slot.date.0,
-                key.slot.meal_type,
-                b.phase.prep_id,
-                moment(&t.elapsed.start),
-                moment(&t.elapsed.end),
-                moment(&occ.eat_by)
-            ))?;
+            if let Some(limit) = cooling_phase_limit(r, b.phase.prep_id) {
+                if let Some(prep_id) = earlier_cooking_endpoint(r, Some(b.phase.prep_id)) {
+                    let phase=PhaseKey{occurrence:b.phase.occurrence.clone(),prep_id};
+                    let (_, completion)=binding_task(o,&phase)?;
+                    body.line(format!(
+                        "Remaining-portion handling/cooling scheduled from original cooking at {}: phase {}, {} to {}; hot service at {}. Finish cooling and refrigeration within {} of that cooking endpoint. These times are planned; follow the recipe handling instructions.",
+                        moment(&completion.elapsed.end),b.phase.prep_id,moment(&t.elapsed.start),moment(&t.elapsed.end),moment(&occ.eat_by),cooling_duration(limit)
+                    ))?;
+                } else { body.line(format!(
+                    "Remaining-portion cooling scheduled after hot service at {}: phase {}, {} to {}; cool and refrigerate within {} of cooking. These times are planned; follow the recipe handling instructions.",
+                    moment(&occ.eat_by),
+                    b.phase.prep_id,
+                    moment(&t.elapsed.start),
+                    moment(&t.elapsed.end),
+                    cooling_duration(limit)
+                ))?; }
+            } else {
+                body.line(format!(
+                    "Preparation scheduled elsewhere for {} {:?}: phase {}, {} to {}; required by {}",
+                    key.slot.date.0,
+                    key.slot.meal_type,
+                    b.phase.prep_id,
+                    moment(&t.elapsed.start),
+                    moment(&t.elapsed.end),
+                    moment(&occ.eat_by)
+                ))?;
+            }
         }
+        let mut stored_components = Vec::new();
         for (component, source, phase) in source_components(o, occ)? {
             let (_, t) = binding_task(o, &phase)?;
             body.line(format!("Preparation scheduled earlier for this reuse: {} {:?}, component {}, phase {}, {} to {}",source.slot.date.0,source.slot.meal_type,component.component_id.0,phase.prep_id,moment(&t.elapsed.start),moment(&t.elapsed.end)))?;
-            storage(&mut body, component)?;
+            if !stored_components.contains(&component.component_id) {
+                storage(&mut body, component)?;
+                stored_components.push(component.component_id.clone());
+            }
             if !credited.contains(&(*owner, source.recipe.clone())) {
                 credits(&mut body, recipe(o.input.historical, &source.recipe)?)?;
                 credited.push((*owner, source.recipe.clone()));

@@ -6,6 +6,7 @@ use mstrchf_contracts::*;
 mod feasibility;
 mod uses;
 pub use feasibility::assess_feasibility;
+pub(crate) use feasibility::assess_verified_feasibility;
 pub(crate) use feasibility::{canonicalise_other_checks, summarise};
 pub use uses::reconstruct_use_graph;
 

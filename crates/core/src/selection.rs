@@ -35,6 +35,7 @@ pub struct ChoiceSpec {
     pub extras: Vec<ExtraChoice>,
     pub meal_overrides: MealOverrides,
     pub batch_use: BatchUse,
+    pub portable_cold: Option<PortableColdJourney>,
 }
 #[derive(Clone, Debug, PartialEq, Eq)]
 // The adopted native API carries MealSelection directly; boxing changes that signature.
@@ -202,6 +203,9 @@ fn choice_shape(choice: &ChoiceSpec) -> Result<(), DomainError> {
     shape(&choice.recipe, "/choice/recipe")?;
     shape(&choice.meal_overrides, "/choice/meal_overrides")?;
     shape(&choice.batch_use, "/choice/batch_use")?;
+    if let Some(journey) = &choice.portable_cold {
+        shape(journey, "/choice/portable_cold")?;
+    }
     let mut extras = BTreeSet::new();
     for e in &choice.extras {
         bound(e.recipients.len(), 1, 64, "/choice/extras/recipients")?;
@@ -285,7 +289,17 @@ pub(crate) fn assess_choice_in_validated_context(
 ) -> Result<ChoiceAssessment, DomainError> {
     choice_shape(choice)?;
     reviewed_inputs(c, reviewed)?;
-    food_choice(c, slot, choice, origin, repeat_authorised, reviewed)
+    food_choice(c, slot, choice, origin, repeat_authorised, reviewed, None)
+}
+
+pub fn assess_choice_with_food(
+    c: &PlanningContext, slot: &SlotId, choice: &ChoiceSpec, origin: SelectionOrigin,
+    repeat_authorised: bool, reviewed: &[ReviewedRecipe<'_>], evidence: &crate::food::FoodEvidence,
+) -> Result<ChoiceAssessment, DomainError> {
+    validate_selection_context(c)?;
+    choice_shape(choice)?;
+    reviewed_inputs(c, reviewed)?;
+    food_choice(c, slot, choice, origin, repeat_authorised, reviewed, Some(evidence))
 }
 
 // Only callers that have admitted the genuine complete candidate can reach here.
@@ -296,6 +310,7 @@ fn food_choice(
     origin: SelectionOrigin,
     repeat_authorised: bool,
     reviewed: &[ReviewedRecipe<'_>],
+    evidence: Option<&crate::food::FoodEvidence>,
 ) -> Result<ChoiceAssessment, DomainError> {
     shape(slot, "/slot")?;
     choice_shape(choice)?;
@@ -354,8 +369,12 @@ fn food_choice(
             "/choice/meal_overrides/eat_by",
         ));
     }
-    if let Some(result) = outcome(eligible(base, meal)?) {
-        return Ok(result);
+    if choice.portable_cold.is_none() {
+        if let Some(result) = outcome(eligible(base, meal)?) {
+            return Ok(result);
+        }
+    } else if evidence.is_none() {
+        return Err(error(ErrorCode::UnsupportedCapability, "/choice/portable_cold"));
     }
     let servings = match resolve_servings(base, meal, &choice.meal_overrides) {
         Ok(s) => s,
@@ -411,8 +430,14 @@ fn food_choice(
         extras: BoundedVec(extras),
         batch_use: choice.batch_use.clone(),
         meal_overrides: choice.meal_overrides.clone(),
+        portable_cold: choice.portable_cold.clone(),
     };
     shape(&selection, "/selection")?;
+    if let Some(evidence) = evidence {
+        if let Some(result) = outcome(crate::eligibility::eligible_with_food(base, meal, &selection, c, evidence)?) {
+            return Ok(result);
+        }
+    }
     Ok(ChoiceAssessment::Suitable(selection))
 }
 
@@ -430,6 +455,7 @@ fn spec(s: &MealSelection) -> ChoiceSpec {
             .collect(),
         meal_overrides: s.meal_overrides.clone(),
         batch_use: s.batch_use.clone(),
+        portable_cold: s.portable_cold.clone(),
     }
 }
 
@@ -439,6 +465,22 @@ pub fn prepare_selection_patch(
     proposal: &PlanProposal,
     reviewed: &[ReviewedRecipe<'_>],
     resolutions: &[SlotResolution],
+) -> Result<SelectionPatch, SelectionFailure> {
+    prepare_selection_patch_inner(c, intent, proposal, reviewed, resolutions, None)
+}
+
+pub fn prepare_selection_patch_with_food(
+    c: &PlanningContext, intent: &SelectionIntent, proposal: &PlanProposal,
+    reviewed: &[ReviewedRecipe<'_>], resolutions: &[SlotResolution],
+    evidence: &crate::food::FoodEvidence,
+) -> Result<SelectionPatch, SelectionFailure> {
+    prepare_selection_patch_inner(c, intent, proposal, reviewed, resolutions, Some(evidence))
+}
+
+fn prepare_selection_patch_inner(
+    c: &PlanningContext, intent: &SelectionIntent, proposal: &PlanProposal,
+    reviewed: &[ReviewedRecipe<'_>], resolutions: &[SlotResolution],
+    evidence: Option<&crate::food::FoodEvidence>,
 ) -> Result<SelectionPatch, SelectionFailure> {
     constituents(c)?;
     validate_intent(c, intent)?;
@@ -502,6 +544,12 @@ pub fn prepare_selection_patch(
                 .iter()
                 .find(|s| s.slot == replacement.slot);
             let new = replacement.selection.0.as_ref();
+            if intent.origin == SelectionOrigin::Suggested
+                && (old.is_some_and(|selection| selection.portable_cold.is_some())
+                    || new.is_some_and(|selection| selection.portable_cold.is_some()))
+            {
+                return Err(error(ErrorCode::AuthorityDenied, "/proposal/selection/portable_cold").into());
+            }
             if !intent.slots.contains(&replacement.slot)
                 || !active_slots(original)?.contains(&replacement.slot)
             {
@@ -591,6 +639,9 @@ pub fn prepare_selection_patch(
         }
     }
     shape(&candidate, "")?;
+    if intent.origin == SelectionOrigin::Suggested {
+        crate::portable::preserve_declarations(c, &candidate)?;
+    }
     let mut conflicts = Vec::new();
     // Structural shape and A3 attendance are necessary but do not establish food
     // eligibility or exact portions. Rebuild every active choice, including retained
@@ -604,6 +655,7 @@ pub fn prepare_selection_patch(
                 s.origin,
                 s.repeat_authorised,
                 reviewed,
+                evidence,
             )? {
                 ChoiceAssessment::Suitable(actual) => {
                     if &actual != s {

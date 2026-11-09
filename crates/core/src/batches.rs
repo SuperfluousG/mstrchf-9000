@@ -782,9 +782,10 @@ pub(crate) fn derive_batches(
                 .find(|c| c.component_id == produced.component_id)
                 .ok_or_else(|| err(ErrorCode::MissingReference, "/component"))?;
             let (prep_id, cooked) = match &spec.production.0 {
-                Some(ComponentProductionSpec::Cooked { completion_prep_id }) => {
-                    (*completion_prep_id, true)
-                }
+                Some(ComponentProductionSpec::Cooked { completion_prep_id })
+                | Some(ComponentProductionSpec::CookedWithCooling {
+                    completion_prep_id, ..
+                }) => (*completion_prep_id, true),
                 Some(ComponentProductionSpec::Unheated {
                     first_handling_prep_id,
                 }) => (*first_handling_prep_id, false),

@@ -132,6 +132,12 @@ impl ReviewedRecipe<'_> {
     pub fn recipe(&self) -> &RecipeRevision {
         self.recipe
     }
+    pub(crate) fn reference(&self) -> &RecipeRef {
+        // assess_revision is the only constructor and verifies this reference
+        // against the complete recipe bytes. Both inputs remain immutably
+        // borrowed for this proof's lifetime; no stored claim can create it.
+        &self.basis.recipe
+    }
     pub fn assessment(&self) -> &RecipeValidation {
         &self.assessment
     }

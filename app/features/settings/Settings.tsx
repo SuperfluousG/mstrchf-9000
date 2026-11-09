@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import type {HouseholdProfile,HouseholdDraft,HardRequirement,Diner,AgeBand,PortionPresetName,EquipmentCode,HouseholdStage} from '../../generated/contracts';
+import type {HouseholdProfile,HouseholdDraft,HardRequirement,Diner,AgeBand,PortionPresetName,EquipmentCode,HouseholdStage,MealLocation} from '../../generated/contracts';
+import type {LibraryEntry} from '../week/plannerTypes';
 import {usePlanner} from '../../runtime/PlannerProvider';
 
 const stages:HouseholdStage[]=['household','food_preferences','usual_week','connections'];
@@ -8,7 +9,7 @@ const diets=['vegetarian','vegan','gluten_free'] as const;
 const allergens=['milk','eggs','peanuts','tree_nuts','cereals_containing_gluten','soybeans','sesame','fish','crustaceans','molluscs','celery','mustard','lupin','sulphur_dioxide_sulphites'] as const;
 const equipment:EquipmentCode[]=['hob','oven','microwave','fridge','kettle','toaster','blender','slow_cooker','pressure_cooker'];
 const human=(s:string)=>s.replaceAll('_',' ');
-export function Settings({onClose,onboarding=false}:{onClose:()=>void;onboarding?:boolean}){
+export function Settings({onClose,onboarding=false,library=[]}:{onClose:()=>void;onboarding?:boolean;library?:LibraryEntry[]}){
  const {session,state}=usePlanner();
  const saved=state.snapshot!;
  const [profile,setProfile]=useState<HouseholdProfile>(()=>{
@@ -61,10 +62,13 @@ export function Settings({onClose,onboarding=false}:{onClose:()=>void;onboarding
     <label>Age band<select value={d.age_band} onChange={e=>edit(p=>{p.diners[i]!.age_band=e.target.value as AgeBand;})}>{['adult','teen','child_1_3','child_4_6','child_7_10','child_11_12'].map(x=><option key={x} value={x}>{human(x)}</option>)}</select></label>
     <label>Usual portion<select value={d.portions.preset} onChange={e=>edit(p=>{p.diners[i]!.portions.preset=e.target.value as PortionPresetName;})}>{['smaller','regular','larger'].map(x=><option key={x}>{x}</option>)}</select></label>
     <p>Portions use recipe-specific reviewed servings. An unsupported age or preset stays unresolved.</p>
+    <details><summary>Portions by meal type</summary>{(['breakfast','lunch','dinner'] as const).map(m=><label key={m}>{m}<select value={d.portions.meal_overrides.find(o=>o.meal_type===m)?.preset??''} onChange={e=>edit(p=>{const portions=p.diners[i]!.portions;portions.meal_overrides=portions.meal_overrides.filter(o=>o.meal_type!==m);if(e.target.value)portions.meal_overrides.push({meal_type:m,preset:e.target.value as PortionPresetName,adjustment:{numerator:'1',denominator:'1'}});portions.meal_overrides.sort((a,b)=>a.meal_type.localeCompare(b.meal_type));})}><option value="">Usual portion</option>{['smaller','regular','larger'].map(x=><option key={x}>{x}</option>)}</select></label>)}</details>
+    <details><summary>Ingredients to suggest less often</summary>{[...new Map(library.flatMap(v=>v.recipe?.ingredients??[]).map(v=>[v.ingredient_id,v])).values()].map(ingredient=><label key={ingredient.ingredient_id}><input type="checkbox" checked={d.dislikes.includes(ingredient.ingredient_id)} onChange={e=>edit(p=>{p.diners[i]!.dislikes=e.target.checked?[...p.diners[i]!.dislikes,ingredient.ingredient_id].sort():p.diners[i]!.dislikes.filter(id=>id!==ingredient.ingredient_id);})}/>{ingredient.name}</label>)}<p>Dislikes affect suggestions. Dietary exclusions remain separate.</p></details>
     <div className="requirements">{diets.map(code=><label key={code}><input type="checkbox" checked={requirements(d).some(r=>r.kind==='diet'&&r.data.code===code)} onChange={()=>toggle(i,{kind:'diet',data:{code}})}/>{human(code)}</label>)}</div>
     <details><summary>Allergens to exclude</summary>{allergens.map(code=><label key={code}><input type="checkbox" checked={requirements(d).some(r=>r.kind==='allergen_exclusion'&&r.data.code===code)} onChange={()=>toggle(i,{kind:'allergen_exclusion',data:{code}})}/>{human(code)}</label>)}</details>
     <button disabled={requirements(d).length>0} onClick={()=>edit(p=>{p.diners[i]!.restrictions={kind:'confirmed_none',data:{confirmed_at:new Date().toISOString().replace(/\.\d{3}Z$/,'Z') as never}};})}>Confirm no dietary requirements</button>
     <p>{d.restrictions.kind==='unconfirmed'?'Dietary requirements need confirmation.':d.restrictions.kind==='confirmed_none'?'Confirmed: no dietary requirements.':'Dietary requirements confirmed.'}</p>
+    <button disabled={profile.diners.length===1} onClick={()=>edit(p=>{p.diners=p.diners.filter(x=>x.diner_id!==d.diner_id);for(const c of p.usual_week.cells)c.attendee_ids=c.attendee_ids.filter(id=>id!==d.diner_id);})}>Remove diner</button><p>A diner referenced by a saved week must remain until those references are resolved.</p>
    </fieldset>)}
    <button disabled={profile.diners.length>=64} onClick={()=>edit(p=>{const d=structuredClone(p.diners[0]!);d.diner_id=`dn_${crypto.randomUUID().replaceAll('-','')}` as never;d.display_name=null;d.restrictions={kind:'unconfirmed',data:{}};p.diners.push(d);for(const c of p.usual_week.cells)c.attendee_ids.push(d.diner_id);})}>Add diner</button>
   </fieldset>}
@@ -77,6 +81,8 @@ export function Settings({onClose,onboarding=false}:{onClose:()=>void;onboarding
   </fieldset>}
   {(!onboarding||step===2)&&<fieldset><legend>Usual week</legend>
    <p>These defaults apply to new weeks. Existing weeks retain their availability.</p>
+   <label>Home time zone<input value={profile.usual_week.zone} maxLength={80} onChange={e=>edit(p=>{p.usual_week.zone=e.target.value as never;})}/></label>
+   <div className="availability-scroll"><table><thead><tr><th>Usual meal</th><th>Location</th><th>Diners</th></tr></thead><tbody>{profile.usual_week.cells.map((c,i)=><tr key={`${c.weekday}/${c.meal_type}`}><th>{human(c.weekday)} {c.meal_type}</th><td><select aria-label={`Usual ${human(c.weekday)} ${c.meal_type}`} value={c.choice} onChange={e=>edit(p=>{p.usual_week.cells[i]!.choice=e.target.value as MealLocation;})}>{['at_home','on_the_move','skip'].map(v=><option key={v} value={v}>{human(v)}</option>)}</select></td><td>{profile.diners.map(d=><label key={d.diner_id}><input type="checkbox" checked={c.attendee_ids.includes(d.diner_id)} onChange={e=>edit(p=>{const cell=p.usual_week.cells[i]!;cell.attendee_ids=e.target.checked?[...cell.attendee_ids,d.diner_id].sort():cell.attendee_ids.filter(id=>id!==d.diner_id);})}/>{d.display_name??'Diner'}</label>)}</td></tr>)}</tbody></table></div>
    {profile.preferences.meal_times.map((t,i)=><label key={t.meal_type}>{human(t.meal_type)} eat-by time<input type="time" value={t.time.slice(0,5)} onChange={e=>edit(p=>{p.preferences.meal_times[i]!.time=`${e.target.value}:00` as never;})}/></label>)}
    <label><input type="checkbox" checked={profile.preferences.mobility.reheating} onChange={e=>edit(p=>{p.preferences.mobility.reheating=e.target.checked;})}/>Reheating available on the move</label>
    <label><input type="checkbox" checked={profile.preferences.mobility.cold_storage} onChange={e=>edit(p=>{p.preferences.mobility.cold_storage=e.target.checked;})}/>Cold storage available on the move</label>

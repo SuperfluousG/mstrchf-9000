@@ -10,7 +10,7 @@ CREATE TABLE local_command_receipts(command_id TEXT PRIMARY KEY NOT NULL COLLATE
 const SQL_M2: &str = "CREATE TABLE active_weeks(position INTEGER PRIMARY KEY CHECK(position>=0 AND position<4), week_id TEXT NOT NULL UNIQUE REFERENCES weeks(week_id)) STRICT;";
 
 pub(crate) fn m2(c: &Connection) -> Result<bool, DomainError> {
-    Ok(c.pragma_query_value::<i64,_>(None,"user_version",|r|r.get(0)).map_err(storage)? == 1002)
+    Ok(c.pragma_query_value::<i64,_>(None,"user_version",|r|r.get(0)).map_err(storage)? >= 1002)
 }
 
 pub(crate) fn active(c: &Connection) -> Result<bool, DomainError> {
@@ -49,6 +49,12 @@ pub(crate) fn initialise(c: &mut Connection) -> Result<(), DomainError> {
             tx.pragma_update(None,"user_version",1002).map_err(storage)?;
             audit(&tx)?;
             tx.commit().map_err(storage)?;
+        }
+        if c.pragma_query_value::<i64,_>(None,"user_version",|r|r.get(0)).map_err(storage)?==1002 {
+            let tx=c.transaction().map_err(storage)?;
+            crate::planner_state::initialise(&tx)?;
+            tx.pragma_update(None,"user_version",1003).map_err(storage)?;
+            audit(&tx)?;tx.commit().map_err(storage)?;
         }
         return Ok(());
     }
@@ -111,6 +117,7 @@ pub(crate) fn conflicts(c:&Connection,s:&Snapshot)->Result<Vec<Conflict>,DomainE
     let Some(p)=&s.profile.0 else{return Ok(vec![]);};
     let mut result=Vec::new();
     for mut w in all_weeks(c)? {
+        for conflict in crate::planner::retained_conflicts(p,&w)? {if result.len()<100&&!result.contains(&conflict){result.push(conflict);}}
         let active=mstrchf_core::availability::eligible_slots(&w)?;
         w.plan.selections.0.retain(|selection|active.contains(&selection.slot));
         if w.plan.selections.is_empty() && w.plan.batch_links.is_empty(){continue;}
@@ -128,7 +135,7 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     let version: i64 = c
         .pragma_query_value(None, "user_version", |r| r.get(0))
         .map_err(storage)?;
-    if version != 1001 && version != 1002 {
+    if version != 1001 && version != 1002 && version != 1003 {
         return Err(DomainError::new(
             ErrorCode::UnsupportedVersion,
             "/development/schema",
@@ -148,7 +155,8 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
         .execute_batch(crate::migrate::SQL_002)
         .map_err(storage)?;
     expected.execute_batch(SQL).map_err(storage)?;
-    if version==1002 {expected.execute_batch(SQL_M2).map_err(storage)?;}
+    if version>=1002 {expected.execute_batch(SQL_M2).map_err(storage)?;}
+    if version>=1003 {expected.execute_batch(crate::planner_state::SQL).map_err(storage)?;}
     let schema = audit::schema(c)?;
     if schema != audit::schema(&expected)? {
         return Err(storage("current schema differs"));
@@ -217,7 +225,8 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
         "weeks",
         "local_command_receipts",
     ];
-    if version==1002 {tables.push("active_weeks");}
+    if version>=1002 {tables.push("active_weeks");}
+    if version>=1003 {tables.extend(["recipe_library","planner_history","essentials","local_assets"]);}
     for table in tables {
         let sql = format!("SELECT * FROM {table} ORDER BY 1"); // Closed identifiers above.
         let mut q = c.prepare(&sql).map_err(storage)?;
@@ -293,12 +302,12 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
             {
                 return Err(storage("fixed synthetic week"));
             }
-            if version==1001 {crate::development::validate_saved_plan(&state, profile, w)?;}
+            if version==1001 {crate::development::validate_legacy_plan(&state, profile, w)?;}
             else {
                 let edit=WeekEdit{week_id:w.range.week_id.clone(),defaults_snapshot:w.defaults_snapshot.clone(),day_enabled:w.day_enabled.clone(),meal_type_enabled:w.meal_type_enabled.clone(),cells:w.cells.clone(),plan:Nullable(None)};
                 mstrchf_core::availability::prepare_week_edit(w,&edit,w.revision,profile,&evaluated_at)?;
                 for selection in &w.plan.selections.0 {
-                    if !crate::development::catalogue()?.iter().any(|r|crate::development::recipe_reference(r).as_ref()==Ok(&selection.recipe)) {
+                    if !crate::planner::catalogue()?.iter().any(|r|crate::development::recipe_reference(r).as_ref()==Ok(&selection.recipe)) {
                         return Err(storage("unavailable saved recipe revision"));
                     }
                 }
@@ -307,10 +316,11 @@ pub(crate) fn audit(c: &Connection) -> Result<audit::AuditedRows, DomainError> {
     } else if !state.weeks.is_empty() {
         return Err(storage("week without profile"));
     }
+    if version>=1003 {crate::planner_state::audit(c)?;}
     Ok(audit::AuditedRows {
         version: version as u32,
         reader: "DevelopmentCurrent",
-        closure: "synthetic-m1-no-assets",
+        closure: if version>=1003 {"m2-engineering-library-and-personal-candidates"} else {"synthetic-m1-no-assets"},
         counters,
         lineage,
         ledger,
@@ -357,6 +367,11 @@ pub(crate) fn lookup(
     if !matches!(
         command.command.kind(),
         CommandKind::UpdateProfile
+            | CommandKind::SuggestMeals
+            | CommandKind::SavePersonalRecipe
+            | CommandKind::RecordFeedback
+            | CommandKind::RestoreHiddenRecipe
+            | CommandKind::ConfirmEssentials
             | CommandKind::OpenPlanningHorizon
             | CommandKind::SaveWeek
             | CommandKind::SetPrivacy

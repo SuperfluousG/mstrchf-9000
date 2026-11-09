@@ -86,6 +86,38 @@ fn selection(v: &mut Value) -> &mut Value {
     &mut v["proposal"]["data"]["proposal"]["changes"][0]["replace_slots"][0]["selection"]
 }
 #[test]
+fn ai_result_cannot_supply_an_owner_portable_chilling_declaration() {
+    let (request, mut result) = result_pair();
+    let mut request = serde_json::to_value(request).unwrap();
+    request["scope"]["data"]["slots"][0]["meal_type"] = json!("lunch");
+    request["payload"]["data"]["requirements"][0]["slot"]["meal_type"] = json!("lunch");
+    let mut request: JobRequestV1 = serde_json::from_value(request).unwrap();
+    bind_digest(&mut request);
+    request.validate_shape().unwrap();
+    result["input_digest"] = json!(request.input_digest);
+    result["proposal"]["data"]["proposal"]["changes"][0]["replace_slots"][0]["slot"]["meal_type"] = json!("lunch");
+    let selected = selection(&mut result);
+    selected["slot"]["meal_type"] = json!("lunch");
+    selected["origin"] = json!("fixed");
+    for serving in selected["servings"].as_array_mut().unwrap() {
+        serving["preset_ref"]["meal_type"] = json!("lunch");
+    }
+    selected["batch_use"] = json!({"kind":"leftover","data":{
+        "batch_id":"ba_00000000000000000000000000000001",
+        "component_ids":["co_00000000000000000000000000000001"]}});
+    let at = |hour| ZonedMoment::new(LocalDate("2026-12-28".into()),
+        LocalTime(format!("{hour:02}:00:00")), ZoneId("Europe/London".into()),
+        Resolution::Unambiguous, Instant(format!("2026-12-28T{hour:02}:00:00Z"))).unwrap();
+    selected["portable_cold"] = json!(PortableColdJourney {packing_complete_at: at(7), depart_at: at(8),
+        declaration: PortableChillingDeclaration {schema_version: SchemaVersion,
+            confirmed_at: Instant("2026-12-27T12:00:00Z".into()),
+            journey_digest: PayloadDigest("a".repeat(64))}});
+    let result: JobResultV1 = decode(&result);
+    let error = validate_result_binding(&result, &request, &request.context_stamp).unwrap_err();
+    assert_eq!(error.code, ErrorCode::AuthorityDenied);
+    assert!(error.issues.iter().any(|issue| issue.path.ends_with("/portable_cold")));
+}
+#[test]
 fn f01_parent_payload_recipe_references_must_also_be_closed() {
     let mut req: JobRequestV1 = decode(&load("ruling004-current--job-request-personalised.json"));
     let mut foreign = req.context_stamp.recipe_refs[0].clone();

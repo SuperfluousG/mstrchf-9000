@@ -1,0 +1,2561 @@
+{
+  "expected": {
+    "prepared": "88aa73982acec420c173c886f64ff5d29e2385389b2fc379786b65f10623d369",
+    "recorded": "56cba186a1b6cf2c18287f06d4d654ce97ac29cbe81cf51f73e1e1b465b73b14",
+    "returned": "a9800d8a0b1755d7b4f43d1a9ee7d0f9651d845fdc6ff1a36b5bab70feaf53bf"
+  },
+  "prepared": {
+    "binding": {
+      "accepted": {
+        "admitted_at": "2026-10-13T10:05:00Z",
+        "digest": "0240a80c605db1d10a96d823ccb0bf0c30c22efb909b5771ee58cf78ceb542c4",
+        "evidence_id": "ev_80000000000000000000000000000090",
+        "job_id": "jb_80000000000000000000000000000090",
+        "observation_id": "ob_80000000000000000000000000000090",
+        "observed_at": "2026-10-13T10:00:01Z",
+        "read_id": "rd_80000000000000000000000000000090",
+        "resource": {
+          "data": {
+            "key": {
+              "account_ref": "synthetic-local-account",
+              "basket_id": "bk_80000000000000000000000000000090",
+              "retailer": "tesco"
+            }
+          },
+          "kind": "basket"
+        }
+      },
+      "draft": {
+        "admission_status": "missing",
+        "context": {
+          "catalogue_revision": "5",
+          "history_revision": "1",
+          "household_revision": "4",
+          "privacy_revision": "2",
+          "ranking_policy_version": "1",
+          "read_weeks": [
+            {
+              "revision": "7",
+              "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+            }
+          ],
+          "recipe_refs": [
+            {
+              "digest": "e9d9968baebb1c033cea77855889ee8f3955d54a3d2fa227cedf96e140eb08fd",
+              "recipe_id": "rc_00000000000000000000000000000001",
+              "revision": "1"
+            },
+            {
+              "digest": "6f6f739e58abf2c496f5bdd1788c50a7f3cbce00ad621b43adf0ef181c808e0c",
+              "recipe_id": "rc_00000000000000000000000000000002",
+              "revision": "1"
+            },
+            {
+              "digest": "46a16a796965198e72a9d3456ad116e275f1b49014c597e28f3b1f441540550f",
+              "recipe_id": "rc_00000000000000000000000000000003",
+              "revision": "1"
+            },
+            {
+              "digest": "4bf2e3436c0f19036db1e3cf40a2aa0e2c363564f45a6c563f41fcde97ac4bd8",
+              "recipe_id": "rc_00000000000000000000000000000004",
+              "revision": "1"
+            },
+            {
+              "digest": "2a1045c09fd89328879a4efa473898429e4800dc3285134b49547b69caabe725",
+              "recipe_id": "rc_00000000000000000000000000000005",
+              "revision": "1"
+            },
+            {
+              "digest": "dd867c017a9b591f57546246518cd93c94e9f1ab50c54bfe4f288a1054de6ce0",
+              "recipe_id": "rc_80000000000000000000000000000001",
+              "revision": "3"
+            },
+            {
+              "digest": "58914b613960257e33ce294636bcd417baccb631f61379a22aa4977b14cc14f3",
+              "recipe_id": "rc_80000000000000000000000000000003",
+              "revision": "1"
+            },
+            {
+              "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+              "recipe_id": "rc_80000000000000000000000000000006",
+              "revision": "1"
+            },
+            {
+              "digest": "8e73018765acca1f0265082f1c95601359274014259a306f4621ed805a133b97",
+              "recipe_id": "rc_80000000000000000000000000000007",
+              "revision": "1"
+            }
+          ],
+          "settings_revision": "2",
+          "write_weeks": [
+            {
+              "revision": "7",
+              "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+            }
+          ]
+        },
+        "effect_enabled": false,
+        "field_dependencies": [
+          {
+            "fact": {
+              "data": {
+                "value": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+              },
+              "kind": "known"
+            },
+            "field": "ingredients",
+            "status": "known"
+          },
+          {
+            "fact": {
+              "data": {
+                "values": [
+                  "Synthetic statement A",
+                  "Synthetic statement B"
+                ]
+              },
+              "kind": "conflicting"
+            },
+            "field": "allergens",
+            "status": "conflicting"
+          },
+          {
+            "fact": {
+              "data": {
+                "value": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+              },
+              "kind": "known"
+            },
+            "field": "storage",
+            "status": "known"
+          }
+        ],
+        "food_binding": {
+          "catalogue_pin": {
+            "entries": [
+              {
+                "packet_digest": "a55505f8e4939e96f1e71229f13dfbc38010075c2424aa4f522a44b944d467e7",
+                "recipe": {
+                  "digest": "e9d9968baebb1c033cea77855889ee8f3955d54a3d2fa227cedf96e140eb08fd",
+                  "recipe_id": "rc_00000000000000000000000000000001",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "9ef8bc7ddf9c991427dabd1c33e29fe8463cbd4d7a85518b88201c365b05c462",
+                "recipe": {
+                  "digest": "6f6f739e58abf2c496f5bdd1788c50a7f3cbce00ad621b43adf0ef181c808e0c",
+                  "recipe_id": "rc_00000000000000000000000000000002",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "16a666102af18be45f53b9ca986d0bf679d323674e47a773877a943c259916da",
+                "recipe": {
+                  "digest": "46a16a796965198e72a9d3456ad116e275f1b49014c597e28f3b1f441540550f",
+                  "recipe_id": "rc_00000000000000000000000000000003",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "c018edd90db46c3979172275b796e04a08f5ab8a4cb2b458e68aa9055ddb1c46",
+                "recipe": {
+                  "digest": "4bf2e3436c0f19036db1e3cf40a2aa0e2c363564f45a6c563f41fcde97ac4bd8",
+                  "recipe_id": "rc_00000000000000000000000000000004",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "df01f50879287cf4f0743c873a8221d78fea4d237c81f6de8ef8b3cc71c2c21d",
+                "recipe": {
+                  "digest": "2a1045c09fd89328879a4efa473898429e4800dc3285134b49547b69caabe725",
+                  "recipe_id": "rc_00000000000000000000000000000005",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "edc4239b57366c96ef4b91198e4cc54de62db44d3d6346574e7318a852e2d726",
+                "recipe": {
+                  "digest": "dd867c017a9b591f57546246518cd93c94e9f1ab50c54bfe4f288a1054de6ce0",
+                  "recipe_id": "rc_80000000000000000000000000000001",
+                  "revision": "3"
+                }
+              },
+              {
+                "packet_digest": "62949a9b43fb50ed7385271a22c09f9b5d703ff08ce865041b66c6d6f2d14dee",
+                "recipe": {
+                  "digest": "58914b613960257e33ce294636bcd417baccb631f61379a22aa4977b14cc14f3",
+                  "recipe_id": "rc_80000000000000000000000000000003",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "61aa9bc1b586ff82a1ceab2198f5cf88e7113ef82e37bdfa2b60cd4c7915de6d",
+                "recipe": {
+                  "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                  "recipe_id": "rc_80000000000000000000000000000006",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "93df7d839d9076d377fb1c08b201c3048aff4a428093a1cf75fcf6cf919cebfd",
+                "recipe": {
+                  "digest": "8e73018765acca1f0265082f1c95601359274014259a306f4621ed805a133b97",
+                  "recipe_id": "rc_80000000000000000000000000000007",
+                  "revision": "1"
+                }
+              }
+            ],
+            "manifest_digest": "a4769d7e96fe4498bbe34f9d82be25f2d3d3fea73db2cc88651d063022ec5998",
+            "revision": "5"
+          },
+          "contains_engineering": false,
+          "demand_digest": "1f017ed941bffae76a6c8ef8f398d652cb03fa95c18aa3c093230e78b46a9467",
+          "derived_digest": "b5ea847601833915d774735deaf28045dfe256371757c6c782ea6d0332910e33",
+          "saved_basis_digest": "95d0a760bd0480afd573523018839eaca03d827673f937b1e333cac73fd61519",
+          "snapshot_revision": "14",
+          "week_revision": "7"
+        },
+        "format": "mstrchf-product-meaning-review-draft",
+        "freshness": {
+          "status": "unknown",
+          "valid_until": null
+        },
+        "line": {
+          "demand": {
+            "conversion_evidence_ids": [],
+            "essential": false,
+            "ingredient_id": "ig_80000000000000000000000000000007",
+            "line_id": "dl_e9ebf0d9318d793051222efe94826967",
+            "origin_batches": [
+              "ba_f8c6a0fec78261e84d8eeabd0cf55291"
+            ],
+            "origin_extras": [],
+            "quantity": {
+              "amount": {
+                "denominator": "1",
+                "numerator": "160"
+              },
+              "form": "drained",
+              "unit": "g"
+            }
+          },
+          "origins": [
+            {
+              "batch_id": "ba_f8c6a0fec78261e84d8eeabd0cf55291",
+              "component_id": "co_80000000000000000000000000000006",
+              "ingredient_id": "ig_80000000000000000000000000000007",
+              "occurrence": {
+                "extra_id": null,
+                "recipe": {
+                  "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                  "recipe_id": "rc_80000000000000000000000000000006",
+                  "revision": "1"
+                },
+                "slot": {
+                  "date": "2026-10-27",
+                  "meal_type": "lunch",
+                  "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+                }
+              },
+              "original_quantity": {
+                "amount": {
+                  "denominator": "1",
+                  "numerator": "160"
+                },
+                "form": "drained",
+                "unit": "g"
+              }
+            }
+          ],
+          "shopping_action": "add_to_shop",
+          "uses": [
+            {
+              "at": {
+                "instant": "2026-10-27T12:30:00Z",
+                "local_date": "2026-10-27",
+                "local_time": "12:30:00",
+                "resolution": "unambiguous",
+                "zone": "Europe/London"
+              },
+              "requirements": [],
+              "use_key": {
+                "data": {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "occurrence": {
+                    "extra_id": null,
+                    "recipe": {
+                      "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                      "recipe_id": "rc_80000000000000000000000000000006",
+                      "revision": "1"
+                    },
+                    "slot": {
+                      "date": "2026-10-27",
+                      "meal_type": "lunch",
+                      "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+                    }
+                  },
+                  "person": {
+                    "data": {
+                      "diner_id": "dn_80000000000000000000000000000090"
+                    },
+                    "kind": "diner"
+                  }
+                },
+                "kind": "consumption"
+              }
+            },
+            {
+              "at": {
+                "instant": "2026-10-27T12:30:00Z",
+                "local_date": "2026-10-27",
+                "local_time": "12:30:00",
+                "resolution": "unambiguous",
+                "zone": "Europe/London"
+              },
+              "requirements": [],
+              "use_key": {
+                "data": {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "occurrence": {
+                    "extra_id": null,
+                    "recipe": {
+                      "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                      "recipe_id": "rc_80000000000000000000000000000006",
+                      "revision": "1"
+                    },
+                    "slot": {
+                      "date": "2026-10-27",
+                      "meal_type": "lunch",
+                      "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+                    }
+                  },
+                  "person": {
+                    "data": {
+                      "diner_id": "dn_80000000000000000000000000000091"
+                    },
+                    "kind": "diner"
+                  }
+                },
+                "kind": "consumption"
+              }
+            },
+            {
+              "at": {
+                "instant": "2026-10-27T11:00:00Z",
+                "local_date": "2026-10-27",
+                "local_time": "11:00:00",
+                "resolution": "unambiguous",
+                "zone": "Europe/London"
+              },
+              "requirements": [],
+              "use_key": {
+                "data": {
+                  "phase": {
+                    "occurrence": {
+                      "extra_id": null,
+                      "recipe": {
+                        "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                        "recipe_id": "rc_80000000000000000000000000000006",
+                        "revision": "1"
+                      },
+                      "slot": {
+                        "date": "2026-10-27",
+                        "meal_type": "lunch",
+                        "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+                      }
+                    },
+                    "prep_id": 1
+                  }
+                },
+                "kind": "preparation"
+              }
+            },
+            {
+              "at": {
+                "instant": "2026-10-27T11:30:00Z",
+                "local_date": "2026-10-27",
+                "local_time": "11:30:00",
+                "resolution": "unambiguous",
+                "zone": "Europe/London"
+              },
+              "requirements": [],
+              "use_key": {
+                "data": {
+                  "phase": {
+                    "occurrence": {
+                      "extra_id": null,
+                      "recipe": {
+                        "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                        "recipe_id": "rc_80000000000000000000000000000006",
+                        "revision": "1"
+                      },
+                      "slot": {
+                        "date": "2026-10-27",
+                        "meal_type": "lunch",
+                        "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+                      }
+                    },
+                    "prep_id": 2
+                  }
+                },
+                "kind": "preparation"
+              }
+            }
+          ]
+        },
+        "match_status": "not_assessed",
+        "meaning_status": "not_reviewed",
+        "occurrences": [
+          {
+            "checklist_status": "pinned_structured_conditions",
+            "condition_text": [
+              "Weigh after rinsing and draining; do not include canning liquid.",
+              "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved."
+            ],
+            "evidence_refs": [
+              {
+                "digest": "bb64bd8e81ad89cf04c48bb8dd4870340ed921c33ab15f8847a8df6f67ddc18d",
+                "evidence_id": "ev_8000000000000000000000000000002c",
+                "revision": "1"
+              },
+              {
+                "digest": "327af01ebbbce1ed5ddfde27c4b6c98143baee0cfbe7b5f6ea53dd264d6ca4e4",
+                "evidence_id": "ev_8000000000000000000000000000002d",
+                "revision": "1"
+              },
+              {
+                "digest": "667580a09d9f5f830257a88a8ebd1aca854c4b5f6667967ce9bb4e27aab12ae1",
+                "evidence_id": "ev_8000000000000000000000000000002e",
+                "revision": "1"
+              },
+              {
+                "digest": "89411e7932eb8c769cbbbe1843ef371e22ee909496a812c02a1c082dab9e8874",
+                "evidence_id": "ev_8000000000000000000000000000002f",
+                "revision": "1"
+              },
+              {
+                "digest": "cf63bc661f6445a8cb1c37d6020277b3ed0f48f489b43926473ffa2aa2b71fa4",
+                "evidence_id": "ev_80000000000000000000000000000030",
+                "revision": "1"
+              },
+              {
+                "digest": "9c4ae31e3266e8e85900f6075895f210111e33c89ba07b46b1a9bed6adb9857b",
+                "evidence_id": "ev_80000000000000000000000000000031",
+                "revision": "1"
+              },
+              {
+                "digest": "f3f83b809a55753e578ddae878363576d8e711b2b534d9c6727f3dad435fb68b",
+                "evidence_id": "ev_80000000000000000000000000000032",
+                "revision": "1"
+              }
+            ],
+            "ingredient": {
+              "component_id": "co_80000000000000000000000000000006",
+              "conversion_evidence": [],
+              "discrete": false,
+              "ingredient_id": "ig_80000000000000000000000000000007",
+              "name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+              "quantity": {
+                "amount": {
+                  "denominator": "1",
+                  "numerator": "160"
+                },
+                "form": "drained",
+                "unit": "g"
+              },
+              "step_ids": [
+                1
+              ]
+            },
+            "input_definition": {
+              "allergen_status": "not_qualified",
+              "canonical_key": "kidney-drained-mass",
+              "conversion_policy": "Use only the exact input form/unit. No net-can-to-drained recovery, dry-to-cooked, density, vegetable count/mass or brand equivalence.",
+              "form": "drained",
+              "ingredient_id": "ig_80000000000000000000000000000007",
+              "meaning": "Weigh after rinsing and draining; do not include canning liquid.",
+              "preferred_name": "commercially canned cooked red kidney beans",
+              "product_suitability": "not_qualified",
+              "source_anchor": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/content/bean-salad.md",
+              "unit": "g"
+            },
+            "intrinsic_conditions": {
+              "custody": {
+                "dietary_review_pin": {
+                  "digest": "9c4ae31e3266e8e85900f6075895f210111e33c89ba07b46b1a9bed6adb9857b",
+                  "evidence_id": "ev_80000000000000000000000000000031",
+                  "revision": "1"
+                },
+                "intrinsic_input_conditions_digest": "cd344e3c63034ca967b2e559d6a5cc8541c9ee60cfe080e3364f0b7cb245f1e1",
+                "maker_policy_pin": {
+                  "digest": "f3f83b809a55753e578ddae878363576d8e711b2b534d9c6727f3dad435fb68b",
+                  "evidence_id": "ev_80000000000000000000000000000032",
+                  "revision": "1"
+                },
+                "recipe_reference": {
+                  "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                  "recipe_id": "rc_80000000000000000000000000000006",
+                  "revision": "1"
+                }
+              },
+              "entry": {
+                "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                "cooked_ready_to_eat_canned_required": true,
+                "form": "drained",
+                "ingredient_id": "ig_80000000000000000000000000000007",
+                "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                "not_inferred_from_title_brand_or_recipe": true,
+                "plain_unseasoned_input_required": false,
+                "predicates": [
+                  {
+                    "kind": "vegetarian_compatible_input_composition",
+                    "requirement": {
+                      "data": {
+                        "code": "vegetarian"
+                      },
+                      "kind": "diet"
+                    }
+                  },
+                  {
+                    "kind": "no_animal_body_part_ingredients_or_processing_products"
+                  }
+                ],
+                "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+                "unit": "g"
+              },
+              "table": {
+                "applies_even_when_all_consumers_confirmed_none": true,
+                "dietary_review_id": "ev_80000000000000000000000000000031",
+                "entries": [
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": true,
+                    "form": "drained",
+                    "ingredient_id": "ig_80000000000000000000000000000007",
+                    "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": false,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": true,
+                    "form": "drained",
+                    "ingredient_id": "ig_80000000000000000000000000000008",
+                    "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat chickpeas; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": false,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat chickpeas",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": true,
+                    "form": "drained",
+                    "ingredient_id": "ig_80000000000000000000000000000009",
+                    "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat black beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": false,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat black beans",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "raw",
+                    "ingredient_id": "ig_8000000000000000000000000000000a",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible carrot; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible carrot",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "raw",
+                    "ingredient_id": "ig_8000000000000000000000000000000b",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible onion; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible onion",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "raw",
+                    "ingredient_id": "ig_8000000000000000000000000000000c",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible bell pepper; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible bell pepper",
+                    "unit": "g"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "prepared",
+                    "ingredient_id": "ig_8000000000000000000000000000000d",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible olive oil; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible olive oil",
+                    "unit": "ml"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "prepared",
+                    "ingredient_id": "ig_8000000000000000000000000000000e",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible cider vinegar; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible cider vinegar",
+                    "unit": "ml"
+                  },
+                  {
+                    "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                    "cooked_ready_to_eat_canned_required": false,
+                    "form": "prepared",
+                    "ingredient_id": "ig_8000000000000000000000000000000f",
+                    "input_condition": "For this exact recipe use only plain vegetarian-compatible granulated sugar; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                    "not_inferred_from_title_brand_or_recipe": true,
+                    "plain_unseasoned_input_required": true,
+                    "predicates": [
+                      {
+                        "kind": "vegetarian_compatible_input_composition",
+                        "requirement": {
+                          "data": {
+                            "code": "vegetarian"
+                          },
+                          "kind": "diet"
+                        }
+                      },
+                      {
+                        "kind": "no_animal_body_part_ingredients_or_processing_products"
+                      }
+                    ],
+                    "recipe_input_name": "plain vegetarian-compatible granulated sugar",
+                    "unit": "g"
+                  }
+                ],
+                "format": "mstrchf-recipe-intrinsic-input-conditions",
+                "full_method_prep_ids": [
+                  1,
+                  2
+                ],
+                "full_method_step_ids": [
+                  1,
+                  2
+                ],
+                "future_D_guard": "Every actual use and supply origin must retain its exact recipe/ingredient conditions. A trusted Supported CookingClaim for the exact recipe/occurrence must attest intrinsic compatibility even with None consumers. Actual Vegetarian consumers also require admitted Vegetarian RequirementClaim/policy. No such producer, source, meaning, expiry or product policy is qualified by this document.",
+                "maker_policy_id": "ev_80000000000000000000000000000032",
+                "product_and_operational_compliance_observed": false,
+                "recipe_reference": {
+                  "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                  "recipe_id": "rc_80000000000000000000000000000006",
+                  "revision": "1"
+                },
+                "rule": "no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass",
+                "status": "maker_adopted_definition_not_product_observation",
+                "version": 1
+              }
+            },
+            "occurrence": {
+              "extra_id": null,
+              "recipe": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              },
+              "slot": {
+                "date": "2026-10-27",
+                "meal_type": "lunch",
+                "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+              }
+            },
+            "packet_ref": {
+              "packet_digest": "61aa9bc1b586ff82a1ceab2198f5cf88e7113ef82e37bdfa2b60cd4c7915de6d",
+              "recipe": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              }
+            },
+            "recipe": {
+              "active_minutes": 30,
+              "capabilities": {
+                "blocking_issues": [
+                  {
+                    "code": "missing_storage",
+                    "evidence_ids": [],
+                    "path": "/components/0/storage_rule_ids"
+                  },
+                  {
+                    "code": "missing_image",
+                    "evidence_ids": [],
+                    "path": "/image"
+                  }
+                ],
+                "leftovers": false,
+                "local_display": true,
+                "shopping": true,
+                "starter_distribution": false
+              },
+              "components": [
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "ingredient_ids": [
+                    "ig_80000000000000000000000000000007",
+                    "ig_80000000000000000000000000000008",
+                    "ig_80000000000000000000000000000009",
+                    "ig_8000000000000000000000000000000a",
+                    "ig_8000000000000000000000000000000b",
+                    "ig_8000000000000000000000000000000c",
+                    "ig_8000000000000000000000000000000d",
+                    "ig_8000000000000000000000000000000e",
+                    "ig_8000000000000000000000000000000f"
+                  ],
+                  "production": {
+                    "data": {
+                      "first_handling_prep_id": 1
+                    },
+                    "kind": "unheated"
+                  },
+                  "storage_rule_ids": [],
+                  "title": "Two separately assembled vegetarian-input salad units"
+                }
+              ],
+              "dietary_evidence": [
+                {
+                  "evidence_id": "ev_80000000000000000000000000000031",
+                  "requirement": {
+                    "data": {
+                      "code": "vegetarian"
+                    },
+                    "kind": "diet"
+                  },
+                  "review_id": "ev_80000000000000000000000000000031",
+                  "source": {
+                    "adaptation_notice": "Criterion-informed automated maker composition inference for this exact nine-input definition and full method. Input/body-part processing conditions are normative, not actual product/manufacturing evidence. No certification, GMO, animal-testing, Vegan or allergen qualification.",
+                    "authors": [
+                      "Vegetarian Society (criterion publisher)"
+                    ],
+                    "origin": "adapted",
+                    "retrieved_at": "2026-10-13T01:29:41Z",
+                    "source_revision": "public trademark-criteria page, retrieved2026-10-13; automated maker inference, no certification",
+                    "url": "https://vegsoc.org/trademarks/trademark-criteria/"
+                  },
+                  "verdict": "supported"
+                }
+              ],
+              "elapsed_minutes": 90,
+              "equipment": [
+                "fridge"
+              ],
+              "extras": [],
+              "image": null,
+              "ingredients": [
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_80000000000000000000000000000007",
+                  "name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "160"
+                    },
+                    "form": "drained",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_80000000000000000000000000000008",
+                  "name": "vegetarian-compatible commercially canned cooked ready-to-eat chickpeas",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "160"
+                    },
+                    "form": "drained",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_80000000000000000000000000000009",
+                  "name": "vegetarian-compatible commercially canned cooked ready-to-eat black beans",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "160"
+                    },
+                    "form": "drained",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000a",
+                  "name": "plain vegetarian-compatible carrot",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "80"
+                    },
+                    "form": "raw",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000b",
+                  "name": "plain vegetarian-compatible onion",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "40"
+                    },
+                    "form": "raw",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000c",
+                  "name": "plain vegetarian-compatible bell pepper",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "120"
+                    },
+                    "form": "raw",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000d",
+                  "name": "plain vegetarian-compatible olive oil",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "20"
+                    },
+                    "form": "prepared",
+                    "unit": "ml"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000e",
+                  "name": "plain vegetarian-compatible cider vinegar",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "30"
+                    },
+                    "form": "prepared",
+                    "unit": "ml"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                },
+                {
+                  "component_id": "co_80000000000000000000000000000006",
+                  "conversion_evidence": [],
+                  "discrete": false,
+                  "ingredient_id": "ig_8000000000000000000000000000000f",
+                  "name": "plain vegetarian-compatible granulated sugar",
+                  "quantity": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "10"
+                    },
+                    "form": "prepared",
+                    "unit": "g"
+                  },
+                  "step_ids": [
+                    1
+                  ]
+                }
+              ],
+              "meal_types": [
+                "lunch"
+              ],
+              "nutrition": null,
+              "portability": {
+                "cold_storage_required": true,
+                "cold_suitable": true,
+                "evidence_ids": [
+                  "ev_8000000000000000000000000000002f",
+                  "ev_80000000000000000000000000000032"
+                ],
+                "reheating_required": false
+              },
+              "portion_presets": [
+                {
+                  "age_band": "adult",
+                  "evidence_ids": [
+                    "ev_8000000000000000000000000000002d",
+                    "ev_80000000000000000000000000000032"
+                  ],
+                  "meal_type": "lunch",
+                  "preset": "regular",
+                  "servings": {
+                    "denominator": "1",
+                    "numerator": "1"
+                  }
+                }
+              ],
+              "prep": [
+                {
+                  "active_minutes": 30,
+                  "can_attach_to_prior_session": false,
+                  "depends_on": [],
+                  "earliest_offset_seconds": -5400,
+                  "elapsed_minutes": 30,
+                  "ingredient_ids": [
+                    "ig_80000000000000000000000000000007",
+                    "ig_80000000000000000000000000000008",
+                    "ig_80000000000000000000000000000009",
+                    "ig_8000000000000000000000000000000a",
+                    "ig_8000000000000000000000000000000b",
+                    "ig_8000000000000000000000000000000c",
+                    "ig_8000000000000000000000000000000d",
+                    "ig_8000000000000000000000000000000e",
+                    "ig_8000000000000000000000000000000f"
+                  ],
+                  "latest_offset_seconds": -5400,
+                  "prep_id": 1,
+                  "step_ids": [
+                    1
+                  ],
+                  "title": "Assemble two separate units — unmeasured 30-minute reservation"
+                },
+                {
+                  "active_minutes": 0,
+                  "can_attach_to_prior_session": false,
+                  "depends_on": [
+                    1
+                  ],
+                  "earliest_offset_seconds": -3600,
+                  "elapsed_minutes": 60,
+                  "ingredient_ids": [],
+                  "latest_offset_seconds": -3600,
+                  "prep_id": 2,
+                  "step_ids": [
+                    2
+                  ],
+                  "title": "Both covered home-fridge units — at least 60 minutes of chilling"
+                }
+              ],
+              "recipe_id": "rc_80000000000000000000000000000006",
+              "reused_inputs": [],
+              "reviews": [
+                {
+                  "actor": "automated",
+                  "at": "2026-10-13T02:28:12Z",
+                  "evidence_id": "ev_8000000000000000000000000000002c",
+                  "kind": "source_review",
+                  "note": "Automated source/rights comparison and direct Root maker adoption of the exact conditional vegetarian input specification. The published eight servings and 10-minute headline do not define these operational portions or measured timing. Actual products, manufacturing, readiness and human cook/calibration remain unknown."
+                },
+                {
+                  "actor": "automated",
+                  "at": "2026-10-13T02:28:12Z",
+                  "evidence_id": "ev_8000000000000000000000000000002d",
+                  "kind": "quantity_review",
+                  "note": "Automated comparison with frozen rc05: all nine quantities, forms and separate-unit arithmetic are unchanged. Two independently measured operational units contain aggregate 730 g of weighed inputs plus 50 ml separately. No final dish mass, net-can/drained recovery, nutrition, human cook or portion calibration is inferred."
+                },
+                {
+                  "actor": "automated",
+                  "at": "2026-10-13T02:28:12Z",
+                  "evidence_id": "ev_80000000000000000000000000000031",
+                  "kind": "dietary_review",
+                  "note": "Automated maker composition inference covering all nine vegetarian-compatible input definitions and both complete method phases for this exact new recipe. Only Vegetarian is supported by this conditional specification. Actual retailer products, manufacturing/processing, cross-contact, labels and matched policy are not observed or admitted; no certification, Vegan or allergen claim follows."
+                }
+              ],
+              "revision": "1",
+              "scaling": {
+                "data": {
+                  "maximum": {
+                    "denominator": "1",
+                    "numerator": "1"
+                  },
+                  "minimum": {
+                    "denominator": "1",
+                    "numerator": "1"
+                  }
+                },
+                "kind": "linear"
+              },
+              "schema_version": 1,
+              "source": {
+                "adaptation_notice": "Root adopted this separately authored, conditional vegetarian input specification under the B commission. It is not a vegetarian claim made by the published recipe or any actual retailer product. Prepare exactly two independently measured, covered home-lunch containers. Each uses 80 g each newly opened, commercially cooked, ready-to-eat, vegetarian-compatible canned kidney beans, chickpeas and black beans weighed after rinse/drain; 40 g edible carrot, 20 g peeled onion, 60 g edible bell pepper, 10 ml plain olive oil, 15 ml plain cider vinegar and 5 g plain sugar. All nine inputs and their applicable processing must satisfy the rule: no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Actual manufacturing, processing, cross-contact, labels, dates and native matched-product policy remain unverified. The fixed quantities and two operational-unit yield are unchanged from rc05, not source-serving, net-can recovery, density, finished dish mass, nutrition or human portion calibration. Exactly two confirmed Adult Regular ×1 people, at least one resident and at most one temporary guest, at-home Lunch with Fridge and first handling/service in the same local day. Only confirmed None or exactly Vegetarian per attendee/shared base is supported; Vegan, gluten-free, allergens, ingredient exclusions and every other/additional hard requirement remain unknown and refused. Reserve 30 minutes of full attention as an unmeasured assembly estimate, then at least 60 minutes of passive, covered home-fridge chilling at 0–5 °C. First handling and ingredient-needed-at are nominal T−90 minutes. Continue chilling and delay/refuse service if either container is not properly chilled. No certification, GMO, animal-testing, product suitability, cook-test, nutrition, image, portable, storage/reuse or extras authority is supplied.",
+                "authors": [
+                  "joel-maxuel (published handle)"
+                ],
+                "origin": "adapted",
+                "retrieved_at": "2026-10-12T20:23:53Z",
+                "source_revision": "commit=da84378b36bd5b2e3cb35f610d64630bf1bd899d;content/bean-salad.md",
+                "url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/content/bean-salad.md"
+              },
+              "steps": [
+                {
+                  "active_minutes": 30,
+                  "component_ids": [
+                    "co_80000000000000000000000000000006"
+                  ],
+                  "depends_on": [],
+                  "elapsed_minutes": 30,
+                  "ingredient_ids": [
+                    "ig_80000000000000000000000000000007",
+                    "ig_80000000000000000000000000000008",
+                    "ig_80000000000000000000000000000009",
+                    "ig_8000000000000000000000000000000a",
+                    "ig_8000000000000000000000000000000b",
+                    "ig_8000000000000000000000000000000c",
+                    "ig_8000000000000000000000000000000d",
+                    "ig_8000000000000000000000000000000e",
+                    "ig_8000000000000000000000000000000f"
+                  ],
+                  "step_id": 1,
+                  "text": "Use clean hands and clean food-contact scales, measures, colander, utensils, board and two separate covered containers; keep non-vegetarian materials and residues out of this preparation. Check actual labels and credible supplier/manufacturer information needed to establish vegetarian-compatible, ready-to-eat inputs and their applicable processing. The rule is: no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Do not infer compliance from a plant name, this recipe, a brand or an absent allergen declaration; if an input condition cannot be established, do not claim vegetarian service from it. Use only newly opened, commercially cooked, ready-to-eat canned beans whose actual cold-use, date and storage labels permit this handling. For EACH container independently rinse/drain and weigh 80 g each kidney beans, chickpeas and black beans; wash/trim 40 g edible carrot and 60 g edible bell pepper, peel/chop 20 g onion; measure 10 ml plain olive oil, 15 ml plain cider vinegar and 5 g plain sugar. All nine inputs must be vegetarian-compatible under the stated rule. Mix each separate dressing, then its own beans and vegetables; no common bowl/estimated half split, seasoning, stock, substitute or unlisted garnish. Transfer unused opened-can contents according to actual labels to covered non-metallic refrigerated containers; they are outside this plan/stock. Cover both completed units for phase 2. Reserve 30 minutes of full attention as an unmeasured maker estimate, not measured completion."
+                },
+                {
+                  "active_minutes": 0,
+                  "component_ids": [
+                    "co_80000000000000000000000000000006"
+                  ],
+                  "depends_on": [
+                    1
+                  ],
+                  "elapsed_minutes": 60,
+                  "ingredient_ids": [],
+                  "step_id": 2,
+                  "text": "Keep BOTH separate, covered salad units in a working home fridge at 0–5 °C for at least 60 minutes, retaining the published minimum. No mid-chill stirring is included. Continue chilling each container if needed until properly chilled; the 60-minute field and nominal 90-minute planning interval do not establish thermal completion or guarantee the meal deadline. Keep both properly chilled until same-day home service and minimise time out. If either is not properly chilled at the deadline, continue refrigeration and delay/refuse that service. No travel, ambient-safe interval, acid preservation, storage life, reheating, leftover or reuse permission is supplied. Keep these exact vegetarian-input units separate from non-vegetarian preparation and food-contact residues. No new dressing, stock, garnish or other ingredient is added during chilling or service. The complete method and all nine inputs are included in the conditional composition review. These instructions are not observations of factory/kitchen cross-contact control, allergen absence, actual product suitability or physical chilling completion."
+                }
+              ],
+              "storage": [],
+              "text_rights": {
+                "adaptations": [
+                  "Root adopted this separately authored, conditional vegetarian input specification under the B commission. It is not a vegetarian claim made by the published recipe or any actual retailer product. Prepare exactly two independently measured, covered home-lunch containers. Each uses 80 g each newly opened, commercially cooked, ready-to-eat, vegetarian-compatible canned kidney beans, chickpeas and black beans weighed after rinse/drain; 40 g edible carrot, 20 g peeled onion, 60 g edible bell pepper, 10 ml plain olive oil, 15 ml plain cider vinegar and 5 g plain sugar. All nine inputs and their applicable processing must satisfy the rule: no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Actual manufacturing, processing, cross-contact, labels, dates and native matched-product policy remain unverified. The fixed quantities and two operational-unit yield are unchanged from rc05, not source-serving, net-can recovery, density, finished dish mass, nutrition or human portion calibration. Exactly two confirmed Adult Regular ×1 people, at least one resident and at most one temporary guest, at-home Lunch with Fridge and first handling/service in the same local day. Only confirmed None or exactly Vegetarian per attendee/shared base is supported; Vegan, gluten-free, allergens, ingredient exclusions and every other/additional hard requirement remain unknown and refused. Reserve 30 minutes of full attention as an unmeasured assembly estimate, then at least 60 minutes of passive, covered home-fridge chilling at 0–5 °C. First handling and ingredient-needed-at are nominal T−90 minutes. Continue chilling and delay/refuse service if either container is not properly chilled. No certification, GMO, animal-testing, product suitability, cook-test, nutrition, image, portable, storage/reuse or extras authority is supplied."
+                ],
+                "attribution": "Adapted from Three Bean Salad by joel-maxuel, Public Domain Recipes, pinned commit da84378b36bd5b2e3cb35f610d64630bf1bd899d. Publisher public-domain dedication; independent contributor-authorship audit not performed.",
+                "distribution": "permitted",
+                "evidence_ids": [
+                  "ev_8000000000000000000000000000002e"
+                ],
+                "licence_id": "Unlicense / publisher public-domain content dedication",
+                "licence_url": "https://raw.githubusercontent.com/ronaldl29/public-domain-recipes/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md"
+              },
+              "title": "Three-bean salad — two vegetarian-input cold home lunch units",
+              "yield": {
+                "basis": "Exactly two separately measured/assembled covered containers, each the unchanged authored operational Adult Regular unit. Not source8serving scaling, final output mass/volume, nutritional sufficiency or human calibration.",
+                "components": [
+                  {
+                    "component_id": "co_80000000000000000000000000000006",
+                    "quantity": {
+                      "amount": {
+                        "denominator": "1",
+                        "numerator": "2"
+                      },
+                      "form": "prepared",
+                      "unit": "each"
+                    }
+                  }
+                ],
+                "servings": {
+                  "denominator": "1",
+                  "numerator": "2"
+                }
+              }
+            },
+            "scope_notices": [
+              "Cold at-home lunch for exactly two confirmed adults at Regular ×1, at least one resident and at most one temporary guest. Each person's requirements must be None or exactly Vegetarian; prepare two separately measured covered containers, one whole operational unit each.",
+              "Aggregate inputs: 160 g each vegetarian-compatible commercially canned cooked ready-to-eat kidney beans, chickpeas and black beans weighed after rinse/drain; 80 g plain carrot, 40 g plain onion, 120 g plain pepper, 20 ml plain olive oil, 30 ml plain cider vinegar and 10 g plain sugar. Every input must meet the exact intrinsic conditions even when consumers confirm None.",
+              "No animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Actual product/manufacturer processing and labels remain unknown; no brand, certification, manufacturing or allergen compliance is inferred.",
+              "Reserve 30 minutes of full attention as an unmeasured assembly estimate, followed by at least 60 minutes covered home-fridge chilling at 0–5 °C. Begin first handling 90 minutes before same-day service; continue chilling and delay/refuse service if either container is not properly chilled.",
+              "No automatic halving/scaling, extras, travel or reuse. Removing a person retains the exact saved meal as a conflict; explicitly remove it or choose a genuinely eligible replacement. An unrestricted one-unit recipe is not a Vegetarian-compatible replacement simply because the count fits.",
+              "Exactly two separate vegetarian-input containers, one authored Adult Regular unit each; not product qualification, nutrition or human calibration.",
+              "30-minute full-attention reservation is an unmeasured estimate, not a completion guarantee.",
+              "Only the exact conditional Vegetarian input definition is reviewed; Vegan, allergens, ingredient exclusions and any other/additional hard requirement remain unsupported. No actual product, other ages/scales, substitutions, extras, leftovers, reuse, image, nutrition, human cook test or portion calibration is qualified."
+            ]
+          }
+        ],
+        "pack_comparison": {
+          "measure": "drained",
+          "observed": {
+            "data": {
+              "value": {
+                "amount": {
+                  "denominator": "1",
+                  "numerator": "240"
+                },
+                "form": "drained",
+                "unit": "g"
+              }
+            },
+            "kind": "known"
+          },
+          "status": "comparable_declared_measure"
+        },
+        "purchase_readiness": "not_assessed",
+        "source": {
+          "accepted_ref": {
+            "admitted_at": "2026-10-13T10:05:00Z",
+            "digest": "0240a80c605db1d10a96d823ccb0bf0c30c22efb909b5771ee58cf78ceb542c4",
+            "evidence_id": "ev_80000000000000000000000000000090",
+            "job_id": "jb_80000000000000000000000000000090",
+            "observation_id": "ob_80000000000000000000000000000090",
+            "observed_at": "2026-10-13T10:00:01Z",
+            "read_id": "rd_80000000000000000000000000000090",
+            "resource": {
+              "data": {
+                "key": {
+                  "account_ref": "synthetic-local-account",
+                  "basket_id": "bk_80000000000000000000000000000090",
+                  "retailer": "tesco"
+                }
+              },
+              "kind": "basket"
+            }
+          },
+          "currentness": "not_assessed",
+          "host_attested": false,
+          "item": {
+            "allergens": {
+              "data": {
+                "values": [
+                  "Synthetic statement A",
+                  "Synthetic statement B"
+                ]
+              },
+              "kind": "conflicting"
+            },
+            "availability": "unknown",
+            "delivery_context": {
+              "account_ref": "synthetic-local-account",
+              "context_ref": "synthetic-public-source-context",
+              "delivery_date": null,
+              "retailer": "tesco",
+              "slot_ref": null
+            },
+            "ingredients": {
+              "data": {
+                "value": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+              },
+              "kind": "known"
+            },
+            "observed_at": "2026-10-13T10:00:01Z",
+            "offers": [],
+            "pack": {
+              "count": {
+                "data": {
+                  "value": 1
+                },
+                "kind": "known"
+              },
+              "drained": {
+                "data": {
+                  "value": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "240"
+                    },
+                    "form": "drained",
+                    "unit": "g"
+                  }
+                },
+                "kind": "known"
+              },
+              "net": {
+                "data": {
+                  "value": {
+                    "amount": {
+                      "denominator": "1",
+                      "numerator": "400"
+                    },
+                    "form": "raw",
+                    "unit": "g"
+                  }
+                },
+                "kind": "known"
+              }
+            },
+            "price": {
+              "data": {
+                "reason": "not_exposed"
+              },
+              "kind": "unknown"
+            },
+            "product": {
+              "product_id": "123456789",
+              "retailer": "tesco",
+              "variant_id": null
+            },
+            "storage": {
+              "data": {
+                "value": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+              },
+              "kind": "known"
+            },
+            "title": "Synthetic source fixture; no Tesco read occurred",
+            "url": "https://www.tesco.com/shop/en-GB/products/123456789"
+          },
+          "observation_digest": "0240a80c605db1d10a96d823ccb0bf0c30c22efb909b5771ee58cf78ceb542c4",
+          "provenance": "retained_source_correlation_only",
+          "read_id": "rd_80000000000000000000000000000090",
+          "source_truth_assessed": false
+        },
+        "version": 1
+      },
+      "line_id": "dl_e9ebf0d9318d793051222efe94826967",
+      "method_map": [
+        {
+          "method_handle": "mh_e84ef610c913391933d2174226c33549",
+          "occurrences": [
+            {
+              "extra_id": null,
+              "recipe": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              },
+              "slot": {
+                "date": "2026-10-27",
+                "meal_type": "lunch",
+                "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+              }
+            }
+          ]
+        }
+      ],
+      "observation": {
+        "body": {
+          "data": {
+            "delivery_context": {
+              "account_ref": "synthetic-local-account",
+              "context_ref": "synthetic-public-source-context",
+              "delivery_date": null,
+              "retailer": "tesco",
+              "slot_ref": null
+            },
+            "items": [
+              {
+                "allergens": {
+                  "data": {
+                    "values": [
+                      "Synthetic statement A",
+                      "Synthetic statement B"
+                    ]
+                  },
+                  "kind": "conflicting"
+                },
+                "availability": "unknown",
+                "delivery_context": {
+                  "account_ref": "synthetic-local-account",
+                  "context_ref": "synthetic-public-source-context",
+                  "delivery_date": null,
+                  "retailer": "tesco",
+                  "slot_ref": null
+                },
+                "ingredients": {
+                  "data": {
+                    "value": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+                  },
+                  "kind": "known"
+                },
+                "observed_at": "2026-10-13T10:00:01Z",
+                "offers": [],
+                "pack": {
+                  "count": {
+                    "data": {
+                      "value": 1
+                    },
+                    "kind": "known"
+                  },
+                  "drained": {
+                    "data": {
+                      "value": {
+                        "amount": {
+                          "denominator": "1",
+                          "numerator": "240"
+                        },
+                        "form": "drained",
+                        "unit": "g"
+                      }
+                    },
+                    "kind": "known"
+                  },
+                  "net": {
+                    "data": {
+                      "value": {
+                        "amount": {
+                          "denominator": "1",
+                          "numerator": "400"
+                        },
+                        "form": "raw",
+                        "unit": "g"
+                      }
+                    },
+                    "kind": "known"
+                  }
+                },
+                "price": {
+                  "data": {
+                    "reason": "not_exposed"
+                  },
+                  "kind": "unknown"
+                },
+                "product": {
+                  "product_id": "123456789",
+                  "retailer": "tesco",
+                  "variant_id": null
+                },
+                "storage": {
+                  "data": {
+                    "value": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+                  },
+                  "kind": "known"
+                },
+                "title": "Synthetic source fixture; no Tesco read occurred",
+                "url": "https://www.tesco.com/shop/en-GB/products/123456789"
+              }
+            ]
+          },
+          "kind": "products"
+        },
+        "input_digest": "ae01d82be3458720f0a5db9a3f1d96a59c8a00249d66a5dbaa6955b179ff5945",
+        "job_id": "jb_80000000000000000000000000000090",
+        "observation_id": "ob_80000000000000000000000000000090",
+        "observed_at": "2026-10-13T10:00:01Z",
+        "read_id": "rd_80000000000000000000000000000090",
+        "reader": {
+          "native_task_ref": "synthetic-owner-bound-task-not-a-live-host-attestation",
+          "provider": "codex_local"
+        },
+        "resource": {
+          "data": {
+            "key": {
+              "account_ref": "synthetic-local-account",
+              "basket_id": "bk_80000000000000000000000000000090",
+              "retailer": "tesco"
+            }
+          },
+          "kind": "basket"
+        },
+        "schema_version": 1
+      },
+      "product": {
+        "product_id": "123456789",
+        "retailer": "tesco",
+        "variant_id": null
+      },
+      "source_prepared": {
+        "delivery": {
+          "account_ref": "synthetic-local-account",
+          "context_ref": "synthetic-public-source-context",
+          "delivery_date": null,
+          "retailer": "tesco",
+          "slot_ref": null
+        },
+        "expected_reader": {
+          "native_task_ref": "synthetic-owner-bound-task-not-a-live-host-attestation",
+          "provider": "codex_local"
+        },
+        "food": {
+          "catalogue_pin": {
+            "entries": [
+              {
+                "packet_digest": "a55505f8e4939e96f1e71229f13dfbc38010075c2424aa4f522a44b944d467e7",
+                "recipe": {
+                  "digest": "e9d9968baebb1c033cea77855889ee8f3955d54a3d2fa227cedf96e140eb08fd",
+                  "recipe_id": "rc_00000000000000000000000000000001",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "9ef8bc7ddf9c991427dabd1c33e29fe8463cbd4d7a85518b88201c365b05c462",
+                "recipe": {
+                  "digest": "6f6f739e58abf2c496f5bdd1788c50a7f3cbce00ad621b43adf0ef181c808e0c",
+                  "recipe_id": "rc_00000000000000000000000000000002",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "16a666102af18be45f53b9ca986d0bf679d323674e47a773877a943c259916da",
+                "recipe": {
+                  "digest": "46a16a796965198e72a9d3456ad116e275f1b49014c597e28f3b1f441540550f",
+                  "recipe_id": "rc_00000000000000000000000000000003",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "c018edd90db46c3979172275b796e04a08f5ab8a4cb2b458e68aa9055ddb1c46",
+                "recipe": {
+                  "digest": "4bf2e3436c0f19036db1e3cf40a2aa0e2c363564f45a6c563f41fcde97ac4bd8",
+                  "recipe_id": "rc_00000000000000000000000000000004",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "df01f50879287cf4f0743c873a8221d78fea4d237c81f6de8ef8b3cc71c2c21d",
+                "recipe": {
+                  "digest": "2a1045c09fd89328879a4efa473898429e4800dc3285134b49547b69caabe725",
+                  "recipe_id": "rc_00000000000000000000000000000005",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "edc4239b57366c96ef4b91198e4cc54de62db44d3d6346574e7318a852e2d726",
+                "recipe": {
+                  "digest": "dd867c017a9b591f57546246518cd93c94e9f1ab50c54bfe4f288a1054de6ce0",
+                  "recipe_id": "rc_80000000000000000000000000000001",
+                  "revision": "3"
+                }
+              },
+              {
+                "packet_digest": "62949a9b43fb50ed7385271a22c09f9b5d703ff08ce865041b66c6d6f2d14dee",
+                "recipe": {
+                  "digest": "58914b613960257e33ce294636bcd417baccb631f61379a22aa4977b14cc14f3",
+                  "recipe_id": "rc_80000000000000000000000000000003",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "61aa9bc1b586ff82a1ceab2198f5cf88e7113ef82e37bdfa2b60cd4c7915de6d",
+                "recipe": {
+                  "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                  "recipe_id": "rc_80000000000000000000000000000006",
+                  "revision": "1"
+                }
+              },
+              {
+                "packet_digest": "93df7d839d9076d377fb1c08b201c3048aff4a428093a1cf75fcf6cf919cebfd",
+                "recipe": {
+                  "digest": "8e73018765acca1f0265082f1c95601359274014259a306f4621ed805a133b97",
+                  "recipe_id": "rc_80000000000000000000000000000007",
+                  "revision": "1"
+                }
+              }
+            ],
+            "manifest_digest": "a4769d7e96fe4498bbe34f9d82be25f2d3d3fea73db2cc88651d063022ec5998",
+            "revision": "5"
+          },
+          "contains_engineering": false,
+          "demand_digest": "1f017ed941bffae76a6c8ef8f398d652cb03fa95c18aa3c093230e78b46a9467",
+          "derived_digest": "b5ea847601833915d774735deaf28045dfe256371757c6c782ea6d0332910e33",
+          "saved_basis_digest": "95d0a760bd0480afd573523018839eaca03d827673f937b1e333cac73fd61519",
+          "snapshot_revision": "14",
+          "week_revision": "7"
+        },
+        "format": "mstrchf-product-source-read",
+        "prepared_digest": "d2b1af802079c783645f0fcc41555aaa576f67341ed9cbf899d275e5cc7e2477",
+        "request": {
+          "action": "prepare_shop",
+          "allowed_artefacts": [],
+          "base_plan_revision": "7",
+          "context_stamp": {
+            "catalogue_revision": "5",
+            "history_revision": "1",
+            "household_revision": "4",
+            "privacy_revision": "2",
+            "ranking_policy_version": "1",
+            "read_weeks": [
+              {
+                "revision": "7",
+                "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+              }
+            ],
+            "recipe_refs": [
+              {
+                "digest": "e9d9968baebb1c033cea77855889ee8f3955d54a3d2fa227cedf96e140eb08fd",
+                "recipe_id": "rc_00000000000000000000000000000001",
+                "revision": "1"
+              },
+              {
+                "digest": "6f6f739e58abf2c496f5bdd1788c50a7f3cbce00ad621b43adf0ef181c808e0c",
+                "recipe_id": "rc_00000000000000000000000000000002",
+                "revision": "1"
+              },
+              {
+                "digest": "46a16a796965198e72a9d3456ad116e275f1b49014c597e28f3b1f441540550f",
+                "recipe_id": "rc_00000000000000000000000000000003",
+                "revision": "1"
+              },
+              {
+                "digest": "4bf2e3436c0f19036db1e3cf40a2aa0e2c363564f45a6c563f41fcde97ac4bd8",
+                "recipe_id": "rc_00000000000000000000000000000004",
+                "revision": "1"
+              },
+              {
+                "digest": "2a1045c09fd89328879a4efa473898429e4800dc3285134b49547b69caabe725",
+                "recipe_id": "rc_00000000000000000000000000000005",
+                "revision": "1"
+              },
+              {
+                "digest": "dd867c017a9b591f57546246518cd93c94e9f1ab50c54bfe4f288a1054de6ce0",
+                "recipe_id": "rc_80000000000000000000000000000001",
+                "revision": "3"
+              },
+              {
+                "digest": "58914b613960257e33ce294636bcd417baccb631f61379a22aa4977b14cc14f3",
+                "recipe_id": "rc_80000000000000000000000000000003",
+                "revision": "1"
+              },
+              {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              },
+              {
+                "digest": "8e73018765acca1f0265082f1c95601359274014259a306f4621ed805a133b97",
+                "recipe_id": "rc_80000000000000000000000000000007",
+                "revision": "1"
+              }
+            ],
+            "settings_revision": "2",
+            "write_weeks": []
+          },
+          "created_at": "2026-10-13T10:00:00Z",
+          "expires_at": "2026-10-13T11:00:00Z",
+          "input_digest": "ae01d82be3458720f0a5db9a3f1d96a59c8a00249d66a5dbaa6955b179ff5945",
+          "job_id": "jb_80000000000000000000000000000090",
+          "payload": {
+            "data": {
+              "approved_contribution": null,
+              "products": [
+                {
+                  "product_id": "123456789",
+                  "retailer": "tesco",
+                  "variant_id": null
+                }
+              ],
+              "read_scope": {
+                "allowed_kinds": [
+                  "products"
+                ],
+                "event_ids": [],
+                "expires_at": "2026-10-13T11:00:00Z",
+                "not_before": "2026-10-13T10:00:00Z",
+                "products": [
+                  {
+                    "product_id": "123456789",
+                    "retailer": "tesco",
+                    "variant_id": null
+                  }
+                ],
+                "purpose": "initial",
+                "read_id": "rd_80000000000000000000000000000090",
+                "resource": {
+                  "data": {
+                    "key": {
+                      "account_ref": "synthetic-local-account",
+                      "basket_id": "bk_80000000000000000000000000000090",
+                      "retailer": "tesco"
+                    }
+                  },
+                  "kind": "basket"
+                }
+              }
+            },
+            "kind": "product_observation"
+          },
+          "privacy_policy_revision": "2",
+          "required_capabilities": [
+            "browser_read"
+          ],
+          "schema_version": 1,
+          "scope": {
+            "data": {
+              "approval_id": null,
+              "key": {
+                "account_ref": "synthetic-local-account",
+                "basket_id": "bk_80000000000000000000000000000090",
+                "retailer": "tesco"
+              },
+              "phase": "observe",
+              "read_scope": {
+                "allowed_kinds": [
+                  "products"
+                ],
+                "event_ids": [],
+                "expires_at": "2026-10-13T11:00:00Z",
+                "not_before": "2026-10-13T10:00:00Z",
+                "products": [
+                  {
+                    "product_id": "123456789",
+                    "retailer": "tesco",
+                    "variant_id": null
+                  }
+                ],
+                "purpose": "initial",
+                "read_id": "rd_80000000000000000000000000000090",
+                "resource": {
+                  "data": {
+                    "key": {
+                      "account_ref": "synthetic-local-account",
+                      "basket_id": "bk_80000000000000000000000000000090",
+                      "retailer": "tesco"
+                    }
+                  },
+                  "kind": "basket"
+                }
+              }
+            },
+            "kind": "shop"
+          },
+          "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+        },
+        "targets": [
+          {
+            "product": {
+              "product_id": "123456789",
+              "retailer": "tesco",
+              "variant_id": null
+            },
+            "url": "https://www.tesco.com/shop/en-GB/products/123456789"
+          }
+        ],
+        "version": 1
+      },
+      "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+    },
+    "deadline": "2026-10-13T11:00:00Z",
+    "format": "mstrchf-product-semantic-prepared",
+    "prepared_at": "2026-10-13T10:05:00Z",
+    "prepared_digest": "e9dbba4a49c090b0309c726f55717ad68d3b7940896cf50d2c7e0dcb3c5d294e",
+    "request": {
+      "created_at": "2026-10-13T10:05:00Z",
+      "deadline": "2026-10-13T11:00:00Z",
+      "format": "mstrchf-product-semantic-request",
+      "input_digest": "db61f28ff0bd08e47e00c6fb8f8c82d4d15a7dd5fbbfbc9a1966cd0cec6e27ff",
+      "methods": [
+        {
+          "attribution": "Adapted from Three Bean Salad by joel-maxuel, Public Domain Recipes, pinned commit da84378b36bd5b2e3cb35f610d64630bf1bd899d. Publisher public-domain dedication; independent contributor-authorship audit not performed.",
+          "component_production": [
+            {
+              "component_id": "co_80000000000000000000000000000006",
+              "ingredient_ids": [
+                "ig_80000000000000000000000000000007",
+                "ig_80000000000000000000000000000008",
+                "ig_80000000000000000000000000000009",
+                "ig_8000000000000000000000000000000a",
+                "ig_8000000000000000000000000000000b",
+                "ig_8000000000000000000000000000000c",
+                "ig_8000000000000000000000000000000d",
+                "ig_8000000000000000000000000000000e",
+                "ig_8000000000000000000000000000000f"
+              ],
+              "production": {
+                "data": {
+                  "first_handling_prep_id": 1
+                },
+                "kind": "unheated"
+              },
+              "storage_rule_ids": [],
+              "title": "Two separately assembled vegetarian-input salad units"
+            }
+          ],
+          "condition_text": [
+            "Weigh after rinsing and draining; do not include canning liquid.",
+            "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+            "Semantic review rule: a supported cold ready-to-eat input decision must cite exact known ingredients and storage/direct-use text. Unknown or conflicting storage stays unresolved; actual prior refrigeration, handling and separation are not observed."
+          ],
+          "equipment": [
+            "fridge"
+          ],
+          "ingredient": {
+            "component_id": "co_80000000000000000000000000000006",
+            "conversion_evidence": [],
+            "discrete": false,
+            "ingredient_id": "ig_80000000000000000000000000000007",
+            "name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+            "quantity": {
+              "amount": {
+                "denominator": "1",
+                "numerator": "160"
+              },
+              "form": "drained",
+              "unit": "g"
+            },
+            "step_ids": [
+              1
+            ]
+          },
+          "input_definition": {
+            "allergen_status": "not_qualified",
+            "canonical_key": "kidney-drained-mass",
+            "conversion_policy": "Use only the exact input form/unit. No net-can-to-drained recovery, dry-to-cooked, density, vegetable count/mass or brand equivalence.",
+            "form": "drained",
+            "ingredient_id": "ig_80000000000000000000000000000007",
+            "meaning": "Weigh after rinsing and draining; do not include canning liquid.",
+            "preferred_name": "commercially canned cooked red kidney beans",
+            "product_suitability": "not_qualified",
+            "source_anchor": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/content/bean-salad.md",
+            "unit": "g"
+          },
+          "intrinsic_conditions": {
+            "custody": {
+              "dietary_review_pin": {
+                "digest": "9c4ae31e3266e8e85900f6075895f210111e33c89ba07b46b1a9bed6adb9857b",
+                "evidence_id": "ev_80000000000000000000000000000031",
+                "revision": "1"
+              },
+              "intrinsic_input_conditions_digest": "cd344e3c63034ca967b2e559d6a5cc8541c9ee60cfe080e3364f0b7cb245f1e1",
+              "maker_policy_pin": {
+                "digest": "f3f83b809a55753e578ddae878363576d8e711b2b534d9c6727f3dad435fb68b",
+                "evidence_id": "ev_80000000000000000000000000000032",
+                "revision": "1"
+              },
+              "recipe_reference": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              }
+            },
+            "entry": {
+              "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+              "cooked_ready_to_eat_canned_required": true,
+              "form": "drained",
+              "ingredient_id": "ig_80000000000000000000000000000007",
+              "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+              "not_inferred_from_title_brand_or_recipe": true,
+              "plain_unseasoned_input_required": false,
+              "predicates": [
+                {
+                  "kind": "vegetarian_compatible_input_composition",
+                  "requirement": {
+                    "data": {
+                      "code": "vegetarian"
+                    },
+                    "kind": "diet"
+                  }
+                },
+                {
+                  "kind": "no_animal_body_part_ingredients_or_processing_products"
+                }
+              ],
+              "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+              "unit": "g"
+            },
+            "table": {
+              "applies_even_when_all_consumers_confirmed_none": true,
+              "dietary_review_id": "ev_80000000000000000000000000000031",
+              "entries": [
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": true,
+                  "form": "drained",
+                  "ingredient_id": "ig_80000000000000000000000000000007",
+                  "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": false,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat red kidney beans",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": true,
+                  "form": "drained",
+                  "ingredient_id": "ig_80000000000000000000000000000008",
+                  "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat chickpeas; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": false,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat chickpeas",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": true,
+                  "form": "drained",
+                  "ingredient_id": "ig_80000000000000000000000000000009",
+                  "input_condition": "For this exact recipe use only vegetarian-compatible commercially canned cooked ready-to-eat black beans; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": false,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "vegetarian-compatible commercially canned cooked ready-to-eat black beans",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "raw",
+                  "ingredient_id": "ig_8000000000000000000000000000000a",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible carrot; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible carrot",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "raw",
+                  "ingredient_id": "ig_8000000000000000000000000000000b",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible onion; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible onion",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "raw",
+                  "ingredient_id": "ig_8000000000000000000000000000000c",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible bell pepper; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible bell pepper",
+                  "unit": "g"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "prepared",
+                  "ingredient_id": "ig_8000000000000000000000000000000d",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible olive oil; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible olive oil",
+                  "unit": "ml"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "prepared",
+                  "ingredient_id": "ig_8000000000000000000000000000000e",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible cider vinegar; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible cider vinegar",
+                  "unit": "ml"
+                },
+                {
+                  "actual_source_or_manufacturer_processing_evidence_status": "unknown_not_qualified",
+                  "cooked_ready_to_eat_canned_required": false,
+                  "form": "prepared",
+                  "ingredient_id": "ig_8000000000000000000000000000000f",
+                  "input_condition": "For this exact recipe use only plain vegetarian-compatible granulated sugar; no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Establish applicable product compatibility from credible current product/manufacturer evidence, never ingredient naming, this recipe or brand inference. Actual processing/manufacturing and cross-contact remain unobserved.",
+                  "not_inferred_from_title_brand_or_recipe": true,
+                  "plain_unseasoned_input_required": true,
+                  "predicates": [
+                    {
+                      "kind": "vegetarian_compatible_input_composition",
+                      "requirement": {
+                        "data": {
+                          "code": "vegetarian"
+                        },
+                        "kind": "diet"
+                      }
+                    },
+                    {
+                      "kind": "no_animal_body_part_ingredients_or_processing_products"
+                    }
+                  ],
+                  "recipe_input_name": "plain vegetarian-compatible granulated sugar",
+                  "unit": "g"
+                }
+              ],
+              "format": "mstrchf-recipe-intrinsic-input-conditions",
+              "full_method_prep_ids": [
+                1,
+                2
+              ],
+              "full_method_step_ids": [
+                1,
+                2
+              ],
+              "future_D_guard": "Every actual use and supply origin must retain its exact recipe/ingredient conditions. A trusted Supported CookingClaim for the exact recipe/occurrence must attest intrinsic compatibility even with None consumers. Actual Vegetarian consumers also require admitted Vegetarian RequirementClaim/policy. No such producer, source, meaning, expiry or product policy is qualified by this document.",
+              "maker_policy_id": "ev_80000000000000000000000000000032",
+              "product_and_operational_compliance_observed": false,
+              "recipe_reference": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              },
+              "rule": "no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass",
+              "status": "maker_adopted_definition_not_product_observation",
+              "version": 1
+            }
+          },
+          "method_handle": "mh_e84ef610c913391933d2174226c33549",
+          "prep": [
+            {
+              "active_minutes": 30,
+              "can_attach_to_prior_session": false,
+              "depends_on": [],
+              "earliest_offset_seconds": -5400,
+              "elapsed_minutes": 30,
+              "ingredient_ids": [
+                "ig_80000000000000000000000000000007",
+                "ig_80000000000000000000000000000008",
+                "ig_80000000000000000000000000000009",
+                "ig_8000000000000000000000000000000a",
+                "ig_8000000000000000000000000000000b",
+                "ig_8000000000000000000000000000000c",
+                "ig_8000000000000000000000000000000d",
+                "ig_8000000000000000000000000000000e",
+                "ig_8000000000000000000000000000000f"
+              ],
+              "latest_offset_seconds": -5400,
+              "prep_id": 1,
+              "step_ids": [
+                1
+              ],
+              "title": "Assemble two separate units — unmeasured 30-minute reservation"
+            },
+            {
+              "active_minutes": 0,
+              "can_attach_to_prior_session": false,
+              "depends_on": [
+                1
+              ],
+              "earliest_offset_seconds": -3600,
+              "elapsed_minutes": 60,
+              "ingredient_ids": [],
+              "latest_offset_seconds": -3600,
+              "prep_id": 2,
+              "step_ids": [
+                2
+              ],
+              "title": "Both covered home-fridge units — at least 60 minutes of chilling"
+            }
+          ],
+          "recipe": {
+            "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+            "recipe_id": "rc_80000000000000000000000000000006",
+            "revision": "1"
+          },
+          "source_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/content/bean-salad.md",
+          "steps": [
+            {
+              "active_minutes": 30,
+              "component_ids": [
+                "co_80000000000000000000000000000006"
+              ],
+              "depends_on": [],
+              "elapsed_minutes": 30,
+              "ingredient_ids": [
+                "ig_80000000000000000000000000000007",
+                "ig_80000000000000000000000000000008",
+                "ig_80000000000000000000000000000009",
+                "ig_8000000000000000000000000000000a",
+                "ig_8000000000000000000000000000000b",
+                "ig_8000000000000000000000000000000c",
+                "ig_8000000000000000000000000000000d",
+                "ig_8000000000000000000000000000000e",
+                "ig_8000000000000000000000000000000f"
+              ],
+              "step_id": 1,
+              "text": "Use clean hands and clean food-contact scales, measures, colander, utensils, board and two separate covered containers; keep non-vegetarian materials and residues out of this preparation. Check actual labels and credible supplier/manufacturer information needed to establish vegetarian-compatible, ready-to-eat inputs and their applicable processing. The rule is: no animal body-part ingredients, or products/processing aids made from them; no meat/fish/bone stocks, carcass fats, gelatine or isinglass. Do not infer compliance from a plant name, this recipe, a brand or an absent allergen declaration; if an input condition cannot be established, do not claim vegetarian service from it. Use only newly opened, commercially cooked, ready-to-eat canned beans whose actual cold-use, date and storage labels permit this handling. For EACH container independently rinse/drain and weigh 80 g each kidney beans, chickpeas and black beans; wash/trim 40 g edible carrot and 60 g edible bell pepper, peel/chop 20 g onion; measure 10 ml plain olive oil, 15 ml plain cider vinegar and 5 g plain sugar. All nine inputs must be vegetarian-compatible under the stated rule. Mix each separate dressing, then its own beans and vegetables; no common bowl/estimated half split, seasoning, stock, substitute or unlisted garnish. Transfer unused opened-can contents according to actual labels to covered non-metallic refrigerated containers; they are outside this plan/stock. Cover both completed units for phase 2. Reserve 30 minutes of full attention as an unmeasured maker estimate, not measured completion."
+            },
+            {
+              "active_minutes": 0,
+              "component_ids": [
+                "co_80000000000000000000000000000006"
+              ],
+              "depends_on": [
+                1
+              ],
+              "elapsed_minutes": 60,
+              "ingredient_ids": [],
+              "step_id": 2,
+              "text": "Keep BOTH separate, covered salad units in a working home fridge at 0–5 °C for at least 60 minutes, retaining the published minimum. No mid-chill stirring is included. Continue chilling each container if needed until properly chilled; the 60-minute field and nominal 90-minute planning interval do not establish thermal completion or guarantee the meal deadline. Keep both properly chilled until same-day home service and minimise time out. If either is not properly chilled at the deadline, continue refrigeration and delay/refuse that service. No travel, ambient-safe interval, acid preservation, storage life, reheating, leftover or reuse permission is supplied. Keep these exact vegetarian-input units separate from non-vegetarian preparation and food-contact residues. No new dressing, stock, garnish or other ingredient is added during chilling or service. The complete method and all nine inputs are included in the conditional composition review. These instructions are not observations of factory/kitchen cross-contact control, allergen absence, actual product suitability or physical chilling completion."
+            }
+          ],
+          "title": "Three-bean salad — two vegetarian-input cold home lunch units"
+        }
+      ],
+      "product": {
+        "allergens": {
+          "data": {
+            "values": [
+              "Synthetic statement A",
+              "Synthetic statement B"
+            ]
+          },
+          "kind": "conflicting"
+        },
+        "ingredients": {
+          "data": {
+            "value": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+          },
+          "kind": "known"
+        },
+        "observed_at": "2026-10-13T10:00:01Z",
+        "pack": {
+          "count": {
+            "data": {
+              "value": 1
+            },
+            "kind": "known"
+          },
+          "drained": {
+            "data": {
+              "value": {
+                "amount": {
+                  "denominator": "1",
+                  "numerator": "240"
+                },
+                "form": "drained",
+                "unit": "g"
+              }
+            },
+            "kind": "known"
+          },
+          "net": {
+            "data": {
+              "value": {
+                "amount": {
+                  "denominator": "1",
+                  "numerator": "400"
+                },
+                "form": "raw",
+                "unit": "g"
+              }
+            },
+            "kind": "known"
+          }
+        },
+        "product": {
+          "product_id": "123456789",
+          "retailer": "tesco",
+          "variant_id": null
+        },
+        "storage": {
+          "data": {
+            "value": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+          },
+          "kind": "known"
+        },
+        "title": "Synthetic source fixture; no Tesco read occurred",
+        "url": "https://www.tesco.com/shop/en-GB/products/123456789"
+      },
+      "request_id": "sr_80000000000000000000000000000090",
+      "version": 2
+    },
+    "version": 2
+  },
+  "recorded": {
+    "assessment": {
+      "admission_status": "missing",
+      "effect_enabled": false,
+      "freshness_status": "unknown",
+      "meaning_status": "proposed",
+      "native_reasons": [
+        "missing_admission"
+      ]
+    },
+    "document": {
+      "food_binding": {
+        "catalogue_pin": {
+          "entries": [
+            {
+              "packet_digest": "a55505f8e4939e96f1e71229f13dfbc38010075c2424aa4f522a44b944d467e7",
+              "recipe": {
+                "digest": "e9d9968baebb1c033cea77855889ee8f3955d54a3d2fa227cedf96e140eb08fd",
+                "recipe_id": "rc_00000000000000000000000000000001",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "9ef8bc7ddf9c991427dabd1c33e29fe8463cbd4d7a85518b88201c365b05c462",
+              "recipe": {
+                "digest": "6f6f739e58abf2c496f5bdd1788c50a7f3cbce00ad621b43adf0ef181c808e0c",
+                "recipe_id": "rc_00000000000000000000000000000002",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "16a666102af18be45f53b9ca986d0bf679d323674e47a773877a943c259916da",
+              "recipe": {
+                "digest": "46a16a796965198e72a9d3456ad116e275f1b49014c597e28f3b1f441540550f",
+                "recipe_id": "rc_00000000000000000000000000000003",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "c018edd90db46c3979172275b796e04a08f5ab8a4cb2b458e68aa9055ddb1c46",
+              "recipe": {
+                "digest": "4bf2e3436c0f19036db1e3cf40a2aa0e2c363564f45a6c563f41fcde97ac4bd8",
+                "recipe_id": "rc_00000000000000000000000000000004",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "df01f50879287cf4f0743c873a8221d78fea4d237c81f6de8ef8b3cc71c2c21d",
+              "recipe": {
+                "digest": "2a1045c09fd89328879a4efa473898429e4800dc3285134b49547b69caabe725",
+                "recipe_id": "rc_00000000000000000000000000000005",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "edc4239b57366c96ef4b91198e4cc54de62db44d3d6346574e7318a852e2d726",
+              "recipe": {
+                "digest": "dd867c017a9b591f57546246518cd93c94e9f1ab50c54bfe4f288a1054de6ce0",
+                "recipe_id": "rc_80000000000000000000000000000001",
+                "revision": "3"
+              }
+            },
+            {
+              "packet_digest": "62949a9b43fb50ed7385271a22c09f9b5d703ff08ce865041b66c6d6f2d14dee",
+              "recipe": {
+                "digest": "58914b613960257e33ce294636bcd417baccb631f61379a22aa4977b14cc14f3",
+                "recipe_id": "rc_80000000000000000000000000000003",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "61aa9bc1b586ff82a1ceab2198f5cf88e7113ef82e37bdfa2b60cd4c7915de6d",
+              "recipe": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              }
+            },
+            {
+              "packet_digest": "93df7d839d9076d377fb1c08b201c3048aff4a428093a1cf75fcf6cf919cebfd",
+              "recipe": {
+                "digest": "8e73018765acca1f0265082f1c95601359274014259a306f4621ed805a133b97",
+                "recipe_id": "rc_80000000000000000000000000000007",
+                "revision": "1"
+              }
+            }
+          ],
+          "manifest_digest": "a4769d7e96fe4498bbe34f9d82be25f2d3d3fea73db2cc88651d063022ec5998",
+          "revision": "5"
+        },
+        "contains_engineering": false,
+        "demand_digest": "1f017ed941bffae76a6c8ef8f398d652cb03fa95c18aa3c093230e78b46a9467",
+        "derived_digest": "b5ea847601833915d774735deaf28045dfe256371757c6c782ea6d0332910e33",
+        "saved_basis_digest": "95d0a760bd0480afd573523018839eaca03d827673f937b1e333cac73fd61519",
+        "snapshot_revision": "14",
+        "week_revision": "7"
+      },
+      "host_attested": false,
+      "input_digest": "db61f28ff0bd08e47e00c6fb8f8c82d4d15a7dd5fbbfbc9a1966cd0cec6e27ff",
+      "line_id": "dl_e9ebf0d9318d793051222efe94826967",
+      "meaning": {
+        "cooking_claims": [
+          {
+            "evidence_ids": [
+              "ev_80000000000000000000000000000092"
+            ],
+            "occurrence": {
+              "extra_id": null,
+              "recipe": {
+                "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+                "recipe_id": "rc_80000000000000000000000000000006",
+                "revision": "1"
+              },
+              "slot": {
+                "date": "2026-10-27",
+                "meal_type": "lunch",
+                "week_id": "wk_2bbeddb1dfc1f1ca95b67c3d21b2cebc"
+              }
+            },
+            "recipe": {
+              "digest": "9e5495c21e6da79685364e4069c62485db521652f5b184f955ff5ae27a6f1632",
+              "recipe_id": "rc_80000000000000000000000000000006",
+              "revision": "1"
+            },
+            "source_fields": [
+              {
+                "kind": "ingredients"
+              },
+              {
+                "kind": "storage"
+              }
+            ],
+            "state": {
+              "kind": "supported"
+            }
+          }
+        ],
+        "key_claim": {
+          "evidence_ids": [
+            "ev_80000000000000000000000000000092"
+          ],
+          "source_fields": [
+            {
+              "kind": "ingredients"
+            }
+          ],
+          "state": {
+            "kind": "supported"
+          },
+          "supply_key": {
+            "form": "drained",
+            "ingredient_id": "ig_80000000000000000000000000000007",
+            "unit": "g"
+          }
+        },
+        "observation_digest": "0240a80c605db1d10a96d823ccb0bf0c30c22efb909b5771ee58cf78ceb542c4",
+        "product": {
+          "product_id": "123456789",
+          "retailer": "tesco",
+          "variant_id": null
+        },
+        "requirement_claims": []
+      },
+      "meaning_digest": "db393031338497d8c45b521f2269c783fc4a7c477c0ecd1dd59265b71526c966",
+      "prepared_digest": "e9dbba4a49c090b0309c726f55717ad68d3b7940896cf50d2c7e0dcb3c5d294e",
+      "product": {
+        "product_id": "123456789",
+        "retailer": "tesco",
+        "variant_id": null
+      },
+      "provenance": "automated_model_proposal",
+      "request_id": "sr_80000000000000000000000000000090",
+      "return_digest": "a9800d8a0b1755d7b4f43d1a9ee7d0f9651d845fdc6ff1a36b5bab70feaf53bf",
+      "returned": {
+        "cooking": [
+          {
+            "decision": {
+              "citations": [
+                {
+                  "field": "ingredients",
+                  "quote": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+                },
+                {
+                  "field": "storage",
+                  "quote": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+                }
+              ],
+              "reasoning": "Synthetic automated proposal: the exact known ingredient text describes the pinned plain dry rolled-oat input; no actual product suitability or freshness is asserted.",
+              "state": "supported"
+            },
+            "method_handle": "mh_e84ef610c913391933d2174226c33549"
+          }
+        ],
+        "format": "mstrchf-product-semantic-return",
+        "identity": {
+          "citations": [
+            {
+              "field": "ingredients",
+              "quote": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+            }
+          ],
+          "reasoning": "Synthetic automated proposal: the exact known ingredient text describes the pinned plain dry rolled-oat input; no actual product suitability or freshness is asserted.",
+          "state": "supported"
+        },
+        "input_digest": "db61f28ff0bd08e47e00c6fb8f8c82d4d15a7dd5fbbfbc9a1966cd0cec6e27ff",
+        "request_id": "sr_80000000000000000000000000000090",
+        "version": 1
+      },
+      "reviewed_at": "2026-10-13T10:05:00Z",
+      "source_observation_digest": "0240a80c605db1d10a96d823ccb0bf0c30c22efb909b5771ee58cf78ceb542c4"
+    },
+    "format": "mstrchf-product-semantic-review-record",
+    "review_pin": {
+      "digest": "18cd8e2e1c534d26715e3207519e36bd3ba1f072845b6f2230e16c9a59338016",
+      "evidence_id": "ev_80000000000000000000000000000092",
+      "revision": "1"
+    },
+    "version": 2
+  },
+  "returned": {
+    "cooking": [
+      {
+        "decision": {
+          "citations": [
+            {
+              "field": "ingredients",
+              "quote": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+            },
+            {
+              "field": "storage",
+              "quote": "Synthetic ready-to-eat canned input; direct cold use and label storage instructions."
+            }
+          ],
+          "reasoning": "Synthetic automated proposal: the exact known ingredient text describes the pinned plain dry rolled-oat input; no actual product suitability or freshness is asserted.",
+          "state": "supported"
+        },
+        "method_handle": "mh_e84ef610c913391933d2174226c33549"
+      }
+    ],
+    "format": "mstrchf-product-semantic-return",
+    "identity": {
+      "citations": [
+        {
+          "field": "ingredients",
+          "quote": "Synthetic exact plain ingredient label and recipe-compatible composition; no actual Tesco observation occurred."
+        }
+      ],
+      "reasoning": "Synthetic automated proposal: the exact known ingredient text describes the pinned plain dry rolled-oat input; no actual product suitability or freshness is asserted.",
+      "state": "supported"
+    },
+    "input_digest": "db61f28ff0bd08e47e00c6fb8f8c82d4d15a7dd5fbbfbc9a1966cd0cec6e27ff",
+    "request_id": "sr_80000000000000000000000000000090",
+    "version": 1
+  }
+}

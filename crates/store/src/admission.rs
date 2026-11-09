@@ -13,6 +13,8 @@ pub(crate) enum PreparedMutation {
     Week(Box<Week>),
     #[cfg(all(debug_assertions, feature = "synthetic-development"))]
     Horizon(Vec<Week>),
+    #[cfg(all(debug_assertions, feature = "synthetic-development"))]
+    Planner(crate::planner_state::Mutation),
 }
 fn stale(path: &str) -> DomainError {
     DomainError::new(ErrorCode::ContextStale, path)
@@ -23,6 +25,11 @@ pub(crate) fn prepare(
     command: &AppCommand,
 ) -> Result<PreparedMutation, DomainError> {
     match command {
+        AppCommand::SuggestMeals{..}|AppCommand::SavePersonalRecipe{..}|AppCommand::RecordFeedback{..}|AppCommand::RestoreHiddenRecipe{..}|AppCommand::ConfirmEssentials{..}=>{
+            #[cfg(all(debug_assertions,feature="synthetic-development"))]
+            if crate::current::m2(c)? {return crate::planner_state::prepare(c,s,command).map(PreparedMutation::Planner);}
+            Err(unsupported())
+        }
         AppCommand::OpenPlanningHorizon {} => {
             #[cfg(all(debug_assertions, feature = "synthetic-development"))]
             if crate::current::m2(c)? {
@@ -167,7 +174,12 @@ pub(crate) fn prepare(
                 }
                 // Retain existing selections during availability/settings changes;
                 // newly supplied selections still require native food admission.
-                if next.plan!=current.plan {crate::development::validate_saved_plan(s, profile, &next)?;}
+                if next.plan!=current.plan {
+                    let removal=next.plan.selections.len()<current.plan.selections.len()
+                        && next.plan.selections.iter().all(|v|current.plan.selections.contains(v))
+                        && next.plan.batch_links.iter().all(|v|current.plan.batch_links.contains(v));
+                    if !removal {crate::development::validate_saved_plan(s, profile, &next)?;}
+                }
                 if existing.is_some() {
                     next.revision = next.revision.checked_increment()?;
                     next.plan.revision = next.plan.revision.checked_increment()?;
@@ -181,13 +193,17 @@ pub(crate) fn prepare(
             let _ = (week, expected_week_revision);
             Err(unsupported())
         }
-        AppCommand::ApplyPlanProposal { .. }
-        | AppCommand::ConfirmEssentials { .. }
+        AppCommand::SuggestPlanningHorizon { .. }
+        | AppCommand::SetPrivacyPreservingEssentials { .. }
+        | AppCommand::AdmitReviewedRecipe { .. }
+        | AppCommand::ApplyPlanProposal { .. }
         | AppCommand::ApprovePlan { .. }
         | AppCommand::ConfirmOrder { .. }
+        | AppCommand::CorrectOrderDelivery { .. }
         | AppCommand::RequestJob { .. }
         | AppCommand::RecordUserStop { .. }
-        | AppCommand::RequestCalendarPublication { .. } => Err(unsupported()),
+        | AppCommand::RequestCalendarPublication { .. }
+        | AppCommand::ConfirmCalendarPublication { .. } => Err(unsupported()),
     }
 }
 pub(crate) fn commit_mutation(
@@ -196,6 +212,8 @@ pub(crate) fn commit_mutation(
     mutation: PreparedMutation,
 ) -> Result<(), DomainError> {
     match mutation {
+        #[cfg(all(debug_assertions,feature="synthetic-development"))]
+        PreparedMutation::Planner(mutation)=>crate::planner_state::commit(c,s,mutation)?,
         #[cfg(all(debug_assertions, feature = "synthetic-development"))]
         PreparedMutation::Horizon(weeks) => {
             c.execute("DELETE FROM active_weeks",[]).map_err(storage)?;
@@ -214,6 +232,7 @@ pub(crate) fn commit_mutation(
         }
         #[cfg(all(debug_assertions, feature = "synthetic-development"))]
         PreparedMutation::Week(week) => {
+            crate::planner_state::record_week(c,s,&week)?;
             c.execute("INSERT INTO weeks(week_id,revision,body) VALUES(?1,?2,?3) ON CONFLICT(week_id) DO UPDATE SET revision=excluded.revision,body=excluded.body",params![week.range.week_id.0,week.revision.0.to_string(),canonical_bytes(&week)?]).map_err(storage)?;
             if crate::current::m2(c)? {c.execute("INSERT INTO active_weeks(position,week_id) SELECT 0,?1 WHERE NOT EXISTS(SELECT 1 FROM active_weeks)",[&week.range.week_id.0]).map_err(storage)?;}
         }

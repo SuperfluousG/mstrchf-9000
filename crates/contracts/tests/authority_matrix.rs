@@ -964,6 +964,42 @@ fn every_command_variant_has_all_three_caller_rules() {
         _ => unreachable!(),
     };
     let commands = [
+        AppCommand::OpenPlanningHorizon {},
+        AppCommand::SuggestMeals {
+            week_id: week.range.week_id.clone(),
+            mode: PlanMode::FillOpen,
+            slots: BoundedVec(vec![]),
+            allow_repeats: false,
+        },
+        AppCommand::SuggestPlanningHorizon {
+            ordered_week_ids: BoundedVec((1..=4).map(|n| WeekId(format!("wk_{n:032x}"))).collect()),
+            mode: PlanMode::FillOpen,
+            allow_repeats: false,
+        },
+        AppCommand::SavePersonalRecipe {
+            candidate: serde_json::from_value(load("recipe-candidate.json")).unwrap(),
+            previous: Nullable(None),
+        },
+        AppCommand::RecordFeedback {
+            feedback: Feedback {
+                slot: week.cells.0[0].slot.clone(),
+                recipe: RecipeRef { recipe_id: RecipeId(id("rc_")), revision: Revision(1), digest: RecipeDigest("a".repeat(64)) },
+                rating: FeedbackRating::Liked,
+                reasons: BoundedVec(vec![]),
+                hide: false,
+                portion_change: Nullable(None),
+                portion_change_accepted: false,
+                recorded_at: time("2026-09-27T10:00:00Z"),
+            },
+        },
+        AppCommand::RestoreHiddenRecipe { recipe_id: RecipeId(id("rc_")) },
+        AppCommand::AdmitReviewedRecipe {
+            packet: ReviewedRecipePacketRef {
+                recipe: RecipeRef {recipe_id: RecipeId(id("rc_")), revision: Revision(1), digest: RecipeDigest("a".repeat(64))},
+                packet_digest: digest(),
+            },
+            expected_catalogue_revision: Revision(1),
+        },
         AppCommand::SaveHouseholdDraft {
             restriction_issue_edits: BoundedVec(vec![]),
             draft,
@@ -971,6 +1007,10 @@ fn every_command_variant_has_all_three_caller_rules() {
         AppCommand::UpdateProfile {
             profile,
             expected_profile_revision: Revision(1),
+        },
+        AppCommand::SetPrivacyPreservingEssentials {
+            policy: policy.clone(),
+            expected_policy_revision: Revision(1),
         },
         AppCommand::SetPrivacy {
             policy,
@@ -1019,8 +1059,8 @@ fn every_command_variant_has_all_three_caller_rules() {
             confirmation: OrderConfirmation {
                 week_id: WeekId(id("wk_")),
                 approval_id: ApprovalId(id("au_")),
-                delivery_start: calendar_event.start,
-                delivery_end: calendar_event.end,
+                delivery_start: calendar_event.start.clone(),
+                delivery_end: calendar_event.end.clone(),
                 confirmed_at: time("2026-09-27T10:00:00Z"),
                 source: OrderConfirmationSource::UserConfirmation {},
             },
@@ -1028,6 +1068,11 @@ fn every_command_variant_has_all_three_caller_rules() {
         AppCommand::RequestJob {
             action: request.action,
             scope: request.scope,
+        },
+        AppCommand::CorrectOrderDelivery {
+            order_id: OrderId(id("or_")),
+            delivery_start: calendar_event.start,
+            delivery_end: calendar_event.end,
         },
         AppCommand::CancelJob {
             job_id: JobId(id("jb_")),
@@ -1042,6 +1087,29 @@ fn every_command_variant_has_all_three_caller_rules() {
             order_id: OrderId(id("or_")),
             destination_id: CalendarDestinationId(id("cd_")),
             event_batch_digest: digest(),
+        },
+        AppCommand::ConfirmCalendarPublication {
+            confirmation: CalendarPublicationConfirmation {
+                preparation_command_id: CommandId(id("cm_")),
+                order_id: OrderId(id("or_")),
+                destination_id: CalendarDestinationId(id("cd_")),
+                event_batch_digest: digest(),
+                calendar_id: Text("synthetic-calendar@example.invalid".into()),
+                source: CalendarPublicationConfirmationSource::UserReviewedGoogleRead {
+                    read_id: Text(id("rd_")), read_digest: digest(),
+                },
+                observed_at: time("2026-09-27T10:00:00Z"),
+                events: BoundedVec(vec![PublishedCalendarEvent {
+                    event_id: CalendarEventId(id("ce_")),
+                    provider_event_id: Text("synthetic-google-event".into()),
+                    title: Title("Synthetic calendar event".into()),
+                    body: LongText("Synthetic observed method.".into()),
+                    start: time("2026-09-28T09:00:00Z"),
+                    end: time("2026-09-28T09:30:00Z"),
+                    zone: ZoneId("Europe/London".into()),
+                    observed_at: time("2026-09-27T10:00:00Z"),
+                }]),
+            },
         },
     ];
     let mut seen = std::collections::BTreeSet::new();
@@ -1071,6 +1139,6 @@ fn every_command_variant_has_all_three_caller_rules() {
         }
     }
     assert_eq!(seen.len(), CommandKind::ALL.len());
-    assert_eq!(cells, 36);
+    assert_eq!(cells, CommandKind::ALL.len() * 3);
     println!("COMMAND_AUTHORITY_CELLS {cells}");
 }

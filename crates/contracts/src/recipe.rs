@@ -328,40 +328,71 @@ record! {
     }
 }
 
-record! {
-    pub struct RecipeRevision {
-        pub schema_version: SchemaVersion,
-        pub recipe_id: RecipeId,
-        pub revision: Revision,
-        pub title: Title,
-        pub source: SourceRecord,
-        pub text_rights: RightsRecord,
-        pub ingredients: BoundedVec<RecipeIngredient, 1, 256>,
-        pub r#yield: YieldSpec,
-        pub scaling: ScalingPolicy,
-        pub steps: BoundedVec<InstructionStep, 1, 256>,
-        pub equipment: BoundedVec<EquipmentCode, 0, 9>,
-        pub active_minutes: u16,
-        pub elapsed_minutes: u16,
-        pub meal_types: BoundedVec<MealType, 1, 3>,
-        pub portability: PortabilityEvidence,
-        pub components: BoundedVec<ComponentSpec, 1, 128>,
-        pub extras: BoundedVec<ExtraSpec, 0, 64>,
-        pub reused_inputs: BoundedVec<ReusedComponentInput, 0, 128>,
-        pub dietary_evidence: BoundedVec<DietaryEvidence, 0, 256>,
-        pub storage: BoundedVec<StorageRule, 0, 128>,
-        pub prep: BoundedVec<PrepSpec, 0, 128>,
-        pub portion_presets: BoundedVec<PortionPreset, 1, 192>,
-        pub nutrition: Nullable<NutritionEvidence>,
-        pub image: Nullable<ImageRecord>,
-        pub reviews: BoundedVec<ReviewRecord, 0, 256>,
-        pub capabilities: RecipeCapabilities,
-    }
+// Keep the representable cross-field invariant in exported schemas as well as
+// native semantic validation. The surrounding object retains its closed shape.
+fn require_recipe_input(schema: &mut schemars::Schema) {
+    schema.insert(
+        "allOf".into(),
+        serde_json::json!([{
+            "anyOf": [
+                {"properties": {"ingredients": {"minItems": 1}}},
+                {"properties": {"reused_inputs": {"minItems": 1}}}
+            ]
+        }]),
+    );
+}
+
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    ts_rs::TS,
+)]
+#[serde(deny_unknown_fields)]
+#[schemars(transform = require_recipe_input)]
+pub struct RecipeRevision {
+    pub schema_version: SchemaVersion,
+    pub recipe_id: RecipeId,
+    pub revision: Revision,
+    pub title: Title,
+    pub source: SourceRecord,
+    pub text_rights: RightsRecord,
+    // A service recipe may consume only an exact original component.
+    // Semantic validation still requires fresh ingredients or reused inputs.
+    pub ingredients: BoundedVec<RecipeIngredient, 0, 256>,
+    pub r#yield: YieldSpec,
+    pub scaling: ScalingPolicy,
+    pub steps: BoundedVec<InstructionStep, 1, 256>,
+    pub equipment: BoundedVec<EquipmentCode, 0, 9>,
+    pub active_minutes: u16,
+    pub elapsed_minutes: u16,
+    pub meal_types: BoundedVec<MealType, 1, 3>,
+    pub portability: PortabilityEvidence,
+    pub components: BoundedVec<ComponentSpec, 1, 128>,
+    pub extras: BoundedVec<ExtraSpec, 0, 64>,
+    pub reused_inputs: BoundedVec<ReusedComponentInput, 0, 128>,
+    pub dietary_evidence: BoundedVec<DietaryEvidence, 0, 256>,
+    pub storage: BoundedVec<StorageRule, 0, 128>,
+    pub prep: BoundedVec<PrepSpec, 0, 128>,
+    pub portion_presets: BoundedVec<PortionPreset, 1, 192>,
+    pub nutrition: Nullable<NutritionEvidence>,
+    pub image: Nullable<ImageRecord>,
+    pub reviews: BoundedVec<ReviewRecord, 0, 256>,
+    pub capabilities: RecipeCapabilities,
 }
 
 tagged! {
     pub enum ComponentProductionSpec {
         Cooked { completion_prep_id: u16 },
+        CookedWithCooling {
+            completion_prep_id: u16,
+            cooling_prep_ids: BoundedVec<u16, 1, 128>,
+            max_cooling_seconds: u32,
+        },
         Unheated { first_handling_prep_id: u16 },
     }
 }

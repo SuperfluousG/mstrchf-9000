@@ -1140,6 +1140,9 @@
         "origin": {
           "$ref": "#/$defs/SelectionOrigin"
         },
+        "portable_cold": {
+          "$ref": "#/$defs/PortableColdJourney"
+        },
         "recipe": {
           "$ref": "#/$defs/RecipeRef"
         },
@@ -1583,6 +1586,47 @@
           "type": "object"
         }
       ]
+    },
+    "PortableChillingDeclaration": {
+      "additionalProperties": false,
+      "description": "Version 1 records the owner's plan to maintain/check 0–5°C through\nservice, with an insulated bag/frozen packs and a fridge on arrival.\nIt is never evidence of actual temperatures or earlier safe handling.",
+      "properties": {
+        "confirmed_at": {
+          "$ref": "#/$defs/Instant"
+        },
+        "journey_digest": {
+          "$ref": "#/$defs/PayloadDigest"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/SchemaVersion"
+        }
+      },
+      "required": [
+        "schema_version",
+        "confirmed_at",
+        "journey_digest"
+      ],
+      "type": "object"
+    },
+    "PortableColdJourney": {
+      "additionalProperties": false,
+      "properties": {
+        "declaration": {
+          "$ref": "#/$defs/PortableChillingDeclaration"
+        },
+        "depart_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        },
+        "packing_complete_at": {
+          "$ref": "#/$defs/ZonedMoment"
+        }
+      },
+      "required": [
+        "packing_complete_at",
+        "depart_at",
+        "declaration"
+      ],
+      "type": "object"
     },
     "PortionPreference": {
       "additionalProperties": false,

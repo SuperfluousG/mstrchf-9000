@@ -10,6 +10,11 @@ pub enum SyntheticDataMode {
 #[serde(rename_all = "snake_case")]
 pub enum SupportedCommand {
     OpenPlanningHorizon,
+    SuggestMeals,
+    SavePersonalRecipe,
+    RecordFeedback,
+    RestoreHiddenRecipe,
+    ConfirmEssentials,
     SaveHouseholdDraft,
     SetPrivacy,
     CancelJob,
@@ -23,7 +28,7 @@ pub struct ShellFeatures {
     #[ts(type = "1")]
     pub format_version: u8,
     pub data_mode: SyntheticDataMode,
-    pub supported_commands: [SupportedCommand; 6],
+    pub supported_commands: [SupportedCommand; 11],
     #[ts(type = "false")]
     pub production_runtime_enabled: bool,
 }
@@ -34,6 +39,11 @@ impl ShellFeatures {
             data_mode: SyntheticDataMode::SyntheticDevelopment,
             supported_commands: [
                 SupportedCommand::OpenPlanningHorizon,
+                SupportedCommand::SuggestMeals,
+                SupportedCommand::SavePersonalRecipe,
+                SupportedCommand::RecordFeedback,
+                SupportedCommand::RestoreHiddenRecipe,
+                SupportedCommand::ConfirmEssentials,
                 SupportedCommand::SaveHouseholdDraft,
                 SupportedCommand::SetPrivacy,
                 SupportedCommand::CancelJob,
@@ -62,7 +72,7 @@ mod tests {
             serde_json::to_value(super::ShellFeatures::synthetic()).unwrap(),
             serde_json::json!({
                 "format_version": 1, "data_mode": "synthetic_development",
-                "supported_commands": ["open_planning_horizon", "save_household_draft", "set_privacy", "cancel_job", "update_profile", "save_week"],
+                "supported_commands": ["open_planning_horizon","suggest_meals","save_personal_recipe","record_feedback","restore_hidden_recipe","confirm_essentials", "save_household_draft", "set_privacy", "cancel_job", "update_profile", "save_week"],
                 "production_runtime_enabled": false
             })
         );

@@ -166,6 +166,36 @@ describe('exact live-session recovery (transport doubles)', () => {
     expect(session.state.read).toBe('failed'); expect(session.canMutate).toBe(false);
   });
 });
+describe('browser backup capacity refusals (transport doubles)',()=>{
+  const capacity=(path:string):DomainError=>({code:'invalid_value',issues:[{code:'invalid_value',path,entity_id:null}],retry:'never',truncated:false});
+  it.each([
+    ['/device_backup/product_notes','archive retained product notes'],
+    ['/device_backup/source_reads','archive product read history'],
+    ['/device_backup/semantic_reviews','archive interpretation history'],
+    ['/device_backup/basket_reads','archive basket read history'],
+  ])('treats the exact audited precommit %s as refusal while preserving the edit and current kitchen',async(path,archive)=>{
+    const {invoke,session}=harness(),before=snapshot(),edit=structuredClone(privacy);
+    if(edit.kind==='set_privacy')edit.data.policy.use_ai_features=true;
+    invoke.mockResolvedValueOnce(before);await session.refresh();invoke.mockRejectedValueOnce(capacity(path)).mockResolvedValueOnce(structuredClone(before));await session.submit(edit);
+    expect(session.state.disposition).toBe('refused');expect(session.state.pending).toBeNull();expect(session.state.lastReceipt).toBeNull();expect(session.state.snapshot).toEqual(before);expect(session.state.snapshot?.privacy.use_ai_features).toBe(false);
+    expect(edit).toEqual(JSON.parse(invoke.mock.calls[1][1]!.commandJson as string).command);expect(session.state.message).toContain(archive);expect(session.state.message).toContain('Your edit is retained');expect(session.state.message).not.toContain('unknown');expect(session.canMutate).toBe(false);
+    await session.recover();expect(invoke).toHaveBeenCalledTimes(3);session.reviewRefusal();expect(session.canMutate).toBe(true);
+  });
+  it.each([
+    {...capacity('/device_backup/semantic_reviews/after_commit')},
+    {...capacity('/device_backup/source_reads_extra')},
+    {...capacity('/device_backup/basket_reads/after_commit')},
+    {...capacity('/device_backup/semantic_reviews'),truncated:true},
+    {...capacity('/device_backup/source_reads'),issues:[{code:'invalid_value',path:'/device_backup/source_reads',entity_id:'rd_00000000000000000000000000000001'}]},
+  ])('retains uncertain intent for an unqualified capacity-like error %#',async refusal=>{
+    const {invoke,session}=harness();invoke.mockResolvedValueOnce(snapshot());await session.refresh();invoke.mockRejectedValueOnce(refusal);await session.submit(privacy);
+    expect(session.state.disposition).toBe('unknown');expect(session.state.pending).not.toBeNull();expect(session.canMutate).toBe(false);expect(invoke).toHaveBeenCalledTimes(2);
+  });
+  it.each(['/device_backup/source_reads','/device_backup/semantic_reviews','/device_backup/basket_reads'])('cannot clear an already uncertain intent on recovery capacity error %s',async path=>{
+    const {invoke,session}=harness();invoke.mockResolvedValueOnce(snapshot());await session.refresh();invoke.mockRejectedValueOnce('Synthetic lost acknowledgement');await session.submit(privacy);const pending=session.state.pending,sent=invoke.mock.calls[1][1];
+    invoke.mockRejectedValueOnce(capacity(path));await session.recover();expect(session.state.disposition).toBe('unknown');expect(session.state.pending).toBe(pending);expect(session.canMutate).toBe(false);expect(invoke.mock.calls[2][1]).toEqual(sent);expect(session.state.message).toContain('restart');
+  });
+});
 const raw=(group:string,name:string)=>readFileSync(`src-tauri/tests/fixtures/receipt/${group}/${name}`,'utf8');
 const literal=(group:string,name:string)=>JSON.parse(raw(group,name));
 function fixedId(lastByte:number) {
@@ -247,6 +277,9 @@ describe('frozen receipt/current session obligations',()=>{
   });
 });
 const refusalRows:[AppCommand,DomainError['code'],string][]=[
+ [{kind:'suggest_planning_horizon',data:{ordered_week_ids:snapshot().weeks.map(week=>week.range.week_id),mode:'fill_open',allow_repeats:false}},'domain_conflict','/suggest_horizon/no_fit_or_permission'],
+ [{kind:'suggest_planning_horizon',data:{ordered_week_ids:snapshot().weeks.map(week=>week.range.week_id),mode:'swap_named',allow_repeats:false}},'scope_violation','/suggest_horizon/mode'],
+ [{kind:'suggest_planning_horizon',data:{ordered_week_ids:snapshot().weeks.map(week=>week.range.week_id),mode:'fill_open',allow_repeats:false}},'scope_violation','/suggest_horizon/ordered_week_ids'],
  [save,'context_stale','/expected_snapshot_revision'],[save,'context_stale','/revision'],[save,'context_stale','/connections/privacy'],
  [privacy,'context_stale','/command/data/policy/revision'],[save,'invalid_value','/command/data/restriction_issue_edits'],
  [cancel,'missing_reference','/command/data/job_id'],[{kind:'update_profile',data:{}} as AppCommand,'unsupported_capability','/command'],

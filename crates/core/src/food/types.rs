@@ -40,7 +40,8 @@ native_units!(LiveSource {
 });
 native_record!(PhaseResources {recipe:RecipeRef,prep_id:u16,equipment:Vec<EquipmentCode>,evidence_ids:Vec<EvidenceId>});
 native_record!(ComponentReheatCount {recipe:RecipeRef,component_id:ComponentId,planned_reheats:u8,evidence_ids:Vec<EvidenceId>});
-native_record!(MethodPhases {recipe:RecipeRef,kind:MethodKind,prep_ids:Vec<u16>,direct_reuse_counts:Vec<ComponentReheatCount>,evidence_ids:Vec<EvidenceId>});
+native_record!(PortableColdMethod {packing_prep_id:u16,service_prep_id:u16});
+native_record!(MethodPhases {recipe:RecipeRef,kind:MethodKind,prep_ids:Vec<u16>,direct_reuse_counts:Vec<ComponentReheatCount>,evidence_ids:Vec<EvidenceId>,portable_cold:Option<PortableColdMethod>});
 native_record!(FoodEvidence {catalogue_revision:Revision,catalogue_digest:PayloadDigest,policy_version:Revision,recipes:Vec<EvidenceBasis>,classes:Vec<ComponentClassView>,methods:Vec<MethodPhases>,resources:Vec<PhaseResources>,essential_ingredient_ids:Vec<IngredientId>});
 native_record!(OccurrenceKey {slot:SlotId,extra_id:Option<ExtraId>,recipe:RecipeRef});
 native_record!(PhaseKey {

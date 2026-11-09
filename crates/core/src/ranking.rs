@@ -742,6 +742,39 @@ pub fn rank_candidates(
     e: &RankingEvidence,
     at: &Instant,
 ) -> Result<CandidateSet, DomainError> {
+    rank_candidate_pool(c, slot, intent, choices, reviewed, e, at, false)
+}
+
+/// Local explicit repeat authorisation applies independently to each candidate.
+/// Final selection still needs one permission for the chosen recipe and slot.
+/// Assessment and scoring retain the complete pool; no per-candidate ranking
+/// scores are combined, and the ordinary intent guard remains unchanged.
+pub fn rank_candidates_with_repeat_authorisation(
+    c: &PlanningContext,
+    slot: &SlotId,
+    intent: &SelectionIntent,
+    choices: &[ChoiceSpec],
+    reviewed: &[ReviewedRecipe<'_>],
+    e: &RankingEvidence,
+    at: &Instant,
+) -> Result<CandidateSet, DomainError> {
+    require(intent.origin == SelectionOrigin::Suggested
+        && intent.slots.as_slice() == std::slice::from_ref(slot)
+        && intent.repeat_permissions.is_empty(),
+        ErrorCode::InvalidValue, "/intent/repeat_permissions")?;
+    rank_candidate_pool(c, slot, intent, choices, reviewed, e, at, true)
+}
+
+fn rank_candidate_pool(
+    c: &PlanningContext,
+    slot: &SlotId,
+    intent: &SelectionIntent,
+    choices: &[ChoiceSpec],
+    reviewed: &[ReviewedRecipe<'_>],
+    e: &RankingEvidence,
+    at: &Instant,
+    authorise_each_candidate: bool,
+) -> Result<CandidateSet, DomainError> {
     bound(choices.len(), 512, "/choices")?;
     bound(reviewed.len(), 512, "/reviewed")?;
     bound(c.weeks.len(), 4, "/weeks")?;
@@ -792,7 +825,10 @@ pub fn rank_candidates(
             "/choices/meal_overrides",
         )?;
     }
-    let pool = pool_digest(c, slot, intent, choices)?;
+    let mut pool = pool_digest(c, slot, intent, choices)?;
+    if authorise_each_candidate {
+        pool = canonical_digest(&json!({"pool_digest":pool,"repeat_authorisation":"each_candidate"}))?;
+    }
     let mut out = CandidateSet {
         slot: slot.clone(),
         context_stamp: c.stamp.clone(),
@@ -807,7 +843,14 @@ pub fn rank_candidates(
     };
     let mut all = BTreeMap::new();
     for (index, ch) in choices.iter().enumerate() {
-        let permit = intent
+        if authorise_each_candidate {
+            let mut candidate_intent = intent.clone();
+            candidate_intent.repeat_permissions = vec![crate::selection::RepeatPermission {
+                slot: slot.clone(), recipe: ch.recipe.clone(),
+            }];
+            validate_intent(c, &candidate_intent)?;
+        }
+        let permit = authorise_each_candidate || intent
             .repeat_permissions
             .iter()
             .any(|p| p.slot == *slot && p.recipe == ch.recipe)
