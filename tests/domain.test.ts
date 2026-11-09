@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { catalogue } from '../src/data';
 import { buildBasket, claudePrompt } from '../src/domain/basket';
-import { amount, inlineName, packLabel, recipeQty } from '../src/domain/format';
+import { amount, countedName, inlineName, packLabel, recipeQty } from '../src/domain/format';
 import { EMPTY_FOCUS, eligibleFor, parseCraving, planWeek, alternatives, whyNot, type PlanContext } from '../src/domain/planner';
 import { DEFAULT_PROFILE, type Profile } from '../src/domain/profile';
 import { bestPacks, buildShoppingList } from '../src/domain/shopping';
@@ -155,6 +155,15 @@ describe('formatting and dates', () => {
     expect(recipeQty(5, cumin)).toBe('2 tsp');
     expect(recipeQty(7.5, cumin)).toBe('1 tbsp');
     expect(amount(1500, 'g')).toBe('1.5 kg');
+  });
+
+  it('pluralises counted ingredients without doubling up', () => {
+    const ing = (id: string) => catalogue.ingredients.get(id)!;
+    expect(countedName(ing('spring-onion'), 2)).toBe('Spring onions');
+    expect(countedName(ing('tortilla'), 2)).toBe('Flour tortilla wraps');
+    expect(countedName(ing('garlic'), 2)).toBe('Garlic cloves');
+    expect(countedName(ing('tomato'), 2)).toBe('Salad tomatoes');
+    expect(countedName(ing('egg'), 1)).toBe('Free-range egg');
   });
 
   it('labels packs and names in plain words', () => {

@@ -66,7 +66,8 @@ export function countedName(ing: Ingredient, qty: number): string {
   if (ing.unit !== 'each' || qty <= 1) return ing.name;
   const n = ing.name;
   if (/\(.*\)$/.test(n)) return n; // "Chickpeas (400g tin)"
-  if (/(ch|sh|s|x)$/i.test(n)) return `${n}es`;
+  if (/[^s]s$/i.test(n)) return n; // already plural: "Spring onions", "Flour tortilla wraps"
+  if (/(ch|sh|ss|x)$/i.test(n)) return `${n}es`;
   if (/[^aeiou]y$/i.test(n)) return `${n.slice(0, -1)}ies`;
   if (/o$/i.test(n)) return `${n}es`;
   return `${n}s`;
