@@ -1,6 +1,0 @@
-{
-  "originals_unchanged": true,
-  "correction": "Historical fixture defaults_snapshot.suggest_leftovers false conflicts with complete current meal requirements. Set true. All original canonical bytes retained. This current vector is independently rebuilt from existing source JSON after fixture diagnosis; no product encoder.",
-  "saved_basis_digest": "251b606cf3c89812ffa7b67d9801a05220bcc67271ed1d6eb30b2079a60e25a4",
-  "match_sha256": "6e60cdb3db9cdfc0e2936f4280f516a04c75327a2e4659210bccc36ad5c5e100"
-}

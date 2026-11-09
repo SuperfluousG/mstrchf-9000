@@ -1,19 +1,12 @@
-/loop/
-/.worktrees/
-/.superpowers/
-/target/
-/node_modules/
-/dist/
-/src-tauri/target/
-*.sqlite
-*.sqlite-shm
-*.sqlite-wal
+node_modules/
+dist/
+*.log
 .env
 .env.*
 !.env.example
-/private/
-/artifacts/local/
-/.sites-local/
-
-**/target/
+# Archived pre-v2 material kept on disk only (also preserved in git on archive/codex-2026-10)
+/loop/
 /sites/
+/.sites-local/
+/.worktrees/
+**/target/

@@ -1,2 +1,0 @@
-# Independent batch fixture copies must retain their original bytes on Windows.
-*.json -text

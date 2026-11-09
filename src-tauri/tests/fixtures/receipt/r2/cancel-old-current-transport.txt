@@ -1,1 +1,0 @@
-{"schema_version":1,"command_id":"cm_00000000000000000000000000000006","expected_snapshot_revision":"1","command":{"kind":"cancel_job","data":{"job_id":"jb_00000000000000000000000000000001"}}}

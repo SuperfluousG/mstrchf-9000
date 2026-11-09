@@ -1,2 +1,0 @@
-# These reviewed RFC fixtures contain literal CRLF bytes on every platform.
-*.ics -text

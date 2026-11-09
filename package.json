@@ -1,37 +1,27 @@
 {
   "name": "mstrchf-9000",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "check:contracts": "node scripts/check-contracts.mjs",
-    "test:contract-types": "tsc --project tests/contracts/tsconfig.json --noEmit",
-    "check:ui": "tsc --project tsconfig.ui.json --noEmit",
-    "test:ui": "vitest run",
-    "build:ui": "vite build",
-    "build:ui:dev": "vite build --mode development-shell",
-    "dev:ui": "vite --mode development-shell --host 127.0.0.1",
-    "tauri:dev": "tauri dev --config src-tauri/development/tauri.conf.json --features synthetic-development -- --locked",
-    "tauri:build": "tauri build --no-bundle -- --locked",
-    "check:shell-types": "cargo run -p mstrchf-shell --locked --no-default-features --bin shell-types -- --check",
-    "check:ui-fixtures": "node scripts/check-ui-fixtures.mjs",
-    "check:ui-boundaries": "node scripts/check-ui-boundaries.mjs"
-  },
-  "devDependencies": {
-    "typescript": "5.9.3",
-    "@testing-library/react": "16.3.3",
-    "vitest": "4.1.11",
-    "@vitejs/plugin-react": "6.1.1",
-    "vite": "8.2.2",
-    "jsdom": "29.1.1",
-    "@testing-library/dom": "10.4.2",
-    "@tauri-apps/cli": "2.11.5",
-    "@types/node": "24.13.3",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.7"
+    "dev": "vite --host 127.0.0.1 --port 5190",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5191",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "validate": "node scripts/validate-catalogue.mjs"
   },
   "dependencies": {
-    "react-dom": "19.2.8",
-    "@tauri-apps/api": "2.11.1",
-    "react": "19.2.8"
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "6.1.1",
+    "typescript": "5.9.3",
+    "vite": "8.2.2",
+    "vitest": "4.1.11"
   }
 }

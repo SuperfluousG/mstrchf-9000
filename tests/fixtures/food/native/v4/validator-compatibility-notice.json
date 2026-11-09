@@ -1,8 +1,0 @@
-{
-  "purpose": "Actual unchanged PlanningContext validator control only; not R3 acceptance or authoritative hash data",
-  "method": "Strip only three unimplemented R3 fields in memory (RecipeRevision.reused_inputs, ComponentSpec.production, BatchUse.NewBatch.production_servings), independently JCS/SHA256 the projected recipe and replace its exact references. Requirements are not repaired by the probe. Validator-internal digest comparisons are ordinary validation, not expected-data generation.",
-  "positive": "prior and subject historical contexts each21 rows",
-  "negative": "same independently projected contexts with only active1/2 requirements reject",
-  "production_expected_digest_generators": 0,
-  "historical_r3_vectors_unchanged_by_projection": true
-}

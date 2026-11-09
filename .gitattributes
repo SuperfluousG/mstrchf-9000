@@ -1,11 +1,4 @@
-# Generated digests compare exact LF bytes on every checkout, including Windows.
-/contracts/v1/* text eol=lf
-/app/generated/contracts.ts text eol=lf
-/tests/fixtures/contracts/*.json text eol=lf
-# Malformed/oversized parser evidence must retain its literal bytes. Binary diffs
-# also avoid treating intentionally invalid whitespace as source formatting.
-/tests/fixtures/contracts/*.txt -text -diff
-# The food oracle retains its pinned original CRLF bytes; ordinary whitespace checks remain.
-/tests/fixtures/food/oracle-v1.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
-# Migration ledger checksums must be identical after every checkout.
-/crates/store/migrations/*.sql text eol=lf
+* text=auto
+*.webp binary
+*.png binary
+*.jpg binary
