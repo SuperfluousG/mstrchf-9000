@@ -128,13 +128,13 @@ export function recencyFor(s: AppState, weekId: string): Map<string, number> {
 }
 
 export function exportBackup(): string {
-  return JSON.stringify({ app: 'MasterChef 9000', exportedAt: new Date().toISOString(), state }, null, 2);
+  return JSON.stringify({ app: 'MSTRCHF 9000', exportedAt: new Date().toISOString(), state }, null, 2);
 }
 
 export function importBackup(text: string): void {
   const parsed = JSON.parse(text);
   const next = parsed?.state ?? parsed;
-  if (next?.version !== 2) throw new Error('This file is not a MasterChef 9000 backup.');
+  if (next?.version !== 2) throw new Error('This file is not a MSTRCHF 9000 backup.');
   setState(() => ({ ...EMPTY_STATE, ...next }));
 }
 

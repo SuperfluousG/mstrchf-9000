@@ -81,7 +81,7 @@ function Plate({ recipe }: { recipe: Recipe }) {
 
   return (
     <svg viewBox="0 0 160 120" className="dish-art" role="img" aria-label={`Illustration of ${recipe.title}`} preserveAspectRatio="xMidYMid slice">
-      <rect width="160" height="120" fill="var(--linen-deep)" />
+      <rect width="160" height="120" fill="var(--chalk-deep)" />
       <rect width="160" height="120" fill={art.tint} opacity="0.12" />
       <ellipse cx="83" cy="65" rx="47" ry="45" fill="#000" opacity="0.07" />
       <circle cx="80" cy="60" r="46" fill="#FBFAF5" />

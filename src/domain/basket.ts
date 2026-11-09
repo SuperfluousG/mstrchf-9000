@@ -15,7 +15,7 @@ export interface BasketItem {
 }
 
 export interface BasketFile {
-  app: 'MasterChef 9000';
+  app: 'MSTRCHF 9000';
   format: 'basket';
   version: 1;
   retailer: 'tesco';
@@ -41,7 +41,7 @@ export function buildBasket(list: ShoppingList, weekId: string, people: number, 
     usedIn: [...new Set(l.usedIn.map(u => u.title))],
   }));
   return {
-    app: 'MasterChef 9000', format: 'basket', version: 1, retailer: 'tesco',
+    app: 'MSTRCHF 9000', format: 'basket', version: 1, retailer: 'tesco',
     weekId, week: weekLabel(weekId), people, meals,
     items,
     alreadyHave: list.lines.filter(l => l.status !== 'buy').map(l => l.ingredient.name),
@@ -51,10 +51,10 @@ export function buildBasket(list: ShoppingList, weekId: string, people: number, 
 }
 
 export function basketText(b: BasketFile): string {
-  const lines = [`MasterChef 9000 — shopping for ${b.week} (${b.people} people)`, '', `Meals: ${b.meals.join(', ')}`, ''];
+  const lines = [`MSTRCHF 9000 — shopping for ${b.week} (${b.people} people)`, '', `Meals: ${b.meals.join(', ')}`, ''];
   let aisle = '';
   for (const i of b.items) {
-    if (i.aisle !== aisle) { aisle = i.aisle; lines.push('', aisle.toUpperCase()); }
+    if (i.aisle !== aisle) { aisle = i.aisle; lines.push('', `${aisle}:`); }
     const packs = i.buy.map(p => p.size === 'single' ? `${p.count}` : `${p.count} × ${p.size}`).join(' + ');
     lines.push(`[ ] ${i.name} — need ${i.need}; buy ${packs} (est. ${money(i.estPrice)})`);
   }
@@ -65,7 +65,7 @@ export function basketText(b: BasketFile): string {
 /** Instructions a browser-capable Claude can follow to fill the Tesco basket. */
 export function claudePrompt(b: BasketFile): string {
   return [
-    'Please fill my Tesco groceries basket for this MasterChef 9000 meal plan, using the tesco-basket skill if you have it.',
+    'Please fill my Tesco groceries basket for this MSTRCHF 9000 meal plan, using the tesco-basket skill if you have it.',
     '',
     'Rules:',
     '- Use the Tesco tab I am already signed in to. Do not sign in, enter payment details or check out.',

@@ -1,4 +1,4 @@
-# MasterChef 9000
+# MSTRCHF 9000
 
 A HelloFresh-style weekly meal planner that is tuned to your taste and hands the shopping to Claude.
 

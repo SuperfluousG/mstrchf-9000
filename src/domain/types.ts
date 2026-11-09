@@ -1,4 +1,4 @@
-// Core data model for MasterChef 9000 v2.
+// Core data model for MSTRCHF 9000 v2.
 // Quantities are always stored in an ingredient's base unit (g, ml or each)
 // for the recipe's base servings (2). Display conversions happen at render time.
 

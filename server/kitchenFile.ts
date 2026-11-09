@@ -9,7 +9,7 @@ export const MAX_BYTES = 5_000_000;
 export const KEEP_DAILY_BACKUPS = 14;
 
 export interface KitchenDoc {
-  app: 'MasterChef 9000';
+  app: 'MSTRCHF 9000';
   savedAt: number;
   state: { version: 2; profile: unknown; weeks: Record<string, unknown> } & Record<string, unknown>;
 }
@@ -80,7 +80,7 @@ export function kitchenFileMiddleware(dataDir: string) {
       if (req.method === 'PUT') {
         let doc: unknown;
         try { doc = JSON.parse(await readBody(req)); } catch (e) { return send(400, { error: e instanceof Error ? e.message : 'Unreadable kitchen' }); }
-        if (!isKitchen(doc)) return send(400, { error: 'That is not a MasterChef 9000 kitchen.' });
+        if (!isKitchen(doc)) return send(400, { error: 'That is not a MSTRCHF 9000 kitchen.' });
         const current = await readDoc();
         // Never let an empty browser silently overwrite a saved kitchen; "Start over" sends this header.
         if (current && isKitchen(current) && !isEmpty(current.state) && isEmpty(doc.state) && req.headers['x-confirm-reset'] !== '1') {
@@ -89,7 +89,7 @@ export function kitchenFileMiddleware(dataDir: string) {
         await mkdir(dataDir, { recursive: true });
         if (current) await dailyBackup();
         const tmp = `${file}.tmp`;
-        await writeFile(tmp, JSON.stringify({ app: 'MasterChef 9000', savedAt: doc.savedAt, state: doc.state }, null, 2), 'utf8');
+        await writeFile(tmp, JSON.stringify({ app: 'MSTRCHF 9000', savedAt: doc.savedAt, state: doc.state }, null, 2), 'utf8');
         await rename(tmp, file);
         return send(200, { ok: true, savedAt: doc.savedAt, path: file });
       }

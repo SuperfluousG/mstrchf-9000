@@ -135,7 +135,7 @@ export function ProfileEditor({ initial, onSave, saveLabel }: { initial: Profile
 export function Onboarding({ onDone }: { onDone: () => void }) {
   return (
     <div className="onboarding">
-      <p className="eyebrow">MasterChef 9000</p>
+      <p className="eyebrow">MSTRCHF 9000</p>
       <h1 className="display">Set up your kitchen</h1>
       <p className="lede">Tell it who's eating and what you like. It picks a week of meals from {catalogue.recipes.length} recipes, shares ingredients between them so less goes to waste, and writes the shopping list.</p>
       <ProfileEditor initial={DEFAULT_PROFILE} saveLabel="Plan my first week" onSave={p => { saveProfile(p); onDone(); }} />

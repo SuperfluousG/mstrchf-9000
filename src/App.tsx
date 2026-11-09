@@ -27,6 +27,10 @@ const NAV: { view: Route['view']; label: string }[] = [
   { view: 'kitchen', label: 'Kitchen' },
 ];
 
+function Wordmark() {
+  return <a className="wordmark" href="#/week" aria-label="MSTRCHF 9000, your week">MSTRCHF<sup>9000</sup></a>;
+}
+
 function fileName(path: string): string {
   return path.split(/[\\/]/).pop() ?? path;
 }
@@ -67,17 +71,23 @@ export function App() {
 
   if (!s.profile) {
     return (
-      <main className="shell">
-        <Onboarding onDone={() => { planWeekAction(thisWeek); go('week'); window.scrollTo({ top: 0 }); }} />
-      </main>
+      <>
+        <div className="band">
+          <header className="topbar"><Wordmark /></header>
+        </div>
+        <main className="shell">
+          <Onboarding onDone={() => { planWeekAction(thisWeek); go('week'); window.scrollTo({ top: 0 }); }} />
+        </main>
+      </>
     );
   }
 
   const saveError = getSaveError();
   return (
     <>
+      <div className="band">
       <header className="topbar">
-        <a className="wordmark" href="#/week" aria-label="MasterChef 9000, your week">MasterChef<sup>9000</sup></a>
+        <Wordmark />
         <SaveStatus />
         <nav aria-label="Main">
           {NAV.map(n => (
@@ -99,7 +109,8 @@ export function App() {
           })}
         </div>
       )}
-      {saveError && <p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
+      </div>
+      {saveError &&<p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
       <FileError />
       <main className="shell">
         {route.view === 'week' && <WeekView weekId={weekId} openRecipe={setRecipeId} go={go} />}

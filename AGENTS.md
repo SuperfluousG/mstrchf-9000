@@ -1,4 +1,4 @@
-# MasterChef 9000 — project guidance
+# MSTRCHF 9000 — project guidance
 
 ## Current commission
 

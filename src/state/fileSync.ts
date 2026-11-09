@@ -1,5 +1,5 @@
 // Keeps the kitchen in a JSON file on this computer as well as in the browser.
-// The file is served by the local MasterChef server at /api/kitchen; a static copy of the app has no file and stays browser-only.
+// The file is served by the local MSTRCHF server at /api/kitchen; a static copy of the app has no file and stays browser-only.
 import { useSyncExternalStore } from 'react';
 
 const ROUTE = '/api/kitchen';

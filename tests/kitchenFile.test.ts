@@ -45,7 +45,7 @@ describe('kitchen file API', () => {
     const again = await call(mw, 'GET') as Res;
     expect(again.body.savedAt).toBe(100);
     expect(again.body.state.profile).toEqual({ people: 1 });
-    expect(JSON.parse(await readFile(join(dir, 'kitchen.json'), 'utf8')).app).toBe('MasterChef 9000');
+    expect(JSON.parse(await readFile(join(dir, 'kitchen.json'), 'utf8')).app).toBe('MSTRCHF 9000');
   });
 
   it('rejects anything that is not a kitchen', async () => {

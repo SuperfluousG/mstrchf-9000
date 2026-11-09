@@ -1,11 +1,11 @@
 ---
 name: tesco-basket
-description: Fill a Tesco groceries basket from a MasterChef 9000 basket file or pasted order instructions, using the user's own signed-in browser. Use when the user asks to order, shop or fill the basket for a MasterChef 9000 week. Stops before delivery-slot booking and checkout for the user to confirm.
+description: Fill a Tesco groceries basket from a MSTRCHF 9000 basket file or pasted order instructions, using the user's own signed-in browser. Use when the user asks to order, shop or fill the basket for a MSTRCHF 9000 week. Stops before delivery-slot booking and checkout for the user to confirm.
 ---
 
-# Tesco basket from a MasterChef 9000 plan
+# Tesco basket from a MSTRCHF 9000 plan
 
-MasterChef 9000 plans the week and writes a basket: one entry per ingredient with a search phrase, the amount the recipes need, and the packs to buy. Your job is to put those items into the user's Tesco basket in their own browser, then hand back to them.
+MSTRCHF 9000 plans the week and writes a basket: one entry per ingredient with a search phrase, the amount the recipes need, and the packs to buy. Your job is to put those items into the user's Tesco basket in their own browser, then hand back to them.
 
 ## Input
 
@@ -38,7 +38,7 @@ Either the pasted "Order with Claude" instructions, or a `mstrchf-basket-<week>.
    - Substituted: what and why.
    - Skipped: what and why.
    - Already in the basket before you started.
-   - Basket total, and the estimated total from MasterChef for comparison.
+   - Basket total, and the estimated total from MSTRCHF for comparison.
 5. Offer the next three available delivery slots and ask which one to book. After booking, remind the user to review the basket and check out themselves.
 
 ## Lessons from the first live run (9 Nov 2026)
