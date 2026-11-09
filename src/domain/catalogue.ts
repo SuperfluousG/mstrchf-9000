@@ -7,6 +7,8 @@ export interface RecipeFacts {
   allergens: Set<Allergen>;
   /** Ingredient ids, for quick lookups. */
   ingredientIds: Set<string>;
+  /** Names of processed ingredients, for the whole-foods preference. */
+  processed: string[];
 }
 
 export interface Catalogue {
@@ -24,16 +26,18 @@ export function factsFor(recipe: Recipe, ingredients: Map<string, Ingredient>): 
   let flesh = false, landMeat = false, animal = false;
   const allergens = new Set<Allergen>();
   const ids = new Set<string>();
+  const processed: string[] = [];
   for (const ri of recipe.ingredients) {
     const def = ingredients.get(ri.id);
     if (!def) continue;
     ids.add(ri.id);
+    if (def.processed) processed.push(def.name);
     if (ANIMAL_FLESH.has(def.kind)) flesh = true;
     if (LAND_MEAT.has(def.kind)) landMeat = true;
     if (ANIMAL_ANY.has(def.kind)) animal = true;
     for (const a of def.allergens ?? []) allergens.add(a);
   }
-  return { vegetarian: !flesh, vegan: !animal, pescatarian: !landMeat, allergens, ingredientIds: ids };
+  return { vegetarian: !flesh, vegan: !animal, pescatarian: !landMeat, allergens, ingredientIds: ids, processed };
 }
 
 export function buildCatalogue(ingredientList: Ingredient[], recipes: Recipe[]): Catalogue {

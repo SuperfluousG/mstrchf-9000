@@ -34,6 +34,8 @@ export interface Ingredient {
   tsp?: number;
   /** Display colour used by generated dish art. */
   colour?: string;
+  /** Ready-made or heavily processed (jarred pastes, stock cubes, wraps, cured meats). */
+  processed?: boolean;
 }
 
 export type MealType = 'dinner' | 'lunch' | 'breakfast';

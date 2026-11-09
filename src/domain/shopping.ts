@@ -67,6 +67,22 @@ export function perishableCost(d: Demand, cat: Catalogue): number {
   return total;
 }
 
+/** Leftover meat and fish usually go in the freezer, so their surplus counts for less. */
+const FREEZABLE_WASTE_FACTOR = 0.35;
+
+/** Estimated value of fresh food bought but likely to be thrown away (pack surplus). */
+export function perishableWaste(d: Demand, cat: Catalogue): number {
+  let total = 0;
+  for (const [id, qty] of d) {
+    const ing = cat.ingredients.get(id);
+    if (!ing || !ing.perishable || ing.pantry) continue;
+    const p = bestPacks(qty, ing.packs);
+    const factor = ing.aisle === 'meat' || ing.aisle === 'fish' ? FREEZABLE_WASTE_FACTOR : 1;
+    if (p.bought > 0) total += factor * p.cost * Math.max(0, p.bought - qty) / p.bought;
+  }
+  return total;
+}
+
 export type LineStatus = 'buy' | 'have' | 'pantry';
 
 export interface ShopLine {

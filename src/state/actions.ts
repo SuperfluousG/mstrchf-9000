@@ -33,7 +33,10 @@ export function planWeekAction(weekId: string, shuffle = false): void {
   const w = s.weeks[weekId] ?? newWeek(weekId);
   const seed = shuffle ? Math.floor(Math.random() * 1e6) : w.seed;
   const locked = w.picks.filter(p => p.locked).map(p => ({ recipeId: p.recipeId, meal: p.meal }));
-  const planned = planWeek(contextFor(getState(), weekId, seed), locked);
+  const ctx = contextFor(getState(), weekId, seed);
+  // Re-planning means "show me something else": meals being replaced count as just eaten.
+  for (const p of w.picks) if (!p.locked) ctx.recency.set(p.recipeId, 1);
+  const planned = planWeek(ctx, locked);
   updateWeek(weekId, wk => ({
     ...wk,
     seed,

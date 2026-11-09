@@ -1,7 +1,7 @@
 import { suitsDiet, type Catalogue } from './catalogue';
 import { inlineName } from './format';
 import { CUISINE_LABELS, type Profile } from './profile';
-import { mergeDemand, perishableCost, recipeDemand, type Demand } from './shopping';
+import { mergeDemand, perishableCost, perishableWaste, recipeDemand, type Demand } from './shopping';
 import type { Cuisine, MealType, Recipe } from './types';
 
 export type Rating = 1 | 0 | -1;
@@ -23,6 +23,7 @@ export const FOCUS_TAGS: { id: string; label: string }[] = [
   { id: 'fakeaway', label: 'Fakeaway' },
   { id: 'veggie', label: 'More veggie' },
   { id: 'high-protein', label: 'High protein' },
+  { id: 'whole', label: 'Whole foods' },
   { id: 'new', label: 'Something new' },
   { id: 'budget', label: 'Budget' },
 ];
@@ -88,7 +89,9 @@ function matchesFocusTag(tag: string, r: Recipe, ctx: PlanContext): boolean {
     case 'quick': return r.time <= 25 || r.tags.includes('quick');
     case 'new': return !ctx.recency.has(r.id) && !ctx.ratings.has(r.id);
     case 'fresh': return r.tags.includes('fresh') || r.tags.includes('light');
-    case 'comfort': return r.tags.includes('comfort') || r.tags.includes('hearty');
+    // Comfort is a dinner mood; lunches stay light.
+    case 'comfort': return r.meal === 'dinner' && (r.tags.includes('comfort') || r.tags.includes('hearty'));
+    case 'whole': return false; // scored separately
     default: return r.tags.includes(tag);
   }
 }
@@ -137,6 +140,12 @@ export function scoreRecipe(r: Recipe, ctx: PlanContext): Scored {
   const hits = ctx.focus.ingredients.filter(i => f.ingredientIds.has(i));
   if (hits.length) add(Math.min(4, 2 * hits.length), `Built around ${hits.map(i => inlineName(ctx.catalogue.ingredients.get(i)?.name ?? i)).join(' and ')}`);
 
+  if (ctx.focus.tags.includes('whole')) {
+    if (f.processed.length === 0) add(1.5, 'Whole foods, nothing ready-made');
+    else add(-Math.min(3, 0.8 * f.processed.length));
+  }
+  if (r.meal === 'lunch' && (r.tags.includes('light') || r.tags.includes('fresh') || r.tags.includes('lunchbox'))) add(0.6);
+
   if (p.budget === 'tight' && r.tags.includes('budget')) add(1, 'Budget-friendly');
   add(jitter(ctx.seed, r.id) * 1.4);
 
@@ -150,9 +159,22 @@ function synergyWeight(p: Profile): number {
   return p.budget === 'tight' ? 2.2 : p.budget === 'relaxed' ? 0.7 : 1.4;
 }
 
+function wasteWeight(p: Profile): number {
+  return p.budget === 'tight' ? 1.2 : p.budget === 'relaxed' ? 0.4 : 0.9;
+}
+
 /** £ of fresh food saved by adding `d` to an existing basket rather than buying it separately. */
 function saving(existing: Demand, d: Demand, ctx: PlanContext): number {
   return perishableCost(existing, ctx.catalogue) + perishableCost(d, ctx.catalogue) - perishableCost(mergeDemand(existing, d), ctx.catalogue);
+}
+
+/**
+ * How well a recipe fits the basket so far: rewards finishing packs already being bought and
+ * penalises fresh food that would be left over. Matters most for small households.
+ */
+function basketFit(existing: Demand, d: Demand, ctx: PlanContext): number {
+  const extraWaste = perishableWaste(mergeDemand(existing, d), ctx.catalogue) - perishableWaste(existing, ctx.catalogue);
+  return synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste;
 }
 
 function sharedReason(r: Recipe, others: Recipe[], ctx: PlanContext): string | null {
@@ -202,7 +224,6 @@ export function planWeek(ctx: PlanContext, locked: { recipeId: string; meal: Mea
   const chosen: Recipe[] = locked.map(l => cat.byId.get(l.recipeId)).filter((r): r is Recipe => !!r);
   const reasons = new Map<string, string[]>(chosen.map(r => [r.id, scoreRecipe(r, ctx).reasons]));
   let demand = mergeDemand(...chosen.map(r => recipeDemand(r, ctx.profile.people)));
-  const w = synergyWeight(ctx.profile);
 
   for (const meal of MEAL_ORDER) {
     const want = ctx.profile.meals[meal] - chosen.filter(r => r.meal === meal).length;
@@ -211,7 +232,7 @@ export function planWeek(ctx: PlanContext, locked: { recipeId: string; meal: Mea
     for (let n = 0; n < want && pool.length; n++) {
       let bestI = -1, bestV = -Infinity;
       pool.forEach((c, i) => {
-        const v = c.score + w * saving(demand, recipeDemand(c.recipe, ctx.profile.people), ctx) - diversityPenalty(c.recipe, chosen, meal);
+        const v = c.score + basketFit(demand, recipeDemand(c.recipe, ctx.profile.people), ctx) - diversityPenalty(c.recipe, chosen, meal);
         if (v > bestV) { bestV = v; bestI = i; }
       });
       const [pick] = pool.splice(bestI, 1);
@@ -241,13 +262,12 @@ export function alternatives(ctx: PlanContext, picks: { recipeId: string; meal: 
   const target = picks[index];
   const others = picks.filter((_, i) => i !== index).map(p => cat.byId.get(p.recipeId)).filter((r): r is Recipe => !!r);
   const demand = mergeDemand(...others.map(r => recipeDemand(r, ctx.profile.people)));
-  const w = synergyWeight(ctx.profile);
   return eligibleFor(target.meal, ctx, new Set(picks.map(p => p.recipeId))).slice(0, 40)
     .map(c => {
       const shared = sharedReason(c.recipe, others, ctx);
       return {
         recipe: c.recipe,
-        score: c.score + w * saving(demand, recipeDemand(c.recipe, ctx.profile.people), ctx) - diversityPenalty(c.recipe, others, target.meal),
+        score: c.score + basketFit(demand, recipeDemand(c.recipe, ctx.profile.people), ctx) - diversityPenalty(c.recipe, others, target.meal),
         reasons: shared ? [shared, ...c.reasons] : c.reasons,
       };
     })
@@ -261,7 +281,7 @@ const TAG_WORDS: [RegExp, string][] = [
   [/\b(spic|hot|heat|fiery|chilli)/i, 'spicy'], [/\b(comfort|cosy|cozy|hearty|warming)/i, 'comfort'],
   [/\b(light|fresh|healthy|salad)/i, 'fresh'], [/\b(quick|fast|easy|lazy)/i, 'quick'],
   [/\b(fakeaway|takeaway)/i, 'fakeaway'], [/\b(veggie|vegetarian|meat-?free|plant)/i, 'veggie'],
-  [/\b(protein|gym)/i, 'high-protein'], [/\b(new|different|adventur)/i, 'new'], [/\b(cheap|budget|thrift)/i, 'budget'],
+  [/\b(protein|gym)/i, 'high-protein'], [/\b(whole ?foods?|unprocessed|real food|from scratch)/i, 'whole'], [/\b(new|different|adventur)/i, 'new'], [/\b(cheap|budget|thrift)/i, 'budget'],
 ];
 
 /** Turns "something spicy with loads of peppers, maybe Thai" into a Focus. */

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogue } from '../src/data';
 import { buildBasket, claudePrompt } from '../src/domain/basket';
 import { amount, inlineName, packLabel, recipeQty } from '../src/domain/format';
-import { EMPTY_FOCUS, parseCraving, planWeek, alternatives, whyNot, type PlanContext } from '../src/domain/planner';
+import { EMPTY_FOCUS, eligibleFor, parseCraving, planWeek, alternatives, whyNot, type PlanContext } from '../src/domain/planner';
 import { DEFAULT_PROFILE, type Profile } from '../src/domain/profile';
 import { bestPacks, buildShoppingList } from '../src/domain/shopping';
 import { addWeeks, mondayOf, weekLabel, weeksBetween } from '../src/domain/weeks';
@@ -81,6 +81,20 @@ describe('planner', () => {
     expect(avg(craved)).toBeGreaterThan(avg(plain));
   });
 
+  it('leans away from processed ingredients when whole foods are asked for', () => {
+    expect(parseCraving('comfort food, spicy, whole foods', catalogue).tags).toEqual(expect.arrayContaining(['comfort', 'spicy', 'whole']));
+    const count = (rs: ReturnType<typeof recipesOf>) => rs.reduce((s, r) => s + catalogue.facts.get(r.id)!.processed.length, 0);
+    const meals = { dinner: 5, lunch: 3, breakfast: 0 };
+    const plain = recipesOf(planWeek(ctx({ meals })));
+    const whole = recipesOf(planWeek(ctx({ meals }, { focus: { tags: ['whole'], ingredients: [], cuisines: [] } })));
+    expect(count(whole)).toBeLessThan(Math.max(1, count(plain)));
+  });
+
+  it('keeps comfort food to dinners', () => {
+    const picks = recipesOf(planWeek(ctx({ meals: { dinner: 5, lunch: 3, breakfast: 0 } }, { focus: { tags: ['comfort'], ingredients: [], cuisines: [] } })));
+    expect(picks.filter(r => r.meal === 'dinner' && (r.tags.includes('comfort') || r.tags.includes('hearty'))).length).toBeGreaterThanOrEqual(3);
+  });
+
   it('recognises cuisines in a craving', () => {
     expect(parseCraving('maybe some Thai or Mexican', catalogue).cuisines).toEqual(expect.arrayContaining(['thai', 'mexican']));
   });
@@ -93,11 +107,15 @@ describe('planner', () => {
     expect(repeats).toHaveLength(0);
   });
 
-  it('groups meals that share fresh ingredients', () => {
-    const picks = planWeek(ctx({ budget: 'tight' }));
-    const list = buildShoppingList({ recipes: recipesOf(picks), people: 2, have: new Set() }, catalogue);
-    expect(list.shared.length).toBeGreaterThan(0);
-    expect(list.groupingSaving).toBeGreaterThan(0);
+  it('wastes less fresh food than just taking the top-scoring meals', () => {
+    for (const people of [1, 2]) {
+      const c = ctx({ people, meals: { dinner: 5, lunch: 3, breakfast: 0 } });
+      const planned = recipesOf(planWeek(c));
+      const naive = [...eligibleFor('dinner', c, new Set()).slice(0, 5), ...eligibleFor('lunch', c, new Set()).slice(0, 3)].map(s => s.recipe);
+      const waste = (rs: typeof planned) => buildShoppingList({ recipes: rs, people, have: new Set() }, catalogue).waste;
+      expect(waste(planned)).toBeLessThan(waste(naive));
+      expect(buildShoppingList({ recipes: planned, people, have: new Set() }, catalogue).shared.length).toBeGreaterThan(0);
+    }
   });
 
   it('keeps locked meals and offers swaps that are not already in the week', () => {
