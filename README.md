@@ -12,9 +12,28 @@ npm run dev        # http://127.0.0.1:5190
 npm test           # planner, shopping and date tests
 npm run validate   # checks every recipe against the ingredient list
 npm run build      # static site in dist/
+npm run plugin     # artifact page + recipes for the plugin, packed to release/*.plugin
 ```
 
-Everything is stored in the browser (`localStorage`). Back it up from **Kitchen → Download backup**.
+## Where your kitchen is saved
+
+| How it runs | Saved to |
+|---|---|
+| `npm run dev` on this computer | `data/kitchen.json` (git-ignored) with daily copies in `data/backups/`, plus the browser |
+| As a Claude artifact | The artifact's storage at `data/users/<your id>/kitchen`, private to you, plus the browser |
+| Any other static copy | The browser only |
+
+Back up from **Kitchen → Download backup** wherever it runs.
+
+## Sharing it
+
+`plugin/` is a Claude plugin. `npm run plugin` rebuilds it and packs `release/mstrchf-9000-<version>.plugin`. It has three skills:
+
+- `mstrchf-planner` publishes the user's own copy of the planner as a Claude artifact (from `plugin/skills/mstrchf-planner/app/`), opens it and reads their week.
+- `tesco-basket` fills a Tesco basket from the planner's order instructions.
+- `meal-calendar` books the week's meals into a calendar, using `plugin/skills/meal-calendar/recipes.json`.
+
+Each person should publish their own copy: on someone else's artifact, people outside the owner's organisation can view but not save.
 
 ## How it fits together
 
@@ -26,7 +45,10 @@ Everything is stored in the browser (`localStorage`). Back it up from **Kitchen 
 | `src/domain/shopping.ts` | Merges quantities, picks the cheapest covering packs, estimates waste and the saving from sharing ingredients. |
 | `src/domain/basket.ts` | Basket file, plain list and the "Order with Claude" instructions. |
 | `src/ui/` | Week, Menu, Shop and Kitchen screens. |
-| `agent/tesco-basket/SKILL.md` | Claude skill for filling the Tesco basket from the basket file. |
+| `src/state/fileSync.ts` | Saves the kitchen to Claude storage (artifact) or `data/kitchen.json` (local server). |
+| `src/platform.ts` | Artifact-aware downloads and copying. |
+| `plugin/` | The Claude plugin: planner, Tesco basket and calendar skills. |
+| `scripts/build-artifact.mjs`, `scripts/export-recipes.mjs` | Build the artifact page and the recipe export for the plugin. |
 
 Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live Tesco prices.
 

@@ -9,7 +9,9 @@
     "preview": "vite preview --host 127.0.0.1 --port 5191",
     "check": "tsc --noEmit",
     "test": "vitest run",
-    "validate": "node scripts/validate-catalogue.mjs"
+    "validate": "node scripts/validate-catalogue.mjs",
+    "build:artifact": "npm run build && node scripts/build-artifact.mjs",
+    "plugin": "npm run build:artifact && node scripts/export-recipes.mjs && python scripts/pack_plugin.py"
   },
   "dependencies": {
     "react": "19.2.8",

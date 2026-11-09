@@ -8,7 +8,9 @@ Supersedes the September–October guidance (Codex Sites delivery, `loop/001/` r
 
 ## Working rules
 
-- Keep it simple: TypeScript + React + Vite, browser storage, no native/Rust/WASM layer, no server.
+- Keep it simple: TypeScript + React + Vite, no native/Rust/WASM layer. The only server is the dev server's `/api/kitchen` file store (`server/kitchenFile.ts`).
+- The same build runs as a Claude artifact (`npm run plugin`). Inside an artifact: plain `#name` hashes only, no direct downloads (use `src/platform.ts`), no `confirm()`, and the kitchen lives in the viewer's private `data/users/<id>/kitchen` document.
+- Gregg's own planner artifact is https://claude.ai/artifact/65ZQJqG6jJTgia2XFXPw4a. Republish it with the Artifact tool from `plugin/skills/mstrchf-planner/app/index.html` (root that folder, files from `files.json`, capabilities `db`, `user`, `downloads`). Never add `db` rules that open `data/users`.
 - The recipe catalogue is original writing. Do not bulk-copy HelloFresh or other publishers' recipe text or photos; their sites' terms and database rights make that unsafe. Personal import of a single recipe by URL is a possible later feature.
 - Diet and allergen facts come from `catalogue/ingredients.json`. Run `npm run validate` after any catalogue change and `npm test` after logic changes.
 - Ordering stays human-controlled. Claude may fill the Tesco basket in Gregg's own signed-in browser. Slot booking needs his confirmation in chat. Checkout and payment are always his.

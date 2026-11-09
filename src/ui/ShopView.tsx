@@ -5,17 +5,11 @@ import { amount, inlineName, money, packLabel } from '../domain/format';
 import { AISLE_LABELS, type ShopLine } from '../domain/shopping';
 import type { Recipe } from '../domain/types';
 import { weekLabel } from '../domain/weeks';
+import { copyText, saveFile, useCanSaveFiles } from '../platform';
 import { setStatus, toggleHave } from '../state/actions';
 import { newWeek, useAppState } from '../state/store';
 import { Sheet } from './Sheet';
 import { useWeekShopping } from './WeekView';
-
-function download(name: string, text: string, type = 'application/json') {
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const a = document.createElement('a');
-  a.href = url; a.download = name; a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => void }) {
   const s = useAppState();
@@ -23,6 +17,9 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const list = useWeekShopping(weekId);
   const [order, setOrder] = useState(false);
   const [copied, setCopied] = useState('');
+  const [fallback, setFallback] = useState('');
+  const [fileMsg, setFileMsg] = useState('');
+  const canSave = useCanSaveFiles();
   const people = s.profile?.people ?? 2;
   const ordered = w.status === 'ordered';
   const meals = w.picks.map(p => catalogue.byId.get(p.recipeId)).filter((r): r is Recipe => !!r).map(r => r.title);
@@ -48,9 +45,15 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   }
 
   const copy = async (what: string, text: string) => {
-    try { await navigator.clipboard.writeText(text); setCopied(what); setTimeout(() => setCopied(''), 2500); }
-    catch { setCopied('failed'); }
+    if (await copyText(text)) { setFallback(''); setCopied(what); setTimeout(() => setCopied(''), 2500); }
+    else { setCopied(''); setFallback(text); }
   };
+  const copyFallback = fallback && (
+    <>
+      <p className="warn small">Copying is blocked here. Select the text below and copy it yourself.</p>
+      <textarea className="copy-fallback" readOnly value={fallback} onFocus={e => e.currentTarget.select()} aria-label="Text to copy" />
+    </>
+  );
 
   return (
     <div className="shop">
@@ -92,6 +95,7 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
             <h2>Ordered</h2>
             <p>This week's shopping is ordered. The list stays here so you can check the delivery against it.</p>
             <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
+            {copyFallback}
             <hr />
             <button type="button" className="link" onClick={() => setStatus(weekId, 'draft')}>Mark as not ordered</button>
             <p className="muted small">Do this to change meals or shop again for this week.</p>
@@ -102,10 +106,14 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           <p>Hand the basket to Claude with browser access and it fills your Tesco basket, then stops for you to choose a slot and pay.</p>
           <button type="button" className="btn primary wide" onClick={() => setOrder(true)}>Order with Claude</button>
           <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
-          <button type="button" className="btn ghost wide" onClick={() => download(`mstrchf-basket-${weekId}.json`, JSON.stringify(basket, null, 2))}>Download basket file</button>
+          {canSave && <button type="button" className="btn ghost wide" onClick={async () => {
+            const r = await saveFile(`mstrchf-basket-${weekId}.json`, JSON.stringify(basket, null, 2));
+            setFileMsg(r === 'unavailable' ? 'Saving files is not available here. Copy the list instead.' : r === 'busy' ? 'Another save is waiting for you. Try again in a moment.' : '');
+          }}>Download basket file</button>}
+          {fileMsg && <p className="warn small">{fileMsg}</p>}
+          {!order && copyFallback}
           <hr />
           <button type="button" className="btn ghost wide" onClick={() => setStatus(weekId, 'ordered')}>Mark as ordered</button>
-          {copied === 'failed' && <p className="warn small">Copying was blocked by the browser. Use Download instead.</p>}
         </aside>
         )}
       </div>
@@ -116,11 +124,12 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           <h2 className="display small">Order with Claude</h2>
           <ol className="how">
             <li>Open Tesco in Chrome and sign in yourself.</li>
-            <li>Copy the order instructions below and paste them to Claude (Claude in Chrome, or Claude Code with browser access).</li>
+            <li>Copy the order instructions below and paste them to Claude (Claude in Chrome, or Claude Code with browser access). With the MSTRCHF 9000 plugin installed, Claude already knows the steps.</li>
             <li>Claude adds each item, keeps anything already in your basket, and reports substitutions.</li>
             <li>You choose the delivery slot and pay. Claude never checks out for you.</li>
           </ol>
           <button type="button" className="btn primary" onClick={() => copy('prompt', claudePrompt(basket))}>{copied === 'prompt' ? 'Copied — paste it to Claude' : 'Copy order instructions'}</button>
+          {copyFallback}
           <details>
             <summary>See the instructions</summary>
             <pre className="prompt">{claudePrompt(basket)}</pre>

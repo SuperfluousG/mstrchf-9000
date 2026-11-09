@@ -3,7 +3,7 @@ import { EMPTY_FOCUS, type Focus, type Rating } from '../domain/planner';
 import type { Profile } from '../domain/profile';
 import type { MealType } from '../domain/types';
 import { weeksBetween } from '../domain/weeks';
-import { chooseState, readKitchenFile, scheduleSave } from './fileSync';
+import { chooseState, readRemote, scheduleSave } from './fileSync';
 
 export interface Pick {
   uid: string;
@@ -72,7 +72,8 @@ function writeBrowser(): void {
 export function setState(update: (s: AppState) => AppState, opts: { reset?: boolean } = {}): void {
   state = { ...update(state), savedAt: Date.now() };
   writeBrowser();
-  scheduleSave(state, state.savedAt!, opts.reset);
+  // An empty kitchen is only ever written on purpose (Start over).
+  if (opts.reset || !isEmptyState(state)) scheduleSave(state, state.savedAt!, opts.reset);
   listeners.forEach(l => l());
 }
 
@@ -81,12 +82,15 @@ export function isEmptyState(s: AppState): boolean {
 }
 
 /**
- * Loads the kitchen file (if the local server provides one) and keeps whichever of the
- * browser and file copies is newer. Call once before the first render.
+ * Loads the stored kitchen (Claude storage in an artifact, or the local kitchen file) and keeps
+ * whichever of the browser and stored copies is newer. Call once before the first render.
  */
 export async function hydrate(): Promise<void> {
-  const file = await readKitchenFile<AppState>();
-  if (!file) return;
+  const file = await readRemote<AppState>();
+  if (!file) {
+    if (!isEmptyState(state)) scheduleSave(state, state.savedAt ?? Date.now());
+    return;
+  }
   const choice = chooseState<AppState>({ state, savedAt: state.savedAt ?? 0 }, file, isEmptyState);
   if (choice.from === 'file' && choice.state) {
     state = { ...EMPTY_STATE, ...choice.state };

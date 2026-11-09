@@ -13,8 +13,9 @@ import { WeekView } from './ui/WeekView';
 
 type Route = { view: 'week' | 'menu' | 'shop' | 'kitchen'; meal?: MealType };
 
+// Plain hashes (#week, #menu-dinner) so the app also works inside a Claude artifact; older #/menu/dinner links still work.
 function readRoute(): Route {
-  const [view, meal] = location.hash.replace(/^#\/?/, '').split('/');
+  const [view, meal] = location.hash.replace(/^#\/?/, '').split(/[/-]/);
   if (view === 'menu') return { view, meal: (['dinner', 'lunch', 'breakfast'].includes(meal) ? meal : undefined) as MealType | undefined };
   if (view === 'shop' || view === 'kitchen') return { view };
   return { view: 'week' };
@@ -28,7 +29,7 @@ const NAV: { view: Route['view']; label: string }[] = [
 ];
 
 function Wordmark() {
-  return <a className="wordmark" href="#/week" aria-label="MSTRCHF 9000, your week">MSTRCHF<sup>9000</sup></a>;
+  return <a className="wordmark" href="#week" aria-label="MSTRCHF 9000, your week">MSTRCHF<sup>9000</sup></a>;
 }
 
 function fileName(path: string): string {
@@ -38,10 +39,10 @@ function fileName(path: string): string {
 /** Small "Saved to kitchen.json" note so it's clear the plan is safe outside the browser. */
 function SaveStatus() {
   const f = useFileStatus();
-  const text = f.kind === 'saved' ? `Saved to ${fileName(f.path)}`
+  const text = f.kind === 'saved' ? (f.store === 'claude' ? 'Saved to Claude' : `Saved to ${fileName(f.path)}`)
     : f.kind === 'saving' ? 'Saving…'
     : f.kind === 'browser-only' ? 'Saved in this browser only'
-    : f.kind === 'error' ? 'Not saved to file' : '';
+    : f.kind === 'error' ? (f.store === 'claude' ? 'Not saved to Claude' : 'Not saved to file') : '';
   if (!text) return null;
   return <span className={`save-status ${f.kind}`} role="status" title={'path' in f ? f.path : undefined}>{text}</span>;
 }
@@ -67,7 +68,7 @@ export function App() {
   }, []);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [route.view, weekId]);
 
-  const go = (r: string) => { location.hash = `/${r}`; };
+  const go = (r: string) => { location.hash = r.replace('/', '-'); };
 
   if (!s.profile) {
     return (
@@ -91,7 +92,7 @@ export function App() {
         <SaveStatus />
         <nav aria-label="Main">
           {NAV.map(n => (
-            <a key={n.view} href={`#/${n.view}`} className={route.view === n.view ? 'on' : ''} aria-current={route.view === n.view ? 'page' : undefined}>{n.label}</a>
+            <a key={n.view} href={`#${n.view}`} className={route.view === n.view ? 'on' : ''} aria-current={route.view === n.view ? 'page' : undefined}>{n.label}</a>
           ))}
         </nav>
       </header>

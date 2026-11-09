@@ -6,7 +6,8 @@ import {
 } from '../domain/profile';
 import type { Allergen, Diet, MealType } from '../domain/types';
 import { saveProfile, toggleFavourite, toggleHidden } from '../state/actions';
-import { useFileStatus } from '../state/fileSync';
+import { saveFile, useCanSaveFiles } from '../platform';
+import { type FileStatus, useFileStatus } from '../state/fileSync';
 import { exportBackup, importBackup, resetAll, setState, useAppState } from '../state/store';
 import { Heat, Stepper } from './bits';
 
@@ -147,6 +148,9 @@ export function KitchenView({ openRecipe }: { openRecipe: (id: string) => void }
   const s = useAppState();
   const fileStatus = useFileStatus();
   const file = useRef<HTMLInputElement>(null);
+  const canSave = useCanSaveFiles();
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [dataMsg, setDataMsg] = useState('');
   const [msg, setMsg] = useState('');
   if (!s.profile) return null;
   const listOf = (ids: string[]) => ids.map(id => catalogue.byId.get(id)).filter(Boolean);
@@ -181,23 +185,49 @@ export function KitchenView({ openRecipe }: { openRecipe: (id: string) => void }
 
       <section className="data">
         <h2>Your data</h2>
-        {fileStatus.kind === 'browser-only'
-          ? <p className="muted small">This copy of the app saves in this browser only. Download a backup to keep it safe or move it to another device.</p>
-          : <p className="muted small">Saved on this computer in <code>{'path' in fileStatus ? fileStatus.path : 'kitchen.json'}</code> as well as in this browser, so clearing the browser loses nothing. A dated copy is kept in the <code>backups</code> folder next to it each day (last 14 days).</p>}
+        <DataNote status={fileStatus} />
         <div className="row-btns">
-          <button type="button" className="btn ghost" onClick={() => {
-            const url = URL.createObjectURL(new Blob([exportBackup()], { type: 'application/json' }));
-            const a = document.createElement('a'); a.href = url; a.download = `mstrchf-backup-${new Date().toISOString().slice(0, 10)}.json`; a.click();
-          }}>Download backup</button>
+          {canSave && <button type="button" className="btn ghost" onClick={async () => {
+            const r = await saveFile(`mstrchf-backup-${new Date().toISOString().slice(0, 10)}.json`, exportBackup());
+            if (r === 'unavailable') setDataMsg('Saving files is not available here.');
+            else if (r === 'busy') setDataMsg('Another save is waiting for you. Try again in a moment.');
+          }}>Download backup</button>}
           <button type="button" className="btn ghost" onClick={() => file.current?.click()}>Restore backup</button>
           <input ref={file} type="file" accept="application/json" hidden onChange={async e => {
             const f = e.target.files?.[0]; if (!f) return;
-            try { importBackup(await f.text()); setMsg('Backup restored.'); } catch (err) { setMsg(err instanceof Error ? err.message : 'That file could not be read.'); }
+            try { importBackup(await f.text()); setDataMsg('Backup restored.'); } catch (err) { setDataMsg(err instanceof Error ? err.message : 'That file could not be read.'); }
             e.target.value = '';
           }} />
-          <button type="button" className="btn ghost danger" onClick={() => { if (confirm('Delete all plans, settings and favourites from this browser?')) resetAll(); }}>Start over</button>
+          {!confirmReset && <button type="button" className="btn ghost danger" onClick={() => setConfirmReset(true)}>Start over</button>}
         </div>
+        {confirmReset && (
+          <div className="confirm-reset" role="alert">
+            <p>Delete all plans, settings, favourites and ratings{fileStatus.kind === 'saved' || fileStatus.kind === 'saving' ? `, here and in ${fileStatus.store === 'claude' ? 'your Claude account' : 'the kitchen file'}` : ''}? This cannot be undone{canSave ? ' unless you download a backup first' : ''}.</p>
+            <div className="row-btns">
+              <button type="button" className="btn primary" onClick={() => { setConfirmReset(false); resetAll(); }}>Yes, delete everything</button>
+              <button type="button" className="btn ghost" onClick={() => setConfirmReset(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
+        {dataMsg && <p className="notice" role="status">{dataMsg}</p>}
       </section>
     </div>
   );
+}
+
+function DataNote({ status }: { status: FileStatus }) {
+  if (status.kind === 'browser-only') {
+    const why = status.reason === 'artifact-no-store'
+      ? 'You can use this shared copy, but it cannot save to your Claude account, so your kitchen stays in this browser.'
+      : status.reason === 'write-refused'
+        ? 'Claude storage stopped accepting changes, so they stay in this browser for now.'
+        : status.reason === 'read-failed'
+          ? 'Your saved kitchen could not be loaded, so changes stay in this browser for now. Reload to try again.'
+          : 'This copy of the app saves in this browser only.';
+    return <p className="muted small">{why} Download a backup to keep it safe or move it to another device.</p>;
+  }
+  if ((status.kind === 'saved' || status.kind === 'saving' || status.kind === 'error') && status.store === 'claude') {
+    return <p className="muted small">Saved to your Claude account with this planner, so it is there on any device where you open it. It is kept private to you.</p>;
+  }
+  return <p className="muted small">Saved on this computer in <code>{'path' in status ? status.path : 'kitchen.json'}</code> as well as in this browser, so clearing the browser loses nothing. A dated copy is kept in the <code>backups</code> folder next to it each day (last 14 days).</p>;
 }

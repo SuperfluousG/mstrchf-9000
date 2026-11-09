@@ -16,6 +16,8 @@ function kitchenFile(): Plugin {
 }
 
 export default defineConfig({
+  // Relative URLs so the same build runs from any folder, including as a Claude artifact.
+  base: './',
   plugins: [react(), kitchenFile()],
   test: {
     environment: 'node',

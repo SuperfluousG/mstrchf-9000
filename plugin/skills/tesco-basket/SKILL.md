@@ -9,7 +9,9 @@ MSTRCHF 9000 plans the week and writes a basket: one entry per ingredient with a
 
 ## Input
 
-Either the pasted "Order with Claude" instructions, or a `mstrchf-basket-<week>.json` file:
+Either the pasted "Order with Claude" instructions, or a `mstrchf-basket-<week>.json` file. If the user asks you to order the week without either, ask them to open the planner's Shop page and press **Order with Claude → Copy order instructions**: the basket's pack sizes come from the planner.
+
+The file looks like this:
 
 ```json
 { "retailer": "tesco", "week": "16–22 Nov", "people": 2,
