@@ -41,6 +41,16 @@ Either the pasted "Order with Claude" instructions, or a `mstrchf-basket-<week>.
    - Basket total, and the estimated total from MasterChef for comparison.
 5. Offer the next three available delivery slots and ask which one to book. After booking, remind the user to review the basket and check out themselves.
 
+## Lessons from the first live run (9 Nov 2026)
+
+- Every Tesco Add button is labelled `add 1 <exact product name>`. Find it by that label, **scroll it into view, then click**. In the first run 4 of 40 off-screen clicks silently did nothing.
+- After each add, confirm the product's basket line ("2 Tesco Limes Each for £0.46") shows the expected count. Second clicks on the same product were the least reliable; on the basket page, use that product's own `add 1 …` button.
+- Always finish by reading the whole basket: line count, unit count and the guide price. The first run matched 40 lines and 45 units only after a retry pass.
+- Loose produce (onions, ginger) is added by count in Quantity mode; leave the weight toggle alone.
+- When an item is out of stock, broaden the search (`red peppers` → `peppers`). Make up the count with the nearest sensible alternative, e.g. a mixed 3-pack plus one single.
+- If `need` is far below the planned pack (curry paste: need about 90 g, planned 283 g jar), buy the smaller pack when one exists.
+- Baskets under £50 carry a £5 minimum-basket charge. Mention it if the total is close.
+
 ## Notes
 
 - Quantities in the file are already scaled to the household and rounded up to whole packs.

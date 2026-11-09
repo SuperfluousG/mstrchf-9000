@@ -83,6 +83,7 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           )}
           {pantry.length > 0 && <p className="muted small pantry">Assumed in the cupboard: {pantry.map(l => inlineName(l.ingredient.name)).join(', ')}.</p>}
           <p className="muted small">Prices are rough supermarket estimates, not live Tesco prices. Tick “Got it” for anything you already have; long-life items stay ticked for future weeks.</p>
+          {list.total > 0 && list.total < 50 && <p className="small warn">Tesco adds a £5 charge to baskets under £50. Adding a meal or a few cupboard staples may cost less than the charge.</p>}
         </section>
 
         <aside className="order-panel">

@@ -179,7 +179,7 @@
 {"id":"miso","name":"White miso paste","aisle":"world","unit":"g","kind":"plant","allergens":["soy"],"packs":[[150,2.00]],"search":"white miso paste","tsp":5,"colour":"#d8b56a"},
 {"id":"thai-red-paste","name":"Thai red curry paste (vegan)","aisle":"world","unit":"g","kind":"plant","packs":[[114,1.50]],"search":"vegan thai red curry paste","tsp":5,"colour":"#b23a1f"},
 {"id":"thai-green-paste","name":"Thai green curry paste (vegan)","aisle":"world","unit":"g","kind":"plant","packs":[[114,1.50]],"search":"vegan thai green curry paste","tsp":5,"colour":"#5a7d2a"},
-{"id":"tikka-paste","name":"Tikka curry paste","aisle":"world","unit":"g","kind":"plant","allergens":["mustard"],"packs":[[283,2.00]],"search":"tikka masala curry paste","tsp":5,"colour":"#c0562b"},
+{"id":"tikka-paste","name":"Tikka curry paste","aisle":"world","unit":"g","kind":"plant","allergens":["mustard"],"packs":[[140,1.95],[283,3.35]],"search":"tikka masala curry paste","tsp":5,"colour":"#c0562b"},
 {"id":"chipotle-paste","name":"Chipotle paste","aisle":"world","unit":"g","kind":"plant","packs":[[90,1.50]],"search":"chipotle paste","tsp":5,"colour":"#7a2a18"},
 {"id":"tahini","name":"Tahini","aisle":"world","unit":"g","kind":"plant","allergens":["sesame"],"packs":[[300,2.50]],"search":"tahini","tsp":5,"colour":"#d9c08a"},
 {"id":"peanut-butter","name":"Smooth peanut butter","aisle":"cupboard","unit":"g","kind":"plant","allergens":["peanuts"],"packs":[[340,1.50]],"search":"smooth peanut butter","tsp":6,"colour":"#b07a3a"},
