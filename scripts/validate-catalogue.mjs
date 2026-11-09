@@ -98,7 +98,7 @@ for (const f of allFiles) {
       if (['meat', 'poultry', 'fish', 'shellfish', 'dairy', 'egg', 'honey'].includes(def.kind)) animal = true;
     }
     if (!Array.isArray(r.steps) || r.steps.length < 3 || r.steps.some(s => typeof s !== 'string' || s.length < 15)) err(w, 'needs at least 3 steps of real text');
-    if (r.image !== undefined && typeof r.image !== 'string') err(w, 'image must be a string path');
+    if (r.image !== undefined) err(w, 'image is no longer used: photos are src/photos/<id>.webp');
     if (!r.source) err(w, 'missing source');
     if (['veg', 'beans', 'lentils', 'tofu', 'cheese', 'egg'].includes(r.protein) && (hasMeat || hasFish)) err(w, `protein "${r.protein}" but contains meat/fish`);
     tally.meal[r.meal] = (tally.meal[r.meal] ?? 0) + 1;

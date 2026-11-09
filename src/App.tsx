@@ -5,6 +5,7 @@ import { planWeekAction } from './state/actions';
 import { useFileStatus } from './state/fileSync';
 import { getSaveError, newWeek, useAppState } from './state/store';
 import { KitchenView, Onboarding } from './ui/KitchenView';
+import { Mark } from './ui/Mark';
 import { MenuView } from './ui/MenuView';
 import { RecipeSheetContent } from './ui/RecipeSheet';
 import { Sheet } from './ui/Sheet';
@@ -29,7 +30,7 @@ const NAV: { view: Route['view']; label: string }[] = [
 ];
 
 function Wordmark() {
-  return <a className="wordmark" href="#week" aria-label="MSTRCHF 9000, your week">MSTRCHF<sup>9000</sup></a>;
+  return <a className="wordmark" href="#week" aria-label="MSTRCHF 9000, your week"><Mark className="mark" /><span>MSTRCHF<sup>9000</sup></span></a>;
 }
 
 function fileName(path: string): string {

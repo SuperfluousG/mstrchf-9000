@@ -63,7 +63,7 @@ Each file in `catalogue/recipes/` is a JSON **array** of recipe objects:
   - Include pantry items you use (salt, black-pepper, olive-oil, vegetable-oil, sugar) so the method is complete.
 - `steps`: 4–8 steps, UK English, specific heats and times, each a full sentence or two.
 - `source`: `"MSTRCHF original"`.
-- Omit `image` (pictures are added separately) unless told otherwise.
+- Do not add an `image` field. A recipe's photo is `src/photos/<id>.webp`, added with `python scripts/import_photos.py <folder of images named by recipe id>`.
 
 ## Make the planner's job easy
 

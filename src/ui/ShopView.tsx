@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import bagUrl from '../brand/market-bag.webp';
+import plateUrl from '../brand/empty-plate.webp';
 import { catalogue } from '../data';
 import { basketText, buildBasket, claudePrompt } from '../domain/basket';
 import { amount, inlineName, money, packLabel } from '../domain/format';
@@ -29,7 +31,10 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
     return (
       <div className="shop">
         <h1 className="display">Shopping list</h1>
-        <p className="empty-week">Plan some meals for {weekLabel(weekId)} first. <button type="button" className="link" onClick={() => go('week')}>Go to the week</button></p>
+        <section className="empty-week">
+          <img className="empty-photo" src={plateUrl} alt="" />
+          <p>Plan some meals for {weekLabel(weekId)} first. <button type="button" className="link" onClick={() => go('week')}>Go to the week</button></p>
+        </section>
       </div>
     );
   }
@@ -58,6 +63,7 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   return (
     <div className="shop">
       <header className="shop-head">
+        <img className="shop-photo" src={bagUrl} alt="" />
         <div>
           <p className="eyebrow">Week of {weekLabel(weekId)} · {meals.length} meals for {people}{ordered && <span className="badge">Ordered</span>}</p>
           <h1 className="display">{ordered ? 'What you ordered' : 'Shopping list'}</h1>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="328" height="64" viewBox="0 0 328 64" role="img" aria-labelledby="title desc">
+  <title id="title">MSTRCHF 9000</title>
+  <desc id="desc">Gold-rimmed bowl mark with a chalk wordmark and a smaller bright-gold 9000. For an oxblood background.</desc>
+  <defs>
+    <radialGradient id="glaze" cx="54%" cy="56%" r="70%">
+      <stop offset="0" stop-color="#2A1517"/>
+      <stop offset="0.56" stop-color="#4A1F2B"/>
+      <stop offset="1" stop-color="#9B1B26"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="#D7B461"/>
+  <circle cx="32" cy="32" r="25" fill="url(#glaze)"/>
+  <ellipse cx="24.5" cy="23" rx="4" ry="2.5" transform="rotate(-35 24.5 23)" fill="#EEEDE5" opacity="0.46"/>
+  <text x="80" y="46" fill="#EEEDE5" font-family="Space Grotesk" font-size="40" font-weight="600" letter-spacing="-1.2">MSTRCHF</text>
+  <text x="274" y="25" fill="#E2C779" font-family="Space Grotesk" font-size="17" font-weight="500">9000</text>
+</svg>

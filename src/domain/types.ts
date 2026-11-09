@@ -74,8 +74,6 @@ export interface Recipe {
   tags: string[];
   ingredients: RecipeIngredient[];
   steps: string[];
-  /** Relative path under /recipes/ when a picture exists. */
-  image?: string;
   source: string;
 }
 

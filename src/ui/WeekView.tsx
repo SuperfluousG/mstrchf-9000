@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+import { type CSSProperties, useMemo, useState } from 'react';
+import plateUrl from '../brand/empty-plate.webp';
+import tableUrl from '../brand/hero-table.webp';
 import { catalogue } from '../data';
 import { amount, inlineName, money } from '../domain/format';
 import { alternatives, FOCUS_TAGS } from '../domain/planner';
@@ -40,7 +42,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
   return (
     <div className="week">
       {ordered ? <OrderedHeader weekId={weekId} picks={w.picks} openRecipe={openRecipe} /> : (
-      <section className="mood" aria-labelledby="mood-h">
+      <section className="mood mood-photo" aria-labelledby="mood-h" style={{ '--photo': `url(${tableUrl})` } as CSSProperties}>
         <p className="eyebrow">Week of {weekLabel(weekId)}{w.status === 'ordered' && <span className="badge">Ordered</span>}</p>
         <h1 id="mood-h" className="display">What are you in the mood for?</h1>
         <div className="mood-row">
@@ -54,7 +56,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
             onKeyDown={e => { if (e.key === 'Enter') planWeekAction(weekId); }}
           />
           <button type="button" className="btn primary" onClick={() => planWeekAction(weekId)}>{empty ? 'Plan my week' : 'Re-plan'}</button>
-          {!empty && <button type="button" className="btn ghost" onClick={() => planWeekAction(weekId, true)} title="Keep your kept meals, try different suggestions">Shuffle</button>}
+          {!empty && <button type="button" className="btn ghost on-dark" onClick={() => planWeekAction(weekId, true)} title="Keep your kept meals, try different suggestions">Shuffle</button>}
         </div>
         <div className="chips" role="group" aria-label="Quick moods">
           {FOCUS_TAGS.map(t => (
@@ -67,8 +69,11 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
 
       {empty ? (
         <section className="empty-week">
-          <p>Nothing planned for {weekLabel(weekId)} yet. Tell it what you fancy, or just press <strong>Plan my week</strong> and it will pick {describeCounts(s.profile?.meals)} that suit your kitchen.</p>
-          <button type="button" className="link" onClick={() => go('menu')}>Or browse all {catalogue.recipes.length} recipes</button>
+          <img className="empty-photo" src={plateUrl} alt="" />
+          <div>
+            <p>Nothing planned for {weekLabel(weekId)} yet. Tell it what you fancy, or just press <strong>Plan my week</strong> and it will pick {describeCounts(s.profile?.meals)} that suit your kitchen.</p>
+            <button type="button" className="link" onClick={() => go('menu')}>Or browse all {catalogue.recipes.length} recipes</button>
+          </div>
         </section>
       ) : (
         <>
@@ -87,7 +92,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
                     const r = catalogue.byId.get(p.recipeId);
                     if (!r) return null;
                     return (
-                      <li key={p.uid} className={`card${p.locked ? ' kept' : ''}`}>
+                      <li key={p.uid} className={`card${p.locked && !ordered ? ' kept' : ''}`}>
                         <button type="button" className="card-media" onClick={() => openRecipe(r.id)} aria-label={`Open ${r.title}`}>
                           <DishArt recipe={r} />
                         </button>
@@ -133,25 +138,50 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
 
 const MEAL_ORDER: MealType[] = ['breakfast', 'lunch', 'dinner'];
 
-/** Shown instead of the planning controls once the shopping is ordered. */
+const FULL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+/** Shown instead of the planning controls once the shopping is ordered: the next dinner, large. */
 function OrderedHeader({ weekId, picks, openRecipe }: { weekId: string; picks: Pick[]; openRecipe: (id: string) => void }) {
   const today = daysSinceMonday(weekId);
   const sorted = [...picks].sort((a, b) => a.day - b.day || MEAL_ORDER.indexOf(a.meal) - MEAL_ORDER.indexOf(b.meal));
+  const nextDinner = sorted.find(p => p.day >= today && p.meal === 'dinner');
   const next = sorted.find(p => p.day >= today);
-  const recipe = next ? catalogue.byId.get(next.recipeId) : undefined;
-  const first = sorted[0];
+  const feature = nextDinner ?? next;
+  const recipe = feature ? catalogue.byId.get(feature.recipeId) : undefined;
+  const sooner = next && feature && next !== feature ? next : undefined;
+  const soonerRecipe = sooner ? catalogue.byId.get(sooner.recipeId) : undefined;
+  const when = (p: Pick) => p.day === today
+    ? (p.meal === 'dinner' ? 'Tonight' : `Today's ${p.meal}`)
+    : p.day === today + 1 ? `Tomorrow's ${p.meal}` : `${FULL_DAYS[p.day]}'s ${p.meal}`;
+
+  if (!feature || !recipe) {
+    return (
+      <section className="mood ordered" aria-labelledby="mood-h">
+        <p className="eyebrow">Week of {weekLabel(weekId)}<span className="badge">Ordered</span></p>
+        <h1 id="mood-h" className="display">That's the week eaten.</h1>
+        <p className="muted">All of this week's meals are behind you. Plan next week from the tabs above.</p>
+      </section>
+    );
+  }
   return (
-    <section className="mood ordered" aria-labelledby="mood-h">
-      <p className="eyebrow">Week of {weekLabel(weekId)}<span className="badge">Ordered</span></p>
-      <h1 id="mood-h" className="display">Your week is ordered.</h1>
-      {next && recipe ? (
-        <p className="next-meal">
-          <span className="muted">{first && first.day > today ? 'First up' : 'Next up'}:</span>{' '}
-          {next.day === today ? 'today' : next.day === today + 1 ? 'tomorrow' : `${DAYS[next.day]} ${dayDate(weekId, next.day)}`}, {next.meal} —{' '}
-          <button type="button" className="link" onClick={() => openRecipe(recipe.id)}>{recipe.title}</button>
-        </p>
-      ) : <p className="next-meal muted">All of this week's meals are behind you.</p>}
-      <p className="muted small">Moving a meal to another day is fine; the shopping already covers it. To change meals, mark the week as not ordered on the Shop page.</p>
+    <section className="hero" aria-labelledby="mood-h">
+      <div className="hero-text">
+        <p className="eyebrow">Week of {weekLabel(weekId)}<span className="badge">Ordered</span></p>
+        <p className="hero-when">{when(feature)}{feature.day > today + 1 ? `, ${dayDate(weekId, feature.day)}` : ''}</p>
+        <h1 id="mood-h" className="hero-title"><button type="button" className="title-btn" onClick={() => openRecipe(recipe.id)}>{recipe.title}</button></h1>
+        <p className="hero-blurb">{recipe.blurb}</p>
+        <Meta recipe={recipe} />
+        <div className="hero-actions">
+          <button type="button" className="btn primary" onClick={() => openRecipe(recipe.id)}>Open the recipe</button>
+        </div>
+        {sooner && soonerRecipe && (
+          <p className="hero-sooner">Before that: {when(sooner).replace(/^(Today|Tomorrow|Tonight)/, w => w.toLowerCase())} is <button type="button" className="link" onClick={() => openRecipe(soonerRecipe.id)}>{soonerRecipe.title}</button>.</p>
+        )}
+        <p className="muted small">The shopping is ordered. Moving a meal to another day is fine; to change meals, mark the week as not ordered on the Shop page.</p>
+      </div>
+      <button type="button" className="hero-media" onClick={() => openRecipe(recipe.id)} aria-label={`Open ${recipe.title}`}>
+        <DishArt recipe={recipe} />
+      </button>
     </section>
   );
 }
@@ -177,13 +207,11 @@ function Threads({ picks, list }: { weekId: string; picks: Pick[]; list: ReturnT
           const used = Math.min(100, Math.round((l.need / Math.max(l.packs.bought, 1e-9)) * 100));
           return (
             <li key={l.ingredient.id} className="thread">
-              <span className="swatch" style={{ background: l.ingredient.colour ?? '#999' }} aria-hidden="true" />
               <span className="thread-name">{l.ingredient.name}</span>
               <span className="thread-days" aria-label={`Used on ${[...days].length} meals`}>
                 {DAYS.map((d, i) => {
                   const on = [...days].some(x => x.endsWith(`:${i}`));
-                  const light = isLight(l.ingredient.colour ?? '#999999');
-                  return <span key={d} className={`dot${on ? ' on' : ''}${on && light ? ' light' : ''}`} style={on ? { background: l.ingredient.colour } : undefined} title={on ? d : undefined}>{d[0]}</span>;
+                  return <span key={d} className={`dot${on ? ' on' : ''}`} title={on ? d : undefined}>{d[0]}</span>;
                 })}
               </span>
               <span className="thread-use">{amount(l.need, l.ingredient.unit)} of {amount(l.packs.bought, l.ingredient.unit)} · {used}% used</span>
@@ -193,12 +221,6 @@ function Threads({ picks, list }: { weekId: string; picks: Pick[]; list: ReturnT
       </ul>
     </section>
   );
-}
-
-function isLight(hex: string): boolean {
-  const n = parseInt(hex.slice(1), 16);
-  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-  return 0.299 * r + 0.587 * g + 0.114 * b > 170;
 }
 
 function SwapList({ weekId, pick, onPick, onBrowse, openRecipe }: { weekId: string; pick: Pick; onPick: (id: string, reasons: string[]) => void; onBrowse: () => void; openRecipe: (id: string) => void }) {

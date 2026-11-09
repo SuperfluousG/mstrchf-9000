@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { type CSSProperties, useRef, useState } from 'react';
+import tableUrl from '../brand/hero-table.webp';
 import { catalogue } from '../data';
 import {
   ALLERGEN_LABELS, CUISINE_GROUPS, DEFAULT_PROFILE, PROTEIN_CHOICES, groupAffinity, setGroupAffinity, setProteinAffinity,
@@ -136,9 +137,11 @@ export function ProfileEditor({ initial, onSave, saveLabel }: { initial: Profile
 export function Onboarding({ onDone }: { onDone: () => void }) {
   return (
     <div className="onboarding">
-      <p className="eyebrow">MSTRCHF 9000</p>
-      <h1 className="display">Set up your kitchen</h1>
-      <p className="lede">Tell it who's eating and what you like. It picks a week of meals from {catalogue.recipes.length} recipes, shares ingredients between them so less goes to waste, and writes the shopping list.</p>
+      <header className="mood-photo onboarding-head" style={{ '--photo': `url(${tableUrl})` } as CSSProperties}>
+        <p className="eyebrow">MSTRCHF 9000</p>
+        <h1 className="display">Set up your kitchen</h1>
+        <p className="lede">Tell it who's eating and what you like. It picks a week of meals from {catalogue.recipes.length} recipes, shares ingredients between them so less goes to waste, and writes the shopping list.</p>
+      </header>
       <ProfileEditor initial={DEFAULT_PROFILE} saveLabel="Plan my first week" onSave={p => { saveProfile(p); onDone(); }} />
     </div>
   );
