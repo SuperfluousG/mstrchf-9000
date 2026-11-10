@@ -1,6 +1,6 @@
-import { catalogue } from '../data';
+import { catalogue, selectMarket } from '../data';
 import { EMPTY_FOCUS, parseCraving, planWeek, type Focus, type PlanContext, type Rating } from '../domain/planner';
-import type { Profile } from '../domain/profile';
+import { marketOf, type Profile } from '../domain/profile';
 import { getState, newWeek, recencyFor, setState, uid, updateWeek, type AppState, type WeekPlan } from './store';
 
 export function focusFor(w: WeekPlan): Focus {
@@ -120,5 +120,7 @@ export function toggleHidden(recipeId: string): void {
 }
 
 export function saveProfile(profile: Profile): void {
+  // Switch country now, not on the next render, so a week planned straight after uses the right names and prices.
+  selectMarket(marketOf(profile));
   setState(s => ({ ...s, profile }));
 }

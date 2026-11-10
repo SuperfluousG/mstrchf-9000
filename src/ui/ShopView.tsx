@@ -3,8 +3,9 @@ import bagUrl from '../brand/market-bag.webp';
 import plateUrl from '../brand/empty-plate.webp';
 import { catalogue } from '../data';
 import { basketText, buildBasket, claudePrompt } from '../domain/basket';
-import { amount, inlineName, money, packLabel } from '../domain/format';
-import { AISLE_LABELS, type ShopLine } from '../domain/shopping';
+import { amount, inlineName, money, packLabel, shortMoney } from '../domain/format';
+import { retailerOf } from '../domain/profile';
+import { aisleLabel, type ShopLine } from '../domain/shopping';
 import type { Recipe } from '../domain/types';
 import { weekLabel } from '../domain/weeks';
 import { copyText, saveFile, useCanSaveFiles } from '../platform';
@@ -25,7 +26,10 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const people = s.profile?.people ?? 2;
   const ordered = w.status === 'ordered';
   const meals = w.picks.map(p => catalogue.byId.get(p.recipeId)).filter((r): r is Recipe => !!r).map(r => r.title);
-  const basket = buildBasket(list, weekId, people, meals);
+  const retailer = retailerOf(s.profile);
+  const shop = retailer?.name ?? 'your supermarket';
+  const word = catalogue.market.basket;
+  const basket = buildBasket(list, weekId, people, meals, catalogue.market, retailer);
 
   if (!w.picks.length) {
     return (
@@ -44,7 +48,7 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const pantry = list.lines.filter(l => l.status === 'pantry');
   const groups: [string, ShopLine[]][] = [];
   for (const l of buy) {
-    const label = AISLE_LABELS[l.ingredient.aisle];
+    const label = aisleLabel(l.ingredient.aisle);
     const g = groups.find(x => x[0] === label);
     if (g) g[1].push(l); else groups.push([label, [l]]);
   }
@@ -92,8 +96,8 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
             </div>
           )}
           {pantry.length > 0 && <p className="muted small pantry">Assumed in the cupboard: {pantry.map(l => inlineName(l.ingredient.name)).join(', ')}.</p>}
-          {!ordered && <p className="muted small">Prices are rough supermarket estimates, not live Tesco prices. Tick “Got it” for anything you already have; long-life items stay ticked for future weeks.</p>}
-          {!ordered && list.total > 0 && list.total < 50 && <p className="small warn">Tesco adds a £5 charge to baskets under £50. Adding a meal or a few cupboard staples may cost less than the charge.</p>}
+          {!ordered && <p className="muted small">Prices are rough supermarket estimates, not live {retailer ? `${retailer.name} ` : ''}prices. Tick “Got it” for anything you already have; long-life items stay ticked for future weeks.</p>}
+          {!ordered && retailer?.minBasket && list.total > 0 && list.total < retailer.minBasket.under && <p className="small warn">{retailer.name} adds a {shortMoney(retailer.minBasket.charge)} charge to {word}s under {shortMoney(retailer.minBasket.under)}. Adding a meal or a few cupboard staples may cost less than the charge.</p>}
         </section>
 
         {ordered ? (
@@ -109,7 +113,8 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
         ) : (
         <aside className="order-panel">
           <h2>Get it delivered</h2>
-          <p>Hand the basket to Claude with browser access and it fills your Tesco basket, then stops for you to choose a slot and pay.</p>
+          <p>Hand the basket to Claude with browser access and it fills your {retailer ? `${retailer.name} ` : 'online '}{word}, then stops for you to choose a slot and pay.</p>
+          <p className="muted small">Shopping at {retailer ? retailer.name : 'another shop'} · <button type="button" className="link" onClick={() => go('kitchen')}>change</button></p>
           <button type="button" className="btn primary wide" onClick={() => setOrder(true)}>Order with Claude</button>
           <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
           {canSave && <button type="button" className="btn ghost wide" onClick={async () => {
@@ -126,12 +131,12 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
 
       <Sheet open={order} onClose={() => setOrder(false)} label="Order with Claude">
         <div className="order-sheet">
-          <p className="eyebrow">Tesco · {basket.items.length} items · est. {money(basket.estTotal)}</p>
+          <p className="eyebrow">{retailer?.name ?? 'Any shop'} · {basket.items.length} items · est. {money(basket.estTotal)}</p>
           <h2 className="display small">Order with Claude</h2>
           <ol className="how">
-            <li>Open Tesco in Chrome and sign in yourself.</li>
+            <li>Open {shop} in Chrome and sign in yourself.</li>
             <li>Copy the order instructions below and paste them to Claude (Claude in Chrome, or Claude Code with browser access). With the MSTRCHF 9000 plugin installed, Claude already knows the steps.</li>
-            <li>Claude adds each item, keeps anything already in your basket, and reports substitutions.</li>
+            <li>Claude adds each item, keeps anything already in your {word}, and reports substitutions.</li>
             <li>You choose the delivery slot and pay. Claude never checks out for you.</li>
           </ol>
           <button type="button" className="btn primary" onClick={() => copy('prompt', claudePrompt(basket))}>{copied === 'prompt' ? 'Copied — paste it to Claude' : 'Copy order instructions'}</button>

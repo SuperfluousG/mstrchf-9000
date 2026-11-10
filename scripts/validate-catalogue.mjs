@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Validates catalogue/ingredients.json and every catalogue/recipes/*.json file.
+// Validates catalogue/ingredients.json, catalogue/terms.json, catalogue/markets/*.json and every catalogue/recipes/*.json file.
 // Usage: node scripts/validate-catalogue.mjs [recipes-file ...]
 // With file arguments only those recipe files are checked (cross-file id clashes are still checked).
 import { readFileSync, readdirSync } from 'node:fs';
@@ -47,6 +47,50 @@ for (const [i, x] of ingredients.entries()) {
   ing.set(x.id, x);
 }
 
+// ---- country data ----
+const terms = load(join(catDir, 'terms.json')) ?? {};
+for (const [k, v] of Object.entries(terms)) {
+  if (k !== k.toLowerCase()) err(`terms.json "${k}"`, 'keys must be lower case');
+  if (!v?.us) err(`terms.json "${k}"`, 'needs a "us" word');
+}
+const marketDir = join(catDir, 'markets');
+for (const f of readdirSync(marketDir).filter(f => f.endsWith('.json')).sort()) {
+  const m = load(join(marketDir, f));
+  if (!m) continue;
+  if (!['us', 'ca'].includes(m.market) || `${m.market}.json` !== f) err(f, 'market must be "us" or "ca" and match the file name');
+  if (!m.currency) err(f, 'missing currency');
+  for (const id of ing.keys()) if (!m.ingredients?.[id]) err(f, `no packs for ingredient "${id}"`);
+  for (const [id, x] of Object.entries(m.ingredients ?? {})) {
+    if (!ing.has(id)) err(f, `unknown ingredient id "${id}"`);
+    if (!Array.isArray(x.packs) || !x.packs.length || x.packs.some(p => !Array.isArray(p) || p.length !== 2 || !(p[0] > 0) || !(p[1] >= 0))) err(`${f} ${id}`, 'packs must be [[size, price], ...]');
+    for (const key of ['name', 'search']) if (x[key] !== undefined && (typeof x[key] !== 'string' || !x[key].trim())) err(`${f} ${id}`, `${key} must be a non-empty string`);
+  }
+}
+
+// Recipe text is British and may use {placeholders}; see catalogue/AUTHORING.md and src/domain/localize.ts.
+const MEASURE = /^(oven|temp|ml|g|cm) \d+(?:\.\d+)?$/;
+function textProblems(text, recipe) {
+  const out = [];
+  for (const [, raw] of text.matchAll(/\{([^{}]*)\}/g)) {
+    const inner = raw.trim();
+    const pair = inner.split('|');
+    if (MEASURE.test(inner) || (pair.length === 2 && pair[0].trim() && pair[1].trim()) || (pair.length === 1 && terms[inner.toLowerCase()])) continue;
+    out.push(`unknown placeholder {${raw}}`);
+  }
+  const plain = text.replace(/\{[^{}]*\}/g, ' ');
+  if (/[{}]/.test(plain)) out.push('unmatched brace');
+  if (/\d\s*°C/.test(plain)) out.push('write oven temperatures as {oven 220} (or {temp 180})');
+  if (/\d\s*(ml|g|cm)\b/.test(plain)) out.push('write measures as {ml 300}, {g 50} or {cm 2}');
+  for (const [word, def] of Object.entries(terms)) {
+    if (def.onlyWith && !recipe.ingredients?.some(i => i.id === def.onlyWith)) continue;
+    const scan = def.keep ? plain.replace(new RegExp(def.keep, 'gi'), ' ') : plain;
+    if (new RegExp(`\\b${word}\\b`, 'i').test(scan)) out.push(`put "${word}" in braces: {${word}}`);
+  }
+  return out;
+}
+/** The British reading of a text, placeholders resolved roughly, for length checks. */
+const british = text => text.replace(/\{([^{}]*)\}/g, (_, raw) => raw.split('|')[0].replace(/^(oven|temp) (\d+)$/, '$2°C').replace(/^(ml|g|cm) (\S+)$/, '$2 $1'));
+
 // ---- recipes ----
 const args = process.argv.slice(2);
 const allFiles = readdirSync(recipeDir).filter(f => f.endsWith('.json')).sort();
@@ -70,8 +114,10 @@ for (const f of allFiles) {
     if (!checking) continue;
     count++;
     if (!KEBAB.test(r.id ?? '')) err(w, 'id must be kebab-case');
-    if (!r.title || r.title.length > 60) err(w, 'title missing or over 60 chars');
-    if (!r.blurb || r.blurb.length > 140) err(w, 'blurb missing or over 140 chars');
+    if (!r.title || british(r.title).length > 60) err(w, 'title missing or over 60 chars');
+    if (!r.blurb || british(r.blurb).length > 140) err(w, 'blurb missing or over 140 chars');
+    const texts = [['title', r.title], ['blurb', r.blurb], ...(r.steps ?? []).map((s, n) => [`step ${n + 1}`, s]), ...(r.ingredients ?? []).filter(x => typeof x.prep === 'string').map(x => [`prep ${x.id}`, x.prep])];
+    for (const [where, s] of texts) if (typeof s === 'string') for (const problem of textProblems(s, r)) err(w, `${where}: ${problem}`);
     if (!MEALS.includes(r.meal)) err(w, `bad meal ${r.meal}`);
     if (!CUISINES.includes(r.cuisine)) err(w, `bad cuisine ${r.cuisine}`);
     if (!PROTEINS.includes(r.protein)) err(w, `bad protein ${r.protein}`);

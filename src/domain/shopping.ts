@@ -1,4 +1,5 @@
 import type { Catalogue } from './catalogue';
+import { activeMarket } from './market';
 import type { Aisle, Ingredient, Recipe } from './types';
 
 export type Demand = Map<string, number>;
@@ -115,6 +116,18 @@ export const AISLE_LABELS: Record<Aisle, string> = {
   tins: 'Tins & jars', world: 'World foods', sauces: 'Sauces & condiments', spices: 'Herbs & spices',
   nuts: 'Nuts & seeds', frozen: 'Frozen', cupboard: 'Cupboard',
 };
+
+/** Aisle names as North American grocers label them. */
+const AISLE_LABELS_NA: Record<Aisle, string> = {
+  ...AISLE_LABELS,
+  veg: 'Produce', fruit: 'Produce', fish: 'Seafood', dairy: 'Dairy & eggs', eggs: 'Dairy & eggs',
+  tins: 'Canned goods & jars', world: 'International', sauces: 'Condiments & sauces', spices: 'Spices & seasonings',
+  cupboard: 'Pantry',
+};
+
+export function aisleLabel(aisle: Aisle): string {
+  return (activeMarket().id === 'uk' ? AISLE_LABELS : AISLE_LABELS_NA)[aisle];
+}
 
 export interface ShoppingInput {
   recipes: Recipe[];

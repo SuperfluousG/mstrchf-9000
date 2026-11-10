@@ -1,3 +1,5 @@
+import { usLiquidPack, usVolume, usWeight } from './localize';
+import { activeMarket } from './market';
 import type { Ingredient } from './types';
 
 const FRACTIONS: [number, string][] = [[0.25, '¼'], [0.5, '½'], [0.75, '¾'], [1 / 3, '⅓'], [2 / 3, '⅔']];
@@ -20,26 +22,39 @@ function round(n: number): number {
   return Math.round(n * 2) / 2;
 }
 
-/** Friendly quantity for a recipe card: "2 tsp", "1½ tbsp", "250 g", "1 kg", "2". */
+/** Friendly quantity for a recipe card: "2 tsp", "1½ tbsp", "250 g" or "9 oz", "1¼ cups", "2". */
 export function recipeQty(qty: number, ing: Ingredient): string {
   if (ing.tsp && qty / ing.tsp <= 9) {
     const tsp = qty / ing.tsp;
     if (tsp >= 3 && Math.abs(tsp / 3 - Math.round(tsp / 3 * 2) / 2) < 0.2) return `${fraction(tsp / 3)} tbsp`;
     return `${fraction(tsp)} tsp`;
   }
-  return amount(qty, ing.unit);
+  if (activeMarket().measures === 'us' && ing.unit !== 'each') return ing.unit === 'g' ? usWeight(qty) : usVolume(qty);
+  return metricAmount(qty, ing.unit);
 }
 
-/** Amount in base units: "250 g", "1.2 kg", "300 ml", "1.5 L", "3". */
-export function amount(qty: number, unit: Ingredient['unit']): string {
+function metricAmount(qty: number, unit: Ingredient['unit']): string {
   if (unit === 'each') return fraction(qty);
+  const ca = activeMarket().id === 'ca';
+  const small = unit === 'ml' && ca ? 'mL' : unit;
   const big = unit === 'g' ? 'kg' : 'L';
   if (qty >= 1000) return `${(qty / 1000).toFixed(qty % 1000 === 0 ? 0 : 1)} ${big}`;
-  return `${round(qty)} ${unit}`;
+  return `${round(qty)} ${small}`;
+}
+
+/** Shopping amount in the country's pack units: "250 g", "1.2 kg", "300 ml", "1 lb", "32 fl oz", "3". */
+export function amount(qty: number, unit: Ingredient['unit']): string {
+  if (unit !== 'each' && activeMarket().packs === 'us') return unit === 'g' ? usWeight(qty) : usLiquidPack(qty);
+  return metricAmount(qty, unit);
 }
 
 export function money(n: number): string {
-  return `£${n.toFixed(2)}`;
+  return `${activeMarket().symbol}${n.toFixed(2)}`;
+}
+
+/** "£5", "£4.50": no pence when the amount is whole. */
+export function shortMoney(n: number): string {
+  return `${activeMarket().symbol}${Number.isInteger(n) ? n : n.toFixed(2)}`;
 }
 
 const PROPER = /^(Greek|Italian|Thai|Chinese|Dijon|Tenderstem|Worcestershire|English|Puy|Parmesan)/;
@@ -54,7 +69,10 @@ export function inlineName(name: string): string {
 export function packLabel(size: number, count: number, ing: Ingredient): string {
   if (ing.unit === 'each') {
     if (size > 1) return `${count} × pack of ${size}`;
-    if (ing.aisle === 'tins') return `${count} ${count > 1 ? 'tins' : 'tin'}`;
+    if (ing.aisle === 'tins') {
+      const word = activeMarket().id === 'uk' ? 'tin' : 'can';
+      return `${count} ${word}${count > 1 ? 's' : ''}`;
+    }
     if (ing.aisle === 'veg' || ing.aisle === 'fruit') return `${count} loose`;
     return String(count);
   }

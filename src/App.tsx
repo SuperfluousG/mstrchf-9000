@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { selectMarket } from './data';
+import { marketOf } from './domain/profile';
 import type { MealType } from './domain/types';
 import { addWeeks, mondayOf, weekLabel } from './domain/weeks';
 import { planWeekAction } from './state/actions';
@@ -56,6 +58,9 @@ function FileError() {
 
 export function App() {
   const s = useAppState();
+  // Every view reads the catalogue for this country, so switch it before anything below renders.
+  const market = marketOf(s.profile);
+  selectMarket(market);
   const [route, setRoute] = useState<Route>(readRoute);
   const thisWeek = mondayOf(new Date());
   const weeks = [0, 1, 2, 3].map(n => addWeeks(thisWeek, n));
@@ -114,14 +119,15 @@ export function App() {
       </div>
       {saveError &&<p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
       <FileError />
-      <main className="shell">
+      {/* Keyed by country so lists cached for one country are rebuilt for another. */}
+      <main className="shell" key={market}>
         {route.view === 'week' && <WeekView weekId={weekId} openRecipe={setRecipeId} go={go} />}
         {route.view === 'menu' && <MenuView key={route.meal ?? 'all'} weekId={weekId} initialMeal={route.meal} openRecipe={setRecipeId} />}
         {route.view === 'shop' && <ShopView weekId={weekId} go={go} />}
         {route.view === 'kitchen' && <KitchenView openRecipe={setRecipeId} />}
       </main>
       <Sheet open={!!recipeId} onClose={() => setRecipeId(null)} label="Recipe" wide>
-        {recipeId && <RecipeSheetContent recipeId={recipeId} weekId={weekId} onDone={() => setRecipeId(null)} />}
+        {recipeId && <RecipeSheetContent key={market} recipeId={recipeId} weekId={weekId} onDone={() => setRecipeId(null)} />}
       </Sheet>
     </>
   );

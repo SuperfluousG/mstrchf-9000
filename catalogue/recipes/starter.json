@@ -54,7 +54,7 @@
     "steps": [
       "Bring a large pan of well-salted water to the boil for the spaghetti.",
       "Warm the olive oil in a saucepan over a low heat. Add the garlic and stir for about a minute, without letting it colour.",
-      "Stir in the tomato puree, then the chopped tomatoes, sugar and black pepper. Simmer gently for 12 minutes, stirring now and then, until thick and glossy.",
+      "Stir in the {tomato puree}, then the chopped tomatoes, sugar and black pepper. Simmer gently for 12 minutes, stirring now and then, until thick and glossy.",
       "Cook the spaghetti for the time on the packet, then drain, keeping a mugful of the water.",
       "Toss the spaghetti through the sauce, loosening with a splash of pasta water if needed. Taste, adjust the salt and serve straight away."
     ],
@@ -126,7 +126,7 @@
     "steps": [
       "Warm the oil in a large saucepan over a medium heat. Cook the onion and carrot for 8 minutes, stirring, until the onion is soft.",
       "Add the garlic and cumin and stir for 30 seconds until fragrant.",
-      "Rinse the lentils and add them with the tomatoes, the stock cube crumbled in and 450 ml of water. Bring to the boil, then simmer gently for 20 minutes, stirring occasionally, until the lentils are tender and the stew is thick.",
+      "Rinse the lentils and add them with the tomatoes, the {stock cube} crumbled in and {ml 450} of water. Bring to the boil, then simmer gently for 20 minutes, stirring occasionally, until the lentils are tender and the stew is thick.",
       "Add a splash more water if it catches or gets too thick. Season with salt and pepper and serve in bowls."
     ],
     "source": "MSTRCHF original"
@@ -201,7 +201,7 @@
     "steps": [
       "Put the rice on to cook following the packet, with a good pinch of salt in the water.",
       "Warm the oil in a large saucepan over a medium heat. Cook the onion for 7 minutes, stirring, until soft, then add the garlic, cumin and turmeric and stir for 30 seconds.",
-      "Add the tomatoes and 100 ml of water and simmer gently for 10 minutes, stirring occasionally.",
+      "Add the tomatoes and {ml 100} of water and simmer gently for 10 minutes, stirring occasionally.",
       "Stir in the chickpeas and simmer for 5 minutes until hot through. Add the spinach a handful at a time, stirring until wilted.",
       "Season to taste and serve over the rice."
     ],
@@ -210,7 +210,7 @@
   {
     "id": "pepper-bean-rice",
     "title": "Pepper & bean rice",
-    "blurb": "Red pepper and kidney beans simmered in tomato and stirred through fluffy rice.",
+    "blurb": "{Red pepper} and kidney beans simmered in tomato and stirred through fluffy rice.",
     "meal": "dinner",
     "cuisine": "latin",
     "protein": "beans",
@@ -262,7 +262,7 @@
       }
     ],
     "steps": [
-      "Put the rice in a saucepan with 300 ml of water and a pinch of salt. Bring to the boil, cover, reduce to a low simmer and cook for 12 minutes until the water is absorbed. Take off the heat and keep covered.",
+      "Put the rice in a saucepan with {ml 300} of water and a pinch of salt. Bring to the boil, cover, reduce to a low simmer and cook for 12 minutes until the water is absorbed. Take off the heat and keep covered.",
       "Meanwhile, warm the oil in a large frying pan over a medium heat. Cook the onion and pepper for 8 minutes, stirring, until soft.",
       "Add the tomatoes and kidney beans, season, and simmer for 8 minutes until thick and hot through.",
       "Fluff the rice with a fork, stir it through the beans and vegetables, and serve."
@@ -331,7 +331,7 @@
       }
     ],
     "steps": [
-      "Crumble the stock cube into a heatproof bowl, add the couscous and pour over 200 ml of boiling water. Cover and leave for 5 minutes, then fluff with a fork.",
+      "Crumble the {stock cube} into a heatproof bowl, add the couscous and pour over {ml 200} of boiling water. Cover and leave for 5 minutes, then fluff with a fork.",
       "Warm the oil in a large frying pan over a medium-high heat. Cook the onion for 4 minutes, then add the mushrooms and cook for 6 to 8 minutes, stirring, until golden and the liquid has evaporated.",
       "Add the peas and cook for 3 minutes until hot through.",
       "Stir in the couscous, a squeeze of lemon juice, the parsley and plenty of seasoning, and serve."
@@ -341,7 +341,7 @@
   {
     "id": "roast-vegetable-chickpea-tray",
     "title": "Roast vegetables & chickpeas",
-    "blurb": "A single-tray supper of cumin-roasted carrot, courgette, pepper and crisp chickpeas.",
+    "blurb": "A single-tray supper of cumin-roasted carrot, {courgette}, pepper and crisp chickpeas.",
     "meal": "dinner",
     "cuisine": "middle-eastern",
     "protein": "beans",
@@ -359,17 +359,17 @@
       {
         "id": "carrot",
         "qty": 2,
-        "prep": "cut into 1 cm pieces"
+        "prep": "cut into {cm 1} pieces"
       },
       {
         "id": "courgette",
         "qty": 2,
-        "prep": "cut into 2 cm chunks"
+        "prep": "cut into {cm 2} chunks"
       },
       {
         "id": "red-pepper",
         "qty": 1,
-        "prep": "deseeded and cut into 2 cm pieces"
+        "prep": "deseeded and cut into {cm 2} pieces"
       },
       {
         "id": "red-onion",
@@ -403,8 +403,8 @@
       }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Put the carrot on a large tray first, as it takes longest.",
-      "Roast the carrot for 10 minutes, then add the courgette, pepper, onion and chickpeas to the tray. Toss with the oil, cumin, salt and pepper, spreading everything out in one layer (use two trays if crowded).",
+      "Heat the oven to {oven 220}. Put the carrot on a large tray first, as it takes longest.",
+      "Roast the carrot for 10 minutes, then add the {courgette}, pepper, onion and chickpeas to the tray. Toss with the oil, cumin, salt and pepper, spreading everything out in one layer (use two trays if crowded).",
       "Roast for 25 minutes more, turning once halfway, until the vegetables are tender and the chickpeas are crisp at the edges.",
       "Squeeze over the lemon juice and serve straight from the tray."
     ],
@@ -413,7 +413,7 @@
   {
     "id": "potato-vegetable-frittata",
     "title": "Potato & vegetable frittata",
-    "blurb": "A thick, set omelette of soft potato, red pepper and onion, cooked gently in one pan.",
+    "blurb": "A thick, set omelette of soft potato, {red pepper} and onion, cooked gently in one pan.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "egg",
@@ -430,7 +430,7 @@
       {
         "id": "potato",
         "qty": 400,
-        "prep": "peeled and cut into 1 cm pieces"
+        "prep": "peeled and cut into {cm 1} pieces"
       },
       {
         "id": "onion",
@@ -461,7 +461,7 @@
     ],
     "steps": [
       "Put the potato in a small pan of salted water, bring to a simmer and cook for 8 to 10 minutes until just tender. Drain well.",
-      "Warm the oil in a 24 cm non-stick frying pan with a lid over a medium heat. Cook the onion and pepper for 8 minutes until soft.",
+      "Warm the oil in a {cm 24} non-stick frying pan with a lid over a medium heat. Cook the onion and pepper for 8 minutes until soft.",
       "Add the potato to the pan. Beat the eggs with salt and pepper and pour them evenly over the vegetables.",
       "Reduce to a gentle heat, cover and cook for 8 to 12 minutes until the egg is set all the way through, with no runny egg in the middle.",
       "Slide the frittata onto a board, cut into wedges and serve warm."
@@ -471,7 +471,7 @@
   {
     "id": "warm-apple-cinnamon-oats",
     "title": "Warm apple oats",
-    "blurb": "Creamy stovetop porridge with soft diced apple and a little cinnamon.",
+    "blurb": "Creamy stovetop {porridge} with soft diced apple and a little cinnamon.",
     "meal": "breakfast",
     "cuisine": "british",
     "protein": "veg",
@@ -513,8 +513,8 @@
   },
   {
     "id": "yoghurt-banana-oats",
-    "title": "Yoghurt, banana & oats",
-    "blurb": "A no-cook bowl of thick yoghurt, rolled oats and sliced banana.",
+    "title": "{Yoghurt}, banana & oats",
+    "blurb": "A no-cook bowl of thick {yoghurt}, rolled oats and sliced banana.",
     "meal": "breakfast",
     "cuisine": "british",
     "protein": "veg",
@@ -552,8 +552,8 @@
       }
     ],
     "steps": [
-      "Divide the yoghurt between two bowls.",
-      "Stir the oats into the yoghurt and leave for 2 minutes to soften slightly.",
+      "Divide the {yoghurt} between two bowls.",
+      "Stir the oats into the {yoghurt} and leave for 2 minutes to soften slightly.",
       "Fold the sliced banana through, drizzle with the honey, dust with cinnamon and eat straight away."
     ],
     "source": "MSTRCHF original"
@@ -718,8 +718,8 @@
   },
   {
     "id": "hummus-carrot-pitta",
-    "title": "Hummus & carrot pitta",
-    "blurb": "Homemade lemony hummus stuffed into warm pitta with grated carrot and cucumber.",
+    "title": "Hummus & carrot {pitta}",
+    "blurb": "Homemade lemony hummus stuffed into warm {pitta} with grated carrot and cucumber.",
     "meal": "lunch",
     "cuisine": "middle-eastern",
     "protein": "beans",
@@ -777,15 +777,15 @@
     ],
     "steps": [
       "Blitz the chickpeas, tahini, juice of the lemon, garlic, olive oil, salt and 3 to 4 tablespoons of cold water in a food processor until smooth, adding more water if too thick.",
-      "Warm the pittas briefly in a toaster or dry pan, then split each to make a pocket.",
+      "Warm the {pittas} briefly in a toaster or dry pan, then split each to make a pocket.",
       "Spread the hummus inside, then fill with grated carrot and cucumber and serve."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "bean-corn-chilli",
-    "title": "Bean & corn chilli",
-    "blurb": "A smoky, medium-spicy veg chilli of kidney and black beans with sweetcorn, served over rice.",
+    "title": "Bean & corn {chilli}",
+    "blurb": "A smoky, medium-spicy veg {chilli} of kidney and black beans with {sweetcorn}, served over rice.",
     "meal": "dinner",
     "cuisine": "mexican",
     "protein": "beans",
@@ -874,17 +874,17 @@
       }
     ],
     "steps": [
-      "Warm the oil in a large pan over a medium heat. Cook the onion and pepper for 8 minutes until soft, then add the garlic, paprika, cumin, chilli powder and tomato puree and stir for 1 minute.",
-      "Add the tomatoes and 150 ml of water, then the kidney beans, black beans and half the sweetcorn. Bring to a simmer and cook gently for 20 minutes, stirring now and then, until thick.",
+      "Warm the oil in a large pan over a medium heat. Cook the onion and pepper for 8 minutes until soft, then add the garlic, paprika, cumin, {chilli powder} and {tomato puree} and stir for 1 minute.",
+      "Add the tomatoes and {ml 150} of water, then the kidney beans, black beans and half the {sweetcorn}. Bring to a simmer and cook gently for 20 minutes, stirring now and then, until thick.",
       "Meanwhile, cook the rice following the packet instructions.",
-      "Stir in the remaining sweetcorn, season, and heat for 2 minutes. Serve over the rice with the coriander scattered on top."
+      "Stir in the remaining {sweetcorn}, season, and heat for 2 minutes. Serve over the rice with the {coriander} scattered on top."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chilli-jacket-potatoes",
-    "title": "Chilli jacket potatoes",
-    "blurb": "Crisp-skinned baked potatoes piled with smoky bean chilli and melting cheddar.",
+    "title": "{Chilli} {jacket potatoes}",
+    "blurb": "Crisp-skinned baked potatoes piled with smoky bean {chilli} and melting cheddar.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "beans",
@@ -959,17 +959,17 @@
       }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Prick the potatoes, rub with 10 ml of the oil and a pinch of salt, and bake directly on the shelf for 55 to 60 minutes until the skins are crisp and the middles soft.",
+      "Heat the oven to {oven 220}. Prick the potatoes, rub with {ml 10} of the oil and a pinch of salt, and bake directly on the shelf for 55 to 60 minutes until the skins are crisp and the middles soft.",
       "About 25 minutes before the end, warm the remaining oil in a saucepan and cook the onion for 7 minutes. Add the garlic and spices and stir for 1 minute.",
-      "Add the tomatoes and beans with 100 ml of water, season, and simmer for 15 minutes until thick.",
-      "Split the potatoes, spoon in the chilli, top with the cheddar and spring onions, and serve."
+      "Add the tomatoes and beans with {ml 100} of water, season, and simmer for 15 minutes until thick.",
+      "Split the potatoes, spoon in the {chilli}, top with the cheddar and {spring onions}, and serve."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chilli-bean-wraps",
-    "title": "Chilli bean wraps",
-    "blurb": "Warm tortillas filled with a quick smoky kidney bean and sweetcorn chilli.",
+    "title": "{Chilli} bean wraps",
+    "blurb": "Warm tortillas filled with a quick smoky kidney bean and {sweetcorn} {chilli}.",
     "meal": "lunch",
     "cuisine": "mexican",
     "protein": "beans",
@@ -1034,16 +1034,16 @@
     ],
     "steps": [
       "Warm the oil in a frying pan over a medium heat and cook the onion for 5 minutes until soft.",
-      "Stir in the paprika, cumin and chilli powder for 30 seconds, then add the passata, beans and sweetcorn. Simmer for 8 minutes, mashing a few beans against the pan to thicken, and season.",
+      "Stir in the paprika, cumin and {chilli powder} for 30 seconds, then add the passata, beans and {sweetcorn}. Simmer for 8 minutes, mashing a few beans against the pan to thicken, and season.",
       "Warm the tortillas in a dry pan or microwave for 20 to 30 seconds.",
-      "Spoon the chilli down the middle of each tortilla, fold in the sides and serve."
+      "Spoon the {chilli} down the middle of each tortilla, fold in the sides and serve."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "garlic-chilli-spaghetti",
-    "title": "Garlic & chilli spaghetti",
-    "blurb": "Aglio e olio style: spaghetti in garlicky chilli oil with parsley and lemon, ready in 20 minutes.",
+    "title": "Garlic & {chilli} spaghetti",
+    "blurb": "Aglio e olio style: spaghetti in garlicky {chilli} oil with parsley and lemon, ready in 20 minutes.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "veg",
@@ -1099,7 +1099,7 @@
     ],
     "steps": [
       "Cook the spaghetti in a large pan of well-salted boiling water for the time on the packet. Before draining, scoop out a mugful of the cooking water.",
-      "While the pasta cooks, warm the olive oil in a large frying pan over a low heat. Add the garlic, fresh chilli and chilli flakes and cook gently for 2 to 3 minutes, until the garlic is pale gold. Do not let it brown.",
+      "While the pasta cooks, warm the olive oil in a large frying pan over a low heat. Add the garlic, fresh {chilli} and {chilli flakes} and cook gently for 2 to 3 minutes, until the garlic is pale gold. Do not let it brown.",
       "Add the drained spaghetti to the pan with a generous splash of the pasta water and toss over the heat for 1 minute until glossy.",
       "Take off the heat, add the parsley, a squeeze of lemon, salt and pepper, and serve immediately."
     ],
@@ -1108,7 +1108,7 @@
   {
     "id": "mango-overnight-oats",
     "title": "Mango overnight oats",
-    "blurb": "Creamy overnight oats made with yoghurt and soft golden mango chunks.",
+    "blurb": "Creamy overnight oats made with {yoghurt} and soft golden mango chunks.",
     "meal": "breakfast",
     "cuisine": "british",
     "protein": "veg",
@@ -1146,7 +1146,7 @@
       }
     ],
     "steps": [
-      "Stir the oats, milk, yoghurt and honey together in a bowl or two jars.",
+      "Stir the oats, milk, {yoghurt} and honey together in a bowl or two jars.",
       "Fold in two-thirds of the mango, cover and chill overnight, or for at least 4 hours.",
       "In the morning, loosen with a splash of milk if thick, top with the remaining mango and eat cold."
     ],
@@ -1154,8 +1154,8 @@
   },
   {
     "id": "creamy-oat-porridge",
-    "title": "Creamy oat porridge",
-    "blurb": "Slow-stirred porridge made with milk until thick, soft and creamy.",
+    "title": "Creamy {oat porridge|oatmeal}",
+    "blurb": "Slow-stirred {porridge} made with milk until thick, soft and creamy.",
     "meal": "breakfast",
     "cuisine": "british",
     "protein": "veg",

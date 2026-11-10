@@ -1,3 +1,4 @@
+import { detectMarket, type Market, type Retailer, retailerById, retailersFor } from './market';
 import type { Allergen, Cuisine, Diet, MealType, Protein } from './types';
 
 /** -1 avoid, 0 neutral, 1 like, 2 love. */
@@ -17,6 +18,22 @@ export interface Profile {
   /** Meals per week by type. */
   meals: Record<MealType, number>;
   budget: 'relaxed' | 'balanced' | 'tight';
+  /** Country for ingredient names, measures, packs and prices. Unset: guessed from the browser language. */
+  market?: Market;
+  /** Online grocer id from RETAILERS, or null for "another shop". */
+  retailer?: string | null;
+}
+
+export function marketOf(p: Profile | null | undefined): Market {
+  return p?.market ?? detectMarket();
+}
+
+/** The chosen shop. Never chosen: the country's first listed shop. Null, or a shop in another country: none. */
+export function retailerOf(p: Profile | null | undefined): Retailer | undefined {
+  const market = marketOf(p);
+  if (p?.retailer === undefined) return retailersFor(market)[0];
+  const r = retailerById(p.retailer);
+  return r && r.market === market ? r : undefined;
 }
 
 export const DEFAULT_PROFILE: Profile = {

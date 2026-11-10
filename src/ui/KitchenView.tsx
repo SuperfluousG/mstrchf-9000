@@ -1,8 +1,9 @@
 import { type CSSProperties, useRef, useState } from 'react';
 import tableUrl from '../brand/hero-table.webp';
 import { catalogue } from '../data';
+import { type Market, MARKET_ORDER, MARKETS, retailersFor } from '../domain/market';
 import {
-  ALLERGEN_LABELS, CUISINE_GROUPS, DEFAULT_PROFILE, PROTEIN_CHOICES, groupAffinity, setGroupAffinity, setProteinAffinity,
+  ALLERGEN_LABELS, CUISINE_GROUPS, DEFAULT_PROFILE, PROTEIN_CHOICES, groupAffinity, marketOf, retailerOf, setGroupAffinity, setProteinAffinity,
   type Affinity, type Profile,
 } from '../domain/profile';
 import type { Allergen, Diet, MealType } from '../domain/types';
@@ -15,6 +16,7 @@ import { Heat, Stepper } from './bits';
 const AFFINITY_LABEL: Record<Affinity, string> = { [-1]: 'Skip', 0: '', 1: 'Like', 2: 'Love' } as Record<Affinity, string>;
 const NEXT: Record<Affinity, Affinity> = { [-1]: 0, 0: 1, 1: 2, 2: -1 } as Record<Affinity, Affinity>;
 const HEAT_WORDS = ['None', 'Gentle', 'Spicy', 'Hot'];
+const COUNTRY_TAB: Record<Market, string> = { uk: 'UK', us: 'US', ca: 'Canada' };
 
 /** Taste profile editor, used for first-run setup and later edits. */
 export function ProfileEditor({ initial, onSave, saveLabel }: { initial: Profile; onSave: (p: Profile) => void; saveLabel: string }) {
@@ -24,8 +26,35 @@ export function ProfileEditor({ initial, onSave, saveLabel }: { initial: Profile
   const dislikeMatches = dislikeQ.length < 2 ? [] : [...catalogue.ingredients.values()]
     .filter(i => !i.pantry && !p.dislikes.includes(i.id) && i.name.toLowerCase().includes(dislikeQ.toLowerCase())).slice(0, 6);
 
+  const market = marketOf(p);
+  const shop = retailerOf(p);
+
   return (
-    <form className="profile" onSubmit={e => { e.preventDefault(); onSave(p); }}>
+    <form className="profile" onSubmit={e => { e.preventDefault(); onSave({ ...p, market, retailer: shop?.id ?? null }); }}>
+      <fieldset>
+        <legend>Where you shop</legend>
+        <div className="row">
+          <span>Country</span>
+          <div className="segmented" role="radiogroup" aria-label="Country">
+            {MARKET_ORDER.map(m => (
+              <button key={m} type="button" role="radio" aria-checked={market === m} className={market === m ? 'on' : ''}
+                onClick={() => setP(prev => ({ ...prev, market: m, retailer: undefined }))}>{COUNTRY_TAB[m]}</button>
+            ))}
+          </div>
+        </div>
+        <div className="row top">
+          <span>Supermarket</span>
+          <div className="chips">
+            {retailersFor(market).map(r => (
+              <button key={r.id} type="button" className={`chip${shop?.id === r.id ? ' on' : ''}`} aria-pressed={shop?.id === r.id} title={r.covers ? `Also ${r.covers}` : undefined}
+                onClick={() => set('retailer', r.id)}>{r.name}</button>
+            ))}
+            <button type="button" className={`chip${!shop ? ' on' : ''}`} aria-pressed={!shop} onClick={() => set('retailer', null)}>Another shop</button>
+          </div>
+        </div>
+        <p className="muted small">Sets ingredient names, measures, pack sizes and price estimates for {MARKETS[market].short}, and which shop Claude fills the basket at. Any online grocer works; the listed ones have a step-by-step guide.</p>
+      </fieldset>
+
       <fieldset>
         <legend>Who's eating</legend>
         <div className="row"><span>People at each meal</span><Stepper label="people" value={p.people} min={1} max={8} onChange={n => set('people', n)} /></div>

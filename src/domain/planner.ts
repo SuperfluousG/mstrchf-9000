@@ -174,7 +174,8 @@ function saving(existing: Demand, d: Demand, ctx: PlanContext): number {
  */
 function basketFit(existing: Demand, d: Demand, ctx: PlanContext): number {
   const extraWaste = perishableWaste(mergeDemand(existing, d), ctx.catalogue) - perishableWaste(existing, ctx.catalogue);
-  return synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste;
+  // Weights are tuned in pounds; convert dollars so a US or Canadian basket is judged the same way.
+  return (synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste) / ctx.catalogue.market.perGbp;
 }
 
 function sharedReason(r: Recipe, others: Recipe[], ctx: PlanContext): string | null {

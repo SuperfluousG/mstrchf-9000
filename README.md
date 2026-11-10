@@ -39,18 +39,34 @@ Each person should publish their own copy: on someone else's artifact, people ou
 
 | Path | What it is |
 |---|---|
-| `catalogue/ingredients.json` | 226 ingredients: aisle, unit, typical UK pack sizes and estimated prices, Tesco search phrase, allergens, diet kind, colour. |
-| `catalogue/recipes/*.json` | 170 original recipes (126 dinners, 25 lunches, 19 breakfasts). Rules in `catalogue/AUTHORING.md`. |
+| `catalogue/ingredients.json` | 226 ingredients: aisle, unit, typical UK pack sizes and estimated prices, supermarket search phrase, allergens, diet kind, colour. |
+| `catalogue/markets/us.json`, `ca.json` | The same ingredients for the US and Canada: local names where they differ, pack sizes and estimated prices in dollars. |
+| `catalogue/terms.json` | British food and kitchen words in recipe text and their American equivalents (courgette → zucchini). |
+| `catalogue/recipes/*.json` | 170 original recipes (126 dinners, 25 lunches, 19 breakfasts), written in British English with placeholders for the words and measures that change. Rules in `catalogue/AUTHORING.md`. |
+| `src/domain/market.ts`, `src/domain/localize.ts` | Countries, supermarkets, and turning the British source into each country's words, measures, packs and prices. |
 | `src/domain/planner.ts` | Taste scoring (cuisine, protein, heat, time, favourites, ratings, recency, this week's craving) and greedy week selection that rewards shared perishables and penalises repeated cuisines and proteins. Also swaps and craving parsing. |
 | `src/domain/shopping.ts` | Merges quantities, picks the cheapest covering packs, estimates waste and the saving from sharing ingredients. |
 | `src/domain/basket.ts` | Basket file, plain list and the "Order with Claude" instructions. |
 | `src/ui/` | Week, Menu, Shop and Kitchen screens. |
 | `src/state/fileSync.ts` | Saves the kitchen to Claude storage (artifact) or `data/kitchen.json` (local server). |
 | `src/platform.ts` | Artifact-aware downloads and copying. |
-| `plugin/` | The Claude plugin: planner, Tesco basket and calendar skills. |
+| `plugin/` | The Claude plugin: planner, shopping basket and calendar skills. |
 | `scripts/build-artifact.mjs`, `scripts/export-recipes.mjs` | Build the artifact page and the recipe export for the plugin. |
 
-Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live Tesco prices.
+Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live supermarket prices.
+
+## Countries and shops
+
+The app is British first and also works in the US and Canada. Kitchen → Where you shop sets the country and supermarket; before that, the country is guessed from the browser language (en-US → US, en-CA or fr-CA → Canada, anything else → UK).
+
+| | UK | US | Canada |
+|---|---|---|---|
+| Words | courgette, coriander, spring onions | zucchini, cilantro, green onions | as the US |
+| Recipe measures | g, ml, °C with fan | oz, cups, °F | as the US |
+| Shop packs and money | 500 g, £ | 1 lb, $ | 454 g, $ (CAD) |
+| Listed shops | Tesco, Sainsbury's, Asda, Ocado, Morrisons | Walmart, Kroger, Amazon Fresh, Target, Albertsons | PC Express, Walmart Canada, Voilà, Metro |
+
+"Another shop" works anywhere: the basket goes to Claude without a shop-specific guide. US and Canadian prices are estimates written for planning, not looked up.
 
 ## Look and images
 

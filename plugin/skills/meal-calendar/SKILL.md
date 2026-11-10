@@ -13,7 +13,7 @@ In order of preference:
 2. A local `data/kitchen.json` from a MSTRCHF 9000 checkout, or a backup file the user gives you. Same `state` shape.
 3. A list the user pastes.
 
-A pick's `day` is 0 for Monday to 6 for Sunday, counted from the week id (a Monday, `YYYY-MM-DD`). Recipes are in `recipes.json` next to this file, by `id`.
+A pick's `day` is 0 for Monday to 6 for Sunday, counted from the week id (a Monday, `YYYY-MM-DD`). Recipes are next to this file, by `id`, in the kitchen's own words and measures: `recipes.json` for the UK, `recipes-us.json` for the US and `recipes-ca.json` for Canada. Pick the file from `state.profile.market` (`"uk"`, `"us"` or `"ca"`); if it is missing, use the user's locale, and the UK file when unsure.
 
 ## Ask before booking
 
@@ -47,7 +47,7 @@ Method
 Planned with MSTRCHF 9000.
 ```
 
-Scale ingredient amounts from the recipe's `serves` to the household size (`state.profile.people`): multiply `qty`, then write grams and millilitres as whole numbers, `each` items as fractions (½, ¼, 1½), and small spice or sauce amounts as teaspoons using `gramsPerTsp` (3 tsp = 1 tbsp). Use `amount` unchanged when the household matches `serves`. Steps are written for the recipe's own servings; when you scale, add one line after the method: "The method is written for <serves>; scale the amounts as above."
+Scale ingredient amounts from the recipe's `serves` to the household size (`state.profile.people`): multiply `qty`, then write grams and millilitres as whole numbers (US and Canadian files: ounces, pounds and cups, matching how `amount` is written), `each` items as fractions (½, ¼, 1½), and small spice or sauce amounts as teaspoons using `gramsPerTsp` (3 tsp = 1 tbsp). Use `amount` unchanged when the household matches `serves`. Steps are written for the recipe's own servings; when you scale, add one line after the method: "The method is written for <serves>; scale the amounts as above."
 
 Use sentence case headings, never capitals.
 
