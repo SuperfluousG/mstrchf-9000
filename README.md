@@ -2,7 +2,7 @@
 
 A HelloFresh-style weekly meal planner that is tuned to your taste and hands the shopping to Claude.
 
-Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 390 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude can then fill your Tesco basket in your browser, stopping before slot booking and checkout.
+Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 390 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude can then fill your supermarket basket in your browser (UK, US or Canada), stopping before slot booking and checkout.
 
 ## Run it
 
