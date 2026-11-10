@@ -8,6 +8,17 @@ Gregg authorised the walkthrough's six behaviour fixes, the agreed desktop/phone
 
 Current checkpoint: implementation and local verification are complete. [Draft PR #6](https://github.com/SuperfluousG/mstrchf-9000/pull/6) includes the app, recipe changes and rebuilt Claude artifact files; its [Checks tab](https://github.com/SuperfluousG/mstrchf-9000/pull/6/checks) is the current CI record. Gregg's UI acceptance and final logo preference remain open; the live Claude artifact has not been republished.
 
+Update from Claude Code, 10 November 2026, evening:
+
+- **Accepted.** Gregg accepted the UI for release. Countercut is still the header mark.
+- **Republished.** Gregg's artifact is now version 4, built from this branch at `8467a1e`; the build was identical to the one Codex committed.
+- **Plugin 1.3.0.** The plugin is now version 1.3.0, packed at `release/mstrchf-9000-1.3.0.plugin` (37.9 MB).
+- **Planner skill fixes.**
+  - First-time setup now publishes the 401 files in two parts, because one publish is limited to 255 files.
+  - A new "Update the user's copy" section brings an installed planner up to the current build without touching the user's kitchen.
+- **Install instructions.** These are in `plugin/README.md`.
+- **Not touched.** `package.json` and `package-lock.json` gained MCP app dependencies from parallel Codex work in this folder. Claude did not touch or commit them.
+
 | Behaviour fix | Result and proof |
 |---|---|
 | Kept meals bypassed new exclusions | Re-plan rechecks kept meals; conflicts are named and ordering is blocked until repaired. A kept cashew meal was replaced after excluding tree nuts. |

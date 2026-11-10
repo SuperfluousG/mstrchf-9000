@@ -10,14 +10,26 @@ A meal planner tuned to your taste, and the skills that do the shopping and the 
 
 ## Install
 
-In the Claude desktop app, add the `.plugin` file under Settings → Plugins (or Cowork → Plugins). In Claude Code:
+**Claude app (desktop or claude.ai)**
+
+1. Download the `mstrchf-9000-<version>.plugin` file. Don't unzip it.
+2. In Claude, go to **Customize → Plugins → Add → Upload plugin** and choose the file.
+3. Start a new chat and say: "Set up MSTRCHF 9000 for me." Claude publishes your own copy of the planner as an artifact and opens it. Your kitchen is saved to your Claude account and is private to you.
+
+If **Upload plugin** isn't there, your plan or your organisation's settings don't allow custom plugins.
+
+**Claude Code**
+
+Unzip the `.plugin` file into a folder named `mstrchf-9000`, then run:
 
 ```
-/plugin marketplace add <path to this folder>
-/plugin install mstrchf-9000@mstrchf-9000
+claude plugin marketplace add ./mstrchf-9000
+claude plugin install mstrchf-9000@mstrchf-9000
 ```
 
-Then ask Claude: "Set up MSTRCHF 9000 for me."
+**Updating**
+
+Upload the new `.plugin` file the same way, then say: "Update my MSTRCHF 9000 planner." Claude updates your planner in place at the same link. Your kitchen is not affected.
 
 ## Needs
 
