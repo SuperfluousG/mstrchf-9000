@@ -1,6 +1,7 @@
 // What the page can do where it is running: a normal browser tab, or inside a Claude artifact.
 // Inside an artifact, `window.claude.use(name)` hands out capabilities (storage, downloads); direct downloads are blocked.
 import { useEffect, useState } from 'react';
+import { codexApp, codexCall, isCodexApp } from './codexHost';
 
 interface ClaudeHost { use(name: string): Promise<unknown> }
 
@@ -8,6 +9,8 @@ export const claudeHost: ClaudeHost | null =
   typeof window !== 'undefined' && typeof (window as { claude?: { use?: unknown } }).claude?.use === 'function'
     ? (window as unknown as { claude: ClaudeHost }).claude
     : null;
+export const assistantName = claudeHost ? 'Claude' : 'ChatGPT';
+export const saveFileLabel = isCodexApp ? 'Save' : 'Download';
 
 interface Downloads { save(req: { filename: string; data: string }): Promise<{ status: string }> }
 
@@ -21,7 +24,19 @@ function getDownloads(): Promise<Downloads | null> {
 export type SaveFileResult = 'saved' | 'declined' | 'busy' | 'unavailable';
 
 /** Offers a text file to the user. In an artifact Claude asks them to confirm first. */
-export async function saveFile(filename: string, text: string): Promise<SaveFileResult> {
+export async function saveFile(filename: string, text: string, onSaved?: (path: string) => void): Promise<SaveFileResult> {
+  if (isCodexApp) {
+    try {
+      const app = await codexApp();
+      if (app.getHostCapabilities()?.downloadFile) {
+        const result = await app.downloadFile({ contents: [{ type: 'resource', resource: { uri: `file:///${encodeURIComponent(filename)}`, mimeType: 'application/json', text } }] });
+        return result.isError ? 'declined' : 'saved';
+      }
+      const result = await codexCall<{ path: string }>('export_file', { filename, text });
+      onSaved?.(result.path);
+      return 'saved';
+    } catch { return 'unavailable'; }
+  }
   if (!claudeHost) {
     const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
     const a = document.createElement('a');

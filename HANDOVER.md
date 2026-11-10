@@ -1,6 +1,42 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
-## Active UI refinement — 10 November 2026
+## Active desktop plugin and site — 10 November 2026
+
+Owner: Codex, branch `feat/codex-plugin-and-site`, integrated with Claude release main `04d6c36`.
+
+Gregg accepted the UI and selected **Countercut**, the first logo direction. His subsequent instructions supersede the deferred Codex-planning stage below: build the desktop plugin and promotional Site now, present **Claude and ChatGPT desktop** equally, provide setup without human command-line use, and state plainly that this is a **free beta**, still being developed. It uses the intelligence in the user's existing AI subscription; there are no additional MSTRCHF fees. The user buys their own groceries. Desktop-only support is explicitly accepted.
+
+Current implementation:
+
+- `codex-plugin/` is the ChatGPT desktop edition, version **0.1.2**, beside the unchanged Claude `plugin/` version **1.3.0**. Internal Codex script/file names are retained for development. Both the portable manifest and compatibility overlay include the selected icon, desktop-execution requirement and beta description.
+- The shared React planner is an MCP App, opened through a global `open_planner` entrypoint with fullscreen metadata. Ten tools provide the planner, kitchen reads, revision-guarded edits/restore, photo reads, bounded exports, planning, weeks, baskets and scaled recipes. No AI API call or paid service is introduced by the server.
+- The local stdio server saves outside plugin caches, normally `%LOCALAPPDATA%/MSTRCHF9000/kitchen.json`, with atomic replacement, a file lock, optimistic revisions and 14 daily backups. Ordered records are protected. An explicit newer reset defeats stale browser recovery in this edition. Model tool results update the view without overwriting a pending UI save; teardown awaits pending/in-flight saves.
+- Photos load lazily through MCP resources, with an app-only tool fallback. Fonts, styling and brand material are embedded in the MCP page. Normal browser/Claude paths keep their hashes, storage and host-specific download behaviour; the MCP SDK is loaded only in the desktop view. Release the UI with a new `DESKTOP_VERSION` and matching manifest version so its resource URI changes; the stdio smoke check enforces this.
+- The desktop package is installed and enabled locally through marketplace `mstrchf-local`. A native private **personal** plugin is also saved: [MSTRCHF 9000](https://chatgpt.com/plugins/plugins_6af381bae888819197337453ced425bc), ID `plugins_6af381bae888819197337453ced425bc`, release `pluginrel_6af38877676c81919f3ed4b18b8f67a6`. This is not a public-directory listing or a cross-account installation proof.
+- Downloadable files are `release/mstrchf-9000-chatgpt-0.1.2.zip` and Claude's existing `release/mstrchf-9000-1.3.0.plugin`. The developer marketplace bundle remains available separately. The Claude release was verified and reused, not rebuilt from this branch.
+- The promotional source is the separate checkout `../MSTRCHF-9000-site`. Native Site ID: `appgprj_6af372f74bf881919c57df38a740dec7`; URL: https://mstrchf-9000-codex.gregg-bayes-brown.chatgpt.site . Preserve that ID and owner-private audience. The older `mstrchf-9000` Site is a separate retained project. The final dual-version/free-beta preview is deployed: source commit `5f2c0c77d2083cc7879bf9e54b80a74d322ec127`, deployment `appgdep_6af38aa62e6881919c75df4377c2492d`, status succeeded.
+- Both desktop-app download links and documented `claude://` / `codex://` app links are included. The latter scheme is the ChatGPT desktop compatibility scheme, not customer-facing Codex branding. Setup links prefill a message; they do not send it or silently install anything. Claude uses custom-plugin upload. ChatGPT's guided setup takes the downloaded ZIP into a new local chat. No terminal commands appear on the Site.
+- Site downloads are split into 20 MB delivery parts and joined/checked in the browser, producing one unchanged `.plugin` or ZIP. This avoids the Site source repository's 32 MiB per-object limit and Cloudflare's 25 MiB static-asset limit. Both browser downloads match their release hashes and pass ZIP integrity checks. `package-downloads.py` rebuilds the parts from verified release archives.
+- Bayes website hosting was checked read-only: `Website/wrangler.jsonc` uses Cloudflare Workers Static Assets. No Bayes production source, hosting or Drive sharing was changed. The current Site download path works without a separate Drive or object-storage setup.
+
+Verification so far:
+
+- `npm run check`, catalogue validation, production build, **71 tests in 9 files**, packaged stdio smoke test, ZIP validation and dependency audit passed. The existing browser main-chunk warning remains; the MCP SDK is a separate, dormant browser chunk.
+- The real bundled stdio server exposed ten tools, planned eight meals, returned the embedded app and a real WebP, and saved/exported only disposable data.
+- SDK MCP Apps host checks used an owned temporary kitchen at port 5197: desktop/phone Week, Menu, Shop, Recipe and Kitchen; photos through resources and fallback tool; model-to-view updates; persistent three-person settings after reload; ordered-record recovery; and real backup/basket exports with no phone overflow. Fonts rendered as Space Grotesk with the declared data-font policy. This is SDK-bridge proof, not actual ChatGPT host acceptance.
+- Native account creation and tool startup succeeded. The actual ChatGPT app opened, served photos and returned a correctly scaled recipe. A saved native week was observed after app setup; agent checks did not write test data to that kitchen. Version 0.1.2 adds explicit Freya font scoping and a versioned UI resource URI to avoid stale host pages. The latest saved release is verified by metadata; refresh/update acceptance in the active host and sidebar pinning are not yet established. Claude 1.3.0 install/update on a second account is also unverified, as Claude reported. Do not describe either as established acceptance.
+- The final Site was checked at 1440 px and 375 px, including all four demo moods, both edition cards and the free/subscription/beta explanation. Both edition downloads were saved in a browser and matched their release hashes. ChatGPT 0.1.2: SHA-256 `abd01b26886c0073a99bac8ed02dd1f65094c487e7f8ae13bd5b6c3780e4f4c0`; Claude 1.3.0: `41bab5fafda7a45f7497f0763ee24fa649c04e455953a3e699ee1fc911e4ec55`.
+- Real `data/kitchen.json` retains SHA-256 `36B1222C893B88760D1D3F5CE4AFF584C8E4E35C0A5A4DC28C215DD7575AD06A`. Port 5193 remains Gregg's requested hands-on test-data app; do not remove it until his review ends. Other owned QA servers/temporary kitchens should be stopped/removed after verification.
+
+Commands: `npm run build:codex`, `node scripts/smoke-codex.mjs`, `npm run pack:codex`. For a browser SDK host, `node scripts/preview-codex.mjs` starts an owned temporary kitchen; `--test-fixture` copies `data/test/kitchen.json` into that temporary directory. It never points at the real household.
+
+Integration: [PR #8](https://github.com/SuperfluousG/mstrchf-9000/pull/8) contains this desktop edition. Its CI passed the catalogue validation, production build, 71 tests, desktop bundle and stdio smoke check. Integrate only a passing head revision.
+
+Next action: Gregg's hands-on review of the saved personal plugin and private Site, including updating/reopening the latest desktop view. Public directory submission is separate; OpenAI currently limits local-MCP submissions to allowlisted partners.
+
+The UI refinement and original handover below are retained historical records. Their earlier provisional-logo, deferred-stage and release statements are superseded by this section and Claude's release update.
+
+## UI refinement record — 10 November 2026
 
 Owner: Codex, branch `feat/ui-ux-finalisation`, from merged main `0485543`.
 

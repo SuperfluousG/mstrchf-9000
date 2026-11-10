@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { codexPhoto, isCodexApp } from '../codexHost';
 import { catalogue, imageUrl } from '../data';
 import type { Recipe } from '../domain/types';
 
@@ -93,7 +94,24 @@ function Plate({ recipe }: { recipe: Recipe }) {
 }
 
 export function DishArt({ recipe }: { recipe: Recipe }) {
+  if (isCodexApp) return <CodexDish recipe={recipe} />;
   const src = imageUrl(recipe);
   if (src) return <img className="dish-photo" src={src} alt={recipe.title} loading="lazy" />;
   return <Plate recipe={recipe} />;
+}
+
+function CodexDish({ recipe }: { recipe: Recipe }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      observer.disconnect();
+      void codexPhoto(recipe.id).then(url => { if (live) setSrc(url); }).catch(() => {});
+    }, { rootMargin: '200px' });
+    if (ref.current) observer.observe(ref.current);
+    return () => { live = false; observer.disconnect(); };
+  }, [recipe.id]);
+  return <div className="codex-photo" ref={ref}>{src ? <img className="dish-photo" src={src} alt={recipe.title} /> : <Plate recipe={recipe} />}</div>;
 }

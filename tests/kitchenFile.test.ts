@@ -83,6 +83,10 @@ describe('choosing between the browser and the file', () => {
   it('writes the browser copy when there is no file yet', () => {
     expect(chooseState({ state: { n: 1 }, savedAt: 0 }, { state: null, savedAt: 0 }, empty)).toMatchObject({ from: 'browser', pushToFile: true });
   });
+  it('honours a newer explicit local-plugin reset over an old browser copy', () => {
+    expect(chooseState({ state: { n: 1 }, savedAt: 1 }, { state: { n: 0 }, savedAt: 2 }, empty, { allowEmptyFile: true })).toMatchObject({ from: 'file', state: { n: 0 }, pushToFile: false });
+    expect(chooseState({ state: { n: 1 }, savedAt: 3 }, { state: { n: 0 }, savedAt: 2 }, empty, { allowEmptyFile: true })).toMatchObject({ from: 'browser', pushToFile: true });
+  });
 });
 
 describe('days since Monday', () => {

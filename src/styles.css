@@ -35,14 +35,22 @@
 }
 
 * { box-sizing: border-box; }
+.codex-photo { width: 100%; height: 100%; }
+.notice { overflow-wrap: anywhere; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
+  padding: var(--safe-top, 0px) var(--safe-right, 0px) var(--safe-bottom, 0px) var(--safe-left, 0px);
   background: var(--chalk);
   color: var(--ink);
   font: 400 17px/1.55 var(--font);
   font-feature-settings: 'ss01';
 }
+/* Some MCP hosts set their own body font after loading the app. Keep Freya on our root. */
+#root { font: 400 17px/1.55 var(--font); font-feature-settings: 'ss01'; }
+#root * { font-family: var(--font) !important; }
+.shell, .topbar, .weekbar, .mobile-week, .sheet { font-family: var(--font) !important; }
+#root code, #root pre { font-family: ui-monospace, monospace !important; }
 img, svg { display: block; max-width: 100%; }
 button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2.5px solid var(--cardinal); outline-offset: 2px; border-radius: var(--radius-s); }

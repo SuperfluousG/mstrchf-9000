@@ -4,6 +4,7 @@
 // A plain static copy has neither and stays browser-only.
 import { useSyncExternalStore } from 'react';
 import { claudeHost } from '../platform';
+import { codexCall, isCodexApp } from '../codexHost';
 
 const ROUTE = '/api/kitchen';
 const DEBOUNCE_MS = 400;
@@ -29,9 +30,9 @@ export interface Choice<S> {
 }
 
 /** Picks the newer of the browser copy and the stored copy. An empty side never beats a full one. */
-export function chooseState<S>(browser: Snapshot<S> | null, file: Snapshot<S> | null, isEmpty: (s: S) => boolean): Choice<S> {
+export function chooseState<S>(browser: Snapshot<S> | null, file: Snapshot<S> | null, isEmpty: (s: S) => boolean, options: { allowEmptyFile?: boolean } = {}): Choice<S> {
   const b = browser?.state && !isEmpty(browser.state) ? browser : null;
-  const f = file?.state && !isEmpty(file.state) ? file : null;
+  const f = file?.state && (!isEmpty(file.state) || options.allowEmptyFile) ? file : null;
   if (f && (!b || f.savedAt >= b.savedAt)) return { state: f.state, from: 'file', pushToFile: false };
   if (b) return { state: b.state, from: 'browser', pushToFile: true };
   return { state: null, from: 'none', pushToFile: false };
@@ -130,6 +131,30 @@ async function claudeBackend(): Promise<Backend | null> {
 }
 
 let backend: Backend | null = null;
+let codexRevision = 'empty';
+export function acceptCodexRevision(revision: string): boolean {
+  if (!isCodexApp || pending || inFlight || status.kind !== 'saved') return false;
+  codexRevision = revision;
+  return true;
+}
+function codexBackend(): Backend {
+  const b: Backend = {
+    store: 'file', path: 'your local kitchen file',
+    async read() {
+      const snap = await codexCall<Snapshot<unknown> & { path: string; revision: string }>('get_kitchen');
+      codexRevision = snap.revision; b.path = snap.path;
+      return snap;
+    },
+    async write(body, reset) {
+      const result = await codexCall<{ savedAt: number; revision: string }>(reset ? 'restore_kitchen' : 'save_kitchen', {
+        expectedRevision: codexRevision, stateJson: JSON.stringify(body.state),
+      });
+      codexRevision = result.revision;
+      return result.savedAt;
+    },
+  };
+  return b;
+}
 
 /**
  * Finds where this copy of the app can keep the kitchen and reads it.
@@ -137,7 +162,7 @@ let backend: Backend | null = null;
  */
 export async function readRemote<S>(): Promise<Snapshot<S> | null> {
   try {
-    backend = claudeHost ? await timeout(claudeBackend(), LOAD_TIMEOUT_MS) : fileBackend();
+    backend = claudeHost ? await timeout(claudeBackend(), LOAD_TIMEOUT_MS) : isCodexApp ? codexBackend() : fileBackend();
     if (!backend) {
       setStatus({ kind: 'browser-only', reason: claudeHost ? 'artifact-no-store' : undefined });
       return null;
@@ -198,8 +223,8 @@ export function scheduleSave<S>(state: S, savedAt: number, reset = false): void 
 }
 
 /** Sends any unsaved change straight away, e.g. when the tab is closing. */
-export function flushSave(): void {
-  if (!pending) return;
+export async function flushSave(): Promise<void> {
+  if (!pending) { await inFlight; return; }
   if (timer) { clearTimeout(timer); timer = null; }
-  void drain(true);
+  await drain(true);
 }

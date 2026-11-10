@@ -9,7 +9,7 @@ import { MARKETS } from '../domain/market';
 import { aisleLabel, type ShopLine } from '../domain/shopping';
 import type { Recipe } from '../domain/types';
 import { weekLabel } from '../domain/weeks';
-import { copyText, saveFile, useCanSaveFiles } from '../platform';
+import { assistantName, copyText, saveFile, saveFileLabel, useCanSaveFiles } from '../platform';
 import { setStatus, toggleHave, togglePantry, weekExclusions } from '../state/actions';
 import { newWeek, useAppState } from '../state/store';
 import { Sheet } from './Sheet';
@@ -107,18 +107,19 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
 
         <aside className="order-panel">
           <h2>Get it delivered</h2>
-          <p>Claude can fill your {retailer ? `${retailer.name} ` : 'online '}{word}. You review it, confirm any delivery slot and pay.</p>
+          <p>{assistantName} can fill your {retailer ? `${retailer.name} ` : 'online '}{word}. You review it, confirm any delivery slot and pay.</p>
           <p className="muted small">Shopping at {retailer ? retailer.name : 'another shop'} · <button type="button" className="link" onClick={() => go('kitchen')}>change</button></p>
           {conflicts.length > 0 && <p className="notice warn" role="alert">{conflicts.length} {conflicts.length === 1 ? 'meal conflicts' : 'meals conflict'} with your kitchen exclusions. Review and re-plan from Week before ordering.</p>}
           {!basket.items.length && <p className="notice">Nothing to buy. Review the items you already have and the cupboard staples below.</p>}
-          <button type="button" className="btn primary wide" disabled={!!conflicts.length || !basket.items.length} onClick={() => setOrder(true)}>Order with Claude</button>
+          <button type="button" className="btn primary wide" disabled={!!conflicts.length || !basket.items.length} onClick={() => setOrder(true)}>Order with {assistantName}</button>
           <button type="button" className="btn ghost shopping-tools-toggle" aria-expanded={toolsOpen} aria-controls="shopping-tools" onClick={() => setToolsOpen(!toolsOpen)}>List and order options</button>
           <div id="shopping-tools" className={`shopping-tools${toolsOpen ? ' expanded' : ''}`}>
           <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
           {canSave && <button type="button" className="btn ghost wide" onClick={async () => {
-            const r = await saveFile(`mstrchf-basket-${weekId}.json`, JSON.stringify(basket, null, 2));
-            setFileMsg(r === 'unavailable' ? 'Saving files is not available here. Copy the list instead.' : r === 'busy' ? 'Another save is waiting for you. Try again in a moment.' : '');
-          }}>Download basket file</button>}
+            setFileMsg('');
+            const r = await saveFile(`mstrchf-basket-${weekId}.json`, JSON.stringify(basket, null, 2), path => setFileMsg(`Basket saved to ${path}`));
+            if (r !== 'saved') setFileMsg(r === 'unavailable' ? 'Saving files is not available here. Copy the list instead.' : r === 'busy' ? 'Another save is waiting for you. Try again in a moment.' : '');
+          }}>{saveFileLabel} basket file</button>}
           {fileMsg && <p className="warn small">{fileMsg}</p>}
           {!order && copyFallback}
           <hr />
@@ -129,20 +130,20 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
       </div>
       {!!basket.items.length && <div className="shop-mobile-action" aria-label="Shopping actions"><span><strong>{money(basket.estTotal)}</strong> <span className="small">estimated</span></span><button type="button" className="btn primary" disabled={!!conflicts.length} onClick={() => setOrder(true)}>Review basket</button></div>}
 
-      <Sheet open={order} onClose={() => setOrder(false)} label="Order with Claude">
+      <Sheet open={order} onClose={() => setOrder(false)} label={`Order with ${assistantName}`}>
         <div className="order-sheet">
           <p className="eyebrow">{retailer?.name ?? 'Any shop'} · {basket.items.length} items · est. {money(basket.estTotal)}</p>
-          <h2 className="display small">Order with Claude</h2>
+          <h2 className="display small">Order with {assistantName}</h2>
           <ol className="how">
             <li><strong>Open {shop}.</strong> Sign in yourself in Chrome.</li>
-            <li><strong>Hand over the list.</strong> Copy these instructions to Claude with browser access. The MSTRCHF 9000 plugin supplies the retailer guide.</li>
-            <li><strong>Review and finish.</strong> Claude reports additions and substitutions. You confirm any delivery slot and complete checkout.</li>
+            <li><strong>Hand over the list.</strong> Copy these instructions to {assistantName} with browser access. The MSTRCHF 9000 plugin supplies the retailer guide.</li>
+            <li><strong>Review and finish.</strong> {assistantName} reports additions and substitutions. You confirm any delivery slot and complete checkout.</li>
           </ol>
-          <button type="button" className="btn primary" onClick={() => copy('prompt', claudePrompt(basket))}>{copied === 'prompt' ? 'Copied — paste it to Claude' : 'Copy order instructions'}</button>
+          <button type="button" className="btn primary" onClick={() => copy('prompt', claudePrompt(basket, assistantName))}>{copied === 'prompt' ? `Copied — paste it to ${assistantName}` : 'Copy order instructions'}</button>
           {copyFallback}
           <details>
             <summary>See the instructions</summary>
-            <pre className="prompt">{claudePrompt(basket)}</pre>
+            <pre className="prompt">{claudePrompt(basket, assistantName)}</pre>
           </details>
         </div>
       </Sheet>

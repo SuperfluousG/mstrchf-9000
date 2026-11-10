@@ -4,7 +4,7 @@
 
 The active UI refinement uses the original Freya 2.0 weathered oxblood material in the header, with an oxblood veil for text contrast. Source: `Code/.worktrees/freya-v2-production/v2/assets/materials/oxblood.png`; SHA-256 `faa1bf0588072ac9eac4ecbfb28dc5259e251759ed20b9a86adf3cadaa008f28`. `weathered-oxblood.png` is an exact local copy; `weathered-oxblood.webp` is its 169 KB web derivative. Freya source was not edited.
 
-`logo-directions/` holds three new editable, dark-ground SVG proposals: Countercut, Service docket and Fork current. Compare them at `design/logo-directions.html`. These are native vector designs using Space Grotesk and the existing palette; no generated bitmap logos are involved. Countercut is provisional in `src/ui/Mark.tsx` and the app header, pending Gregg's preference. Prior bowl marks and lockups are retained below and on main; they are not the selected new direction.
+Gregg selected **Countercut**, the first logo direction, on 10 November 2026. It is the app header mark, browser favicon, Codex plugin icon and promotional site identity. `logo-directions/` retains the three editable, dark-ground SVG directions: Countercut, Service docket and Fork current. Compare them at `design/logo-directions.html`. These are native vector designs using Space Grotesk and the existing palette; no generated bitmap logos are involved. Prior bowl marks and lockups are retained below for reference.
 
 The following notes describe the original brand assets, retained for reference.
 

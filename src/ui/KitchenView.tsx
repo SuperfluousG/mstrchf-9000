@@ -8,7 +8,7 @@ import {
 } from '../domain/profile';
 import type { Allergen, Diet, MealType } from '../domain/types';
 import { saveProfile, toggleFavourite, toggleHidden } from '../state/actions';
-import { saveFile, useCanSaveFiles } from '../platform';
+import { saveFile, saveFileLabel, useCanSaveFiles } from '../platform';
 import { type FileStatus, useFileStatus } from '../state/fileSync';
 import { exportBackup, importBackup, readBackup, resetAll, setState, useAppState } from '../state/store';
 import { choiceKeys, Heat, Stepper } from './bits';
@@ -240,10 +240,12 @@ export function KitchenView({ openRecipe, onDirtyChange }: { openRecipe: (id: st
         <DataNote status={fileStatus} />
         <div className="row-btns">
           {canSave && <button type="button" className="btn ghost" onClick={async () => {
-            const r = await saveFile(`mstrchf-backup-${new Date().toISOString().slice(0, 10)}.json`, exportBackup());
+            setDataMsg('');
+            const r = await saveFile(`mstrchf-backup-${new Date().toISOString().slice(0, 10)}.json`, exportBackup(), path => setDataMsg(`Backup saved to ${path}`));
             if (r === 'unavailable') setDataMsg('Saving files is not available here.');
             else if (r === 'busy') setDataMsg('Another save is waiting for you. Try again in a moment.');
-          }}>Download backup</button>}
+            else if (r === 'declined') setDataMsg('Backup save cancelled.');
+          }}>{saveFileLabel} backup</button>}
           <button type="button" className="btn ghost" onClick={() => file.current?.click()}>Restore backup</button>
           <input ref={file} type="file" accept="application/json" hidden onChange={async e => {
             const f = e.target.files?.[0]; if (!f) return;

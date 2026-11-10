@@ -4,8 +4,9 @@ import { marketOf } from './domain/profile';
 import type { MealType } from './domain/types';
 import { addWeeks, mondayOf, weekLabel } from './domain/weeks';
 import { planWeekAction } from './state/actions';
-import { useFileStatus } from './state/fileSync';
-import { getSaveError, newWeek, type Pick, retrySave, useAppState } from './state/store';
+import { acceptCodexRevision, useFileStatus } from './state/fileSync';
+import { adoptSnapshot, getSaveError, getState, loadLatestKitchen, newWeek, type Pick, retrySave, useAppState } from './state/store';
+import { latestCodexSnapshot, onCodexSnapshot } from './codexHost';
 import { KitchenView, Onboarding } from './ui/KitchenView';
 import { Mark } from './ui/Mark';
 import { MenuView } from './ui/MenuView';
@@ -54,7 +55,8 @@ function SaveStatus({ dirty }: { dirty: boolean }) {
 function FileError() {
   const f = useFileStatus();
   if (f.kind !== 'error') return null;
-  return <div className="notice warn" role="alert"><p>The latest changes are saved in this browser, but have not reached {f.store === 'claude' ? 'your Claude account' : 'the kitchen file'}. <button type="button" className="link" onClick={retrySave}>Try saving again</button></p><details><summary>Save details</summary><p>{f.path}: {f.message}</p></details></div>;
+  const conflict = f.message.includes('changed in another view');
+  return <div className="notice warn" role="alert"><p>The latest changes are saved in this browser, but have not reached {f.store === 'claude' ? 'your Claude account' : 'the kitchen file'}. {conflict ? <><span>Another view has changed this kitchen. Export a backup to keep these edits, then </span><button type="button" className="link" onClick={() => void loadLatestKitchen()}>Load latest kitchen</button>.</> : <button type="button" className="link" onClick={retrySave}>Try saving again</button>}</p><details><summary>Save details</summary><p>{f.path}: {f.message}</p></details></div>;
 }
 
 export function App() {
@@ -64,8 +66,8 @@ export function App() {
   selectMarket(market);
   const [route, setRoute] = useState<Route>(readRoute);
   const thisWeek = mondayOf(new Date());
-  const weeks = [0, 1, 2, 3].map(n => addWeeks(thisWeek, n));
-  const [weekId, setWeekId] = useState(thisWeek);
+  const [weekId, setWeekId] = useState(latestCodexSnapshot()?.selectedWeekId ?? thisWeek);
+  const weeks = [...new Set([...([0, 1, 2, 3].map(n => addWeeks(thisWeek, n))), weekId])];
   const [recipeView, setRecipeView] = useState<{ id: string; swapFor?: Pick } | null>(null);
   const [kitchenDirty, setKitchenDirty] = useState(false);
   const [browseSwap, setBrowseSwap] = useState<Pick | undefined>();
@@ -76,6 +78,12 @@ export function App() {
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
   }, []);
+  useEffect(() => onCodexSnapshot(snapshot => {
+    if (snapshot.savedAt < (getState().savedAt ?? 0)) return;
+    if (!acceptCodexRevision(snapshot.revision)) return;
+    adoptSnapshot(snapshot.state, snapshot.savedAt);
+    if (snapshot.selectedWeekId) { setWeekId(snapshot.selectedWeekId); location.hash = 'week'; }
+  }), []);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [route.view, weekId]);
   useEffect(() => { if (route.view !== 'menu') setBrowseSwap(undefined); }, [route.view]);
 

@@ -1,8 +1,8 @@
 # MSTRCHF 9000
 
-A HelloFresh-style weekly meal planner that is tuned to your taste and hands the shopping to Claude.
+A weekly meal planner tuned to your taste, with Claude and ChatGPT desktop editions.
 
-Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 390 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude can then fill your supermarket basket in your browser (UK, US or Canada), stopping before slot booking and checkout.
+Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 390 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude or Codex can then help fill your supermarket basket in your browser (UK, US or Canada), stopping before slot booking and checkout.
 
 ## Run it
 
@@ -13,7 +13,22 @@ npm test           # planner, shopping and date tests
 npm run validate   # checks every recipe against the ingredient list
 npm run build      # static site in dist/
 npm run plugin     # artifact page + recipes for the plugin, packed to release/*.plugin
+npm run build:codex # bundled MCP App and local stdio server in codex-plugin/
+npm run pack:codex  # portable plugin ZIP and local installer bundle in release/
 ```
+
+## ChatGPT desktop — developer setup
+
+Build the Codex package, then register this checkout's local marketplace and install:
+
+```sh
+codex plugin marketplace add "path/to/MSTRCHF-9000"
+codex plugin add mstrchf-9000@mstrchf-local
+```
+
+Open a new local ChatGPT or Codex chat and ask **Open my MSTRCHF 9000 meal planner**. The downloadable installer bundle has its own local marketplace; see `codex-plugin/README.md` for that installation, storage paths and restore instructions. No separate API key or MSTRCHF account is needed. Node.js 20 or newer is required.
+
+`node scripts/smoke-codex.mjs` checks the packaged stdio server with temporary data. `node scripts/preview-codex.mjs` serves a development MCP Apps host on port 5197 with an owned temporary kitchen; `--test-fixture` copies `data/test/kitchen.json` into it. That SDK preview verifies the bridge and UI, and does not establish acceptance in the actual Codex desktop host.
 
 ## Where your kitchen is saved
 
@@ -21,6 +36,7 @@ npm run plugin     # artifact page + recipes for the plugin, packed to release/*
 |---|---|
 | `npm run dev` on this computer | `data/kitchen.json` (git-ignored) with daily copies in `data/backups/`, plus the browser |
 | As a Claude artifact | The artifact's storage at `data/users/<your id>/kitchen`, private to you, plus the browser |
+| As the local Codex plugin | The user's MSTRCHF9000 application-data directory, outside the plugin installation, with daily backups; the view also keeps a browser copy |
 | Any other static copy | The browser only |
 
 Back up from **Kitchen → Download backup** wherever it runs.
@@ -48,9 +64,10 @@ Each person should publish their own copy: on someone else's artifact, people ou
 | `src/domain/shopping.ts` | Merges quantities, picks the cheapest covering packs, estimates waste and the saving from sharing ingredients. |
 | `src/domain/basket.ts` | Basket file, plain list and the "Order with Claude" instructions. |
 | `src/ui/` | Week, Menu, Shop and Kitchen screens. |
-| `src/state/fileSync.ts` | Saves the kitchen to Claude storage (artifact) or `data/kitchen.json` (local server). |
-| `src/platform.ts` | Artifact-aware downloads and copying. |
+| `src/state/fileSync.ts` | Saves to the host's kitchen store: Claude storage, local development file or Codex MCP. |
+| `src/platform.ts`, `src/codexHost.ts` | Host-aware downloads, copying and MCP Apps connection. |
 | `plugin/` | The Claude plugin: planner, grocery basket and calendar skills. |
+| `codex-plugin/`, `server/codex*.ts` | The Codex package and local stdio MCP implementation. |
 | `scripts/build-artifact.mjs`, `scripts/export-recipes.mjs` | Build the artifact page and the recipe export for the plugin. |
 
 Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live supermarket prices.
@@ -70,7 +87,7 @@ The app is British first and also works in the US and Canada. Kitchen → Where 
 
 ## Look and images
 
-The identity is in `src/brand/`: the bowl mark (a gold-rimmed stoneware bowl from above that doubles as a red machine eye), lockups, app icon and three photographs, with usage in `BRAND-NOTES.md`. Colours and type are Freya v2 in red and gold with Space Grotesk.
+The selected identity is Countercut, the first direction in `src/brand/logo-directions/`. It appears in the app header, favicon, Codex plugin and promotional site. Prior bowl artwork is retained in `src/brand/`; usage and material provenance are in `BRAND-NOTES.md`. Colours, Space Grotesk and weathered oxblood are Freya 2.0.
 
 Every recipe has a photo at `src/photos/<recipe id>.webp`, generated by Codex from `catalogue/PHOTO-BRIEF.md` in one house style: window light, handmade stoneware, the same walnut table. A recipe without a photo falls back to a plate drawn from its ingredients. To add photos for new recipes, have Codex follow the brief, then run `python scripts/import_photos.py <folder>`; it crops to 3:2, saves 960×640 WebP and skips existing photos unless `--force` is given.
 

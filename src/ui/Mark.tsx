@@ -1,4 +1,4 @@
-/** Countercut: an angular M with a fine diagonal cut, proposed for the UI review. */
+/** Countercut: Gregg's selected angular M with a fine diagonal cut. */
 export function Mark({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
