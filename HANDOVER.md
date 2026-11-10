@@ -1,5 +1,55 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Claude plugin directory repo — 10 November 2026
+
+Owner: Claude Code. This section records the Claude edition's public release route. It updates the Claude statements in the section below.
+
+**Public repo.** https://github.com/SuperfluousG/mstrchf-9000-claude is public, owned by `SuperfluousG`, branch `main`, first commit `abdfe1e`.
+- It is a copy of `plugin/` at private `main` `616abcb` (PR #9), with `plugin/` as the repo root: 428 files, plus a `.gitignore`.
+- It contains the built planner app, recipes, photos, the three skills, `LICENSE` and `README.md`.
+- Source, scripts, tests and catalogue authoring files stay in this private repo.
+- Gregg uses this repo to submit to Anthropic's plugin directory. It is also the "add by name" install route.
+
+**Licence.** `plugin/LICENSE` (PR #9), © 2026 Bayes Ltd.
+- Free to use for yourself.
+- No redistribution, modified versions, or reuse of the recipes, photos or artwork without written permission.
+- Allergen and price caveats, no warranty, law of England and Wales.
+- Claude wrote it in plain English; no lawyer has reviewed it.
+- GitHub reports it as `NOASSERTION`, because it is a custom licence.
+
+This resolves the "Licence" item under "Open before a public release" below.
+
+**Validation.** `claude plugin validate . --profile directory --strict`, run in the repo root with Claude Code 2.1.322, passed with nothing to report. The directory also runs a safety scan and a human policy review, which this command does not.
+
+**Install routes.** These are documented in `plugin/README.md`; plans other than paid are out of scope:
+1. Download `release/mstrchf-9000-1.3.0.plugin`, then Customize → Plugins → Add → Upload plugin.
+2. Customize → Plugins → Add → Add marketplace, entering `SuperfluousG/mstrchf-9000-claude`.
+3. In Claude Code: `claude plugin marketplace add SuperfluousG/mstrchf-9000-claude`, then `claude plugin install mstrchf-9000@mstrchf-9000`.
+
+After any of these, the user says "Set up MSTRCHF 9000 for me". Claude then publishes that user's own planner artifact, which only its owner can save to. Never point users at Gregg's artifact, where outside viewers cannot save.
+
+**Directory submission.** Gregg submits it himself at https://claude.ai/directory/manage → Submit new → Plugin bundle → `SuperfluousG/mstrchf-9000-claude`. Anthropic states no review time. Claude has not submitted anything.
+
+**Action for the Site: rebuild the Claude download.**
+- `release/mstrchf-9000-1.3.0.plugin` was repacked with `LICENSE` and the updated README. It is now 39,784,344 bytes, SHA-256 `52054d1c8788969a7ce43a55fd98458c6fcb091c8fe2c8d2d5ac09a84b7da756`.
+- The deployed Site's `dist/downloads/claude.json` still lists the earlier file: 39,783,115 bytes, `41bab5fafda7a45f7497f0763ee24fa649c04e455953a3e699ee1fc911e4ec55`.
+- To fix it, rerun `../MSTRCHF-9000-site/package-downloads.py`, check that the joined browser download matches the new hash, and redeploy.
+- The app and skills inside are unchanged: version 1.3.0, the same build as Gregg's artifact version 4.
+
+**Keeping the public repo current.** It is a manual copy, not a mirror. For each Claude release:
+1. Rebuild with `npm run plugin`.
+   - `main` now includes the desktop-edition changes to shared `src/` from PR #8.
+   - The Claude artifact build in `plugin/skills/mstrchf-planner/app/` predates them.
+   - So test the rebuilt artifact before release, and ask a Claude session to republish Gregg's artifact.
+2. Bump `plugin/.claude-plugin/plugin.json`.
+3. Replace the public repo's contents with `git archive <commit>:plugin`.
+4. Run the directory-profile validation above.
+5. Push as `SuperfluousG`. The directory re-checks each version.
+
+**Not yet verified.** Two things have not been run on a second paid account:
+- installing from the file or by adding the repo name;
+- "Set up MSTRCHF 9000 for me" completing, including the two-part artifact publish.
+
 ## Active desktop plugin and site — 10 November 2026
 
 Owner: Codex, branch `feat/codex-plugin-and-site`, integrated with Claude release main `04d6c36`.
@@ -190,7 +240,7 @@ Gregg considers the product close to releasable. This stage settles the interfac
 
 ## Open before a public release
 
-- **Licence.** There is no LICENSE file, and no licensing decision for the recipes and photos.
+- **Licence.** Resolved 10 November 2026: `plugin/LICENSE`, free use and no redistribution. See "Claude plugin directory repo" at the top.
 - **Versions.** The version numbers disagree: `package.json` says 2.0.0 and the plugin says 1.2.0.
 - **Shops.** Only the Tesco guide is tested live (two runs, including a real order Gregg completed himself).
   - The other guides come from a read-only study on 10 November 2026.
