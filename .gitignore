@@ -12,3 +12,18 @@ dist/
 **/target/
 /data/
 /release/
+/.bb/
+
+# Secrets
+*.pem
+*.key
+*.p12
+id_rsa*
+credentials*.json
+
+# OS and tooling files
+.DS_Store
+Thumbs.db
+desktop.ini
+coverage/
+__pycache__/
