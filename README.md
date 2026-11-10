@@ -2,7 +2,7 @@
 
 A HelloFresh-style weekly meal planner that is tuned to your taste and hands the shopping to Claude.
 
-Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 170 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude can then fill your Tesco basket in your browser, stopping before slot booking and checkout.
+Tell it who's eating and what you like. Each week, type what you fancy ("something spicy, loads of peppers, maybe Thai"). It picks meals from 390 recipes, groups meals that share fresh ingredients so packs get finished, and writes a pack-rounded shopping list. Claude can then fill your Tesco basket in your browser, stopping before slot booking and checkout.
 
 ## Run it
 
@@ -31,7 +31,7 @@ Back up from **Kitchen → Download backup** wherever it runs.
 
 - `mstrchf-planner` publishes the user's own copy of the planner as a Claude artifact (from `plugin/skills/mstrchf-planner/app/`), opens it and reads their week.
 - `grocery-basket` fills the basket at the user's online grocer (UK, US or Canada) from the planner's order instructions.
-- `meal-calendar` books the week's meals into a calendar, using `plugin/skills/meal-calendar/recipes.json`.
+- `meal-calendar` books the week's meals into a calendar, using `plugin/skills/meal-calendar/recipes.json` (UK), `recipes-us.json` or `recipes-ca.json`.
 
 Each person should publish their own copy: on someone else's artifact, people outside the owner's organisation can view but not save.
 
@@ -39,10 +39,10 @@ Each person should publish their own copy: on someone else's artifact, people ou
 
 | Path | What it is |
 |---|---|
-| `catalogue/ingredients.json` | 226 ingredients: aisle, unit, typical UK pack sizes and estimated prices, supermarket search phrase, allergens, diet kind, colour. |
+| `catalogue/ingredients.json` | 260 ingredients: aisle, unit, typical UK pack sizes and estimated prices, supermarket search phrase, allergens, diet kind, colour. |
 | `catalogue/markets/us.json`, `ca.json` | The same ingredients for the US and Canada: local names where they differ, pack sizes and estimated prices in dollars. |
 | `catalogue/terms.json` | British food and kitchen words in recipe text and their American equivalents (courgette → zucchini). |
-| `catalogue/recipes/*.json` | 170 original recipes (126 dinners, 25 lunches, 19 breakfasts), written in British English with placeholders for the words and measures that change. Rules in `catalogue/AUTHORING.md`. |
+| `catalogue/recipes/*.json` | 390 original recipes across 23 cuisines (294 dinners, 54 lunches, 42 breakfasts), written in British English with placeholders for the words and measures that change. Rules in `catalogue/AUTHORING.md`. |
 | `src/domain/market.ts`, `src/domain/localize.ts` | Countries, supermarkets, and turning the British source into each country's words, measures, packs and prices. |
 | `src/domain/planner.ts` | Taste scoring (cuisine, protein, heat, time, favourites, ratings, recency, this week's craving) and greedy week selection that rewards shared perishables and penalises repeated cuisines and proteins. Also swaps and craving parsing. |
 | `src/domain/shopping.ts` | Merges quantities, picks the cheapest covering packs, estimates waste and the saving from sharing ingredients. |
