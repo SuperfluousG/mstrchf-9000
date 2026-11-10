@@ -69,7 +69,7 @@
     { "id": "black-pepper", "qty": 1 }
   ],
   "steps": [
-    "Squeeze the grated onion in your hands to remove the juice, then mix it with the {beef mince|ground beef}, half the parsley, the allspice, cinnamon, paprika, 2 teaspoons of salt and the black pepper. Shape into 8 short fingers.",
+    "Squeeze the grated onion in your hands to remove the juice, then mix it with the {beef mince|ground beef}, half the parsley, the allspice, cinnamon, paprika, {qty 2|teaspoon|teaspoons} of salt and the black pepper. Shape into 8 short fingers.",
     "Toss the sliced red onion with the sumac, the juice of half the lemon and a pinch of salt and leave to soften.",
     "Rinse the rice, then cook it in plenty of boiling salted water for 10–12 minutes. Drain and let it steam dry for 2 minutes.",
     "Heat the oil in a large frying pan over a medium-high heat and fry the kafta for 8–10 minutes, turning, until browned and cooked through.",
@@ -184,7 +184,7 @@
     { "id": "black-pepper", "qty": 1 }
   ],
   "steps": [
-    "Mix {g 100} of the {yoghurt} with two-thirds of the garlic, the {tomato puree}, paprika, allspice, the zest of the lemon, the oil, 2 teaspoons of salt and the black pepper. Stir in the chicken and leave for 10 minutes, or longer if you have time.",
+    "Mix {g 100} of the {yoghurt} with two-thirds of the garlic, the {tomato puree}, paprika, allspice, the zest of the lemon, the oil, {qty 2|teaspoon|teaspoons} of salt and the black pepper. Stir in the chicken and leave for 10 minutes, or longer if you have time.",
     "Heat the {grill|broiler} to high. Thread the chicken onto skewers, alternating with the {red pepper} and onion chunks.",
     "{Grill|Broil} the skewers for 12–14 minutes, turning every few minutes, until the chicken is cooked through and charred in places.",
     "Stir the rest of the garlic, a squeeze of lemon juice and a pinch of salt into the remaining {yoghurt}.",
@@ -260,7 +260,7 @@
   "steps": [
     "Heat the oven to {oven 200}. Boil the rice in salted water for 6 minutes, then drain.",
     "Heat the oil in a large frying pan over a medium heat, add the onion and cook for 5 minutes. Add the {lamb mince|ground lamb}, garlic, allspice and cinnamon and fry for 6–8 minutes, breaking it up, until browned.",
-    "Stir in the {tomato puree}, the drained rice, the pine nuts, half the parsley, 2 teaspoons of salt and the black pepper.",
+    "Stir in the {tomato puree}, the drained rice, the pine nuts, half the parsley, {qty 2|teaspoon|teaspoons} of salt and the black pepper.",
     "Stand the pepper halves in a snug baking dish and spoon the filling into them. Mix the passata with {ml 100} water and a pinch of salt and pour it around the peppers.",
     "Cover with foil and bake for 25 minutes, then uncover and bake for 10 minutes more until the peppers are soft and the tops are lightly browned.",
     "Stir the mint into the {yoghurt} and serve with the peppers, spooning over some of the sauce and the rest of the parsley."
@@ -299,7 +299,7 @@
     "Whisk the {yoghurt} with the tahini, garlic, the juice of half the lemon and a good pinch of salt until smooth.",
     "Heat {ml 10} of the oil in a frying pan over a medium heat, add the chickpeas, cumin, paprika and black pepper and cook for 5–6 minutes, stirring, until hot and lightly crisped. Squeeze in a little lemon juice.",
     "Wipe the pan, add the last of the oil and the pine nuts and toast for 1–2 minutes until golden.",
-    "Layer the {pitta} in two bowls, spoon over the chickpeas, then the {yoghurt}, and finish with the pine nuts and their oil, the parsley and the remaining lemon cut into wedges."
+    "Layer the {pitta} in bowls, spoon over the chickpeas, then the {yoghurt}, and finish with the pine nuts and their oil, the parsley and the remaining lemon cut into wedges."
   ],
   "source": "MSTRCHF original"
 },
@@ -408,7 +408,7 @@
   "steps": [
     "Heat the oven to {oven 200}. Rub the fish with the cumin, half the oil, a teaspoon of salt and the black pepper, lay it on a lined tray and bake for 10–12 minutes until it flakes easily.",
     "Meanwhile, rinse the rice and cook it in plenty of boiling salted water for 10–12 minutes, then drain.",
-    "Crush 2 cloves of garlic with a pinch of salt and mix with the {chilli}, {coriander}, the juice of half a lemon and the remaining oil to make a relish.",
+    "Crush {qty 2|clove|cloves} of garlic with a pinch of salt and mix with the {chilli}, {coriander}, the juice of {qty 0.5|lemon|lemons} and the remaining oil to make a relish.",
     "Whisk the tahini with the last clove of garlic, the juice of the other lemon half, a pinch of salt and {ml 50} cold water until smooth and pourable.",
     "Toast the pine nuts in a dry pan for 2 minutes until golden.",
     "Serve the fish over the rice with the tahini sauce, the {chilli} relish and the pine nuts, with the second lemon cut into wedges."
@@ -447,7 +447,7 @@
   ],
   "steps": [
     "Heat the oven to {oven 180}. Brush a {cm 20} ovenproof frying pan with half the oil.",
-    "Whisk the eggs with the turmeric, flour, baking powder, 2 teaspoons of salt and the black pepper until smooth.",
+    "Whisk the eggs with the turmeric, flour, baking powder, {qty 2|teaspoon|teaspoons} of salt and the black pepper until smooth.",
     "Stir in the parsley, {coriander}, dill, {spring onions}, spinach and walnuts so the mixture is more herb than egg.",
     "Heat the pan over a medium heat, pour in the mixture and cook for 3 minutes until the base starts to set, then transfer to the oven for 20–25 minutes until firm in the centre and golden.",
     "Warm the {pitta} in the oven for the last 2 minutes. Season the {yoghurt} with a pinch of salt and the remaining oil.",
@@ -487,7 +487,7 @@
   "steps": [
     "Heat the oil in a wide pan over a medium heat and cook the onion with a pinch of salt for 7–8 minutes until soft and golden.",
     "Add the garlic, {tomato puree}, cumin, cinnamon, allspice and paprika and cook, stirring, for 1–2 minutes.",
-    "Stir in the tomatoes, the beans, {ml 150} water, 2 teaspoons of salt and the black pepper. Simmer for 15–18 minutes, stirring now and then, until the sauce is thick and the beans are creamy.",
+    "Stir in the tomatoes, the beans, {ml 150} water, {qty 2|teaspoon|teaspoons} of salt and the black pepper. Simmer for 15–18 minutes, stirring now and then, until the sauce is thick and the beans are creamy.",
     "Meanwhile, rinse the rice and cook it in plenty of boiling salted water for 10–12 minutes, then drain.",
     "Finish the stew with the juice of half the lemon, spoon it over the rice and scatter with parsley, with the rest of the lemon cut into wedges."
   ],
@@ -527,7 +527,7 @@
   "steps": [
     "Heat the oven to {oven 240} with a large tray inside. Heat the oil in a frying pan over a medium-high heat and fry the {lamb mince|ground lamb} for 5 minutes until browned.",
     "Add the onion, {red pepper}, garlic, {tomato puree}, paprika, cumin, {chilli flakes}, a teaspoon of salt and the black pepper and cook for 6–8 minutes until dry and fragrant. Cool for a few minutes.",
-    "Mix the flour, baking powder and 2 teaspoons of salt with {g 180} of the {yoghurt} to a soft dough, then knead briefly on a floured surface. Divide in two and roll each piece into a long oval about {cm 30} long.",
+    "Mix the flour, baking powder and {qty 2|teaspoon|teaspoons} of salt with {g 180} of the {yoghurt} to a soft dough, then knead briefly on a floured surface. Divide into {qty 2} equal pieces and roll each piece into a long oval about {cm 30} long.",
     "Pinch the long edges up and in to make a boat shape with a rim, then spoon the lamb mixture into the middle, leaving the rim clear.",
     "Slide the pides onto the hot tray and bake for 10 minutes. Make a well in each filling, crack in an egg, and bake for 3–4 minutes more until the egg is just set.",
     "Scatter with parsley, squeeze over some lemon and serve with the remaining {yoghurt} on the side."
@@ -571,7 +571,7 @@
   "steps": [
     "Simmer the lentils in {ml 300} water with a pinch of salt for 10–12 minutes until soft and the water has been absorbed. Stir in the bulgur, cover and leave off the heat for 15 minutes.",
     "Meanwhile, heat {ml 20} of the oil in a frying pan over a medium heat and cook the onions for 8–10 minutes until golden. Stir in the allspice, cinnamon, cumin, paprika and {tomato puree} and cook for 1 minute.",
-    "Mix the onions into the lentil mixture with the flour, walnuts, 2 teaspoons of salt and the black pepper. Let it cool for 5 minutes, then shape into 8 small patties with damp hands.",
+    "Mix the onions into the lentil mixture with the flour, walnuts, {qty 2|teaspoon|teaspoons} of salt and the black pepper. Let it cool for 5 minutes, then shape into 8 small patties with damp hands.",
     "Wipe out the pan, heat {ml 25} of the oil over a medium-high heat and fry the patties for 3–4 minutes on each side until crisp and golden.",
     "Whisk the tahini with half the lemon juice, a pinch of salt and {ml 40} cold water. Toss the cucumber, tomato, leaves and parsley with the pomegranate molasses and the rest of the lemon juice.",
     "Divide the salad between bowls, top with the patties and drizzle with the tahini."
@@ -610,7 +610,7 @@
   "steps": [
     "Season the chicken with a teaspoon of salt and the black pepper. Heat {ml 15} of the oil in a wide casserole or deep pan over a medium-high heat and brown the chicken for 5 minutes. Lift out onto a plate.",
     "Add the remaining oil and the onion and cook for 6 minutes. Stir in the garlic, ginger, cumin, turmeric and cinnamon and cook for 1 minute.",
-    "Cut one lemon into thin slices, discarding the pips. Return the chicken to the pan with the lemon slices, the olives, the {stock cube} and {ml 300} boiling water.",
+    "Cut {qty 1|lemon|lemons} into thin slices, discarding the pips. Return the chicken to the pan with the lemon slices, the olives, the {stock cube} and {ml 300} boiling water.",
     "Cover and simmer gently for 20 minutes, then uncover and cook for 5 minutes more to thicken the sauce.",
     "Put the couscous in a bowl with a pinch of salt and the juice of the second lemon, pour over {ml 200} boiling water, cover for 5 minutes and fluff with a fork.",
     "Stir half the {coriander} through the couscous, spoon the tagine over and scatter with the rest."

@@ -632,9 +632,9 @@
     "steps": [
       "Heat the oven to 220C (200C fan). Warm half the oil in a large pan, add the {spring onions} for 1 minute, then add the spinach in handfuls until wilted, about 3 minutes.",
       "Tip the spinach into a sieve and press out as much water as you can, then chop it roughly into a bowl.",
-      "Beat one egg and stir half of it into the spinach with the feta, dill, lemon zest, salt and pepper.",
+      "Beat {qty 1|egg|eggs} and stir half of it into the spinach with the feta, dill, lemon zest, salt and pepper.",
       "Unroll the pastry on its paper onto a baking tray. Spread the filling over one half, leaving a {cm 2} edge, then fold the other half over and press the edges with a fork to seal.",
-      "Beat the second egg with the rest of the first and brush all over the pastry, cut two slits in the top, then bake for 22-25 minutes until puffed and deep golden.",
+      "Beat the remaining eggs with the reserved beaten egg and brush all over the pastry, cut two slits in the top, then bake for 22-25 minutes until puffed and deep golden.",
       "Dress the leaves with the remaining oil and a squeeze of lemon, and serve with slices of the pie."
     ],
     "source": "MSTRCHF original"
@@ -778,7 +778,7 @@
     ],
     "steps": [
       "Heat the oven to 220C (200C fan). Toss the potatoes with {ml 25} of the oil and half the salt on a large tray and roast for 30-35 minutes, turning twice, until crisp and golden.",
-      "Meanwhile, warm {ml 10} oil in a pan, add two of the garlic cloves, the smoked paprika and {chilli flakes} for 30 seconds, then add the chopped tomatoes, vinegar and a pinch of salt. Simmer for 15 minutes until thick, then blend or mash until fairly smooth.",
+      "Meanwhile, warm {ml 10} oil in a pan, add {qty 2} of the garlic cloves, the smoked paprika and {chilli flakes} for 30 seconds, then add the chopped tomatoes, vinegar and a pinch of salt. Simmer for 15 minutes until thick, then blend or mash until fairly smooth.",
       "Stir the remaining garlic into the {yoghurt} with a squeeze of lemon juice and a pinch of salt.",
       "Wilt the spinach in a hot dry pan for 1-2 minutes, then set aside.",
       "Fry the eggs in the remaining oil over a medium-high heat for 2-3 minutes until the whites are set and the edges are crisp.",

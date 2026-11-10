@@ -1,5 +1,42 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Active UI refinement — 10 November 2026
+
+Owner: Codex, branch `feat/ui-ux-finalisation`, from merged main `0485543`.
+
+Gregg authorised the walkthrough's six behaviour fixes, the agreed desktop/phone layout improvements, a weathered Freya 2.0 oxblood header and distinct logo alternatives. Preserve the current red/gold visual style and the Claude artifact build. Codex packaging/planning is deferred until the UI is settled.
+
+Current checkpoint: implementation and local verification are complete. [Draft PR #6](https://github.com/SuperfluousG/mstrchf-9000/pull/6) includes the app, recipe changes and rebuilt Claude artifact files; its [Checks tab](https://github.com/SuperfluousG/mstrchf-9000/pull/6/checks) is the current CI record. Gregg's UI acceptance and final logo preference remain open; the live Claude artifact has not been republished.
+
+| Behaviour fix | Result and proof |
+|---|---|
+| Kept meals bypassed new exclusions | Re-plan rechecks kept meals; conflicts are named and ordering is blocked until repaired. A kept cashew meal was replaced after excluding tree nuts. |
+| Ordered weeks could be edited from Menu | All planning entry points guard ordered weeks. A recorded basket freezes names, quantities, market, people and estimates; changing Kitchen does not alter it. Older ordered weeks without a record are labelled transparently. Moving dates remains allowed. |
+| A recipe opened from Swap offered Add | Shortlist previews and full-menu browsing retain the exact replacement context and day. Replacing kept the same meal count; full-menu confirmation includes Undo. |
+| Shuffle reset kept dates | Kept identities and days survive both re-plan and shuffle. A kept Sunday dinner stayed on Sunday. |
+| Kitchen drafts disappeared on navigation | Drafts survive route changes and reload, with explicit Save/Discard and an unsaved header state. Remote save failures have a retry action and honest status. |
+| Methods used base quantities | Method measures and ingredient counts scale with servings, while cooking times, temperatures, cut sizes and per-person amounts stay fixed. Cupboard ingredients have quantities. Recipe text no longer assumes two plates or a fixed number of sandwiches or egg wells. |
+
+Other refinements: compact planned-week controls, meals before ingredient-sharing detail, phone week selector, contextual add feedback, folded phone filters, larger touch targets, keyboard-operable radio/tab groups, full-width phone sheets with one active dialog and locked background scroll, shorter onboarding, and a phone Shop layout that puts ordering before the receipt. Pantry staples can be explicitly included. Backup restore validates and previews before replacement; invalid files leave the kitchen intact, and an empty restore carries explicit reset authority.
+
+Verification on throwaway data at port 5193:
+
+- `npm run check`, `npm test` and `npm run build` passed; **62 tests in 8 files**. `npm run validate`: **260 ingredients, 390 recipes, 17 files**, no errors. The existing large JavaScript chunk warning remains (about 1,025 KB, 238 KB gzip).
+- Browser checks at **1440 × 1000** and **375 × 812** covered onboarding, empty/planned/ordered Week, swap shortlist and full-menu replacement, Menu filters and empty results, Recipe, draft/recorded Shop, Order with Claude and Kitchen. Keyboard arrows, Escape/focus return, background scroll, hard-exclusion recovery, draft reload, backup preview/cancel/restore and download were exercised. No horizontal overflow was found at these widths.
+- UK/Tesco, US/Walmart and Canada/PC Express handoffs were checked. An ordered US estimate of **USD 194.81 for four** stayed unchanged after switching Kitchen to Canada/two and then the UK. These were fixtures, not real orders.
+- In the compiled app, a stopped server and then a read-only test file caused a clear save failure. Restoring access and pressing **Try saving again** succeeded; four-person settings survived reload. Misleading secondary “saved” messages were removed.
+- Phone first-meal position improved from about 1,550 px to 375 px; the order button moved from about 6,000 px to 540 px. These are layout observations, not performance measurements.
+- `node scripts/build-artifact.mjs` produced **402 files / 38.2 MB**; the manifest references were checked. Calendar recipe exports were regenerated for all three countries. No release ZIP was replaced. Actual Claude-host runtime/republication still needs a Claude session after integration; local compatibility checks do not establish live-host acceptance.
+- Real `data/kitchen.json` SHA-256 remained `36B1222C893B88760D1D3F5CE4AFF584C8E4E35C0A5A4DC28C215DD7575AD06A`. Browser test kitchens were reset through the app, temporary viewport overrides were reset and review tabs were closed. Test servers were stopped and `data/test` was deleted after preserving the evidence.
+
+Review screenshots: [desktop Week](design/evidence/week-desktop.jpg), [phone Shop](design/evidence/shop-phone.jpg), [save failure](design/evidence/save-failure-phone.jpg), [recovered save](design/evidence/save-recovered-phone.jpg), [logo directions](design/evidence/logo-directions.jpg). The full local capture set and downloaded test backup are outside the repo at `C:/Users/Gregg/.codex/visualizations/2026/11/10/01a1c664-ece5-71e1-a686-f3a9c57f8a2a/mstrchf-refinement/`.
+
+Header material: the actual Freya 2.0 weathered oxblood source; provenance is in `src/brand/BRAND-NOTES.md`. Three native SVG directions are in `src/brand/logo-directions/`, compared by `design/logo-directions.html` (serve through the dev server). Countercut is provisional in the app; Gregg has not selected a final logo. Prior bowl assets are retained. No Freya source was changed.
+
+Next action: review the UI and logo directions with Gregg, then integrate through the PR and arrange Claude artifact republication. Plan the Codex version only once the UI is settled. Recipe cooking validation and a full assistive-technology audit remain outside this UI pass; the original handover's limitations still apply.
+
+The existing record below is the original Claude handover; its release statements describe that handover, not acceptance of this branch.
+
 10 November 2026. Written by Claude Code at the end of the v2 rebuild, for Codex and Gregg. Read it with `AGENTS.md` (working rules) and `README.md` (layout and commands).
 
 ## Where it stands

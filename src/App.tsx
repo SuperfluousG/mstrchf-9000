@@ -5,7 +5,7 @@ import type { MealType } from './domain/types';
 import { addWeeks, mondayOf, weekLabel } from './domain/weeks';
 import { planWeekAction } from './state/actions';
 import { useFileStatus } from './state/fileSync';
-import { getSaveError, newWeek, useAppState } from './state/store';
+import { getSaveError, newWeek, type Pick, retrySave, useAppState } from './state/store';
 import { KitchenView, Onboarding } from './ui/KitchenView';
 import { Mark } from './ui/Mark';
 import { MenuView } from './ui/MenuView';
@@ -13,6 +13,7 @@ import { RecipeSheetContent } from './ui/RecipeSheet';
 import { Sheet } from './ui/Sheet';
 import { ShopView } from './ui/ShopView';
 import { WeekView } from './ui/WeekView';
+import { choiceKeys } from './ui/bits';
 
 type Route = { view: 'week' | 'menu' | 'shop' | 'kitchen'; meal?: MealType };
 
@@ -32,7 +33,7 @@ const NAV: { view: Route['view']; label: string }[] = [
 ];
 
 function Wordmark() {
-  return <a className="wordmark" href="#week" aria-label="MSTRCHF 9000, your week"><Mark className="mark" /><span>MSTRCHF<sup>9000</sup></span></a>;
+  return <a className="wordmark" href="#week" aria-label="MSTRCHF 9000, your week"><Mark className="mark" /><span className="wordmark-name">MSTRCHF<span className="wordmark-edition">9000</span></span></a>;
 }
 
 function fileName(path: string): string {
@@ -40,20 +41,20 @@ function fileName(path: string): string {
 }
 
 /** Small "Saved to kitchen.json" note so it's clear the plan is safe outside the browser. */
-function SaveStatus() {
+function SaveStatus({ dirty }: { dirty: boolean }) {
   const f = useFileStatus();
-  const text = f.kind === 'saved' ? (f.store === 'claude' ? 'Saved to Claude' : `Saved to ${fileName(f.path)}`)
+  const text = dirty ? 'Kitchen changes not saved' : f.kind === 'saved' ? (f.store === 'claude' ? 'Saved to Claude' : `Saved to ${fileName(f.path)}`)
     : f.kind === 'saving' ? 'Saving…'
     : f.kind === 'browser-only' ? 'Saved in this browser only'
     : f.kind === 'error' ? (f.store === 'claude' ? 'Not saved to Claude' : 'Not saved to file') : '';
   if (!text) return null;
-  return <span className={`save-status ${f.kind}`} role="status" title={'path' in f ? f.path : undefined}>{text}</span>;
+  return <span className={`save-status ${dirty ? 'dirty' : f.kind}`} role="status" aria-label={text} title={text}><span className="save-long" aria-hidden="true">{text}</span><span className="save-short" aria-hidden="true">{dirty ? 'Unsaved' : f.kind === 'saved' ? 'Saved' : f.kind === 'saving' ? 'Saving…' : f.kind === 'error' ? 'Save failed' : 'Browser only'}</span></span>;
 }
 
 function FileError() {
   const f = useFileStatus();
   if (f.kind !== 'error') return null;
-  return <p className="notice warn" role="alert">Your changes are saved in this browser but not to {f.path}: {f.message}</p>;
+  return <div className="notice warn" role="alert"><p>The latest changes are saved in this browser, but have not reached {f.store === 'claude' ? 'your Claude account' : 'the kitchen file'}. <button type="button" className="link" onClick={retrySave}>Try saving again</button></p><details><summary>Save details</summary><p>{f.path}: {f.message}</p></details></div>;
 }
 
 export function App() {
@@ -65,7 +66,10 @@ export function App() {
   const thisWeek = mondayOf(new Date());
   const weeks = [0, 1, 2, 3].map(n => addWeeks(thisWeek, n));
   const [weekId, setWeekId] = useState(thisWeek);
-  const [recipeId, setRecipeId] = useState<string | null>(null);
+  const [recipeView, setRecipeView] = useState<{ id: string; swapFor?: Pick } | null>(null);
+  const [kitchenDirty, setKitchenDirty] = useState(false);
+  const [browseSwap, setBrowseSwap] = useState<Pick | undefined>();
+  const openRecipe = (id: string, swapFor?: Pick) => setRecipeView({ id, swapFor });
 
   useEffect(() => {
     const on = () => setRoute(readRoute());
@@ -73,6 +77,7 @@ export function App() {
     return () => window.removeEventListener('hashchange', on);
   }, []);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [route.view, weekId]);
+  useEffect(() => { if (route.view !== 'menu') setBrowseSwap(undefined); }, [route.view]);
 
   const go = (r: string) => { location.hash = r.replace('/', '-'); };
 
@@ -95,7 +100,7 @@ export function App() {
       <div className="band">
       <header className="topbar">
         <Wordmark />
-        <SaveStatus />
+        <SaveStatus dirty={kitchenDirty} />
         <nav aria-label="Main">
           {NAV.map(n => (
             <a key={n.view} href={`#${n.view}`} className={route.view === n.view ? 'on' : ''} aria-current={route.view === n.view ? 'page' : undefined}>{n.label}</a>
@@ -103,12 +108,12 @@ export function App() {
         </nav>
       </header>
       {route.view !== 'kitchen' && (
-        <div className="weekbar" role="tablist" aria-label="Choose a week">
+        <div className="weekbar" role="tablist" aria-label="Choose a week" onKeyDown={choiceKeys}>
           {weeks.map((id, i) => {
             const w = s.weeks[id] ?? newWeek(id);
             const state = w.status === 'ordered' ? 'Ordered' : w.picks.length ? `${w.picks.length} meals` : 'Not started';
             return (
-              <button key={id} role="tab" type="button" aria-selected={id === weekId} className={`weektab${id === weekId ? ' on' : ''}`} onClick={() => setWeekId(id)}>
+              <button key={id} role="tab" type="button" tabIndex={id === weekId ? 0 : -1} aria-selected={id === weekId} className={`weektab${id === weekId ? ' on' : ''}`} onClick={() => { setWeekId(id); setBrowseSwap(undefined); }}>
                 <span className="wk-label">{i === 0 ? 'This week' : i === 1 ? 'Next week' : weekLabel(id)}</span>
                 <span className="wk-state">{i <= 1 ? `${weekLabel(id)} · ` : ''}{state}</span>
               </button>
@@ -116,18 +121,19 @@ export function App() {
           })}
         </div>
       )}
+      {route.view !== 'kitchen' && <div className="mobile-week"><label><span className="sr-only">Choose a week</span><select value={weekId} onChange={e => { setWeekId(e.target.value); setBrowseSwap(undefined); }}>{weeks.map((id, i) => <option key={id} value={id}>{i === 0 ? 'This week' : i === 1 ? 'Next week' : 'Week'} · {weekLabel(id)}{s.weeks[id]?.status === 'ordered' ? ' · Ordered' : ''}</option>)}</select></label></div>}
       </div>
-      {saveError &&<p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
-      <FileError />
-      {/* Keyed by country so lists cached for one country are rebuilt for another. */}
-      <main className="shell" key={market}>
-        {route.view === 'week' && <WeekView weekId={weekId} openRecipe={setRecipeId} go={go} />}
-        {route.view === 'menu' && <MenuView key={route.meal ?? 'all'} weekId={weekId} initialMeal={route.meal} openRecipe={setRecipeId} />}
+      {/* Kitchen stays mounted so navigating cannot discard a settings draft. */}
+      <main className="shell" id="main">
+        {saveError && <p className="notice warn" role="alert">Changes could not be saved in this browser ({saveError}). Download a backup from Kitchen.</p>}
+        <FileError />
+        {route.view === 'week' && <WeekView weekId={weekId} openRecipe={openRecipe} go={go} browseSwap={pick => { setBrowseSwap(pick); go(`menu/${pick.meal}`); }} />}
+        {route.view === 'menu' && <MenuView key={`${market}-${route.meal ?? 'all'}-${weekId}`} weekId={weekId} initialMeal={route.meal} openRecipe={openRecipe} swapFor={browseSwap} onSwapDone={() => setBrowseSwap(undefined)} />}
         {route.view === 'shop' && <ShopView weekId={weekId} go={go} />}
-        {route.view === 'kitchen' && <KitchenView openRecipe={setRecipeId} />}
+        <div hidden={route.view !== 'kitchen'}><KitchenView openRecipe={openRecipe} onDirtyChange={setKitchenDirty} /></div>
       </main>
-      <Sheet open={!!recipeId} onClose={() => setRecipeId(null)} label="Recipe" wide>
-        {recipeId && <RecipeSheetContent key={market} recipeId={recipeId} weekId={weekId} onDone={() => setRecipeId(null)} />}
+      <Sheet open={!!recipeView} onClose={() => setRecipeView(null)} label="Recipe" wide>
+        {recipeView && <RecipeSheetContent key={`${market}-${recipeView.id}`} recipeId={recipeView.id} weekId={weekId} swapFor={recipeView.swapFor} onDone={() => { setRecipeView(null); if (recipeView.swapFor) setBrowseSwap(undefined); }} />}
       </Sheet>
     </>
   );

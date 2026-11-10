@@ -424,7 +424,7 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Mix the chicken in a bowl with the oregano, two of the garlic cloves, the zest and juice of half the lemon, {ml 20} of the oil, and a good pinch of salt and pepper. Leave for 15 minutes while you prepare everything else.",
+      "Mix the chicken in a bowl with the oregano, {qty 2} of the garlic cloves, the zest and juice of half the lemon, {ml 20} of the oil, and a good pinch of salt and pepper. Leave for 15 minutes while you prepare everything else.",
       "For the tzatziki, coarsely grate half the cucumber and squeeze out as much water as you can. Stir into the {yoghurt} with the last garlic clove and a pinch of salt.",
       "Slice the remaining cucumber and toss with the tomatoes, red onion, the remaining oil and a squeeze of lemon juice. Season well.",
       "Heat a large frying pan or griddle over a high heat. Cook the chicken in a single layer for 8-10 minutes, turning, until charred in places and cooked through.",

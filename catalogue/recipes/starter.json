@@ -552,7 +552,7 @@
       }
     ],
     "steps": [
-      "Divide the {yoghurt} between two bowls.",
+      "Divide the {yoghurt} between bowls.",
       "Stir the oats into the {yoghurt} and leave for 2 minutes to soften slightly.",
       "Fold the sliced banana through, drizzle with the honey, dust with cinnamon and eat straight away."
     ],
@@ -776,7 +776,7 @@
       }
     ],
     "steps": [
-      "Blitz the chickpeas, tahini, juice of the lemon, garlic, olive oil, salt and 3 to 4 tablespoons of cold water in a food processor until smooth, adding more water if too thick.",
+      "Blitz the chickpeas, tahini, juice of the lemon, garlic, olive oil, salt and {qty 3}–{qty 4} tablespoons of cold water in a food processor until smooth, adding more water if too thick.",
       "Warm the {pittas} briefly in a toaster or dry pan, then split each to make a pocket.",
       "Spread the hummus inside, then fill with grated carrot and cucumber and serve."
     ],
@@ -1146,7 +1146,7 @@
       }
     ],
     "steps": [
-      "Stir the oats, milk, {yoghurt} and honey together in a bowl or two jars.",
+      "Stir the oats, milk, {yoghurt} and honey together in a bowl or jars.",
       "Fold in two-thirds of the mango, cover and chill overnight, or for at least 4 hours.",
       "In the morning, loosen with a splash of milk if thick, top with the remaining mango and eat cold."
     ],

@@ -29,7 +29,7 @@
       { "id": "black-pepper", "qty": 2 }
     ],
     "steps": [
-      "Heat the oven to {oven 200}. Mix the {beef mince|ground beef} with the onion, garlic, panko, egg, {ml 30} of the milk, the Worcestershire sauce, {15 g|1 tbsp} of the ketchup, the Dijon, thyme, 2 teaspoons of salt and the pepper, using your hands, until just combined.",
+      "Heat the oven to {oven 200}. Mix the {beef mince|ground beef} with the onion, garlic, panko, egg, {ml 30} of the milk, the Worcestershire sauce, {15 g|1 tbsp} of the ketchup, the Dijon, thyme, {qty 2|teaspoon|teaspoons} of salt and the pepper, using your hands, until just combined.",
       "Shape the mixture into a loaf about {cm 18} long on a lined tray. Stir the remaining ketchup into a small bowl with a splash of water and brush half of it over the top.",
       "Bake for 35–40 minutes, brushing with the rest of the glaze halfway, until the loaf is cooked through and the top is sticky and dark.",
       "Meanwhile, boil the potatoes in well-salted water for 15–18 minutes until completely tender. Drain well, then mash with the butter, the remaining {ml 50} of milk and a pinch of salt and pepper.",
@@ -183,7 +183,7 @@
       { "id": "black-pepper", "qty": 1.5 }
     ],
     "steps": [
-      "Heat the oven to {oven 220}. Mix {ml 150} of the buttermilk with the garlic, half the paprika, 2 teaspoons of salt and the pepper in a bowl. Add the drumsticks, turn to coat and leave for at least 10 minutes.",
+      "Heat the oven to {oven 220}. Mix {ml 150} of the buttermilk with the garlic, half the paprika, {qty 2|teaspoon|teaspoons} of salt and the pepper in a bowl. Add the drumsticks, turn to coat and leave for at least 10 minutes.",
       "Mix the panko with the remaining paprika and the oil on a plate. Lift each drumstick out of the buttermilk, let the excess drip off, and roll it in the crumbs, pressing so they stick.",
       "Arrange the drumsticks on a rack set over a tray, or directly on a lined tray, and bake for 40–45 minutes, turning once, until deep golden and the juices run clear.",
       "For the slaw, whisk the remaining {ml 40} of buttermilk with the mayonnaise, the juice of half the lemon, the sugar, hot sauce and a pinch of salt. Toss with the cabbage and carrot and chill until needed.",
@@ -259,7 +259,7 @@
     "steps": [
       "Heat half the oil in a large frying pan over medium heat and cook the onion and {green pepper} for 8 minutes until soft and lightly golden. Add the mushrooms and cook for 4 minutes more, then stir in the garlic and tip everything onto a plate.",
       "Turn the heat up to high and add the remaining oil. Fry the beef in a single layer for 1–2 minutes, turning once, seasoning with salt and pepper, until just browned.",
-      "Return the vegetables to the pan with the Worcestershire sauce, toss for 30 seconds and divide into two heaps, then lay the cheese over each and cover the pan for 1 minute until melted.",
+      "Return the vegetables to the pan with the Worcestershire sauce, toss for 30 seconds and divide into {qty 2} heaps, then lay the cheese over each and cover the pan for 1 minute until melted.",
       "Toast the split baguette under the {grill|broiler} for 1–2 minutes and spread the cut sides with mayonnaise.",
       "Scoop a cheesy heap of steak into each roll and serve straight away."
     ],
@@ -451,7 +451,7 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to {oven 220}. Toss the potatoes with {ml 20} of the oil and 1 teaspoon of salt on a large tray and roast for 30–35 minutes, turning once, until crisp.",
+      "Heat the oven to {oven 220}. Toss the potatoes with {ml 20} of the oil and {qty 1|teaspoon|teaspoons} of salt on a large tray and roast for 30–35 minutes, turning once, until crisp.",
       "Stir the mayonnaise, ketchup, Dijon and the chopped gherkin with the diced onion to make the sauce, and season with a little pepper.",
       "Divide the {beef mince|ground beef} into 4 loose balls, without squeezing them. Heat a large heavy frying pan over high heat with the remaining oil until smoking.",
       "Add 2 balls and smash each flat with a sturdy spatula, pressing hard for 10 seconds. Season with salt and pepper, cook for 2 minutes until the edges are lacy and brown, then scrape up, flip, lay on the cheese and cook for 30 seconds. Repeat with the rest, and fry the sliced onion in the same pan for 3 minutes.",
@@ -489,10 +489,10 @@
     ],
     "steps": [
       "Boil the eggs for 8 minutes, cool under cold running water, then peel and cut into quarters.",
-      "Meanwhile, rub the chicken with 1 tablespoon of the oil, salt and pepper. Cook in a hot frying pan for 6–7 minutes per side until golden and cooked through, then rest for 5 minutes and slice.",
+      "Meanwhile, rub the chicken with {qty 1|tablespoon|tablespoons} of the oil, salt and pepper. Cook in a hot frying pan for 6–7 minutes per side until golden and cooked through, then rest for 5 minutes and slice.",
       "Fry the bacon in a separate pan over medium heat for 6–8 minutes until crisp, drain on {kitchen paper} and crumble.",
       "Whisk the vinegar and Dijon with the remaining oil and a pinch of salt and pepper to make the dressing.",
-      "Spread the lettuce and leaves over two plates and arrange the chicken, bacon, egg, avocado, tomatoes and blue cheese in rows. Drizzle with the dressing and scatter over the chives."
+      "Spread the lettuce and leaves over plates and arrange the chicken, bacon, egg, avocado, tomatoes and blue cheese in rows. Drizzle with the dressing and scatter over the chives."
     ],
     "source": "MSTRCHF original"
   },
@@ -605,7 +605,7 @@
     "steps": [
       "Heat the oil in a saucepan over medium heat and cook the onion for 6 minutes until soft. Add the garlic and {tomato puree} and stir for 1 minute.",
       "Add the tomatoes, crumbled {stock cube}, {ml 200} of water, the sugar, salt and pepper. Simmer for 12 minutes, then blend until smooth and stir in the cream and half the basil.",
-      "Butter one side of each slice of bread and spread the other sides lightly with Dijon. Pile the cheddar over two slices, Dijon-side up, and top with the others, butter-side out.",
+      "Butter one side of each slice of bread and spread the other sides lightly with Dijon. Pile the cheddar over half the bread slices, Dijon-side up, and top with the others, butter-side out.",
       "Fry the sandwiches in a large frying pan over medium-low heat for 3–4 minutes per side, pressing gently, until deep golden and the cheese has melted.",
       "Cut the sandwiches in half and serve with the hot soup topped with the remaining basil."
     ],
@@ -644,8 +644,8 @@
     "steps": [
       "Melt the butter in a large pan over medium heat and cook the onion and celery for 6 minutes until soft. Stir in the garlic, smoked paprika and thyme for 1 minute.",
       "Stir in the flour for 1 minute, then gradually pour in the milk and {ml 300} of water, stirring, and crumble in the {stock cube}.",
-      "Add the potatoes and one tin of the {sweetcorn}, bring to a simmer and cook for 15 minutes until the potato is tender.",
-      "Blend roughly a third of the chowder with a stick blender, leaving it chunky, then stir in the second {tin|can} of {sweetcorn} and heat for 3 minutes. Season well.",
+      "Add the potatoes and half the {sweetcorn}, bring to a simmer and cook for 15 minutes until the potato is tender.",
+      "Blend roughly a third of the chowder with a stick blender, leaving it chunky, then stir in the remaining {sweetcorn} and heat for 3 minutes. Season well.",
       "Ladle into bowls and top with the cheddar and chives, with the toast alongside."
     ],
     "source": "MSTRCHF original"
@@ -819,10 +819,10 @@
       { "id": "black-pepper", "qty": 1.5 }
     ],
     "steps": [
-      "Heat the oven to {oven 220}. Toss the potatoes with the oil and 2 teaspoons of salt on two trays and roast for 35–40 minutes, turning and swapping the trays halfway, until golden and crisp.",
+      "Heat the oven to {oven 220}. Toss the potatoes with the oil and {qty 2|teaspoon|teaspoons} of salt on two trays and roast for 35–40 minutes, turning and swapping the trays halfway, until golden and crisp.",
       "Meanwhile, melt the butter in a saucepan over medium heat and cook the mushrooms for 6 minutes until golden. Stir in the flour for 1 minute.",
       "Gradually whisk in {ml 300} of water, then crumble in the {stock cube}, and add the soy sauce and pepper. Simmer for 6–8 minutes until the gravy coats the back of a spoon, and season to taste.",
-      "Pile the hot fries into two bowls and scatter over the mozzarella so it starts to soften.",
+      "Pile the hot fries into bowls and scatter over the mozzarella so it starts to soften.",
       "Pour the boiling gravy over the top so the cheese melts, and finish with the {spring onions}. Eat immediately, while the fries still have crunch."
     ],
     "source": "MSTRCHF original"
@@ -898,7 +898,7 @@
       "Mix the soy sauce, maple syrup, ginger, garlic and sesame oil in a shallow dish. Add the salmon and turn it over in the marinade for 5 minutes.",
       "Heat the vegetable oil in a non-stick frying pan over medium-high heat. Cook the salmon, skin-side down first, for 3–4 minutes per side, pouring in the remaining marinade for the last minute to glaze.",
       "Toss the cucumber with the rice vinegar. Stir the mayonnaise and sriracha together with a splash of water until pourable.",
-      "Divide the rice and edamame between two bowls and top with the salmon, cucumber, avocado and {spring onions}. Drizzle with the sriracha mayo and scatter with the sesame seeds."
+      "Divide the rice and edamame between bowls and top with the salmon, cucumber, avocado and {spring onions}. Drizzle with the sriracha mayo and scatter with the sesame seeds."
     ],
     "source": "MSTRCHF original"
   },

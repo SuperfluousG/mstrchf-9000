@@ -3,11 +3,11 @@ import plateUrl from '../brand/empty-plate.webp';
 import tableUrl from '../brand/hero-table.webp';
 import { catalogue } from '../data';
 import { amount, inlineName, money } from '../domain/format';
-import { alternatives, FOCUS_TAGS } from '../domain/planner';
+import { alternatives, FOCUS_TAGS, scoreRecipe, sharedReason } from '../domain/planner';
 import { buildShoppingList } from '../domain/shopping';
 import type { MealType, Recipe } from '../domain/types';
 import { DAYS, dayDate, daysSinceMonday, weekLabel } from '../domain/weeks';
-import { contextFor, focusFor, moveDay, planWeekAction, removePick, setCraving, swapPick, toggleFocusTag, toggleLock } from '../state/actions';
+import { contextFor, focusFor, moveDay, planWeekAction, removePick, setCraving, swapPick, toggleFocusTag, toggleLock, weekExclusions } from '../state/actions';
 import { newWeek, useAppState, type Pick } from '../state/store';
 import { Meta } from './bits';
 import { DishArt } from './DishArt';
@@ -20,14 +20,17 @@ export function useWeekShopping(weekId: string) {
   const w = s.weeks[weekId] ?? newWeek(weekId);
   return useMemo(() => {
     const recipes = w.picks.map(p => catalogue.byId.get(p.recipeId)).filter((r): r is Recipe => !!r);
-    return buildShoppingList({ recipes, people: s.profile?.people ?? 2, have: new Set([...w.have, ...s.cupboard]) }, catalogue);
-  }, [w.picks, w.have, s.cupboard, s.profile?.people]);
+    return buildShoppingList({ recipes, people: s.profile?.people ?? 2, have: new Set([...w.have, ...s.cupboard]), pantryToBuy: new Set(w.pantryToBuy ?? []) }, catalogue);
+  }, [w.picks, w.have, w.pantryToBuy, s.cupboard, s.profile?.people, catalogue.market.id]);
 }
 
-export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecipe: (id: string) => void; go: (route: string) => void }) {
+export function WeekView({ weekId, openRecipe, go, browseSwap }: { weekId: string; openRecipe: (id: string, swapFor?: Pick) => void; go: (route: string) => void; browseSwap: (pick: Pick) => void }) {
   const s = useAppState();
   const w = s.weeks[weekId] ?? newWeek(weekId);
   const [swapFor, setSwapFor] = useState<Pick | null>(null);
+  const [adjusting, setAdjusting] = useState(false);
+  const plan = (shuffle = false) => { planWeekAction(weekId, shuffle); setAdjusting(false); };
+  const conflicts = weekExclusions(s, weekId);
   const list = useWeekShopping(weekId);
   const focus = focusFor(w);
   const focusWords = [
@@ -38,13 +41,17 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
   const meals = (['dinner', 'lunch', 'breakfast'] as MealType[]).filter(m => w.picks.some(p => p.meal === m) || (s.profile?.meals[m] ?? 0) > 0);
   const empty = w.picks.length === 0;
   const ordered = w.status === 'ordered' && !empty;
+  const recipes = w.picks.map(p => catalogue.byId.get(p.recipeId)).filter((r): r is Recipe => !!r);
+  const ctx = contextFor(s, weekId);
 
   return (
     <div className="week">
-      {ordered ? <OrderedHeader weekId={weekId} picks={w.picks} openRecipe={openRecipe} /> : (
-      <section className="mood mood-photo" aria-labelledby="mood-h" style={{ '--photo': `url(${tableUrl})` } as CSSProperties}>
+      {ordered ? <OrderedHeader weekId={weekId} picks={w.picks} people={w.orderedBasket?.people} openRecipe={openRecipe} /> : <>
+      {!empty && <header className="week-heading"><div><p className="week-context">{weekLabel(weekId)} · {w.picks.length} meals</p><h1 className="display">Your week</h1></div><div className="row-btns"><button type="button" className="btn ghost" aria-expanded={adjusting} aria-controls="planning-controls" onClick={() => setAdjusting(!adjusting)}>Adjust this week</button><button type="button" className="btn ghost" onClick={() => plan(true)}>Shuffle</button></div></header>}
+      {(empty || adjusting) && (
+      <section id="planning-controls" className="mood mood-photo" aria-labelledby="mood-h" style={{ '--photo': `url(${tableUrl})` } as CSSProperties}>
         <p className="eyebrow">Week of {weekLabel(weekId)}{w.status === 'ordered' && <span className="badge">Ordered</span>}</p>
-        <h1 id="mood-h" className="display">What are you in the mood for?</h1>
+        {empty ? <h1 id="mood-h" className="display">What are you in the mood for?</h1> : <h2 id="mood-h" className="display small">What do you fancy?</h2>}
         <div className="mood-row">
           <label className="sr-only" htmlFor="craving">Describe what you fancy this week</label>
           <input
@@ -53,19 +60,20 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
             value={w.craving}
             placeholder="Something spicy, loads of peppers, maybe Thai…"
             onChange={e => setCraving(weekId, e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') planWeekAction(weekId); }}
+            onKeyDown={e => { if (e.key === 'Enter') plan(); }}
           />
-          <button type="button" className="btn primary" onClick={() => planWeekAction(weekId)}>{empty ? 'Plan my week' : 'Re-plan'}</button>
-          {!empty && <button type="button" className="btn ghost on-dark" onClick={() => planWeekAction(weekId, true)} title="Keep your kept meals, try different suggestions">Shuffle</button>}
+          <button type="button" className="btn primary" onClick={() => plan()}>{empty ? 'Plan my week' : 'Re-plan'}</button>
         </div>
         <div className="chips" role="group" aria-label="Quick moods">
           {FOCUS_TAGS.map(t => (
             <button key={t.id} type="button" className={`chip${w.focus.tags.includes(t.id) ? ' on' : ''}`} aria-pressed={w.focus.tags.includes(t.id)} onClick={() => toggleFocusTag(weekId, t.id)}>{t.label}</button>
           ))}
         </div>
-        {focusWords.length > 0 && <p className="focus-read">Planning around <strong>{focusWords.join(' · ')}</strong></p>}
+        {focusWords.length > 0 && <p className="focus-read">Your next plan will favour <strong>{focusWords.join(' · ')}</strong></p>}
       </section>
-      )}
+      )}</>}
+
+      {!!conflicts.length && <section className="notice warn" role="alert"><strong>Your kitchen settings have changed.</strong><p>{conflicts.length} {conflicts.length === 1 ? 'meal needs' : 'meals need'} review before shopping.</p><ul>{conflicts.map(({ pick, reason }) => <li key={pick.uid}><button type="button" className="link" onClick={() => openRecipe(pick.recipeId)}>{catalogue.byId.get(pick.recipeId)?.title ?? 'Unavailable recipe'}</button> — {reason}</li>)}</ul>{!ordered && <button type="button" className="btn primary" onClick={() => plan()}>Replace excluded meals</button>}</section>}
 
       {empty ? (
         <section className="empty-week">
@@ -77,7 +85,6 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
         </section>
       ) : (
         <>
-          {list.shared.length > 0 && <Threads weekId={weekId} picks={w.picks} list={list} />}
           {meals.map(meal => {
             const picks = w.picks.filter(p => p.meal === meal).sort((a, b) => a.day - b.day);
             return (
@@ -91,6 +98,8 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
                   {picks.map(p => {
                     const r = catalogue.byId.get(p.recipeId);
                     if (!r) return null;
+                    const reason = !ordered && (p.reasons.includes('You chose this') ? 'You chose this'
+                      : sharedReason(r, recipes.filter(other => other.id !== r.id), ctx) ?? scoreRecipe(r, ctx).reasons[0]);
                     return (
                       <li key={p.uid} className={`card${p.locked && !ordered ? ' kept' : ''}`}>
                         <button type="button" className="card-media" onClick={() => openRecipe(r.id)} aria-label={`Open ${r.title}`}>
@@ -105,7 +114,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
                           </label>
                           <h3><button type="button" className="title-btn" onClick={() => openRecipe(r.id)}>{r.title}</button></h3>
                           <Meta recipe={r} />
-                          {!ordered && p.reasons[0] && <p className="why">{p.reasons[0]}</p>}
+                          {reason && <p className="why">{reason}</p>}
                           {!ordered && <div className="card-actions">
                             <button type="button" className="btn small" onClick={() => setSwapFor(p)}>Swap</button>
                             <button type="button" className={`btn small ghost${p.locked ? ' active' : ''}`} aria-pressed={!!p.locked} onClick={() => toggleLock(weekId, p.uid)} title="Kept meals stay when you re-plan">{p.locked ? 'Kept' : 'Keep'}</button>
@@ -119,6 +128,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
               </section>
             );
           })}
+          {!ordered && list.shared.length > 0 && <details className="sharing-details"><summary>Shared ingredients <span className="muted small">{list.groupingSaving > .05 ? `· about ${money(list.groupingSaving)} saved` : '· less food left over'}</span></summary><Threads weekId={weekId} picks={w.picks} list={list} /></details>}
           {!ordered && <div className="summary-bar" role="region" aria-label="Week summary">
             <span><strong>{w.picks.length}</strong> meals</span>
             <span className="n-items"><strong>{list.lines.filter(l => l.status === 'buy').length}</strong> things to buy</span>
@@ -130,7 +140,7 @@ export function WeekView({ weekId, openRecipe, go }: { weekId: string; openRecip
       )}
 
       <Sheet open={!!swapFor} onClose={() => setSwapFor(null)} label="Swap a meal">
-        {swapFor && <SwapList weekId={weekId} pick={swapFor} onPick={(id, reasons) => { swapPick(weekId, swapFor.uid, id, reasons); setSwapFor(null); }} onBrowse={() => { setSwapFor(null); go(`menu/${swapFor.meal}`); }} openRecipe={openRecipe} />}
+        {swapFor && <SwapList weekId={weekId} pick={swapFor} onPick={(id, reasons) => { swapPick(weekId, swapFor.uid, id, reasons); setSwapFor(null); }} onBrowse={() => { const pick = swapFor; setSwapFor(null); browseSwap(pick); }} openRecipe={id => { const pick = swapFor; setSwapFor(null); openRecipe(id, pick); }} />}
       </Sheet>
     </div>
   );
@@ -141,7 +151,7 @@ const MEAL_ORDER: MealType[] = ['breakfast', 'lunch', 'dinner'];
 const FULL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 /** Shown instead of the planning controls once the shopping is ordered: the next dinner, large. */
-function OrderedHeader({ weekId, picks, openRecipe }: { weekId: string; picks: Pick[]; openRecipe: (id: string) => void }) {
+function OrderedHeader({ weekId, picks, people, openRecipe }: { weekId: string; picks: Pick[]; people?: number; openRecipe: (id: string) => void }) {
   const today = daysSinceMonday(weekId);
   const sorted = [...picks].sort((a, b) => a.day - b.day || MEAL_ORDER.indexOf(a.meal) - MEAL_ORDER.indexOf(b.meal));
   const nextDinner = sorted.find(p => p.day >= today && p.meal === 'dinner');
@@ -175,9 +185,9 @@ function OrderedHeader({ weekId, picks, openRecipe }: { weekId: string; picks: P
           <button type="button" className="btn primary" onClick={() => openRecipe(recipe.id)}>Open the recipe</button>
         </div>
         {sooner && soonerRecipe && (
-          <p className="hero-sooner">Before that: {when(sooner).replace(/^(Today|Tomorrow|Tonight)/, w => w.toLowerCase())} is <button type="button" className="link" onClick={() => openRecipe(soonerRecipe.id)}>{soonerRecipe.title}</button>.</p>
+          <p className="hero-sooner">Before that: {when(sooner).replace(/^(Today|Tomorrow|Tonight)/, w => w.toLowerCase())} is <button type="button" className="link" onClick={() => openRecipe(soonerRecipe.id)}>{soonerRecipe.title}.</button></p>
         )}
-        <p className="muted small">The shopping is ordered. Moving a meal to another day is fine; to change meals, mark the week as not ordered on the Shop page.</p>
+        <p className="muted small">{people ? `This week was planned for ${people}. ` : ''}Moving meals between days is fine. Reopen the week from Shop to change meals or quantities.</p>
       </div>
       <button type="button" className="hero-media" onClick={() => openRecipe(recipe.id)} aria-label={`Open ${recipe.title}`}>
         <DishArt recipe={recipe} />
@@ -188,7 +198,7 @@ function OrderedHeader({ weekId, picks, openRecipe }: { weekId: string; picks: P
 
 function describeCounts(m?: Record<MealType, number>): string {
   if (!m) return 'meals';
-  const parts = [m.dinner && `${m.dinner} dinners`, m.lunch && `${m.lunch} lunches`, m.breakfast && `${m.breakfast} breakfasts`].filter(Boolean);
+  const parts = [m.dinner && `${m.dinner} dinner${m.dinner === 1 ? '' : 's'}`, m.lunch && `${m.lunch} lunch${m.lunch === 1 ? '' : 'es'}`, m.breakfast && `${m.breakfast} breakfast${m.breakfast === 1 ? '' : 's'}`].filter(Boolean);
   return parts.join(', ') || 'meals';
 }
 

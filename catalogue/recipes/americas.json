@@ -192,8 +192,8 @@
     ],
     "steps": [
       "Heat the oil in a frying pan over a medium heat. Add the garlic, cumin, paprika and {chilli flakes} and stir for 30 seconds until fragrant.",
-      "Add the black beans with 3 tablespoons of liquid from the {tin|can}. Cook for 5 minutes, crushing about a third of the beans with the back of a spoon, until thick and glossy. Season.",
-      "Toss the red cabbage with the juice of half a lime and a pinch of salt. Mix the onion and tomatoes with half the {coriander} and the juice of half a lime.",
+      "Add the black beans with {qty 3|tablespoon|tablespoons} of liquid from the {tin|can}. Cook for 5 minutes, crushing about a third of the beans with the back of a spoon, until thick and glossy. Season.",
+      "Toss the red cabbage with the juice of {qty 0.5|lime|limes} and a pinch of salt. Mix the onion and tomatoes with half the {coriander} and the juice of {qty 0.5|lime|limes}.",
       "Mash the avocado with the juice of the remaining lime, the rest of the {coriander}, salt and pepper.",
       "Warm the tortillas in a dry pan. Fill with the beans, avocado, tomato salsa and red cabbage."
     ],
@@ -230,8 +230,8 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Toss the {prawns} with the chipotle paste, paprika, {chilli flakes}, garlic, half the oil and the juice of half a lime. Leave for 10 minutes.",
-      "Mix the cabbage, carrot, {spring onions}, most of the {coriander} and the red {chilli} with the juice of one lime, the {yoghurt}, salt and pepper.",
+      "Toss the {prawns} with the chipotle paste, paprika, {chilli flakes}, garlic, half the oil and the juice of {qty 0.5|lime|limes}. Leave for 10 minutes.",
+      "Mix the cabbage, carrot, {spring onions}, most of the {coriander} and the red {chilli} with the juice of {qty 1|lime|limes}, the {yoghurt}, salt and pepper.",
       "Heat the remaining oil in a large frying pan over a high heat. Fry the {prawns} for 2 to 3 minutes each side until pink and lightly charred.",
       "Warm the tortillas in a dry pan or the microwave.",
       "Fill the tortillas with slaw and {prawns}, then finish with the last of the {coriander} and the remaining lime cut into wedges."
@@ -308,7 +308,7 @@
     "steps": [
       "Heat the oven to {oven 220}. Whisk the chipotle paste, cumin, garlic, oil and a pinch of salt in a large bowl and toss the cauliflower through until coated.",
       "Spread on a large tray and roast for 25 minutes, turning once, until tender with dark crisp edges.",
-      "Mix the {sweetcorn}, onion, juice of one lime and the {coriander} for the salsa. Season with salt and pepper.",
+      "Mix the {sweetcorn}, onion, juice of {qty 1|lime|limes} and the {coriander} for the salsa. Season with salt and pepper.",
       "Mash the avocado with the juice of the remaining lime and a pinch of salt.",
       "Warm the tortillas in the oven for the last 2 minutes. Fill with avocado, cauliflower and {sweetcorn} salsa."
     ],
@@ -389,7 +389,7 @@
     "steps": [
       "Cook the rice in plenty of boiling salted water for 10 to 12 minutes, then drain and keep warm.",
       "Heat the oil in a saucepan and cook the onion and {green pepper} for 8 minutes until soft. Add the garlic, cumin and oregano and stir for 1 minute.",
-      "Add the beans, the liquid from one {tin|can}, {ml 150} of water, the bay leaf and the crumbled {stock cube}. Simmer for 15 minutes, mashing a few beans against the side of the pan to thicken.",
+      "Add the beans, half the reserved bean liquid, {ml 150} of water, the bay leaf and the crumbled {stock cube}. Simmer for 15 minutes, mashing a few beans against the side of the pan to thicken.",
       "Stir in the vinegar, season well and remove the bay leaf.",
       "Serve the beans over the rice with avocado, {spring onions}, {coriander} and wedges of lime."
     ],
@@ -460,9 +460,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Cook the rice in boiling salted water for 10 to 12 minutes. Drain, then stir through the zest of one lime and a squeeze of its juice.",
+      "Cook the rice in boiling salted water for 10 to 12 minutes. Drain, then stir through the zest of {qty 1|lime|limes} and a squeeze of its juice.",
       "Season the fish with cumin, oregano, salt and pepper. Heat {ml 15} of the oil in a large non-stick frying pan and fry the fish for 3 to 4 minutes each side until just cooked and flaking. Move to warm plates.",
-      "Add the remaining oil to the pan with the garlic and cook gently for 1 minute until pale gold. Pour in the juice of the orange and one lime and bubble for 1 minute.",
+      "Add the remaining oil to the pan with the garlic and cook gently for 1 minute until pale gold. Pour in the juice of the orange and {qty 1|lime|limes} and bubble for 1 minute.",
       "Toss the avocado, tomatoes, half the onion and the {coriander} with a pinch of salt.",
       "Spoon the warm mojo over the fish and serve with the lime rice, salad and the remaining onion."
     ],
@@ -498,8 +498,8 @@
     ],
     "steps": [
       "Heat the oven to {oven 220}. Toss the wedges with {ml 20} of the oil, the paprika and a good pinch of salt and roast for 30 to 35 minutes, turning once, until crisp.",
-      "Mix the mayonnaise, ketchup and mustard into a sauce. Season the {mince|ground beef} lightly and shape it into four thin balls.",
-      "Heat a large frying pan until very hot with the remaining oil. Squash each ball flat with a spatula, season, and cook for 2 minutes until crusted. Flip, top two patties with cheddar and cook for 1 minute more.",
+      "Mix the mayonnaise, ketchup and mustard into a sauce. Season the {mince|ground beef} lightly and shape it into {qty 4} thin balls.",
+      "Heat a large frying pan until very hot with the remaining oil. Squash each ball flat with a spatula, season, and cook for 2 minutes until crusted. Flip, top half the patties with cheddar and cook for 1 minute more.",
       "Toast the buns cut-side down in the pan for 30 seconds.",
       "Build the burgers with sauce, lettuce, tomato, onion and two patties each. Serve with the wedges."
     ],
@@ -689,7 +689,7 @@
     ],
     "steps": [
       "Mash the beans in a bowl, leaving some whole for texture. Mix in the oats, onion, garlic, paprika, cumin, {chilli powder}, egg, salt and pepper until it holds together.",
-      "Shape into two fat patties and chill for 10 minutes to firm up.",
+      "Shape into {qty 2} fat patties and chill for 10 minutes to firm up.",
       "Mix the cabbage, carrot, {yoghurt}, lime juice and {coriander} for the slaw and season.",
       "Heat the oil in a non-stick frying pan over a medium heat. Cook the patties for 5 minutes each side until crisp and heated through, turning carefully.",
       "Toast the buns, then build with slaw, avocado and a patty."
@@ -807,9 +807,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Mix the garlic, ginger, half the {chilli}, thyme, cinnamon, sugar, soy sauce, the juice of half a lime and half the oil. Spread over the salmon and leave for 10 minutes.",
+      "Mix the garlic, ginger, half the {chilli}, thyme, cinnamon, sugar, soy sauce, the juice of {qty 0.5|lime|limes} and half the oil. Spread over the salmon and leave for 10 minutes.",
       "Cook the rice in boiling salted water for 10 to 12 minutes, then drain. Stir through the {spring onions}.",
-      "Mix the mango, red onion, {coriander}, the remaining {chilli} and the juice of one lime with a pinch of salt and pepper.",
+      "Mix the mango, red onion, {coriander}, the remaining {chilli} and the juice of {qty 1|lime|limes} with a pinch of salt and pepper.",
       "Heat the remaining oil in a non-stick frying pan over a medium-high heat and cook the salmon skin-side down for 4 minutes, then flip for 2 to 3 minutes until just cooked through and glazed.",
       "Serve the salmon on the rice with the mango salsa and a wedge of the remaining lime."
     ],

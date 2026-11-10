@@ -8,6 +8,13 @@ import type { Ingredient, Recipe } from './domain/types';
 const files = import.meta.glob<Recipe[]>('../catalogue/recipes/*.json', { eager: true, import: 'default' });
 /** British source recipes, placeholders unrendered. */
 export const sourceRecipes = Object.values(files).flat();
+const sourceById = new Map(sourceRecipes.map(r => [r.id, r]));
+
+/** Re-render quantity placeholders from British source, before any unit conversion. */
+export function recipeForPeople(id: string, people: number): Recipe | undefined {
+  const source = sourceById.get(id);
+  return source ? localRecipe(source, catalogue.market.id, terms as Terms, people) : undefined;
+}
 
 const marketFiles = import.meta.glob<MarketFile>('../catalogue/markets/*.json', { eager: true, import: 'default' });
 const byMarket: Partial<Record<Market, MarketFile>> = Object.fromEntries(Object.values(marketFiles).map(f => [f.market, f]));
