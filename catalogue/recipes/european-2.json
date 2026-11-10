@@ -1,12 +1,12 @@
 [
 {
   "id": "coq-au-vin-style-chicken-mushroom-mash",
-  "title": "Coq au vin-style chicken with buttery mash",
-  "blurb": "Browned chicken, bacon and mushrooms braised in a deep, savoury sauce, with a balsamic note standing in for the wine.",
+  "title": "Coq au vin with buttery mash",
+  "blurb": "Chicken, bacon and mushrooms braised in red wine until the sauce is glossy and savoury, with buttery mash.",
   "meal": "dinner",
   "cuisine": "french",
   "protein": "chicken",
-  "time": 45,
+  "time": 50,
   "difficulty": 2,
   "spice": 0,
   "servings": 2,
@@ -23,7 +23,7 @@
     { "id": "tomato-puree", "qty": 15 },
     { "id": "plain-flour", "qty": 10 },
     { "id": "chicken-stock", "qty": 1 },
-    { "id": "balsamic", "qty": 15 },
+    { "id": "red-wine", "qty": 250 },
     { "id": "potato", "qty": 500, "prep": "peeled and chopped" },
     { "id": "butter", "qty": 30 },
     { "id": "milk", "qty": 50 },
@@ -36,8 +36,8 @@
     "Put the potatoes in a pan of well-salted cold water, bring to the boil and simmer for 15–18 minutes until completely tender.",
     "Meanwhile, heat the oil in a deep frying pan over a medium-high heat and brown the chicken for 4–5 minutes per side with a pinch of salt and pepper. Lift it out and set aside.",
     "In the same pan fry the lardons, shallots and carrot for 5 minutes until golden, then add the mushrooms and garlic and cook for 3 minutes more.",
-    "Stir in the {tomato puree} and flour, then add the balsamic, the {stock cube} dissolved in {ml 250} of boiling water, the thyme and the bay leaf, scraping up the sticky bits from the pan.",
-    "Return the chicken, cover and simmer gently for 15–20 minutes, until the chicken is tender and the sauce has thickened. Remove the bay leaf and thyme stalks.",
+    "Stir in the {tomato puree} and flour, then pour in the red wine and let it bubble hard for 3–4 minutes, scraping up the sticky bits from the pan. Add the {stock cube} dissolved in {ml 100} of boiling water, the thyme and the bay leaf.",
+    "Return the chicken, cover and simmer gently for 20–25 minutes, until the chicken is tender and the sauce has thickened. Remove the bay leaf and thyme stalks.",
     "Drain the potatoes, mash with the butter and milk and season well. Serve the chicken over the mash, scattered with the parsley."
   ],
   "source": "MSTRCHF original"
@@ -118,7 +118,7 @@
 {
   "id": "dijon-cream-chicken-leeks-buttered-rice",
   "title": "Chicken in dijon cream with leeks and buttered rice",
-  "blurb": "Golden chicken breast in a silky mustard sauce with soft leeks, spooned over fluffy buttered rice.",
+  "blurb": "Golden chicken breast in a silky mustard and white wine sauce with soft leeks, spooned over fluffy buttered rice.",
   "meal": "dinner",
   "cuisine": "french",
   "protein": "chicken",
@@ -131,6 +131,7 @@
     { "id": "chicken-breast", "qty": 300, "prep": "sliced into thick strips" },
     { "id": "leek", "qty": 2, "prep": "sliced into rounds" },
     { "id": "garlic", "qty": 1, "prep": "crushed" },
+    { "id": "white-wine", "qty": 100 },
     { "id": "dijon", "qty": 20 },
     { "id": "double-cream", "qty": 100 },
     { "id": "chicken-stock", "qty": 1 },
@@ -145,7 +146,7 @@
     "Rinse the rice, then cook in boiling salted water for 10–12 minutes until tender. Drain, return to the pan and stir through half the butter.",
     "Heat the oil in a frying pan over a medium-high heat and cook the chicken for 5–6 minutes until golden. Lift out onto a plate.",
     "Add the remaining butter and the leeks to the pan with a pinch of salt and cook gently for 6–7 minutes until soft. Stir in the garlic for 30 seconds.",
-    "Pour in the {stock cube} dissolved in {ml 100} of boiling water, then whisk in the mustard and cream. Simmer for 3 minutes until slightly thickened.",
+    "Pour in the wine and bubble for 2 minutes until almost gone. Add the {stock cube} dissolved in {ml 80} of boiling water, then whisk in the mustard and cream. Simmer for 3 minutes until slightly thickened.",
     "Return the chicken and any juices to the pan and simmer for 3 minutes until cooked through. Season with pepper and serve over the rice with the parsley."
   ],
   "source": "MSTRCHF original"
@@ -298,7 +299,7 @@
 {
   "id": "fish-en-papillote-fennel-tomato-baby-potatoes",
   "title": "Fish en papillote with fennel, lemon and baby potatoes",
-  "blurb": "White fish steamed in a paper parcel with fennel, tomatoes and capers, so everything stays juicy and fragrant.",
+  "blurb": "White fish steamed in a paper parcel with fennel, tomatoes, capers and a splash of white wine, so everything stays juicy.",
   "meal": "dinner",
   "cuisine": "french",
   "protein": "fish",
@@ -313,6 +314,7 @@
     { "id": "cherry-tomato", "qty": 150, "prep": "halved" },
     { "id": "lemon", "qty": 1, "prep": "half sliced, half juiced" },
     { "id": "capers", "qty": 15 },
+    { "id": "white-wine", "qty": 60 },
     { "id": "baby-potato", "qty": 300, "prep": "halved" },
     { "id": "butter", "qty": 20 },
     { "id": "parsley", "qty": 10, "prep": "chopped" },
@@ -323,7 +325,7 @@
   "steps": [
     "Heat the oven to {oven 200}. Boil the potatoes in salted water for 12–15 minutes until tender, then drain and toss with the parsley and half the butter.",
     "Toss the fennel with the oil and a pinch of salt, and divide between two large squares of baking parchment, piling it in the middle. Add the tomatoes and capers.",
-    "Season the fish and lay a fillet on each pile. Top with the lemon slices, a share of the remaining butter, and a squeeze of the lemon juice.",
+    "Season the fish and lay a fillet on each pile. Top with the lemon slices, a share of the remaining butter, a squeeze of the lemon juice and {ml 30} of white wine for each parcel.",
     "Fold the paper over and crimp the edges tightly to seal into parcels. Set on a baking tray.",
     "Bake for 15–18 minutes until the parcels are puffed. Open carefully at the table, as the steam is hot, and serve with the potatoes."
   ],
@@ -877,8 +879,8 @@
 },
 {
   "id": "mushroom-toad-in-the-hole-style-onion-gravy",
-  "title": "Mushroom toad in the hole-style with onion gravy",
-  "blurb": "Big roasted mushrooms in a tall, crisp Yorkshire batter with sticky onion gravy and peas.",
+  "title": "Mushroom toad in the hole-style with sage onion gravy",
+  "blurb": "Big roasted mushrooms in a tall, crisp Yorkshire batter with sticky sage onion gravy and peas.",
   "meal": "dinner",
   "cuisine": "british",
   "protein": "veg",
@@ -893,7 +895,7 @@
     { "id": "milk", "qty": 150 },
     { "id": "mushroom", "qty": 300, "prep": "large, left whole or halved" },
     { "id": "onion", "qty": 2, "prep": "sliced" },
-    { "id": "thyme", "qty": 4 },
+    { "id": "sage", "qty": 6, "prep": "leaves finely chopped" },
     { "id": "veg-stock", "qty": 1 },
     { "id": "balsamic", "qty": 10 },
     { "id": "butter", "qty": 15 },
@@ -903,10 +905,10 @@
     { "id": "black-pepper", "qty": 1 }
   ],
   "steps": [
-    "Heat the oven to {oven 220}. Whisk {g 120} of the flour with the eggs, milk, a pinch of salt and pepper until smooth, then leave to stand while the oven heats.",
-    "Pour the oil into a metal roasting tin or ovenproof dish, add the mushrooms and thyme, and roast for 10 minutes until the tin is smoking hot.",
+    "Heat the oven to {oven 220}. Whisk {g 120} of the flour with the eggs, milk, half the sage, a pinch of salt and pepper until smooth, then leave to stand while the oven heats.",
+    "Pour the oil into a metal roasting tin or ovenproof dish, add the mushrooms, and roast for 10 minutes until the tin is smoking hot.",
     "Pour the batter quickly into the sizzling tin around the mushrooms and return it to the oven straight away. Bake for 25–30 minutes without opening the door, until the batter is puffed, deep golden and crisp.",
-    "Meanwhile, melt the butter in a pan and cook the onions with a pinch of salt for 12–15 minutes until soft and golden. Stir in the remaining flour for 1 minute, then add the balsamic and the {stock cube} dissolved in {ml 300} of boiling water. Simmer for 5 minutes until glossy.",
+    "Meanwhile, melt the butter in a pan and cook the onions with a pinch of salt for 12–15 minutes until soft and golden, adding the rest of the sage for the last 2 minutes. Stir in the remaining flour for 1 minute, then add the balsamic and the {stock cube} dissolved in {ml 300} of boiling water. Simmer for 5 minutes until glossy.",
     "Boil the peas for 3 minutes and drain. Serve the toad in the hole cut into wedges with the gravy and peas."
   ],
   "source": "MSTRCHF original"

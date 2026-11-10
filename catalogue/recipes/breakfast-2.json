@@ -575,7 +575,7 @@
   {
     "id": "couscous-upma-style-vegetable-breakfast",
     "title": "Upma-style couscous with veg and cashews",
-    "blurb": "Fluffy savoury couscous cooked the South Indian upma way, with mustard seeds, ginger, peas and cashews.",
+    "blurb": "Fluffy savoury couscous cooked the South Indian upma way, with mustard seeds, curry leaves, ginger, peas and cashews.",
     "meal": "breakfast",
     "cuisine": "indian",
     "protein": "veg",
@@ -588,6 +588,7 @@
       { "id": "couscous", "qty": 130 },
       { "id": "vegetable-oil", "qty": 15 },
       { "id": "mustard-seeds", "qty": 2.5 },
+      { "id": "curry-leaves", "qty": 2 },
       { "id": "onion", "qty": 1, "prep": "finely chopped" },
       { "id": "green-chilli", "qty": 1, "prep": "finely chopped" },
       { "id": "ginger", "qty": 10, "prep": "grated" },
@@ -600,7 +601,7 @@
     ],
     "steps": [
       "Toast the couscous in a dry pan over a medium heat for 2 minutes until it smells nutty, then tip it into a bowl.",
-      "Heat the oil in the pan over a medium heat. Add the mustard seeds and the cashews and cook for 1 minute, until the seeds pop and the cashews turn golden.",
+      "Heat the oil in the pan over a medium heat. Add the mustard seeds, curry leaves and cashews and cook for 1 minute, until the seeds pop, the leaves crackle and the cashews turn golden.",
       "Add the onion, {chilli}, ginger and carrot and cook for 5–6 minutes until the onion is soft and the carrot is just tender.",
       "Add the peas and {ml 260} of boiling water with the salt. Return the couscous to the pan, stir once, cover and take off the heat for 5 minutes.",
       "Fluff with a fork, squeeze over lemon juice to taste and finish with the {coriander}."

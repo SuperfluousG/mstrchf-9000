@@ -120,7 +120,7 @@
 {
   "id": "sambar-style-lentil-vegetable-stew-rice",
   "title": "Sambar-style lentil and vegetable stew with rice",
-  "blurb": "A tangy South Indian lentil stew of {aubergine}, carrot and tomato, lifted with tamarind and mustard seeds.",
+  "blurb": "A tangy South Indian lentil stew of {aubergine}, carrot and tomato, lifted with tamarind, mustard seeds and curry leaves.",
   "meal": "dinner",
   "cuisine": "indian",
   "protein": "lentils",
@@ -139,6 +139,7 @@
     { "id": "green-chilli", "qty": 1, "prep": "slit lengthways" },
     { "id": "tamarind-paste", "qty": 15 },
     { "id": "mustard-seeds", "qty": 5 },
+    { "id": "curry-leaves", "qty": 3 },
     { "id": "ground-coriander", "qty": 5 },
     { "id": "ground-cumin", "qty": 2.5 },
     { "id": "turmeric", "qty": 2.5 },
@@ -153,7 +154,7 @@
     "Add the {aubergine}, tomatoes, ground coriander, cumin, {chilli powder}, green {chilli} and salt. Simmer for 15 minutes until the vegetables are soft and the lentils have broken down into a loose stew.",
     "Meanwhile, cook the rice in boiling salted water for 10–12 minutes, then drain.",
     "Stir the tamarind into the stew and taste; it should be gently sour and savoury, so add a little more salt if it needs it.",
-    "In a small pan, heat the oil until hot and add the mustard seeds. When they pop, add the onion and garlic and fry for 4–5 minutes until golden.",
+    "In a small pan, heat the oil until hot and add the mustard seeds. When they pop, add the curry leaves (stand back, they spit) and fry for 10 seconds, then add the onion and garlic and fry for 4–5 minutes until golden.",
     "Tip the sizzling tarka over the stew, stir through half the {coriander} and serve with the rice and the rest of the {coriander}."
   ],
   "source": "MSTRCHF original"
@@ -161,7 +162,7 @@
 {
   "id": "kerala-style-coconut-fish-curry-rice",
   "title": "Kerala-style coconut fish curry with rice",
-  "blurb": "White fish poached in a sour, gently hot coconut sauce with mustard seeds and tamarind.",
+  "blurb": "White fish poached in a sour, gently hot coconut sauce with mustard seeds, curry leaves and tamarind.",
   "meal": "dinner",
   "cuisine": "indian",
   "protein": "fish",
@@ -179,6 +180,7 @@
     { "id": "green-chilli", "qty": 2, "prep": "slit lengthways" },
     { "id": "tomato", "qty": 1, "prep": "chopped" },
     { "id": "mustard-seeds", "qty": 5 },
+    { "id": "curry-leaves", "qty": 3 },
     { "id": "turmeric", "qty": 2.5 },
     { "id": "ground-coriander", "qty": 5 },
     { "id": "chilli-powder", "qty": 2.5 },
@@ -190,7 +192,7 @@
   ],
   "steps": [
     "Cook the rice in boiling salted water for 10–12 minutes, then drain and keep covered.",
-    "Heat the oil in a wide pan over a medium heat and add the mustard seeds. When they start to pop, add the onion and fry for 6 minutes until soft.",
+    "Heat the oil in a wide pan over a medium heat and add the mustard seeds. When they start to pop, add the curry leaves (stand back, they spit) for 10 seconds, then the onion, and fry for 6 minutes until soft.",
     "Stir in the garlic, ginger and green {chilli} for 1 minute, then the turmeric, ground coriander and {chilli powder} for 30 seconds.",
     "Add the tomato, coconut milk, tamarind and a good pinch of salt. Simmer gently for 6–8 minutes until the tomato has softened into the sauce.",
     "Slide in the fish, spoon the sauce over and cook gently for 5–6 minutes until it flakes. Try not to stir too much, or the fish will break up.",
@@ -201,7 +203,7 @@
 {
   "id": "lemon-rice-cashew-mustard-seed-peas",
   "title": "South Indian lemon rice with cashews and peas",
-  "blurb": "Fragrant, sunny rice with crackling mustard seeds, toasted cashews and a sharp lemon hit.",
+  "blurb": "Fragrant, sunny rice with crackling mustard seeds, curry leaves, toasted cashews and a sharp lemon hit.",
   "meal": "dinner",
   "cuisine": "indian",
   "protein": "veg",
@@ -214,6 +216,7 @@
     { "id": "basmati-rice", "qty": 150 },
     { "id": "cashews", "qty": 40 },
     { "id": "mustard-seeds", "qty": 5 },
+    { "id": "curry-leaves", "qty": 3 },
     { "id": "turmeric", "qty": 2.5 },
     { "id": "green-chilli", "qty": 1, "prep": "finely chopped" },
     { "id": "ginger", "qty": 10, "prep": "finely grated" },
@@ -226,7 +229,7 @@
   "steps": [
     "Rinse the rice, then cook it in plenty of boiling salted water for 10–12 minutes. Add the peas for the last 2 minutes, then drain well and spread out on a plate so it stays fluffy.",
     "Heat the oil in a large frying pan over a medium heat. Add the cashews and fry for 1–2 minutes until golden, then lift them out with a slotted spoon.",
-    "In the same oil, add the mustard seeds and cover loosely until they stop popping, about 30 seconds.",
+    "In the same oil, add the mustard seeds and cover loosely until they stop popping, about 30 seconds. Add the curry leaves for 10 seconds until crisp.",
     "Stir in the green {chilli}, ginger and turmeric for 30 seconds, then tip in the rice and peas and toss until every grain is yellow.",
     "Take off the heat. Add the zest of 1 lemon and the juice of both, the cashews and half the {coriander}, and season to taste.",
     "Serve scattered with the rest of the {coriander}."

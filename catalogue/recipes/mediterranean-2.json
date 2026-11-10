@@ -55,10 +55,10 @@
       { "id": "red-pepper", "qty": 1, "prep": "cut into chunks" },
       { "id": "mushroom", "qty": 120, "prep": "quartered" },
       { "id": "garlic", "qty": 3, "prep": "sliced" },
+      { "id": "red-wine", "qty": 100 },
       { "id": "chopped-tomatoes", "qty": 400 },
       { "id": "olives", "qty": 40, "prep": "halved" },
       { "id": "rosemary", "qty": 3, "prep": "leaves chopped" },
-      { "id": "balsamic", "qty": 15 },
       { "id": "parsley", "qty": 10, "prep": "roughly chopped" },
       { "id": "olive-oil", "qty": 30 },
       { "id": "salt", "qty": 2 },
@@ -67,7 +67,7 @@
     "steps": [
       "Season the chicken with salt and pepper. Heat half the oil in a wide, deep pan over a medium-high heat and brown the chicken for 3-4 minutes a side. Lift out onto a plate.",
       "Add the remaining oil with the onion, {red pepper} and mushrooms and fry for 6 minutes until the mushrooms have lost their water and everything is golden at the edges.",
-      "Stir in the garlic and rosemary for 30 seconds, then pour in the balsamic, let it bubble for a few seconds and add the chopped tomatoes and olives with half a tomato {tin|can} of water.",
+      "Stir in the garlic and rosemary for 30 seconds, then pour in the red wine and let it bubble for 2–3 minutes until reduced by half. Add the chopped tomatoes and olives with half a tomato {tin|can} of water.",
       "Return the chicken and any juices to the pan, cover and simmer gently for 20-25 minutes, turning once, until the chicken is tender and the sauce is thick.",
       "Meanwhile, boil the penne in well-salted water for 10-11 minutes until al dente, then drain.",
       "Taste the sauce for seasoning, scatter with parsley and serve over the penne."
@@ -233,6 +233,7 @@
       { "id": "arborio-rice", "qty": 160 },
       { "id": "shallot", "qty": 1, "prep": "finely chopped" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
+      { "id": "white-wine", "qty": 100 },
       { "id": "courgette", "qty": 1, "prep": "diced" },
       { "id": "asparagus", "qty": 120, "prep": "woody ends snapped off, cut into {cm 3} pieces" },
       { "id": "frozen-peas", "qty": 100 },
@@ -248,6 +249,7 @@
     "steps": [
       "Dissolve the {stock cubes} in {ml 900} of boiling water and keep it hot in a pan on the back of the hob.",
       "Heat the oil in a wide, heavy pan over a medium heat. Cook the shallot and {courgette} with a pinch of salt for 5 minutes until soft, then stir in the garlic and rice and toast for 1-2 minutes until the grains look glassy.",
+      "Pour in the white wine and stir until it has almost all been absorbed, about 2 minutes.",
       "Add the stock a ladleful at a time, stirring often and letting each addition absorb before adding the next. After 10 minutes, add the asparagus.",
       "Keep adding stock for another 6-8 minutes until the rice is tender with a little bite, adding the peas for the final 3 minutes. You may not need all the stock.",
       "Take off the heat and beat in the butter, parmesan, lemon zest and a squeeze of juice. Cover for 2 minutes, then loosen with a splash of stock so it flows slowly across the plate.",
@@ -290,8 +292,8 @@
   },
   {
     "id": "chicken-saltimbocca-style-lemon-thyme",
-    "title": "Chicken saltimbocca-style with ham and thyme",
-    "blurb": "Thin chicken escalopes wrapped in ham and crisped in butter, with a lemony pan sauce and buttery potatoes.",
+    "title": "Chicken saltimbocca with sage, ham and lemon",
+    "blurb": "Thin chicken escalopes wrapped in ham and sage, crisped in butter, with a lemon and white wine pan sauce and buttery potatoes.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "chicken",
@@ -303,11 +305,12 @@
     "ingredients": [
       { "id": "chicken-breast", "qty": 300, "prep": "2 breasts, sliced in half horizontally and flattened" },
       { "id": "ham", "qty": 60, "prep": "about 4 thin slices" },
-      { "id": "thyme", "qty": 4, "prep": "leaves picked" },
+      { "id": "sage", "qty": 5, "prep": "8 leaves" },
       { "id": "plain-flour", "qty": 15 },
       { "id": "baby-potato", "qty": 450, "prep": "halved" },
       { "id": "green-beans", "qty": 150, "prep": "trimmed" },
       { "id": "lemon", "qty": 1 },
+      { "id": "white-wine", "qty": 60 },
       { "id": "butter", "qty": 25 },
       { "id": "olive-oil", "qty": 20 },
       { "id": "salt", "qty": 2 },
@@ -315,17 +318,17 @@
     ],
     "steps": [
       "Put the potatoes in a pan of well-salted cold water, bring to the boil and simmer for 12 minutes, adding the green beans for the final 4 minutes. Drain well.",
-      "Season the chicken with salt and pepper. Press the thyme leaves onto each piece, then lay a slice of ham over it, pressing so it sticks. Dust very lightly with flour.",
+      "Season the chicken with salt and pepper. Press 2 sage leaves onto each piece, then lay a slice of ham over them, pressing so it sticks. Dust very lightly with flour.",
       "Heat the oil in a large frying pan over a medium-high heat. Fry the chicken ham-side down for 3 minutes until the ham is crisp, flip and cook for 2-3 minutes more until cooked through. Move to a plate and keep warm.",
       "Add the butter to the pan with the potatoes and cook for 4-5 minutes until golden at the edges. Tip the potatoes and beans into a bowl.",
-      "Pour {ml 60} of water and the juice of half the lemon into the pan, scraping up the bits, and bubble for 1 minute to make a quick sauce. Spoon over the chicken and serve with the potatoes, beans and a wedge of the remaining lemon."
+      "Pour the wine and the juice of half the lemon into the pan, scraping up the bits, and bubble for 2 minutes until reduced by half. Add {ml 40} of water and bubble for 1 minute more. Spoon over the chicken and serve with the potatoes, beans and a wedge of the remaining lemon."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "gnocchi-brown-butter-squash-thyme",
-    "title": "Gnocchi with brown butter, squash and walnuts",
-    "blurb": "Pan-crisped gnocchi and roasted butternut in nutty brown butter, scattered with walnuts and parmesan.",
+    "title": "Gnocchi with sage brown butter, squash and walnuts",
+    "blurb": "Pan-crisped gnocchi and roasted butternut in nutty sage brown butter, scattered with walnuts and parmesan.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "veg",
@@ -339,7 +342,7 @@
       { "id": "butternut-squash", "qty": 350, "prep": "peeled and cut into {cm 2} cubes" },
       { "id": "butter", "qty": 40 },
       { "id": "garlic", "qty": 2, "prep": "sliced" },
-      { "id": "thyme", "qty": 4, "prep": "leaves picked" },
+      { "id": "sage", "qty": 6, "prep": "leaves picked" },
       { "id": "walnuts", "qty": 25, "prep": "roughly chopped" },
       { "id": "spinach", "qty": 80 },
       { "id": "parmesan", "qty": 20, "prep": "finely grated" },
@@ -348,11 +351,11 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to {oven 220}. Toss the squash on a tray with the oil, half the thyme and a good pinch of salt and pepper. Roast for 25 minutes, turning once, until soft and caramelised at the edges.",
+      "Heat the oven to {oven 220}. Toss the squash on a tray with the oil and a good pinch of salt and pepper. Roast for 25 minutes, turning once, until soft and caramelised at the edges.",
       "Bring a pan of salted water to the boil. Cook the gnocchi for 2-3 minutes until they float, then drain well.",
-      "Melt the butter in a large frying pan over a medium heat. Once it foams and smells nutty, after about 3 minutes, add the gnocchi and fry for 4-5 minutes, turning, until golden and crisp in places.",
-      "Add the garlic, walnuts and remaining thyme for 1 minute, then fold in the spinach until just wilted.",
-      "Gently stir through the roasted squash, check the seasoning and serve scattered with parmesan."
+      "Melt the butter in a large frying pan over a medium heat. Once it foams and smells nutty, after about 3 minutes, add the sage leaves and fry for 30 seconds until crisp, then lift them out. Add the gnocchi and fry for 4-5 minutes, turning, until golden and crisp in places.",
+      "Add the garlic and walnuts for 1 minute, then fold in the spinach until just wilted.",
+      "Gently stir through the roasted squash, check the seasoning and serve scattered with the crisp sage and the parmesan."
     ],
     "source": "MSTRCHF original"
   },
@@ -504,7 +507,7 @@
   {
     "id": "prawn-saganaki-feta-tomato",
     "title": "{Prawn} saganaki with feta and warm {pittas}",
-    "blurb": "Juicy {prawns} simmered in a garlicky tomato sauce, topped with melting feta and mopped up with warm {pittas}.",
+    "blurb": "Juicy {prawns} simmered in a garlicky tomato and white wine sauce, topped with melting feta and mopped up with warm {pittas}.",
     "meal": "dinner",
     "cuisine": "greek",
     "protein": "prawns",
@@ -520,6 +523,7 @@
       { "id": "garlic", "qty": 3, "prep": "sliced" },
       { "id": "red-chilli", "qty": 1, "prep": "finely sliced" },
       { "id": "oregano", "qty": 2 },
+      { "id": "white-wine", "qty": 60 },
       { "id": "lemon", "qty": 1 },
       { "id": "feta", "qty": 80, "prep": "crumbled" },
       { "id": "parsley", "qty": 10, "prep": "roughly chopped" },
@@ -530,7 +534,7 @@
     ],
     "steps": [
       "Heat the oil in a deep frying pan over a medium heat. Cook the onion with a pinch of salt for 5 minutes until soft, then add the garlic, {chilli} and oregano for 1 minute.",
-      "Pour in the chopped tomatoes and the juice of half the lemon. Simmer for 8-10 minutes until the sauce is thick and glossy, seasoning with salt and pepper.",
+      "Pour in the white wine and let it bubble for 1-2 minutes, then add the chopped tomatoes and the juice of half the lemon. Simmer for 8-10 minutes until the sauce is thick and glossy, seasoning with salt and pepper.",
       "Stir in the {prawns} and cook for 3-4 minutes, turning once, until pink and just cooked through.",
       "Scatter the feta over the top, cover with a lid or a baking tray for 2 minutes until it softens, or finish under a hot {grill|broiler} for 2 minutes until lightly golden.",
       "Warm the {pittas} in a dry pan or the toaster. Scatter the parsley over the saganaki and serve with the {pittas} and lemon wedges."

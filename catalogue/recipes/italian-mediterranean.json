@@ -38,7 +38,7 @@
   {
     "id": "beef-mushroom-ragu-rigatoni",
     "title": "Beef and mushroom ragu rigatoni",
-    "blurb": "A slow-feeling beef ragu bulked out with {chestnut mushrooms} and carrot, spooned over big tubes of rigatoni.",
+    "blurb": "A slow-feeling beef ragu with red wine, {chestnut mushrooms} and carrot, spooned over big tubes of rigatoni.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "beef",
@@ -54,6 +54,7 @@
       { "id": "carrot", "qty": 1, "prep": "grated" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
       { "id": "tomato-puree", "qty": 15 },
+      { "id": "red-wine", "qty": 100 },
       { "id": "chopped-tomatoes", "qty": 400 },
       { "id": "beef-stock", "qty": 1 },
       { "id": "oregano", "qty": 1 },
@@ -66,8 +67,8 @@
     "steps": [
       "Heat the oil in a large pan over a high heat and brown the {mince|ground beef} for 5-6 minutes, breaking it up well. Tip it into a bowl, leaving a spoonful of fat behind.",
       "Lower the heat to medium and cook the onion, carrot and mushrooms for 8-10 minutes until the mushroom moisture has cooked away and everything is soft.",
-      "Stir in the garlic, {tomato puree} and oregano for a minute, then return the beef to the pan.",
-      "Add the chopped tomatoes and the {stock cube} crumbled into {ml 150} of hot water. Season, then simmer gently for 20 minutes until rich and thick.",
+      "Stir in the garlic, {tomato puree} and oregano for a minute, then pour in the red wine and let it bubble for 3 minutes until reduced by half. Return the beef to the pan.",
+      "Add the chopped tomatoes and the {stock cube} crumbled into {ml 100} of hot water. Season, then simmer gently for 20 minutes until rich and thick.",
       "Boil the rigatoni in well-salted water for 11-12 minutes until tender, saving a splash of cooking water before draining.",
       "Toss the pasta through the ragu, loosening with the reserved water, and serve with the parmesan and plenty of black pepper."
     ],
@@ -91,6 +92,7 @@
       { "id": "spinach", "qty": 80 },
       { "id": "onion", "qty": 1, "prep": "finely diced" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
+      { "id": "white-wine", "qty": 100 },
       { "id": "veg-stock", "qty": 2 },
       { "id": "butter", "qty": 20 },
       { "id": "parmesan", "qty": 40, "prep": "finely grated" },
@@ -103,7 +105,7 @@
     "steps": [
       "Dissolve the {stock cubes} in {ml 750} of boiling water and keep it hot in a pan on a low heat.",
       "Heat the oil in a wide pan over a high heat and fry the mushrooms for 6-7 minutes without crowding until deep golden. Season, then scoop them out onto a plate.",
-      "Lower the heat, add half the butter and the onion, and cook for 5 minutes until soft. Add the garlic, thyme and rice and stir for 1 minute until the grains turn glossy.",
+      "Lower the heat, add half the butter and the onion, and cook for 5 minutes until soft. Add the garlic, thyme and rice and stir for 1 minute until the grains turn glossy, then pour in the white wine and stir until it has almost all been absorbed.",
       "Add the hot stock a ladleful at a time, stirring often and letting each addition mostly absorb before the next. This takes about 18-20 minutes, and the rice should be creamy with a little bite.",
       "Fold in the spinach, mushrooms, remaining butter and most of the parmesan. Add a squeeze of lemon juice and a little zest, then rest the pan off the heat for 2 minutes.",
       "Serve in warm bowls with the last of the parmesan and black pepper."

@@ -193,8 +193,8 @@
   },
   {
     "id": "buffalo-cauliflower-wedges-ranch-dip",
-    "title": "Buffalo cauliflower with wedges and ranch dip",
-    "blurb": "Crisp-battered cauliflower tossed in hot, buttery buffalo sauce with a cooling sour cream and chive dip.",
+    "title": "Buffalo cauliflower with wedges and blue cheese dip",
+    "blurb": "Crisp-battered cauliflower tossed in hot, buttery buffalo sauce with a cooling sour cream and blue cheese dip.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "veg",
@@ -212,6 +212,7 @@
       { "id": "potato", "qty": 450, "prep": "cut into wedges" },
       { "id": "vegetable-oil", "qty": 30 },
       { "id": "sour-cream", "qty": 80 },
+      { "id": "blue-cheese", "qty": 50, "prep": "crumbled" },
       { "id": "chives", "qty": 5, "prep": "snipped" },
       { "id": "garlic", "qty": 1, "prep": "grated" },
       { "id": "lemon", "qty": 1 },
@@ -223,7 +224,7 @@
     "steps": [
       "Heat the oven to {oven 220}. Toss the potato wedges with half the oil, a good pinch of salt and the pepper on a large tray and roast for 15 minutes.",
       "Whisk the flour, paprika, {ml 60} of water and a pinch of salt into a thick batter. Coat the cauliflower in it, then add to a second oiled tray with the remaining oil, turn the wedges, and roast both for 25 minutes until the cauliflower is crisp and golden.",
-      "Meanwhile, stir the sour cream with the chives, garlic, a squeeze of lemon juice and a pinch of salt for the dip. Cut the rest of the lemon into wedges.",
+      "Meanwhile, mash the blue cheese into the sour cream with the chives, garlic, a squeeze of lemon juice and a pinch of salt for the dip. Cut the rest of the lemon into wedges.",
       "Melt the butter in a large bowl in the oven for a minute or in a small pan, then stir in the hot sauce. Toss the hot cauliflower through it until glossy.",
       "Serve the cauliflower with the wedges, celery and carrot sticks and the dip alongside."
     ],
@@ -380,8 +381,8 @@
   },
   {
     "id": "smoky-bean-vegetable-gumbo-style-stew",
-    "title": "Smoky bean and vegetable gumbo-style stew",
-    "blurb": "A dark, spicy roux-based stew of beans, peppers and celery over fluffy rice, in the spirit of Louisiana gumbo.",
+    "title": "Smoky bean and okra gumbo with rice",
+    "blurb": "A dark roux gumbo of beans, okra, peppers and celery, spiced with Cajun seasoning and ladled over fluffy rice.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "beans",
@@ -402,7 +403,7 @@
       { "id": "dried-thyme", "qty": 1 },
       { "id": "chopped-tomatoes", "qty": 200 },
       { "id": "kidney-beans", "qty": 1, "prep": "drained and rinsed" },
-      { "id": "green-beans", "qty": 100, "prep": "trimmed and halved" },
+      { "id": "okra", "qty": 150, "prep": "sliced into {cm 1} rounds" },
       { "id": "veg-stock", "qty": 1 },
       { "id": "bay-leaf", "qty": 1 },
       { "id": "basmati-rice", "qty": 150 },
@@ -417,7 +418,7 @@
       "Add the onion, celery and {green pepper} straight into the roux and cook for 6 minutes, stirring, until softened. Stir in the garlic, Cajun spice, smoked paprika and thyme for 1 minute.",
       "Add the tomatoes, kidney beans, crumbled {stock cube}, bay leaf and {ml 500} of water, stirring well to dissolve the roux. Simmer, partly covered, for 20 minutes.",
       "Meanwhile, cook the rice in boiling salted water for 11–12 minutes until tender, then drain.",
-      "Stir the green beans into the stew for the last 6 minutes. Season, remove the bay leaf and spoon over the rice, topped with {spring onions}, parsley and the hot sauce."
+      "Stir the okra into the gumbo for the last 10 minutes, so it softens and thickens the stew. Season, remove the bay leaf and spoon over the rice, topped with {spring onions}, parsley and the hot sauce."
     ],
     "source": "MSTRCHF original"
   },
@@ -460,8 +461,8 @@
   },
   {
     "id": "chicken-bacon-avocado-cobb-style-salad",
-    "title": "Chicken, bacon and avocado Cobb-style salad",
-    "blurb": "Rows of chicken, crisp bacon, egg, avocado and tomato over crisp lettuce with a sharp mustard vinaigrette.",
+    "title": "Chicken, bacon and avocado Cobb salad",
+    "blurb": "Rows of chicken, crisp bacon, egg, avocado, tomato and blue cheese over crisp lettuce with a sharp mustard vinaigrette.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "chicken",
@@ -478,7 +479,7 @@
       { "id": "cherry-tomato", "qty": 120, "prep": "halved" },
       { "id": "little-gem", "qty": 2, "prep": "roughly chopped" },
       { "id": "mixed-leaves", "qty": 60 },
-      { "id": "feta", "qty": 50, "prep": "crumbled" },
+      { "id": "blue-cheese", "qty": 50, "prep": "crumbled" },
       { "id": "chives", "qty": 5, "prep": "snipped" },
       { "id": "red-wine-vinegar", "qty": 15 },
       { "id": "dijon", "qty": 5 },
@@ -491,7 +492,7 @@
       "Meanwhile, rub the chicken with 1 tablespoon of the oil, salt and pepper. Cook in a hot frying pan for 6–7 minutes per side until golden and cooked through, then rest for 5 minutes and slice.",
       "Fry the bacon in a separate pan over medium heat for 6–8 minutes until crisp, drain on {kitchen paper} and crumble.",
       "Whisk the vinegar and Dijon with the remaining oil and a pinch of salt and pepper to make the dressing.",
-      "Spread the lettuce and leaves over two plates and arrange the chicken, bacon, egg, avocado, tomatoes and feta in rows. Drizzle with the dressing and scatter over the chives."
+      "Spread the lettuce and leaves over two plates and arrange the chicken, bacon, egg, avocado, tomatoes and blue cheese in rows. Drizzle with the dressing and scatter over the chives."
     ],
     "source": "MSTRCHF original"
   },
@@ -760,18 +761,18 @@
   },
   {
     "id": "quebec-style-lentil-and-ham-soup",
-    "title": "Québec-style lentil and ham soup",
-    "blurb": "A thick, comforting soup in the manner of soupe aux pois, made with red lentils and smoky ham.",
+    "title": "Québec split pea and ham soup",
+    "blurb": "A thick, comforting soupe aux pois of yellow split peas and smoky ham, simmered until it falls apart.",
     "meal": "dinner",
     "cuisine": "canadian",
     "protein": "pork",
-    "time": 45,
+    "time": 70,
     "difficulty": 1,
     "spice": 0,
     "servings": 2,
-    "tags": ["one-pot", "batch-friendly", "budget", "hearty"],
+    "tags": ["comfort", "one-pot", "batch-friendly", "budget", "hearty"],
     "ingredients": [
-      { "id": "red-lentils", "qty": 150, "prep": "rinsed" },
+      { "id": "yellow-split-peas", "qty": 180, "prep": "rinsed" },
       { "id": "ham", "qty": 150, "prep": "diced" },
       { "id": "onion", "qty": 1, "prep": "diced" },
       { "id": "carrot", "qty": 2, "prep": "diced" },
@@ -786,9 +787,9 @@
     ],
     "steps": [
       "Melt the butter in a large pan over medium heat and cook the onion, carrot and celery for 8 minutes until softened. Add the garlic and thyme for 1 minute.",
-      "Add the lentils, bay leaf, crumbled {stock cube}, pepper and {ml 800} of water. Bring to the boil, then simmer for 20–25 minutes, stirring now and then, until the lentils have broken down and the soup is thick.",
+      "Add the split peas, bay leaf, crumbled {stock cube}, pepper and {ml 1200} of water. Bring to the boil, skimming off any foam, then simmer gently for 45–50 minutes, stirring now and then, until the peas have collapsed and the soup is thick.",
       "Stir in the ham and simmer for 5 minutes. Remove the bay leaf, add water if you want it thinner, and season with pepper, tasting before adding any salt as the ham is salty.",
-      "Ladle into bowls and serve with the toast for dunking."
+      "Ladle into bowls and serve with the toasted bread for dunking."
     ],
     "source": "MSTRCHF original"
   },
