@@ -8,6 +8,7 @@ Supersedes the September–October guidance (Codex Sites delivery, `loop/001/` r
 
 ## Working rules
 
+- The repo is https://github.com/SuperfluousG/mstrchf-9000 (private, owned by the `SuperfluousG` account). `main` is the default branch. Make changes on a branch and merge them through a pull request, so CI (`.github/workflows/ci.yml`: validate, build, test) runs first. Branch protection is off because the free plan doesn't offer it for private repos, so this is a convention, not enforced.
 - Keep it simple: TypeScript + React + Vite, no native/Rust/WASM layer. The only server is the dev server's `/api/kitchen` file store (`server/kitchenFile.ts`).
 - The same build runs as a Claude artifact (`npm run plugin`). Inside an artifact: plain `#name` hashes only, no direct downloads (use `src/platform.ts`), no `confirm()`, and the kitchen lives in the viewer's private `data/users/<id>/kitchen` document.
 - Gregg's own planner artifact is https://claude.ai/artifact/65ZQJqG6jJTgia2XFXPw4a. Republish it with the Artifact tool from `plugin/skills/mstrchf-planner/app/index.html` (root that folder, files from `files.json`, capabilities `db`, `user`, `downloads`). Never add `db` rules that open `data/users`.
