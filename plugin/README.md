@@ -16,23 +16,24 @@ A meal planner tuned to your taste, and the skills that do the shopping and the 
 2. In Claude, go to **Customize → Plugins → Add → Upload plugin** and choose the file.
 3. Start a new chat and say: "Set up MSTRCHF 9000 for me." Claude publishes your own copy of the planner as an artifact and opens it. Your kitchen is saved to your Claude account and is private to you.
 
-If **Upload plugin** isn't there, your plan or your organisation's settings don't allow custom plugins.
+If **Upload plugin** isn't there, your organisation's settings don't allow custom plugins.
+
+You can also install from GitHub instead of downloading the file: go to **Customize → Plugins → Add → Add marketplace**, enter `SuperfluousG/mstrchf-9000-claude`, then install MSTRCHF 9000 from it.
 
 **Claude Code**
 
-Unzip the `.plugin` file into a folder named `mstrchf-9000`, then run:
-
 ```
-claude plugin marketplace add ./mstrchf-9000
+claude plugin marketplace add SuperfluousG/mstrchf-9000-claude
 claude plugin install mstrchf-9000@mstrchf-9000
 ```
 
 **Updating**
 
-Upload the new `.plugin` file the same way, then say: "Update my MSTRCHF 9000 planner." Claude updates your planner in place at the same link. Your kitchen is not affected.
+Install the new version the same way, then say: "Update my MSTRCHF 9000 planner." Claude updates your planner in place at the same link. Your kitchen is not affected.
 
 ## Needs
 
+- A paid Claude plan, with code execution turned on so skills can run.
 - The planner: the Claude desktop app or claude.ai (it publishes an artifact).
 - The basket: a browser Claude can use (Claude in Chrome, or the desktop app's browser) with you signed in to your grocery shop.
 - The calendar: a calendar connector such as Google Calendar.
@@ -43,4 +44,8 @@ Claude never types passwords, card details or loyalty numbers, never creates acc
 
 Amazon's Conditions of Use bar unauthorised AI agents, so for Amazon Fresh Claude gives you the list to shop yourself instead of filling the cart.
 
-Recipes are original. Prices are estimates for planning, not the shop's live prices.
+Recipes are original. Prices are estimates for planning, not the shop's live prices. Diet and allergen labels come from each recipe's ingredients; always check product labels yourself.
+
+## Licence
+
+Free to use for yourself; not to be redistributed. The recipes, photographs and artwork are © 2026 Bayes Ltd. See [LICENSE](LICENSE).
