@@ -25,7 +25,7 @@ Publishing needs the Artifact tool, which the Claude desktop app and claude.ai p
    - `files`: a map of every path listed in `files.json` to itself, e.g. `{"assets/index-….js": "assets/index-….js", …}`
    - `capabilities`: `{"db": {}, "user": {}, "downloads": true}`
    - `icon`: `"recipe"`
-   - `description`: "A weekly meal planner tuned to your taste, with a shopping list ready for Claude to fill a Tesco basket."
+   - `description`: "A weekly meal planner tuned to your taste, with a shopping list ready for Claude to fill your grocery basket."
 3. Give the user the link. The first visit asks a few questions (household, likes, budget) and plans the week.
 
 Do not change the page or its files. Do not add `db` rules: the default keeps each person's `data/users/<id>/` private.
@@ -46,4 +46,4 @@ A local copy of MSTRCHF (`data/kitchen.json`) or a backup file from Kitchen → 
 
 ## What the planner does not do
 
-It does not shop. The Shop page's "Order with Claude" button copies instructions for the `tesco-basket` skill, and the `meal-calendar` skill puts the week into the user's calendar.
+It does not shop. The Shop page's "Order with Claude" button copies instructions for the `grocery-basket` skill, which fills the basket at the user's chosen online grocer (UK, US or Canada, or any other shop without a guide). The `meal-calendar` skill puts the week into the user's calendar.
