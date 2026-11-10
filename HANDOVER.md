@@ -30,7 +30,9 @@ Verification so far:
 
 Commands: `npm run build:codex`, `node scripts/smoke-codex.mjs`, `npm run pack:codex`. For a browser SDK host, `node scripts/preview-codex.mjs` starts an owned temporary kitchen; `--test-fixture` copies `data/test/kitchen.json` into that temporary directory. It never points at the real household.
 
-Next action: integrate the implementation through a checked PR, then Gregg's hands-on review of the saved personal plugin and private Site. Public directory submission is separate; OpenAI currently limits local-MCP submissions to allowlisted partners.
+Integration: [PR #8](https://github.com/SuperfluousG/mstrchf-9000/pull/8) contains this desktop edition. Its CI passed the catalogue validation, production build, 71 tests, desktop bundle and stdio smoke check. Integrate only a passing head revision.
+
+Next action: Gregg's hands-on review of the saved personal plugin and private Site, including updating/reopening the latest desktop view. Public directory submission is separate; OpenAI currently limits local-MCP submissions to allowlisted partners.
 
 The UI refinement and original handover below are retained historical records. Their earlier provisional-logo, deferred-stage and release statements are superseded by this section and Claude's release update.
 
