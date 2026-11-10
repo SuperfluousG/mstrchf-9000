@@ -1,6 +1,6 @@
 # MSTRCHF 9000 recipe photos
 
-MSTRCHF 9000 is a meal-planning app. Every recipe card shows one photo. The current photos look generic and AI-made; these replace them with one consistent, editorial look across all 170 recipes.
+MSTRCHF 9000 is a meal-planning app. Every recipe card shows one photo. The current photos look generic and AI-made; these replace them with one consistent, editorial look across every recipe.
 
 ## The job
 
