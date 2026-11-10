@@ -30,7 +30,7 @@ Back up from **Kitchen → Download backup** wherever it runs.
 `plugin/` is a Claude plugin. `npm run plugin` rebuilds it and packs `release/mstrchf-9000-<version>.plugin`. It has three skills:
 
 - `mstrchf-planner` publishes the user's own copy of the planner as a Claude artifact (from `plugin/skills/mstrchf-planner/app/`), opens it and reads their week.
-- `tesco-basket` fills a Tesco basket from the planner's order instructions.
+- `grocery-basket` fills the basket at the user's online grocer (UK, US or Canada) from the planner's order instructions.
 - `meal-calendar` books the week's meals into a calendar, using `plugin/skills/meal-calendar/recipes.json`.
 
 Each person should publish their own copy: on someone else's artifact, people outside the owner's organisation can view but not save.
@@ -47,7 +47,7 @@ Each person should publish their own copy: on someone else's artifact, people ou
 | `src/ui/` | Week, Menu, Shop and Kitchen screens. |
 | `src/state/fileSync.ts` | Saves the kitchen to Claude storage (artifact) or `data/kitchen.json` (local server). |
 | `src/platform.ts` | Artifact-aware downloads and copying. |
-| `plugin/` | The Claude plugin: planner, Tesco basket and calendar skills. |
+| `plugin/` | The Claude plugin: planner, grocery basket and calendar skills. |
 | `scripts/build-artifact.mjs`, `scripts/export-recipes.mjs` | Build the artifact page and the recipe export for the plugin. |
 
 Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live Tesco prices.
