@@ -52,14 +52,14 @@ export const DEFAULT_PROFILE: Profile = {
 export const CUISINE_GROUPS: { label: string; cuisines: Cuisine[] }[] = [
   { label: 'Italian', cuisines: ['italian'] },
   { label: 'Mediterranean', cuisines: ['greek', 'spanish'] },
-  { label: 'British & European', cuisines: ['british', 'european', 'french'] },
+  { label: 'British & European', cuisines: ['british', 'european', 'french', 'german', 'nordic'] },
   { label: 'Indian', cuisines: ['indian'] },
-  { label: 'Middle Eastern', cuisines: ['middle-eastern', 'north-african'] },
+  { label: 'Middle Eastern', cuisines: ['middle-eastern', 'north-african', 'lebanese'] },
   { label: 'Thai & Vietnamese', cuisines: ['thai', 'vietnamese', 'indonesian'] },
   { label: 'Chinese', cuisines: ['chinese'] },
   { label: 'Japanese & Korean', cuisines: ['japanese', 'korean'] },
   { label: 'Mexican & Latin', cuisines: ['mexican', 'latin'] },
-  { label: 'American & Caribbean', cuisines: ['american', 'caribbean'] },
+  { label: 'North American & Caribbean', cuisines: ['american', 'canadian', 'caribbean'] },
 ];
 
 export const PROTEIN_CHOICES: { label: string; proteins: Protein[] }[] = [
@@ -84,8 +84,17 @@ export const CUISINE_LABELS: Record<Cuisine, string> = {
   'middle-eastern': 'Middle Eastern', 'north-african': 'North African', indian: 'Indian', thai: 'Thai',
   chinese: 'Chinese', japanese: 'Japanese', korean: 'Korean', vietnamese: 'Vietnamese',
   indonesian: 'Indonesian', mexican: 'Mexican', american: 'American', caribbean: 'Caribbean',
-  latin: 'Latin American', european: 'European',
+  latin: 'Latin American', european: 'European', german: 'German', nordic: 'Scandinavian', lebanese: 'Lebanese',
+  canadian: 'Canadian',
 };
+
+/** A cuisine's own setting, or else its group's (cuisines added later inherit what the user chose for the group). */
+export function cuisineAffinity(p: Profile, c: Cuisine): Affinity {
+  const own = p.cuisines[c];
+  if (own !== undefined) return own;
+  const group = CUISINE_GROUPS.find(g => g.cuisines.includes(c));
+  return (group ? p.cuisines[group.cuisines[0]] ?? 0 : 0) as Affinity;
+}
 
 export function groupAffinity(p: Profile, cuisines: Cuisine[]): Affinity {
   return (p.cuisines[cuisines[0]] ?? 0) as Affinity;

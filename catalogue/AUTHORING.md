@@ -50,7 +50,7 @@ Each file in `catalogue/recipes/` is a JSON **array** of recipe objects:
 - `id`: kebab-case, unique across the whole catalogue. Make it descriptive (dish + key ingredient) to avoid clashes.
 - `title` ≤ 60 characters, sentence case. `blurb` ≤ 140 characters, appetising, one sentence.
 - `meal`: `dinner`, `lunch` or `breakfast`.
-- `cuisine`: one of british, italian, french, spanish, greek, middle-eastern, north-african, indian, thai, chinese, japanese, korean, vietnamese, indonesian, mexican, american, caribbean, latin, european.
+- `cuisine`: one of british, italian, french, spanish, greek, middle-eastern, north-african, indian, thai, chinese, japanese, korean, vietnamese, indonesian, mexican, american, canadian, caribbean, latin, german, nordic (Swedish, Danish, Norwegian, Finnish), lebanese, european (anywhere else in Europe).
 - `protein` (the star of the dish): chicken, beef, pork, lamb, turkey, fish, prawns, egg, cheese, beans, lentils, tofu, veg. Use `cheese`/`egg`/`beans`/`lentils`/`tofu`/`veg` only when there is no meat or fish.
 - `time`: honest total minutes. Dinners mostly 20–45. `difficulty`: 1 easy, 2 medium, 3 involved (use 3 rarely).
 - `spice`: 0 none, 1 gentle warmth, 2 properly spicy, 3 hot. Be honest; spice drives taste matching.
