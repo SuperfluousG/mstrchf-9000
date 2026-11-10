@@ -43,7 +43,8 @@ export type MealType = 'dinner' | 'lunch' | 'breakfast';
 export type Cuisine =
   | 'british' | 'italian' | 'french' | 'spanish' | 'greek' | 'middle-eastern' | 'north-african'
   | 'indian' | 'thai' | 'chinese' | 'japanese' | 'korean' | 'vietnamese' | 'indonesian'
-  | 'mexican' | 'american' | 'caribbean' | 'latin' | 'european';
+  | 'mexican' | 'american' | 'caribbean' | 'latin' | 'european'
+  | 'german' | 'nordic' | 'lebanese' | 'canadian';
 
 export type Protein =
   | 'chicken' | 'beef' | 'pork' | 'lamb' | 'turkey' | 'fish' | 'prawns' | 'egg'

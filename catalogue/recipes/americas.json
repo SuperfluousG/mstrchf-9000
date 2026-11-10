@@ -30,10 +30,10 @@
     ],
     "steps": [
       "Mix the chipotle paste, smoked paprika, cumin, garlic, half the lime juice, half the oil and a pinch of salt in a bowl. Stir the chicken through and leave it while you make the salsa.",
-      "For the salsa, combine the pineapple, half the red onion, the chilli and most of the coriander with a squeeze of lime, a pinch of salt and pepper.",
-      "Stir the yoghurt with the rest of the lime juice and a pinch of salt to make a cooling drizzle.",
+      "For the salsa, combine the pineapple, half the red onion, the {chilli} and most of the {coriander} with a squeeze of lime, a pinch of salt and pepper.",
+      "Stir the {yoghurt} with the rest of the lime juice and a pinch of salt to make a cooling drizzle.",
       "Heat the remaining oil in a large frying pan over a high heat. Fry the chicken for 7 to 8 minutes, turning, until cooked through with sticky charred edges.",
-      "Warm the tortillas in a dry pan or microwave for 30 seconds. Fill with chicken, a spoonful of salsa, the lime yoghurt, the remaining red onion and a scatter of coriander."
+      "Warm the tortillas in a dry pan or microwave for 30 seconds. Fill with chicken, a spoonful of salsa, the lime {yoghurt}, the remaining red onion and a scatter of {coriander}."
     ],
     "source": "MSTRCHF original"
   },
@@ -72,11 +72,11 @@
     ],
     "steps": [
       "Rinse the rice, then cook it in plenty of boiling salted water for 10 to 12 minutes. Drain and steam dry for a few minutes.",
-      "Meanwhile, heat the oil in a large frying pan and cook the onion and pepper for 6 minutes until softened. Add the garlic, chilli powder, cumin and paprika and stir for 1 minute.",
-      "Add the mince and brown it hard for 5 minutes, breaking it up. Pour in the tomatoes, beans and jalapenos and simmer for 10 minutes until thick. Season well.",
-      "Stir the zest and juice of the lime and the coriander through the rice with a pinch of salt.",
-      "Lay the tortillas flat. Spoon rice, beef and bean mix, cheddar and a little yoghurt down the middle of each, fold in the sides and roll up tightly.",
-      "Wipe out the pan and toast the burritos seam-side down over a medium heat for 2 minutes each side until golden. Serve with the remaining yoghurt."
+      "Meanwhile, heat the oil in a large frying pan and cook the onion and pepper for 6 minutes until softened. Add the garlic, {chilli powder}, cumin and paprika and stir for 1 minute.",
+      "Add the {mince|ground beef} and brown it hard for 5 minutes, breaking it up. Pour in the tomatoes, beans and jalapenos and simmer for 10 minutes until thick. Season well.",
+      "Stir the zest and juice of the lime and the {coriander} through the rice with a pinch of salt.",
+      "Lay the tortillas flat. Spoon rice, beef and bean mix, cheddar and a little {yoghurt} down the middle of each, fold in the sides and roll up tightly.",
+      "Wipe out the pan and toast the burritos seam-side down over a medium heat for 2 minutes each side until golden. Serve with the remaining {yoghurt}."
     ],
     "source": "MSTRCHF original"
   },
@@ -93,7 +93,7 @@
     "servings": 2,
     "tags": ["comfort", "veg-packed", "hearty"],
     "ingredients": [
-      { "id": "sweet-potato", "qty": 400, "prep": "cut into 1.5cm cubes" },
+      { "id": "sweet-potato", "qty": 400, "prep": "cut into {cm 1.5} cubes" },
       { "id": "black-beans", "qty": 1, "prep": "drained and rinsed" },
       { "id": "red-onion", "qty": 1, "prep": "sliced" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
@@ -112,12 +112,12 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Roast the sweet potato on a tray with half the oil, half the cumin, half the paprika and a pinch of salt for 20 minutes until tender and caramelised at the edges.",
-      "Meanwhile, soften the onion in the remaining oil in a saucepan for 5 minutes. Add the garlic, chilli powder and remaining cumin and paprika, then the passata. Simmer for 8 minutes and season.",
+      "Heat the oven to {oven 220}. Roast the sweet potato on a tray with half the oil, half the cumin, half the paprika and a pinch of salt for 20 minutes until tender and caramelised at the edges.",
+      "Meanwhile, soften the onion in the remaining oil in a saucepan for 5 minutes. Add the garlic, {chilli powder} and remaining cumin and paprika, then the passata. Simmer for 8 minutes and season.",
       "Tip the roasted sweet potato into a bowl with the black beans and spinach, and crush a little with a fork so it holds together.",
       "Spread a few spoonfuls of sauce in a baking dish. Fill each tortilla with the sweet potato mix, roll up and nestle seam-side down in the dish.",
       "Pour over the rest of the sauce, scatter with cheddar and bake for 12 to 15 minutes until bubbling and golden.",
-      "Stir the lime juice into the yoghurt. Serve the enchiladas with the lime yoghurt and coriander."
+      "Stir the lime juice into the {yoghurt}. Serve the enchiladas with the lime {yoghurt} and {coriander}."
     ],
     "source": "MSTRCHF original"
   },
@@ -155,9 +155,9 @@
     "steps": [
       "Heat half the oil in a large frying pan over a high heat. Fry the peppers and half the onion for 5 minutes until blistered, adding the cumin and paprika for the last minute. Tip into a bowl.",
       "In the same pan, fry the halloumi for 3 to 4 minutes, turning, until golden on most sides. Add it to the peppers with the jalapenos and cheddar and toss.",
-      "For the salsa, mix the avocado, tomatoes, remaining onion, coriander, half the lime juice, salt and pepper.",
+      "For the salsa, mix the avocado, tomatoes, remaining onion, {coriander}, half the lime juice, salt and pepper.",
       "Spread the filling over half of each tortilla and fold over. Wipe the pan, add a drop of the remaining oil and toast each quesadilla for 2 minutes per side until crisp and the cheese has melted.",
-      "Cut into wedges and serve with the salsa and the yoghurt loosened with the remaining lime juice."
+      "Cut into wedges and serve with the salsa and the {yoghurt} loosened with the remaining lime juice."
     ],
     "source": "MSTRCHF original"
   },
@@ -174,7 +174,7 @@
     "servings": 2,
     "tags": ["quick", "budget", "veg-packed"],
     "ingredients": [
-      { "id": "black-beans", "qty": 1, "prep": "drained, liquid from the tin kept" },
+      { "id": "black-beans", "qty": 1, "prep": "drained, liquid from the {tin|can} kept" },
       { "id": "garlic", "qty": 1, "prep": "crushed" },
       { "id": "ground-cumin", "qty": 2.5 },
       { "id": "smoked-paprika", "qty": 2.5 },
@@ -191,18 +191,18 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oil in a frying pan over a medium heat. Add the garlic, cumin, paprika and chilli flakes and stir for 30 seconds until fragrant.",
-      "Add the black beans with 3 tablespoons of liquid from the tin. Cook for 5 minutes, crushing about a third of the beans with the back of a spoon, until thick and glossy. Season.",
-      "Toss the red cabbage with the juice of half a lime and a pinch of salt. Mix the onion and tomatoes with half the coriander and the juice of half a lime.",
-      "Mash the avocado with the juice of the remaining lime, the rest of the coriander, salt and pepper.",
+      "Heat the oil in a frying pan over a medium heat. Add the garlic, cumin, paprika and {chilli flakes} and stir for 30 seconds until fragrant.",
+      "Add the black beans with 3 tablespoons of liquid from the {tin|can}. Cook for 5 minutes, crushing about a third of the beans with the back of a spoon, until thick and glossy. Season.",
+      "Toss the red cabbage with the juice of half a lime and a pinch of salt. Mix the onion and tomatoes with half the {coriander} and the juice of half a lime.",
+      "Mash the avocado with the juice of the remaining lime, the rest of the {coriander}, salt and pepper.",
       "Warm the tortillas in a dry pan. Fill with the beans, avocado, tomato salsa and red cabbage."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chipotle-prawn-tacos-lime-slaw",
-    "title": "Hot chipotle prawn tacos with lime slaw",
-    "blurb": "Fiery chipotle prawns in soft tortillas with a cooling crunchy cabbage and carrot slaw.",
+    "title": "Hot chipotle {prawn} tacos with lime slaw",
+    "blurb": "Fiery chipotle {prawns} in soft tortillas with a cooling crunchy cabbage and carrot slaw.",
     "meal": "dinner",
     "cuisine": "mexican",
     "protein": "prawns",
@@ -230,11 +230,11 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Toss the prawns with the chipotle paste, paprika, chilli flakes, garlic, half the oil and the juice of half a lime. Leave for 10 minutes.",
-      "Mix the cabbage, carrot, spring onions, most of the coriander and the red chilli with the juice of one lime, the yoghurt, salt and pepper.",
-      "Heat the remaining oil in a large frying pan over a high heat. Fry the prawns for 2 to 3 minutes each side until pink and lightly charred.",
+      "Toss the {prawns} with the chipotle paste, paprika, {chilli flakes}, garlic, half the oil and the juice of half a lime. Leave for 10 minutes.",
+      "Mix the cabbage, carrot, {spring onions}, most of the {coriander} and the red {chilli} with the juice of one lime, the {yoghurt}, salt and pepper.",
+      "Heat the remaining oil in a large frying pan over a high heat. Fry the {prawns} for 2 to 3 minutes each side until pink and lightly charred.",
       "Warm the tortillas in a dry pan or the microwave.",
-      "Fill the tortillas with slaw and prawns, then finish with the last of the coriander and the remaining lime cut into wedges."
+      "Fill the tortillas with slaw and {prawns}, then finish with the last of the {coriander} and the remaining lime cut into wedges."
     ],
     "source": "MSTRCHF original"
   },
@@ -270,18 +270,18 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Squeeze the juice of the orange and the lime into a bowl. Whisk in the garlic, cumin, oregano, chilli powder, chipotle paste, half the oil and a good pinch of salt, then turn the pork steaks in it for 10 minutes.",
+      "Squeeze the juice of the orange and the lime into a bowl. Whisk in the garlic, cumin, oregano, {chilli powder}, chipotle paste, half the oil and a good pinch of salt, then turn the pork steaks in it for 10 minutes.",
       "Put the sliced onion in a small bowl with the vinegar, sugar and a pinch of salt. Scrunch with your fingers and leave to turn pink.",
       "Heat a large frying pan over a high heat. Lift the pork from the marinade, pat dry and fry for 4 to 5 minutes each side until cooked through and well browned. Pour the marinade into the pan for the last minute to glaze.",
       "Rest the pork for 3 minutes, then slice thinly.",
-      "Warm the tortillas and fill with pork, pickled onion, avocado and coriander."
+      "Warm the tortillas and fill with pork, pickled onion, avocado and {coriander}."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chipotle-cauliflower-tacos-sweetcorn-salsa",
-    "title": "Chipotle cauliflower tacos with sweetcorn salsa",
-    "blurb": "Roasted smoky cauliflower in warm tortillas with sweetcorn salsa and lime avocado.",
+    "title": "Chipotle cauliflower tacos with {sweetcorn} salsa",
+    "blurb": "Roasted smoky cauliflower in warm tortillas with {sweetcorn} salsa and lime avocado.",
     "meal": "dinner",
     "cuisine": "mexican",
     "protein": "veg",
@@ -306,18 +306,18 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Whisk the chipotle paste, cumin, garlic, oil and a pinch of salt in a large bowl and toss the cauliflower through until coated.",
+      "Heat the oven to {oven 220}. Whisk the chipotle paste, cumin, garlic, oil and a pinch of salt in a large bowl and toss the cauliflower through until coated.",
       "Spread on a large tray and roast for 25 minutes, turning once, until tender with dark crisp edges.",
-      "Mix the sweetcorn, onion, juice of one lime and the coriander for the salsa. Season with salt and pepper.",
+      "Mix the {sweetcorn}, onion, juice of one lime and the {coriander} for the salsa. Season with salt and pepper.",
       "Mash the avocado with the juice of the remaining lime and a pinch of salt.",
-      "Warm the tortillas in the oven for the last 2 minutes. Fill with avocado, cauliflower and sweetcorn salsa."
+      "Warm the tortillas in the oven for the last 2 minutes. Fill with avocado, cauliflower and {sweetcorn} salsa."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "turkey-picadillo-with-rice",
     "title": "Turkey picadillo with fluffy rice",
-    "blurb": "Gently spiced turkey mince with peppers, olives and raisins, a sweet-savoury Latin classic over rice.",
+    "blurb": "Gently spiced {turkey mince|ground turkey} with peppers, olives and raisins, a sweet-savoury Latin classic over rice.",
     "meal": "dinner",
     "cuisine": "latin",
     "protein": "turkey",
@@ -348,10 +348,10 @@
     ],
     "steps": [
       "Cook the rice in plenty of boiling salted water for 10 to 12 minutes, then drain.",
-      "Heat the oil in a large pan and soften the onion and pepper for 6 minutes. Add the garlic, cumin, paprika, oregano and tomato puree and stir for 1 minute.",
+      "Heat the oil in a large pan and soften the onion and pepper for 6 minutes. Add the garlic, cumin, paprika, oregano and {tomato puree} and stir for 1 minute.",
       "Add the turkey and cook over a high heat for 6 minutes, breaking it up, until no pink remains.",
-      "Pour in the tomatoes and 100ml of water with the crumbled stock cube. Add the raisins and olives, then simmer for 10 minutes until thick.",
-      "Stir in the peas for the last 2 minutes, season well and finish with the coriander. Serve over the rice."
+      "Pour in the tomatoes and {ml 100} of water with the crumbled {stock cube}. Add the raisins and olives, then simmer for 10 minutes until thick.",
+      "Stir in the peas for the last 2 minutes, season well and finish with the {coriander}. Serve over the rice."
     ],
     "source": "MSTRCHF original"
   },
@@ -368,7 +368,7 @@
     "servings": 2,
     "tags": ["one-pot", "budget", "veg-packed"],
     "ingredients": [
-      { "id": "black-beans", "qty": 2, "prep": "drained, liquid from one tin kept" },
+      { "id": "black-beans", "qty": 2, "prep": "drained, liquid from one {tin|can} kept" },
       { "id": "onion", "qty": 1, "prep": "finely diced" },
       { "id": "green-pepper", "qty": 1, "prep": "finely diced" },
       { "id": "garlic", "qty": 3, "prep": "crushed" },
@@ -388,17 +388,17 @@
     ],
     "steps": [
       "Cook the rice in plenty of boiling salted water for 10 to 12 minutes, then drain and keep warm.",
-      "Heat the oil in a saucepan and cook the onion and green pepper for 8 minutes until soft. Add the garlic, cumin and oregano and stir for 1 minute.",
-      "Add the beans, the liquid from one tin, 150ml of water, the bay leaf and the crumbled stock cube. Simmer for 15 minutes, mashing a few beans against the side of the pan to thicken.",
+      "Heat the oil in a saucepan and cook the onion and {green pepper} for 8 minutes until soft. Add the garlic, cumin and oregano and stir for 1 minute.",
+      "Add the beans, the liquid from one {tin|can}, {ml 150} of water, the bay leaf and the crumbled {stock cube}. Simmer for 15 minutes, mashing a few beans against the side of the pan to thicken.",
       "Stir in the vinegar, season well and remove the bay leaf.",
-      "Serve the beans over the rice with avocado, spring onions, coriander and wedges of lime."
+      "Serve the beans over the rice with avocado, {spring onions}, {coriander} and wedges of lime."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chimichurri-steak-baby-potatoes",
     "title": "Chimichurri steak with crispy baby potatoes",
-    "blurb": "Seared rump steak with a punchy parsley, garlic and chilli sauce and roasted baby potatoes.",
+    "blurb": "Seared rump steak with a punchy parsley, garlic and {chilli} sauce and roasted baby potatoes.",
     "meal": "dinner",
     "cuisine": "latin",
     "protein": "beef",
@@ -423,11 +423,11 @@
       { "id": "black-pepper", "qty": 2 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Toss the potatoes with 15ml of the oil and a pinch of salt on a tray and roast for 30 minutes, turning once, until crisp and golden.",
-      "For the chimichurri, stir the parsley, coriander, garlic, chilli, vinegar, oregano and 25ml of oil with a pinch of salt and pepper. Leave to sit.",
+      "Heat the oven to {oven 220}. Toss the potatoes with {ml 15} of the oil and a pinch of salt on a tray and roast for 30 minutes, turning once, until crisp and golden.",
+      "For the chimichurri, stir the parsley, {coriander}, garlic, {chilli}, vinegar, oregano and {ml 25} of oil with a pinch of salt and pepper. Leave to sit.",
       "Take the steak out of the fridge 15 minutes before cooking and season it all over.",
       "Heat a heavy frying pan until very hot. Sear the steak for 3 to 4 minutes each side for medium, then rest it for 5 minutes.",
-      "Toss the tomatoes and rocket with a spoonful of chimichurri. Slice the steak against the grain and serve with the potatoes, salad and the rest of the sauce."
+      "Toss the tomatoes and {rocket} with a spoonful of chimichurri. Slice the steak against the grain and serve with the potatoes, salad and the rest of the sauce."
     ],
     "source": "MSTRCHF original"
   },
@@ -461,9 +461,9 @@
     ],
     "steps": [
       "Cook the rice in boiling salted water for 10 to 12 minutes. Drain, then stir through the zest of one lime and a squeeze of its juice.",
-      "Season the fish with cumin, oregano, salt and pepper. Heat 15ml of the oil in a large non-stick frying pan and fry the fish for 3 to 4 minutes each side until just cooked and flaking. Move to warm plates.",
+      "Season the fish with cumin, oregano, salt and pepper. Heat {ml 15} of the oil in a large non-stick frying pan and fry the fish for 3 to 4 minutes each side until just cooked and flaking. Move to warm plates.",
       "Add the remaining oil to the pan with the garlic and cook gently for 1 minute until pale gold. Pour in the juice of the orange and one lime and bubble for 1 minute.",
-      "Toss the avocado, tomatoes, half the onion and the coriander with a pinch of salt.",
+      "Toss the avocado, tomatoes, half the onion and the {coriander} with a pinch of salt.",
       "Spoon the warm mojo over the fish and serve with the lime rice, salad and the remaining onion."
     ],
     "source": "MSTRCHF original"
@@ -497,8 +497,8 @@
       { "id": "black-pepper", "qty": 2 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Toss the wedges with 20ml of the oil, the paprika and a good pinch of salt and roast for 30 to 35 minutes, turning once, until crisp.",
-      "Mix the mayonnaise, ketchup and mustard into a sauce. Season the mince lightly and shape it into four thin balls.",
+      "Heat the oven to {oven 220}. Toss the wedges with {ml 20} of the oil, the paprika and a good pinch of salt and roast for 30 to 35 minutes, turning once, until crisp.",
+      "Mix the mayonnaise, ketchup and mustard into a sauce. Season the {mince|ground beef} lightly and shape it into four thin balls.",
       "Heat a large frying pan until very hot with the remaining oil. Squash each ball flat with a spatula, season, and cook for 2 minutes until crusted. Flip, top two patties with cheddar and cook for 1 minute more.",
       "Toast the buns cut-side down in the pan for 30 seconds.",
       "Build the burgers with sauce, lettuce, tomato, onion and two patties each. Serve with the wedges."
@@ -533,18 +533,18 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the grill to high. Cook the fusilli in boiling salted water for 7 minutes, adding the cauliflower for the last 4 minutes. Drain.",
+      "Heat the {grill|broiler} to high. Cook the fusilli in boiling salted water for 7 minutes, adding the cauliflower for the last 4 minutes. Drain.",
       "Melt the butter in a saucepan, add the garlic and stir for 20 seconds, then the flour. Cook for 1 minute, stirring.",
       "Add the milk a splash at a time, whisking, then simmer for 4 to 5 minutes until the sauce coats a spoon. Off the heat, stir in three quarters of the cheddar, the mustard, salt and pepper.",
       "Fold the pasta and cauliflower into the sauce and tip into an ovenproof dish. Scatter over the tomatoes.",
-      "Mix the rest of the cheddar with the panko and paprika, sprinkle on top and grill for 5 to 6 minutes until golden and bubbling."
+      "Mix the rest of the cheddar with the panko and paprika, sprinkle on top and {grill|broil} for 5 to 6 minutes until golden and bubbling."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "cajun-prawn-rice-skillet",
-    "title": "Fiery Cajun prawn and rice skillet",
-    "blurb": "Hot, smoky prawns cooked with peppers, celery and rice in one pan, finished with lemon.",
+    "title": "Fiery Cajun {prawn} and rice skillet",
+    "blurb": "Hot, smoky {prawns} cooked with peppers, celery and rice in one pan, finished with lemon.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "prawns",
@@ -574,18 +574,18 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Toss the prawns with half the Cajun seasoning and the chilli flakes. Set aside.",
+      "Toss the {prawns} with half the Cajun seasoning and the {chilli flakes}. Set aside.",
       "Heat the oil in a large lidded frying pan. Cook the onion, peppers and celery for 8 minutes until soft. Add the garlic and remaining Cajun seasoning and stir for 1 minute.",
-      "Stir in the rice, tomatoes, red chilli and 300ml of water with the crumbled stock cube. Bring to a simmer, cover and cook on a low heat for 12 minutes.",
-      "Nestle the prawns into the rice, cover again and cook for 5 minutes until the prawns are pink and the rice is tender, adding a splash of water if it looks dry.",
-      "Season, squeeze over the lemon and scatter with spring onions and parsley."
+      "Stir in the rice, tomatoes, red {chilli} and {ml 300} of water with the crumbled {stock cube}. Bring to a simmer, cover and cook on a low heat for 12 minutes.",
+      "Nestle the {prawns} into the rice, cover again and cook for 5 minutes until the {prawns} are pink and the rice is tender, adding a splash of water if it looks dry.",
+      "Season, squeeze over the lemon and scatter with {spring onions} and parsley."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "bbq-chicken-corn-potato-traybake",
     "title": "BBQ chicken, corn and potato traybake",
-    "blurb": "Sticky barbecue chicken thighs roasted with corn, baby potatoes and peppers, with lemony yoghurt.",
+    "blurb": "Sticky barbecue chicken thighs roasted with corn, baby potatoes and peppers, with lemony {yoghurt}.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "chicken",
@@ -611,11 +611,11 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Put the potatoes on a large tray with half the oil and a pinch of salt and roast for 10 minutes.",
+      "Heat the oven to {oven 220}. Put the potatoes on a large tray with half the oil and a pinch of salt and roast for 10 minutes.",
       "Mix the barbecue sauce, paprika and garlic with the chicken. Add the chicken, corn, onion and pepper to the tray with the remaining oil and toss.",
       "Roast for 25 minutes, turning once, until the chicken is cooked through and sticky and the potatoes are golden.",
-      "Stir a squeeze of lemon juice, a little zest and the spring onions into the yoghurt with salt and pepper.",
-      "Serve the traybake straight from the tray with the lemony yoghurt."
+      "Stir a squeeze of lemon juice, a little zest and the {spring onions} into the {yoghurt} with salt and pepper.",
+      "Serve the traybake straight from the tray with the lemony {yoghurt}."
     ],
     "source": "MSTRCHF original"
   },
@@ -647,9 +647,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220°C (200°C fan). Toss the sweet potato with 15ml of the oil, half the paprika, salt and pepper on a large tray and roast for 15 minutes.",
+      "Heat the oven to {oven 220}. Toss the sweet potato with {ml 15} of the oil, half the paprika, salt and pepper on a large tray and roast for 15 minutes.",
       "Toss the chickpeas with the barbecue sauce and the rest of the paprika, add to the tray and roast for 15 minutes more until sticky and crisp at the edges.",
-      "Meanwhile, simmer the quinoa in 300ml of salted water for 12 to 15 minutes until the water is absorbed, then fluff with a fork.",
+      "Meanwhile, simmer the quinoa in {ml 300} of salted water for 12 to 15 minutes until the water is absorbed, then fluff with a fork.",
       "Toss the cabbage and carrot with half the lime juice, the remaining oil and a pinch of salt.",
       "Divide the quinoa and spinach between bowls, top with the sweet potato, chickpeas, slaw and avocado, and squeeze over the remaining lime."
     ],
@@ -658,7 +658,7 @@
   {
     "id": "black-bean-burgers-lime-slaw",
     "title": "Black bean burgers with lime slaw",
-    "blurb": "Smoky black bean and oat patties in brioche buns with avocado and crunchy yoghurt slaw.",
+    "blurb": "Smoky black bean and oat patties in brioche buns with avocado and crunchy {yoghurt} slaw.",
     "meal": "dinner",
     "cuisine": "american",
     "protein": "beans",
@@ -688,9 +688,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Mash the beans in a bowl, leaving some whole for texture. Mix in the oats, onion, garlic, paprika, cumin, chilli powder, egg, salt and pepper until it holds together.",
+      "Mash the beans in a bowl, leaving some whole for texture. Mix in the oats, onion, garlic, paprika, cumin, {chilli powder}, egg, salt and pepper until it holds together.",
       "Shape into two fat patties and chill for 10 minutes to firm up.",
-      "Mix the cabbage, carrot, yoghurt, lime juice and coriander for the slaw and season.",
+      "Mix the cabbage, carrot, {yoghurt}, lime juice and {coriander} for the slaw and season.",
       "Heat the oil in a non-stick frying pan over a medium heat. Cook the patties for 5 minutes each side until crisp and heated through, turning carefully.",
       "Toast the buns, then build with slaw, avocado and a patty."
     ],
@@ -727,9 +727,9 @@
       { "id": "salt", "qty": 2 }
     ],
     "steps": [
-      "Blitz or mash the ginger, garlic, half the spring onions, chilli, thyme, cinnamon, pepper, sugar, soy sauce, lime juice and oil into a rough paste. Rub it all over the chicken and leave for at least 15 minutes.",
-      "Heat the oven to 220°C (200°C fan). Roast the chicken on a tray for 25 to 30 minutes, turning once, until cooked through and charred in places.",
-      "Meanwhile, rinse the rice. Put it in a pan with the coconut milk, 150ml of water, the kidney beans, the remaining spring onions and the salt. Bring to a simmer, cover and cook on the lowest heat for 12 minutes.",
+      "Blitz or mash the ginger, garlic, half the {spring onions}, {chilli}, thyme, cinnamon, pepper, sugar, soy sauce, lime juice and oil into a rough paste. Rub it all over the chicken and leave for at least 15 minutes.",
+      "Heat the oven to {oven 220}. Roast the chicken on a tray for 25 to 30 minutes, turning once, until cooked through and charred in places.",
+      "Meanwhile, rinse the rice. Put it in a pan with the coconut milk, {ml 150} of water, the kidney beans, the remaining {spring onions} and the salt. Bring to a simmer, cover and cook on the lowest heat for 12 minutes.",
       "Take the rice off the heat and leave it covered for 5 minutes, then fluff with a fork.",
       "Rest the chicken for 3 minutes, slice and serve over the rice and peas."
     ],
@@ -748,7 +748,7 @@
     "servings": 2,
     "tags": ["one-pot", "veg-packed", "budget"],
     "ingredients": [
-      { "id": "sweet-potato", "qty": 400, "prep": "cut into 2cm chunks" },
+      { "id": "sweet-potato", "qty": 400, "prep": "cut into {cm 2} chunks" },
       { "id": "kidney-beans", "qty": 1, "prep": "drained and rinsed" },
       { "id": "coconut-milk", "qty": 200 },
       { "id": "onion", "qty": 1, "prep": "diced" },
@@ -767,8 +767,8 @@
       { "id": "salt", "qty": 2 }
     ],
     "steps": [
-      "Heat the oil in a large pan and cook the onion and pepper for 6 minutes. Add the garlic, ginger, chilli, thyme, cinnamon and black pepper and stir for 1 minute.",
-      "Add the sweet potato, kidney beans, coconut milk, 200ml of water and the crumbled stock cube. Bring to a simmer, cover and cook for 18 to 20 minutes until the sweet potato is tender.",
+      "Heat the oil in a large pan and cook the onion and pepper for 6 minutes. Add the garlic, ginger, {chilli}, thyme, cinnamon and black pepper and stir for 1 minute.",
+      "Add the sweet potato, kidney beans, coconut milk, {ml 200} of water and the crumbled {stock cube}. Bring to a simmer, cover and cook for 18 to 20 minutes until the sweet potato is tender.",
       "Meanwhile, cook the rice in boiling salted water for 10 to 12 minutes and drain.",
       "Stir the spinach into the stew until wilted, then add the lime juice and salt to taste. Crush a few pieces of sweet potato to thicken it if you like.",
       "Serve the stew over the rice."
@@ -807,9 +807,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Mix the garlic, ginger, half the chilli, thyme, cinnamon, sugar, soy sauce, the juice of half a lime and half the oil. Spread over the salmon and leave for 10 minutes.",
-      "Cook the rice in boiling salted water for 10 to 12 minutes, then drain. Stir through the spring onions.",
-      "Mix the mango, red onion, coriander, the remaining chilli and the juice of one lime with a pinch of salt and pepper.",
+      "Mix the garlic, ginger, half the {chilli}, thyme, cinnamon, sugar, soy sauce, the juice of half a lime and half the oil. Spread over the salmon and leave for 10 minutes.",
+      "Cook the rice in boiling salted water for 10 to 12 minutes, then drain. Stir through the {spring onions}.",
+      "Mix the mango, red onion, {coriander}, the remaining {chilli} and the juice of one lime with a pinch of salt and pepper.",
       "Heat the remaining oil in a non-stick frying pan over a medium-high heat and cook the salmon skin-side down for 4 minutes, then flip for 2 to 3 minutes until just cooked through and glazed.",
       "Serve the salmon on the rice with the mango salsa and a wedge of the remaining lime."
     ],
@@ -828,7 +828,7 @@
     "servings": 2,
     "tags": ["one-pot", "veg-packed", "comfort"],
     "ingredients": [
-      { "id": "butternut-squash", "qty": 400, "prep": "peeled and cut into 2cm chunks" },
+      { "id": "butternut-squash", "qty": 400, "prep": "peeled and cut into {cm 2} chunks" },
       { "id": "chickpeas", "qty": 1, "prep": "drained and rinsed" },
       { "id": "coconut-milk", "qty": 400 },
       { "id": "onion", "qty": 1, "prep": "diced" },
@@ -846,11 +846,11 @@
       { "id": "salt", "qty": 2 }
     ],
     "steps": [
-      "Heat the oil in a large pan and soften the onion for 6 minutes. Add the garlic, ginger, curry powder, thyme and half the chilli and stir for 1 minute.",
-      "Add the squash, chickpeas, coconut milk, 100ml of water and the crumbled stock cube. Bring to a simmer and cook, partly covered, for 20 minutes until the squash is soft.",
+      "Heat the oil in a large pan and soften the onion for 6 minutes. Add the garlic, ginger, curry powder, thyme and half the {chilli} and stir for 1 minute.",
+      "Add the squash, chickpeas, coconut milk, {ml 100} of water and the crumbled {stock cube}. Bring to a simmer and cook, partly covered, for 20 minutes until the squash is soft.",
       "Meanwhile, cook the rice in boiling salted water for 10 to 12 minutes and drain.",
       "Stir the spinach into the curry until wilted, then add the lime juice and salt to taste.",
-      "Serve over the rice, topped with the coriander and the remaining chilli."
+      "Serve over the rice, topped with the {coriander} and the remaining {chilli}."
     ],
     "source": "MSTRCHF original"
   }

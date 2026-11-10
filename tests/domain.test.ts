@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { catalogue } from '../src/data';
 import { buildBasket, claudePrompt } from '../src/domain/basket';
 import { amount, countedName, inlineName, packLabel, recipeQty } from '../src/domain/format';
+import { retailerById } from '../src/domain/market';
 import { EMPTY_FOCUS, eligibleFor, parseCraving, planWeek, alternatives, whyNot, type PlanContext } from '../src/domain/planner';
 import { DEFAULT_PROFILE, type Profile } from '../src/domain/profile';
 import { bestPacks, buildShoppingList } from '../src/domain/shopping';
@@ -180,10 +181,12 @@ describe('formatting and dates', () => {
   it('writes a basket with only the things to buy', () => {
     const rs = recipesOf(planWeek(ctx()));
     const list = buildShoppingList({ recipes: rs, people: 2, have: new Set(['onion']) }, catalogue);
-    const b = buildBasket(list, '2026-11-16', 2, rs.map(r => r.title));
+    const b = buildBasket(list, '2026-11-16', 2, rs.map(r => r.title), catalogue.market, retailerById('tesco'));
     expect(b.items.every(i => i.search && i.buy.length > 0)).toBe(true);
     expect(b.items.some(i => i.id === 'onion')).toBe(false);
     expect(b.items.some(i => i.id === 'salt')).toBe(false);
+    expect(b).toMatchObject({ version: 2, market: 'uk', retailer: 'tesco', retailerName: 'Tesco', currency: 'GBP' });
+    expect(claudePrompt(b)).toMatch(/fill my Tesco grocery basket/);
     expect(claudePrompt(b)).toMatch(/Do not sign in, enter payment details or check out/);
   });
 

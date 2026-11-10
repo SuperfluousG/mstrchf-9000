@@ -1,3 +1,4 @@
+import { MARKETS, type MarketInfo } from './market';
 import type { Allergen, Diet, Ingredient, Recipe } from './types';
 
 export interface RecipeFacts {
@@ -12,6 +13,8 @@ export interface RecipeFacts {
 }
 
 export interface Catalogue {
+  /** The country this catalogue's names, packs and prices are for. */
+  market: MarketInfo;
   ingredients: Map<string, Ingredient>;
   recipes: Recipe[];
   byId: Map<string, Recipe>;
@@ -40,12 +43,12 @@ export function factsFor(recipe: Recipe, ingredients: Map<string, Ingredient>): 
   return { vegetarian: !flesh, vegan: !animal, pescatarian: !landMeat, allergens, ingredientIds: ids, processed };
 }
 
-export function buildCatalogue(ingredientList: Ingredient[], recipes: Recipe[]): Catalogue {
+export function buildCatalogue(ingredientList: Ingredient[], recipes: Recipe[], market: MarketInfo = MARKETS.uk): Catalogue {
   const ingredients = new Map(ingredientList.map(i => [i.id, i]));
   const valid = recipes.filter(r => r.ingredients.every(ri => ingredients.has(ri.id)));
   const byId = new Map(valid.map(r => [r.id, r]));
   const facts = new Map(valid.map(r => [r.id, factsFor(r, ingredients)]));
-  return { ingredients, recipes: valid, byId, facts };
+  return { market, ingredients, recipes: valid, byId, facts };
 }
 
 export function suitsDiet(f: RecipeFacts, diet: Diet): boolean {

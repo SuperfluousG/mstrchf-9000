@@ -35,11 +35,11 @@ Each file in `catalogue/recipes/` is a JSON **array** of recipe objects:
     { "id": "black-pepper", "qty": 1 }
   ],
   "steps": [
-    "Heat the oven to 220°C (200°C fan). Toss the chicken, peppers and onion on a large tray with the oil, smoked paprika, cumin and a good pinch of salt and pepper.",
+    "Heat the oven to {oven 220}. Toss the chicken, peppers and onion on a large tray with the oil, smoked paprika, cumin and a good pinch of salt and pepper.",
     "Roast for 20–25 minutes, turning halfway, until the chicken is cooked through and the peppers are charred at the edges.",
-    "Meanwhile, zest half the lime into the yoghurt, squeeze in a little juice and season. Cut the rest of the lime into wedges.",
+    "Meanwhile, zest half the lime into the {yoghurt}, squeeze in a little juice and season. Cut the rest of the lime into wedges.",
     "Warm the tortillas in the oven for the last 2 minutes.",
-    "Pile the traybake into the wraps with a spoonful of lime yoghurt and plenty of coriander."
+    "Pile the traybake into the wraps with a spoonful of lime {yoghurt} and plenty of {coriander}."
   ],
   "source": "MSTRCHF original"
 }
@@ -50,7 +50,7 @@ Each file in `catalogue/recipes/` is a JSON **array** of recipe objects:
 - `id`: kebab-case, unique across the whole catalogue. Make it descriptive (dish + key ingredient) to avoid clashes.
 - `title` ≤ 60 characters, sentence case. `blurb` ≤ 140 characters, appetising, one sentence.
 - `meal`: `dinner`, `lunch` or `breakfast`.
-- `cuisine`: one of british, italian, french, spanish, greek, middle-eastern, north-african, indian, thai, chinese, japanese, korean, vietnamese, indonesian, mexican, american, caribbean, latin, european.
+- `cuisine`: one of british, italian, french, spanish, greek, middle-eastern, north-african, indian, thai, chinese, japanese, korean, vietnamese, indonesian, mexican, american, canadian, caribbean, latin, german, nordic (Swedish, Danish, Norwegian, Finnish), lebanese, european (anywhere else in Europe).
 - `protein` (the star of the dish): chicken, beef, pork, lamb, turkey, fish, prawns, egg, cheese, beans, lentils, tofu, veg. Use `cheese`/`egg`/`beans`/`lentils`/`tofu`/`veg` only when there is no meat or fish.
 - `time`: honest total minutes. Dinners mostly 20–45. `difficulty`: 1 easy, 2 medium, 3 involved (use 3 rarely).
 - `spice`: 0 none, 1 gentle warmth, 2 properly spicy, 3 hot. Be honest; spice drives taste matching.
@@ -64,6 +64,19 @@ Each file in `catalogue/recipes/` is a JSON **array** of recipe objects:
 - `steps`: 4–8 steps, UK English, specific heats and times, each a full sentence or two.
 - `source`: `"MSTRCHF original"`.
 - Do not add an `image` field. A recipe's photo is `src/photos/<id>.webp`, added with `python scripts/import_photos.py <folder of images named by recipe id>`.
+
+## Words and measures for the US and Canada
+
+Write in British English. The app shows the same recipe to American and Canadian cooks in their own words and measures, so mark the parts that change. In the title, blurb, `prep` notes and steps:
+
+- Oven temperatures: `{oven 220}` (°C, conventional oven). It shows as "220°C (200°C fan)" in the UK and "425°F" in North America. Any other temperature: `{temp 180}`.
+- Measures in the method: `{ml 300}`, `{g 50}`, `{cm 2}`. They show as "300 ml" or "1¼ cups", "50 g" or "1¾ oz", "2 cm" or "¾ inch". For a small weight of something spooned (butter, flour, sugar, paste), give both: `{15 g|1 tbsp}`.
+- British-only food and kitchen words listed in `catalogue/terms.json` go in braces: `{courgette}`, `{aubergine}`, `{spring onions}`, `{coriander}`, `{prawns}`, `{yoghurt}`, `{chilli}`, `{chilli flakes}`, `{tomato puree}`, `{stock cube}`, `{rocket}`, `{pak choi}`, `{pitta}`, `{kitchen paper}`. Keep a capital if the word starts a sentence: `{Courgette}`.
+  - `{coriander}` is only for fresh coriander. "Ground coriander" and "coriander seeds" stay plain; Americans call those coriander too.
+- When the grammar changes, write the British and American versions as a pair: `{grill|broil}` (verb), `the {grill|broiler}` (noun), `the {tin|can}`, `{beef mince|ground beef}`, `{oven chips|oven fries}`.
+- Need a British-only word that isn't in `terms.json`? Add it there, with its American word, in the same change.
+
+Ingredient names come from `ingredients.json` and the `catalogue/markets/` files, so the ingredient list needs no braces. `npm run validate` rejects bare British-only words, raw °C, ml, g or cm in the method, and unknown placeholders.
 
 ## Make the planner's job easy
 

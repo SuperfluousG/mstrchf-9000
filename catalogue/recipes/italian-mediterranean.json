@@ -2,7 +2,7 @@
   {
     "id": "sausage-fennel-penne",
     "title": "Sausage and fennel penne",
-    "blurb": "Crumbled pork sausage and sweet fennel simmered in tomato, tossed through penne with a little chilli.",
+    "blurb": "Crumbled pork sausage and sweet fennel simmered in tomato, tossed through penne with a little {chilli}.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "pork",
@@ -27,8 +27,8 @@
     ],
     "steps": [
       "Heat the oil in a large deep pan over a medium-high heat. Squeeze the sausage meat out of its skins in small nuggets and fry for 6-7 minutes, breaking it up, until browned.",
-      "Add the onion and fennel with a pinch of salt and cook for 8 minutes until soft and lightly golden, then stir in the garlic and chilli flakes for 30 seconds.",
-      "Pour in the chopped tomatoes with half a tin of water, season and simmer for 12 minutes until the sauce is thick and glossy.",
+      "Add the onion and fennel with a pinch of salt and cook for 8 minutes until soft and lightly golden, then stir in the garlic and {chilli flakes} for 30 seconds.",
+      "Pour in the chopped tomatoes with half a {tin|can} of water, season and simmer for 12 minutes until the sauce is thick and glossy.",
       "Meanwhile, cook the penne in well-salted boiling water for 10-11 minutes until just tender. Save a mugful of the cooking water, then drain.",
       "Tip the pasta into the sauce with a splash of the cooking water and toss over the heat for a minute.",
       "Serve topped with the parmesan, parsley and black pepper."
@@ -38,7 +38,7 @@
   {
     "id": "beef-mushroom-ragu-rigatoni",
     "title": "Beef and mushroom ragu rigatoni",
-    "blurb": "A slow-feeling beef ragu bulked out with chestnut mushrooms and carrot, spooned over big tubes of rigatoni.",
+    "blurb": "A slow-feeling beef ragu with red wine, {chestnut mushrooms} and carrot, spooned over big tubes of rigatoni.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "beef",
@@ -54,6 +54,7 @@
       { "id": "carrot", "qty": 1, "prep": "grated" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
       { "id": "tomato-puree", "qty": 15 },
+      { "id": "red-wine", "qty": 100 },
       { "id": "chopped-tomatoes", "qty": 400 },
       { "id": "beef-stock", "qty": 1 },
       { "id": "oregano", "qty": 1 },
@@ -64,10 +65,10 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oil in a large pan over a high heat and brown the mince for 5-6 minutes, breaking it up well. Tip it into a bowl, leaving a spoonful of fat behind.",
+      "Heat the oil in a large pan over a high heat and brown the {mince|ground beef} for 5-6 minutes, breaking it up well. Tip it into a bowl, leaving a spoonful of fat behind.",
       "Lower the heat to medium and cook the onion, carrot and mushrooms for 8-10 minutes until the mushroom moisture has cooked away and everything is soft.",
-      "Stir in the garlic, tomato puree and oregano for a minute, then return the beef to the pan.",
-      "Add the chopped tomatoes and the stock cube crumbled into 150ml of hot water. Season, then simmer gently for 20 minutes until rich and thick.",
+      "Stir in the garlic, {tomato puree} and oregano for a minute, then pour in the red wine and let it bubble for 3 minutes until reduced by half. Return the beef to the pan.",
+      "Add the chopped tomatoes and the {stock cube} crumbled into {ml 100} of hot water. Season, then simmer gently for 20 minutes until rich and thick.",
       "Boil the rigatoni in well-salted water for 11-12 minutes until tender, saving a splash of cooking water before draining.",
       "Toss the pasta through the ragu, loosening with the reserved water, and serve with the parmesan and plenty of black pepper."
     ],
@@ -76,7 +77,7 @@
   {
     "id": "mushroom-spinach-parmesan-risotto",
     "title": "Mushroom, spinach and parmesan risotto",
-    "blurb": "Creamy risotto with browned chestnut mushrooms, wilted spinach, thyme and a bright squeeze of lemon.",
+    "blurb": "Creamy risotto with browned {chestnut mushrooms}, wilted spinach, thyme and a bright squeeze of lemon.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "cheese",
@@ -91,6 +92,7 @@
       { "id": "spinach", "qty": 80 },
       { "id": "onion", "qty": 1, "prep": "finely diced" },
       { "id": "garlic", "qty": 2, "prep": "crushed" },
+      { "id": "white-wine", "qty": 100 },
       { "id": "veg-stock", "qty": 2 },
       { "id": "butter", "qty": 20 },
       { "id": "parmesan", "qty": 40, "prep": "finely grated" },
@@ -101,9 +103,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Dissolve the stock cubes in 750ml of boiling water and keep it hot in a pan on a low heat.",
+      "Dissolve the {stock cubes} in {ml 750} of boiling water and keep it hot in a pan on a low heat.",
       "Heat the oil in a wide pan over a high heat and fry the mushrooms for 6-7 minutes without crowding until deep golden. Season, then scoop them out onto a plate.",
-      "Lower the heat, add half the butter and the onion, and cook for 5 minutes until soft. Add the garlic, thyme and rice and stir for 1 minute until the grains turn glossy.",
+      "Lower the heat, add half the butter and the onion, and cook for 5 minutes until soft. Add the garlic, thyme and rice and stir for 1 minute until the grains turn glossy, then pour in the white wine and stir until it has almost all been absorbed.",
       "Add the hot stock a ladleful at a time, stirring often and letting each addition mostly absorb before the next. This takes about 18-20 minutes, and the rice should be creamy with a little bite.",
       "Fold in the spinach, mushrooms, remaining butter and most of the parmesan. Add a squeeze of lemon juice and a little zest, then rest the pan off the heat for 2 minutes.",
       "Serve in warm bowls with the last of the parmesan and black pepper."
@@ -148,7 +150,7 @@
   {
     "id": "vegan-penne-arrabbiata-olives",
     "title": "Vegan penne arrabbiata with olives",
-    "blurb": "A properly fiery tomato and garlic sauce with fresh chilli and briny olives, no cheese needed.",
+    "blurb": "A properly fiery tomato and garlic sauce with fresh {chilli} and briny olives, no cheese needed.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "veg",
@@ -172,7 +174,7 @@
     ],
     "steps": [
       "Boil the penne in well-salted water for 10-11 minutes until just tender. Save a mugful of the cooking water, then drain.",
-      "While the pasta cooks, warm the oil in a deep frying pan over a medium heat and add the garlic, fresh chilli and chilli flakes. Cook for 1 minute, stirring, until fragrant but not browned.",
+      "While the pasta cooks, warm the oil in a deep frying pan over a medium heat and add the garlic, fresh {chilli} and {chilli flakes}. Cook for 1 minute, stirring, until fragrant but not browned.",
       "Pour in the chopped tomatoes, add the sugar and a good pinch of salt, and simmer for 10 minutes until thick.",
       "Stir in the olives, then add the pasta with a splash of the cooking water and toss over the heat for 1 minute.",
       "Finish with torn basil and black pepper."
@@ -181,8 +183,8 @@
   },
   {
     "id": "chilli-prawn-cherry-tomato-linguine",
-    "title": "Chilli prawn and cherry tomato linguine",
-    "blurb": "Juicy king prawns, burst cherry tomatoes, lemon and a gentle chilli kick through silky linguine.",
+    "title": "{Chilli} {prawn} and cherry tomato linguine",
+    "blurb": "Juicy {king prawns}, burst cherry tomatoes, lemon and a gentle {chilli} kick through silky linguine.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "prawns",
@@ -205,10 +207,10 @@
     ],
     "steps": [
       "Cook the linguine in well-salted boiling water for 9-10 minutes until al dente. Save a mugful of cooking water, then drain.",
-      "Meanwhile, heat half the oil in a large frying pan over a high heat. Season the prawns and cook for 1-2 minutes per side until pink, then lift them out.",
-      "Lower the heat, add the remaining oil, garlic and chilli for 30 seconds, then add the cherry tomatoes with a pinch of salt. Cook for 4-5 minutes, pressing them until they burst.",
+      "Meanwhile, heat half the oil in a large frying pan over a high heat. Season the {prawns} and cook for 1-2 minutes per side until pink, then lift them out.",
+      "Lower the heat, add the remaining oil, garlic and {chilli} for 30 seconds, then add the cherry tomatoes with a pinch of salt. Cook for 4-5 minutes, pressing them until they burst.",
       "Add the linguine, a splash of cooking water, the zest of the lemon and a good squeeze of its juice. Toss until the sauce clings.",
-      "Return the prawns to the pan, stir through the parsley and serve."
+      "Return the {prawns} to the pan, stir through the parsley and serve."
     ],
     "source": "MSTRCHF original"
   },
@@ -309,8 +311,8 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat 15ml of the oil in a large pan over a medium heat. Cook the onion, carrot and celery with a pinch of salt for 8-10 minutes until soft.",
-      "Add the garlic and rosemary and cook for 1 minute, then pour in the chopped tomatoes and the stock cube dissolved in 400ml of hot water.",
+      "Heat {ml 15} of the oil in a large pan over a medium heat. Cook the onion, carrot and celery with a pinch of salt for 8-10 minutes until soft.",
+      "Add the garlic and rosemary and cook for 1 minute, then pour in the chopped tomatoes and the {stock cube} dissolved in {ml 400} of hot water.",
       "Tip in the cannellini beans, bring to a simmer and cook for 15 minutes. Crush a handful of beans against the side of the pan to thicken the stew.",
       "Stir in the kale and cook for 5 minutes until tender. Season with salt and plenty of pepper.",
       "Toast the sourdough, drizzle with the remaining oil and serve alongside the stew."
@@ -319,8 +321,8 @@
   },
   {
     "id": "lemon-ricotta-courgette-spaghetti",
-    "title": "Lemon ricotta and courgette spaghetti",
-    "blurb": "Golden courgette ribbons and creamy lemon ricotta tossed through spaghetti with basil and toasted pine nuts.",
+    "title": "Lemon ricotta and {courgette} spaghetti",
+    "blurb": "Golden {courgette} ribbons and creamy lemon ricotta tossed through spaghetti with basil and toasted pine nuts.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "cheese",
@@ -345,16 +347,16 @@
     "steps": [
       "Toast the pine nuts in a dry frying pan over a medium heat for 2-3 minutes until golden, then tip them out.",
       "Cook the spaghetti in well-salted boiling water for 10 minutes until al dente. Save a mugful of cooking water, then drain.",
-      "Meanwhile, heat the oil in the pan over a high heat and fry the courgette with a pinch of salt for 6-7 minutes until golden at the edges. Add the garlic for the last 30 seconds.",
+      "Meanwhile, heat the oil in the pan over a high heat and fry the {courgette} with a pinch of salt for 6-7 minutes until golden at the edges. Add the garlic for the last 30 seconds.",
       "Mix the ricotta with the lemon zest, a squeeze of juice, the parmesan and a splash of the pasta water until loose and creamy.",
-      "Toss the spaghetti and courgette with the ricotta mixture off the heat, loosening with more water if needed. Top with basil, pine nuts and black pepper."
+      "Toss the spaghetti and {courgette} with the ricotta mixture off the heat, loosening with more water if needed. Top with basil, pine nuts and black pepper."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "aubergine-mozzarella-bake",
-    "title": "Aubergine and mozzarella tomato bake",
-    "blurb": "Roasted aubergine layered with garlicky tomato sauce, melting mozzarella and parmesan, with a peppery side salad.",
+    "title": "{Aubergine} and mozzarella tomato bake",
+    "blurb": "Roasted {aubergine} layered with garlicky tomato sauce, melting mozzarella and parmesan, with a peppery side salad.",
     "meal": "dinner",
     "cuisine": "italian",
     "protein": "veg",
@@ -364,7 +366,7 @@
     "servings": 2,
     "tags": ["comfort", "hearty"],
     "ingredients": [
-      { "id": "aubergine", "qty": 2, "prep": "sliced into 1cm rounds" },
+      { "id": "aubergine", "qty": 2, "prep": "sliced into {cm 1} rounds" },
       { "id": "passata", "qty": 400 },
       { "id": "mozzarella", "qty": 125, "prep": "torn" },
       { "id": "parmesan", "qty": 20, "prep": "finely grated" },
@@ -379,9 +381,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220C (200C fan). Toss the aubergine rounds with 25ml of the oil and half the salt on two trays, then roast for 20 minutes, turning once, until golden and soft.",
-      "Meanwhile, soften the onion in 10ml oil in a pan for 6 minutes, add the garlic and oregano for 30 seconds, then pour in the passata. Simmer for 10 minutes and season.",
-      "Spoon a little sauce into a baking dish, then layer in aubergine, sauce and half the basil, repeating until everything is used.",
+      "Heat the oven to 220C (200C fan). Toss the {aubergine} rounds with {ml 25} of the oil and half the salt on two trays, then roast for 20 minutes, turning once, until golden and soft.",
+      "Meanwhile, soften the onion in {ml 10} oil in a pan for 6 minutes, add the garlic and oregano for 30 seconds, then pour in the passata. Simmer for 10 minutes and season.",
+      "Spoon a little sauce into a baking dish, then layer in {aubergine}, sauce and half the basil, repeating until everything is used.",
       "Top with the mozzarella and parmesan and bake for 12-15 minutes until bubbling and browned.",
       "Dress the leaves with the balsamic and remaining oil, and serve alongside the bake with the last of the basil."
     ],
@@ -451,7 +453,7 @@
     "steps": [
       "Heat the oil in a deep frying pan over a medium-high heat. Season the chicken and brown for 5 minutes, then lift it out onto a plate.",
       "Add the onion to the pan and cook for 5 minutes until soft, then add the garlic and oregano for 30 seconds.",
-      "Stir in the orzo to coat it in the oil, then add the stock cube dissolved in 500ml of boiling water and the zest and juice of the lemon.",
+      "Stir in the orzo to coat it in the oil, then add the {stock cube} dissolved in {ml 500} of boiling water and the zest and juice of the lemon.",
       "Return the chicken, bring to a simmer and cook for 12-14 minutes, stirring now and then, until the orzo is tender and the sauce is creamy.",
       "Fold in the spinach until wilted, then top with the feta, parsley and black pepper."
     ],
@@ -459,8 +461,8 @@
   },
   {
     "id": "lamb-kofta-pittas-tzatziki",
-    "title": "Lamb kofta pittas with tzatziki",
-    "blurb": "Herby cumin-scented lamb patties tucked into warm pittas with tomato, red onion and cool cucumber yoghurt.",
+    "title": "Lamb kofta {pittas} with tzatziki",
+    "blurb": "Herby cumin-scented lamb patties tucked into warm {pittas} with tomato, red onion and cool cucumber {yoghurt}.",
     "meal": "dinner",
     "cuisine": "greek",
     "protein": "lamb",
@@ -488,17 +490,17 @@
     ],
     "steps": [
       "Mix the lamb with the grated red onion, garlic, cumin, oregano, parsley, half the mint, half the salt and the pepper. Shape into 8 small oval patties.",
-      "Stir the grated cucumber, remaining mint, the rest of the salt and a squeeze of lemon into the yoghurt to make a quick tzatziki.",
+      "Stir the grated cucumber, remaining mint, the rest of the salt and a squeeze of lemon into the {yoghurt} to make a quick tzatziki.",
       "Heat the oil in a large frying pan over a medium-high heat and cook the kofta for 3-4 minutes per side until browned and cooked through.",
-      "Warm the pittas in a toaster or dry pan for 30 seconds on each side.",
-      "Stuff the pittas with the kofta, tomato, sliced red onion and sliced cucumber, and finish with plenty of tzatziki and a squeeze of lemon."
+      "Warm the {pittas} in a toaster or dry pan for 30 seconds on each side.",
+      "Stuff the {pittas} with the kofta, tomato, sliced red onion and sliced cucumber, and finish with plenty of tzatziki and a squeeze of lemon."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "prawn-feta-tomato-bake",
-    "title": "Prawn and feta tomato bake",
-    "blurb": "King prawns baked in a garlicky oregano tomato sauce under crumbled feta, with ciabatta for mopping.",
+    "title": "{Prawn} and feta tomato bake",
+    "blurb": "{King prawns} baked in a garlicky oregano tomato sauce under crumbled feta, with ciabatta for mopping.",
     "meal": "dinner",
     "cuisine": "greek",
     "protein": "prawns",
@@ -523,8 +525,8 @@
     ],
     "steps": [
       "Heat the oven to 220C (200C fan). Warm the oil in an ovenproof frying pan over a medium heat and cook the onion for 6 minutes until soft.",
-      "Add the garlic, oregano and chilli flakes for 30 seconds, then pour in the chopped tomatoes. Season and simmer for 8 minutes until thick.",
-      "Stir the prawns into the sauce, scatter the feta over the top and bake for 8-10 minutes until the prawns are pink and the feta is lightly golden.",
+      "Add the garlic, oregano and {chilli flakes} for 30 seconds, then pour in the chopped tomatoes. Season and simmer for 8 minutes until thick.",
+      "Stir the {prawns} into the sauce, scatter the feta over the top and bake for 8-10 minutes until the {prawns} are pink and the feta is lightly golden.",
       "Warm the ciabatta in the oven for the final 3 minutes.",
       "Scatter with parsley and serve straight from the pan with the ciabatta for mopping."
     ],
@@ -532,8 +534,8 @@
   },
   {
     "id": "grilled-halloumi-greek-salad-pittas",
-    "title": "Grilled halloumi Greek salad with pittas",
-    "blurb": "Golden halloumi slices over crunchy tomato, cucumber, olive and little gem salad with warm oregano pitta.",
+    "title": "Grilled halloumi Greek salad with {pittas}",
+    "blurb": "Golden halloumi slices over crunchy tomato, cucumber, olive and {little gem} salad with warm oregano {pitta}.",
     "meal": "dinner",
     "cuisine": "greek",
     "protein": "cheese",
@@ -559,10 +561,10 @@
     ],
     "steps": [
       "Soak the sliced red onion in the vinegar with a pinch of salt for 10 minutes to soften its bite.",
-      "Combine the tomatoes, cucumber, little gem and olives in a large bowl and tip in the onion with its vinegar. Dress with 15ml of the oil, a squeeze of lemon and the pepper.",
+      "Combine the tomatoes, cucumber, {little gem} and olives in a large bowl and tip in the onion with its vinegar. Dress with {ml 15} of the oil, a squeeze of lemon and the pepper.",
       "Heat a dry non-stick frying pan over a medium-high heat and cook the halloumi for 1-2 minutes per side until deeply golden.",
-      "Rub the pittas with the remaining oil and the oregano, then toast them for about 30 seconds on each side in the same pan or a toaster.",
-      "Pile the halloumi over the salad and serve with the warm pittas."
+      "Rub the {pittas} with the remaining oil and the oregano, then toast them for about 30 seconds on each side in the same pan or a toaster.",
+      "Pile the halloumi over the salad and serve with the warm {pittas}."
     ],
     "source": "MSTRCHF original"
   },
@@ -594,8 +596,8 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 200C (180C fan). Warm 15ml of the oil in an ovenproof pan over a medium heat and cook the onion for 8 minutes until soft and sweet.",
-      "Add the garlic, oregano and tomato puree and cook for 1 minute, then add the chopped tomatoes, sugar, salt and pepper with 100ml of water.",
+      "Heat the oven to 200C (180C fan). Warm {ml 15} of the oil in an ovenproof pan over a medium heat and cook the onion for 8 minutes until soft and sweet.",
+      "Add the garlic, oregano and {tomato puree} and cook for 1 minute, then add the chopped tomatoes, sugar, salt and pepper with {ml 100} of water.",
       "Stir in the butter beans and spinach, bring to a simmer, then bake for 20 minutes until the sauce is thick and the beans are jammy.",
       "Toast the sourdough and drizzle with the remaining oil.",
       "Top the beans with parsley and serve with the toast."
@@ -605,7 +607,7 @@
   {
     "id": "spinach-feta-puff-pastry-pie",
     "title": "Spinach and feta puff pastry pie",
-    "blurb": "A folded golden pastry parcel of wilted spinach, tangy feta, spring onion and dill with a crisp leafy side.",
+    "blurb": "A folded golden pastry parcel of wilted spinach, tangy feta, {spring onion} and dill with a crisp leafy side.",
     "meal": "dinner",
     "cuisine": "greek",
     "protein": "cheese",
@@ -628,10 +630,10 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220C (200C fan). Warm half the oil in a large pan, add the spring onions for 1 minute, then add the spinach in handfuls until wilted, about 3 minutes.",
+      "Heat the oven to 220C (200C fan). Warm half the oil in a large pan, add the {spring onions} for 1 minute, then add the spinach in handfuls until wilted, about 3 minutes.",
       "Tip the spinach into a sieve and press out as much water as you can, then chop it roughly into a bowl.",
       "Beat one egg and stir half of it into the spinach with the feta, dill, lemon zest, salt and pepper.",
-      "Unroll the pastry on its paper onto a baking tray. Spread the filling over one half, leaving a 2cm edge, then fold the other half over and press the edges with a fork to seal.",
+      "Unroll the pastry on its paper onto a baking tray. Spread the filling over one half, leaving a {cm 2} edge, then fold the other half over and press the edges with a fork to seal.",
       "Beat the second egg with the rest of the first and brush all over the pastry, cut two slits in the top, then bake for 22-25 minutes until puffed and deep golden.",
       "Dress the leaves with the remaining oil and a squeeze of lemon, and serve with slices of the pie."
     ],
@@ -640,7 +642,7 @@
   {
     "id": "chorizo-butter-bean-stew",
     "title": "Chorizo and butter bean stew",
-    "blurb": "Smoky chorizo, red pepper and butter beans in a paprika tomato sauce, finished with spinach and toasted sourdough.",
+    "blurb": "Smoky chorizo, {red pepper} and butter beans in a paprika tomato sauce, finished with spinach and toasted sourdough.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "pork",
@@ -667,7 +669,7 @@
     "steps": [
       "Fry the chorizo in a large pan over a medium heat for 4-5 minutes until it releases its red oil and the edges crisp. Lift out half and set aside for topping.",
       "Add the onion and pepper to the pan and cook for 8 minutes until soft, then stir in the garlic and smoked paprika for 1 minute.",
-      "Pour in the chopped tomatoes and 100ml of water, add the beans, and simmer for 12-15 minutes until thick. Mash a few beans into the sauce to give it body.",
+      "Pour in the chopped tomatoes and {ml 100} of water, add the beans, and simmer for 12-15 minutes until thick. Mash a few beans into the sauce to give it body.",
       "Stir in the spinach until it wilts and season with salt and pepper.",
       "Toast the sourdough with the oil, then serve the stew topped with the reserved chorizo, the parsley and the toast."
     ],
@@ -675,8 +677,8 @@
   },
   {
     "id": "garlic-chilli-prawns-smoky-tomatoes",
-    "title": "Garlic chilli prawns with smoky tomatoes",
-    "blurb": "Sizzling garlic and chilli prawns with blistered tomatoes, smoked paprika and a baguette for the oil.",
+    "title": "Garlic {chilli} {prawns} with smoky tomatoes",
+    "blurb": "Sizzling garlic and {chilli} {prawns} with blistered tomatoes, smoked paprika and a baguette for the oil.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "prawns",
@@ -702,11 +704,11 @@
     ],
     "steps": [
       "Warm the baguette slices in the oven at 180C (160C fan) for 5 minutes while you cook.",
-      "Heat 15ml of the oil in a frying pan over a high heat and cook the cherry tomatoes with a pinch of salt for 3-4 minutes until blistered, then tip them into a bowl.",
-      "Lower the heat to medium, add the remaining oil, the garlic, fresh chilli and chilli flakes and sizzle for 1 minute until fragrant but not brown.",
-      "Add the prawns and smoked paprika and cook for 2-3 minutes, turning once, until pink and curled.",
+      "Heat {ml 15} of the oil in a frying pan over a high heat and cook the cherry tomatoes with a pinch of salt for 3-4 minutes until blistered, then tip them into a bowl.",
+      "Lower the heat to medium, add the remaining oil, the garlic, fresh {chilli} and {chilli flakes} and sizzle for 1 minute until fragrant but not brown.",
+      "Add the {prawns} and smoked paprika and cook for 2-3 minutes, turning once, until pink and curled.",
       "Return the tomatoes to the pan with a squeeze of lemon and the parsley, and toss.",
-      "Serve with the rocket and the warm baguette to mop up the garlicky oil."
+      "Serve with the {rocket} and the warm baguette to mop up the garlicky oil."
     ],
     "source": "MSTRCHF original"
   },
@@ -738,9 +740,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat 15ml of the oil in a large frying pan over a medium heat and cook the onion with a pinch of salt for 6 minutes until soft.",
-      "Add the garlic, smoked paprika, cumin and chilli flakes and stir for 1 minute until fragrant.",
-      "Add the chickpeas and cherry tomatoes with 100ml of water and cook for 8 minutes, pressing a few chickpeas and tomatoes with a spoon until the sauce thickens.",
+      "Heat {ml 15} of the oil in a large frying pan over a medium heat and cook the onion with a pinch of salt for 6 minutes until soft.",
+      "Add the garlic, smoked paprika, cumin and {chilli flakes} and stir for 1 minute until fragrant.",
+      "Add the chickpeas and cherry tomatoes with {ml 100} of water and cook for 8 minutes, pressing a few chickpeas and tomatoes with a spoon until the sauce thickens.",
       "Stir in the spinach and vinegar and cook for 2 minutes until wilted. Taste and season.",
       "Toast the sourdough and drizzle with the remaining oil, then pile the chickpeas on top."
     ],
@@ -748,8 +750,8 @@
   },
   {
     "id": "patatas-bravas-fried-eggs-garlic-yoghurt",
-    "title": "Patatas bravas with fried eggs and garlic yoghurt",
-    "blurb": "Crisp roasted potatoes under spicy smoky tomato sauce, topped with runny eggs, garlic yoghurt and wilted spinach.",
+    "title": "Patatas bravas with fried eggs and garlic {yoghurt}",
+    "blurb": "Crisp roasted potatoes under spicy smoky tomato sauce, topped with runny eggs, garlic {yoghurt} and wilted spinach.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "egg",
@@ -759,7 +761,7 @@
     "servings": 2,
     "tags": ["comfort", "budget"],
     "ingredients": [
-      { "id": "potato", "qty": 550, "prep": "cut into 2cm chunks" },
+      { "id": "potato", "qty": 550, "prep": "cut into {cm 2} chunks" },
       { "id": "chopped-tomatoes", "qty": 400 },
       { "id": "garlic", "qty": 3, "prep": "crushed" },
       { "id": "smoked-paprika", "qty": 5 },
@@ -775,19 +777,19 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to 220C (200C fan). Toss the potatoes with 25ml of the oil and half the salt on a large tray and roast for 30-35 minutes, turning twice, until crisp and golden.",
-      "Meanwhile, warm 10ml oil in a pan, add two of the garlic cloves, the smoked paprika and chilli flakes for 30 seconds, then add the chopped tomatoes, vinegar and a pinch of salt. Simmer for 15 minutes until thick, then blend or mash until fairly smooth.",
-      "Stir the remaining garlic into the yoghurt with a squeeze of lemon juice and a pinch of salt.",
+      "Heat the oven to 220C (200C fan). Toss the potatoes with {ml 25} of the oil and half the salt on a large tray and roast for 30-35 minutes, turning twice, until crisp and golden.",
+      "Meanwhile, warm {ml 10} oil in a pan, add two of the garlic cloves, the smoked paprika and {chilli flakes} for 30 seconds, then add the chopped tomatoes, vinegar and a pinch of salt. Simmer for 15 minutes until thick, then blend or mash until fairly smooth.",
+      "Stir the remaining garlic into the {yoghurt} with a squeeze of lemon juice and a pinch of salt.",
       "Wilt the spinach in a hot dry pan for 1-2 minutes, then set aside.",
       "Fry the eggs in the remaining oil over a medium-high heat for 2-3 minutes until the whites are set and the edges are crisp.",
-      "Pile the potatoes onto plates with the spinach, spoon over the bravas sauce, top with an egg and a dollop of garlic yoghurt, and finish with parsley."
+      "Pile the potatoes onto plates with the spinach, spoon over the bravas sauce, top with an egg and a dollop of garlic {yoghurt}, and finish with parsley."
     ],
     "source": "MSTRCHF original"
   },
   {
     "id": "chicken-chorizo-smoky-rice",
     "title": "Chicken and chorizo smoky rice",
-    "blurb": "A paella-style one-pan rice with chicken thighs, chorizo, red pepper and peas, scented with smoked paprika.",
+    "blurb": "A paella-style one-pan rice with chicken thighs, chorizo, {red pepper} and peas, scented with smoked paprika.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "chicken",
@@ -816,8 +818,8 @@
     ],
     "steps": [
       "Heat the oil in a wide, deep pan over a medium-high heat. Season the chicken and brown it with the chorizo for 6-7 minutes until the chorizo has released its oil.",
-      "Add the onion and red pepper and cook for 6 minutes until softened, then stir in the garlic, smoked paprika, turmeric and tomato puree for 1 minute.",
-      "Stir in the rice to coat it, then pour in the stock cube dissolved in 450ml of boiling water. Bring to a simmer, then do not stir again.",
+      "Add the onion and {red pepper} and cook for 6 minutes until softened, then stir in the garlic, smoked paprika, turmeric and {tomato puree} for 1 minute.",
+      "Stir in the rice to coat it, then pour in the {stock cube} dissolved in {ml 450} of boiling water. Bring to a simmer, then do not stir again.",
       "Cook gently, uncovered, for 15 minutes until most of the liquid has absorbed, scattering the peas over in the last 3 minutes.",
       "Take off the heat, cover with a lid or foil and rest for 5 minutes. Serve with the parsley and lemon wedges."
     ],
@@ -826,7 +828,7 @@
   {
     "id": "vegetable-paella-peppers-green-beans",
     "title": "Vegetable paella with peppers and green beans",
-    "blurb": "Saffron-hued smoky rice with red pepper, courgette, green beans and peas, finished with lemon and parsley.",
+    "blurb": "Saffron-hued smoky rice with {red pepper}, {courgette}, green beans and peas, finished with lemon and parsley.",
     "meal": "dinner",
     "cuisine": "spanish",
     "protein": "veg",
@@ -854,9 +856,9 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Dissolve the stock cubes in 500ml of boiling water and keep it hot.",
-      "Heat the oil in a wide, deep pan over a medium heat and cook the onion, pepper and courgette for 8 minutes until softened and lightly golden.",
-      "Stir in the garlic, smoked paprika, turmeric and tomato puree for 1 minute, then add the rice and stir until coated.",
+      "Dissolve the {stock cubes} in {ml 500} of boiling water and keep it hot.",
+      "Heat the oil in a wide, deep pan over a medium heat and cook the onion, pepper and {courgette} for 8 minutes until softened and lightly golden.",
+      "Stir in the garlic, smoked paprika, turmeric and {tomato puree} for 1 minute, then add the rice and stir until coated.",
       "Pour in the hot stock, add the green beans, season and bring to a simmer. Cook uncovered for 15 minutes without stirring, until the rice is nearly tender.",
       "Scatter the peas over the top and cook for 3 minutes more, then rest off the heat, covered, for 5 minutes.",
       "Serve with the parsley and wedges of lemon to squeeze over."

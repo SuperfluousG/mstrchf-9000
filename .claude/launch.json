@@ -8,6 +8,12 @@
       "port": 5190
     },
     {
+      "name": "mstrchf-dev-test",
+      "runtimeExecutable": "cmd.exe",
+      "runtimeArgs": ["/c", "set MSTRCHF_DATA_DIR=data/test&& npx vite --host 127.0.0.1 --port 5193 --strictPort"],
+      "port": 5193
+    },
+    {
       "name": "mstrchf-artifact-static",
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "5192", "--bind", "127.0.0.1", "--directory", "plugin/skills/mstrchf-planner/app"],

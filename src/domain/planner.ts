@@ -1,6 +1,6 @@
 import { suitsDiet, type Catalogue } from './catalogue';
 import { inlineName } from './format';
-import { CUISINE_LABELS, type Profile } from './profile';
+import { CUISINE_LABELS, cuisineAffinity, type Profile } from './profile';
 import { mergeDemand, perishableCost, perishableWaste, recipeDemand, type Demand } from './shopping';
 import type { Cuisine, MealType, Recipe } from './types';
 
@@ -61,7 +61,7 @@ export function whyNot(r: Recipe, ctx: PlanContext): string | null {
   for (const a of p.avoid) if (f.allergens.has(a)) return `Contains ${a === 'milk' ? 'dairy' : a}`;
   for (const d of p.dislikes) if (f.ingredientIds.has(d)) return `Contains ${inlineName(ctx.catalogue.ingredients.get(d)?.name ?? d)}`;
   if (ctx.hidden.has(r.id)) return 'You hid this recipe';
-  if ((p.cuisines[r.cuisine] ?? 0) === -1 && !ctx.focus.cuisines.includes(r.cuisine)) return `You skip ${CUISINE_LABELS[r.cuisine]}`;
+  if (cuisineAffinity(p, r.cuisine) === -1 && !ctx.focus.cuisines.includes(r.cuisine)) return `You skip ${CUISINE_LABELS[r.cuisine]}`;
   if ((p.proteins[r.protein] ?? 0) === -1) return `You skip ${r.protein}`;
   return null;
 }
@@ -108,7 +108,7 @@ export function scoreRecipe(r: Recipe, ctx: PlanContext): Scored {
   let s = 5;
   const add = (v: number, why?: string) => { s += v; if (why && v > 0) reasons.push([v, why]); };
 
-  const ca = p.cuisines[r.cuisine] ?? 0;
+  const ca = cuisineAffinity(p, r.cuisine);
   if (ca === 2) add(2, `You love ${CUISINE_LABELS[r.cuisine]} food`);
   else if (ca === 1) add(1, `${CUISINE_LABELS[r.cuisine]}, a style you like`);
   const pa = p.proteins[r.protein] ?? 0;
@@ -174,7 +174,8 @@ function saving(existing: Demand, d: Demand, ctx: PlanContext): number {
  */
 function basketFit(existing: Demand, d: Demand, ctx: PlanContext): number {
   const extraWaste = perishableWaste(mergeDemand(existing, d), ctx.catalogue) - perishableWaste(existing, ctx.catalogue);
-  return synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste;
+  // Weights are tuned in pounds; convert dollars so a US or Canadian basket is judged the same way.
+  return (synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste) / ctx.catalogue.market.perGbp;
 }
 
 function sharedReason(r: Recipe, others: Recipe[], ctx: PlanContext): string | null {
