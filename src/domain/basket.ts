@@ -58,14 +58,15 @@ export function buildBasket(list: ShoppingList, weekId: string, people: number, 
 }
 
 export function basketText(b: BasketFile): string {
+  const price = (n: number) => money(n, MARKETS[b.market]);
   const lines = [`MSTRCHF 9000 — shopping for ${b.week} (${b.people} people)`, '', `Meals: ${b.meals.join(', ')}`, ''];
   let aisle = '';
   for (const i of b.items) {
     if (i.aisle !== aisle) { aisle = i.aisle; lines.push('', `${aisle}:`); }
     const packs = i.buy.map(p => p.size === 'single' ? `${p.count}` : `${p.count} × ${p.size}`).join(' + ');
-    lines.push(`[ ] ${i.name} — need ${i.need}; buy ${packs} (est. ${money(i.estPrice)})`);
+    lines.push(`[ ] ${i.name} — need ${i.need}; buy ${packs} (est. ${price(i.estPrice)})`);
   }
-  lines.push('', `Estimated total: ${money(b.estTotal)}`);
+  lines.push('', `Estimated total: ${price(b.estTotal)}`);
   return lines.join('\n');
 }
 

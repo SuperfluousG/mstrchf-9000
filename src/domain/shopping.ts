@@ -136,6 +136,7 @@ export interface ShoppingInput {
   have: Set<string>;
   /** Include pantry staples (salt, oil) in the basket. */
   includePantry?: boolean;
+  pantryToBuy?: Set<string>;
 }
 
 export function buildShoppingList(input: ShoppingInput, cat: Catalogue): ShoppingList {
@@ -159,7 +160,7 @@ export function buildShoppingList(input: ShoppingInput, cat: Catalogue): Shoppin
   let total = 0, waste = 0;
   for (const line of lines.values()) {
     const ing = line.ingredient;
-    line.status = ing.pantry && !input.includePantry ? 'pantry' : input.have.has(ing.id) ? 'have' : 'buy';
+    line.status = input.have.has(ing.id) ? 'have' : ing.pantry && !input.includePantry && !input.pantryToBuy?.has(ing.id) ? 'pantry' : 'buy';
     line.packs = bestPacks(line.need, ing.packs);
     line.leftover = Math.max(0, line.packs.bought - line.need);
     line.wasteCost = ing.perishable && line.packs.bought > 0 ? (line.leftover / line.packs.bought) * line.packs.cost : 0;

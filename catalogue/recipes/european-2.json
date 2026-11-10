@@ -71,7 +71,7 @@
   "steps": [
     "Heat the oven to {oven 220}. Melt half the butter in a small pan, stir in the flour and cook for 1 minute, then whisk in the milk a little at a time. Simmer for 3–4 minutes until thick, then stir in half the Gruyere and season.",
     "Toast the bread lightly, then butter one side of each slice with the remaining butter.",
-    "Spread the unbuttered sides of two slices with the mustard and cover with the ham. Top with the other two slices, buttered side up, and set on a baking tray.",
+    "Spread the unbuttered sides of half the slices with the mustard and cover with the ham. Top with the remaining slices, buttered side up, and set on a baking tray.",
     "Spoon the cheese sauce over the sandwiches and scatter with the rest of the Gruyere.",
     "Bake for 10–12 minutes until bubbling and golden in patches.",
     "Whisk the vinegar, oil and a pinch of salt and pepper, toss through the leaves and serve alongside."
@@ -184,7 +184,7 @@
   ],
   "steps": [
     "Heat half the oil in a large, lidded pan over a medium heat and brown the sausages all over for 6–8 minutes. Lift out and slice thickly.",
-    "Fry the bacon, onion, carrot and celery in the same pan for 6–8 minutes until soft, adding two of the garlic cloves for the last minute.",
+    "Fry the bacon, onion, carrot and celery in the same pan for 6–8 minutes until soft, adding {qty 2} of the garlic cloves for the last minute.",
     "Stir in the {tomato puree}, lentils, chopped tomatoes, thyme, bay leaf and the {stock cube} dissolved in {ml 500} of boiling water. Return the sausage slices.",
     "Bring to a simmer, cover and cook for 25–30 minutes, stirring occasionally, until the lentils are tender and the stew is thick. Add a splash of water if it gets dry.",
     "Meanwhile, fry the panko in the remaining oil with the last garlic clove for 2–3 minutes until golden, then stir in half the parsley.",
@@ -324,7 +324,7 @@
   ],
   "steps": [
     "Heat the oven to {oven 200}. Boil the potatoes in salted water for 12–15 minutes until tender, then drain and toss with the parsley and half the butter.",
-    "Toss the fennel with the oil and a pinch of salt, and divide between two large squares of baking parchment, piling it in the middle. Add the tomatoes and capers.",
+    "Toss the fennel with the oil and a pinch of salt, and divide between {qty 2} large squares of baking parchment, piling it in the middle. Add the tomatoes and capers.",
     "Season the fish and lay a fillet on each pile. Top with the lemon slices, a share of the remaining butter, a squeeze of the lemon juice and {ml 30} of white wine for each parcel.",
     "Fold the paper over and crimp the edges tightly to seal into parcels. Set on a baking tray.",
     "Bake for 15–18 minutes until the parcels are puffed. Open carefully at the table, as the steam is hot, and serve with the potatoes."
@@ -763,9 +763,9 @@
   "steps": [
     "Lower the eggs into simmering water for 9 minutes, then cool under cold running water, peel and slice.",
     "Stir the mayonnaise with half the chives and a pinch of salt and pepper. Mix the cream cheese with the mustard and a little pepper.",
-    "Butter the rye slices and spread two of them with the mustard cream cheese. Layer the {beetroot} on top and add a few rings of red onion.",
-    "Arrange the sliced eggs on one of the remaining slices, dollop with the chive mayo and scatter over the remaining chives.",
-    "Cover the last slice with the cucumber and radish, sprinkle with torn dill and a pinch of salt. Serve all four with the rest of the onion rings."
+    "Butter the rye slices and spread half of them with the mustard cream cheese. Layer the {beetroot} on top and add a few rings of red onion.",
+    "Arrange the sliced eggs on half the remaining slices, dollop with the chive mayo and scatter over the remaining chives.",
+    "Cover the remaining slices with the cucumber and radish, sprinkle with torn dill and a pinch of salt. Serve the sandwiches with the rest of the onion rings."
   ],
   "source": "MSTRCHF original"
 },

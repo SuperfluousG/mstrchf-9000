@@ -103,8 +103,8 @@
   "steps": [
     "Toast the rice in a dry frying pan over a medium heat for 5–6 minutes, shaking often, until deep golden. Tip it into a mortar or bowl and crush it to a coarse powder with a pestle or the base of a rolling pin.",
     "Heat the oil in the same pan over a high heat. Add the pork and fry for 6–7 minutes, breaking it up, until cooked through and lightly browned.",
-    "Take the pan off the heat. Stir in the juice of 1½ limes, the fish sauce, sugar and {chilli flakes}, then fold in the shallots, toasted rice powder, mint, {coriander} and {spring onions}.",
-    "Taste and add more lime or fish sauce so it is sharp, salty and hot. Cut the remaining lime half into wedges.",
+    "Take the pan off the heat. Stir in the juice of {qty 1.5|lime|limes}, the fish sauce, sugar and {chilli flakes}, then fold in the shallots, toasted rice powder, mint, {coriander} and {spring onions}.",
+    "Taste and add more lime or fish sauce so it is sharp, salty and hot. Cut the remaining lime into wedges.",
     "Pile the warm pork into the {little gem} leaves and serve with the lime wedges."
   ],
   "source": "MSTRCHF original"
@@ -525,7 +525,7 @@
   "steps": [
     "Pat the steak dry and season both sides with the salt and black pepper.",
     "Heat the oil in a frying pan over a high heat until almost smoking. Sear the steak for 2–3 minutes on each side for medium-rare, longer if you prefer it more done, then rest it on a board for 5 minutes.",
-    "Meanwhile, whisk the juice of 2 limes with the fish sauce, sugar and half the {chilli} until the sugar dissolves.",
+    "Meanwhile, whisk the juice of {qty 2|lime|limes} with the fish sauce, sugar and half the {chilli} until the sugar dissolves.",
     "Toss the cucumber, tomatoes, red onion, mint and {coriander} in a large bowl with most of the dressing.",
     "Slice the steak thinly against the grain and toss it gently with the salad and the juices from the board.",
     "Arrange the {little gem} leaves on plates, pile the salad on top, spoon over the remaining dressing and scatter with the remaining {chilli}."
@@ -563,7 +563,7 @@
   "steps": [
     "Toss the beef with half the garlic, the soy sauce, oyster sauce, fish sauce, half the sugar and {g 1} of the black pepper. Leave to marinate for 15 minutes while you cook the rice.",
     "Rinse the rice and simmer it covered in {ml 300} of water with {g 1} of the salt for 12 minutes. Turn off the heat and leave it covered.",
-    "For the dip, mix the juice of 1 lime with {g 1} of the salt and the remaining black pepper in a small bowl, stirring until the salt dissolves.",
+    "For the dip, mix the juice of {qty 1|lime|limes} with {g 1} of the salt and the remaining black pepper in a small bowl, stirring until the salt dissolves.",
     "Heat half the oil in a large frying pan or wok over the highest heat you have. Sear the beef in 2 batches for 2 minutes each, shaking the pan and turning the cubes, until browned outside and pink within. Tip onto a plate.",
     "Add the remaining oil, the onion wedges and the rest of the garlic and sugar and stir-fry for 2 minutes until the onion has charred edges. Return the beef and toss for 30 seconds.",
     "Toss the {rocket} and tomatoes with a squeeze of the remaining lime. Serve the beef over the leaves with the rice, the lime dip for dunking and the lime wedges."

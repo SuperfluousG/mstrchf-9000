@@ -53,13 +53,21 @@ export interface PlannedPick {
 
 // ---------- eligibility ----------
 
-export function whyNot(r: Recipe, ctx: PlanContext): string | null {
+/** Dietary exclusions always apply, including to meals the user has kept. */
+export function exclusionReason(r: Recipe, ctx: PlanContext): string | null {
   const f = ctx.catalogue.facts.get(r.id);
   if (!f) return 'Unknown recipe';
   const p = ctx.profile;
   if (!suitsDiet(f, p.diet)) return `Not ${p.diet}`;
-  for (const a of p.avoid) if (f.allergens.has(a)) return `Contains ${a === 'milk' ? 'dairy' : a}`;
+  for (const a of p.avoid) if (f.allergens.has(a)) return `Contains ${a === 'milk' ? 'dairy' : a === 'nuts' ? 'tree nuts' : a}`;
   for (const d of p.dislikes) if (f.ingredientIds.has(d)) return `Contains ${inlineName(ctx.catalogue.ingredients.get(d)?.name ?? d)}`;
+  return null;
+}
+
+export function whyNot(r: Recipe, ctx: PlanContext): string | null {
+  const excluded = exclusionReason(r, ctx);
+  if (excluded) return excluded;
+  const p = ctx.profile;
   if (ctx.hidden.has(r.id)) return 'You hid this recipe';
   if (cuisineAffinity(p, r.cuisine) === -1 && !ctx.focus.cuisines.includes(r.cuisine)) return `You skip ${CUISINE_LABELS[r.cuisine]}`;
   if ((p.proteins[r.protein] ?? 0) === -1) return `You skip ${r.protein}`;
@@ -178,7 +186,7 @@ function basketFit(existing: Demand, d: Demand, ctx: PlanContext): number {
   return (synergyWeight(ctx.profile) * saving(existing, d, ctx) - wasteWeight(ctx.profile) * extraWaste) / ctx.catalogue.market.perGbp;
 }
 
-function sharedReason(r: Recipe, others: Recipe[], ctx: PlanContext): string | null {
+export function sharedReason(r: Recipe, others: Recipe[], ctx: PlanContext): string | null {
   const mine = ctx.catalogue.facts.get(r.id)!.ingredientIds;
   for (const o of others) {
     const shared = [...ctx.catalogue.facts.get(o.id)!.ingredientIds].filter(id => {
@@ -220,9 +228,13 @@ export function eligibleFor(meal: MealType, ctx: PlanContext, exclude: Set<strin
  * best-scoring recipe given what is already chosen, rewarding shared fresh ingredients
  * and penalising repeated cuisines and proteins.
  */
-export function planWeek(ctx: PlanContext, locked: { recipeId: string; meal: MealType }[] = []): PlannedPick[] {
+export function planWeek(ctx: PlanContext, locked: { recipeId: string; meal: MealType; day?: number }[] = []): PlannedPick[] {
   const cat = ctx.catalogue;
-  const chosen: Recipe[] = locked.map(l => cat.byId.get(l.recipeId)).filter((r): r is Recipe => !!r);
+  const kept = locked.filter(l => {
+    const r = cat.byId.get(l.recipeId);
+    return r && whyNot(r, ctx) === null;
+  });
+  const chosen: Recipe[] = [...new Set(kept.map(l => l.recipeId))].map(id => cat.byId.get(id)!);
   const reasons = new Map<string, string[]>(chosen.map(r => [r.id, scoreRecipe(r, ctx).reasons]));
   let demand = mergeDemand(...chosen.map(r => recipeDemand(r, ctx.profile.people)));
 
@@ -243,16 +255,29 @@ export function planWeek(ctx: PlanContext, locked: { recipeId: string; meal: Mea
       demand = mergeDemand(demand, recipeDemand(pick.recipe, ctx.profile.people));
     }
   }
-  return assignDays(chosen, new Set(locked.map(l => l.recipeId)), reasons);
+  return assignDays(chosen, new Set(kept.map(l => l.recipeId)), reasons,
+    new Map(kept.filter(l => l.day !== undefined).map(l => [l.recipeId, l.day!])));
 }
 
 /** Orders meals so the most perishable proteins are cooked first in the week. */
-export function assignDays(recipes: Recipe[], locked: Set<string>, reasons: Map<string, string[]>): PlannedPick[] {
+export function assignDays(recipes: Recipe[], locked: Set<string>, reasons: Map<string, string[]>, keptDays = new Map<string, number>()): PlannedPick[] {
   const out: PlannedPick[] = [];
   for (const meal of MEAL_ORDER) {
     const list = recipes.filter(r => r.meal === meal)
       .sort((a, b) => (PERISHABILITY[b.protein] ?? 1) - (PERISHABILITY[a.protein] ?? 1));
-    list.forEach((r, i) => out.push({ recipeId: r.id, meal, day: i % 7, locked: locked.has(r.id) || undefined, reasons: reasons.get(r.id) ?? [] }));
+    const days = new Map<string, number>();
+    const used = new Set<number>();
+    for (const r of list) {
+      const day = keptDays.get(r.id);
+      if (locked.has(r.id) && day !== undefined && Number.isInteger(day) && day >= 0 && day < 7 && !used.has(day)) {
+        days.set(r.id, day); used.add(day);
+      }
+    }
+    for (const r of list) {
+      const day = days.get(r.id) ?? [0, 1, 2, 3, 4, 5, 6].find(d => !used.has(d)) ?? 6;
+      used.add(day);
+      out.push({ recipeId: r.id, meal, day, locked: locked.has(r.id) || undefined, reasons: reasons.get(r.id) ?? [] });
+    }
   }
   return out;
 }

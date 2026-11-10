@@ -1,6 +1,18 @@
 import { catalogue } from '../data';
 import { dietLabel } from '../domain/catalogue';
 import type { Recipe } from '../domain/types';
+import type { KeyboardEvent } from 'react';
+
+export function choiceKeys(e: KeyboardEvent<HTMLElement>) {
+  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) return;
+  const buttons = [...e.currentTarget.querySelectorAll<HTMLButtonElement>('button[role="radio"], button[role="tab"]')].filter(b => !b.disabled);
+  const index = buttons.indexOf(e.target as HTMLButtonElement);
+  if (index < 0 || !buttons.length) return;
+  e.preventDefault();
+  const next = e.key === 'Home' ? 0 : e.key === 'End' ? buttons.length - 1
+    : (index + (e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 1) + buttons.length) % buttons.length;
+  buttons[next].focus(); buttons[next].click();
+}
 
 const HEAT_LABEL = ['No heat', 'Gentle warmth', 'Spicy', 'Hot'];
 

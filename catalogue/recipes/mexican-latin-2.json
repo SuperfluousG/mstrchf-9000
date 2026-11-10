@@ -225,7 +225,7 @@
       "Pour in the passata and {ml 100} of water, add the beans and the salt, and simmer for 5 minutes until the sauce is thick and glossy.",
       "Fold the tortilla {chips} through the sauce for 1–2 minutes only, until just coated and starting to soften at the edges but still with some bite.",
       "While the tortilla {chips} cook, heat the remaining oil in a second pan over a medium-high heat and fry the eggs for 2–3 minutes until the whites are set and the yolks still runny. Season with pepper.",
-      "Divide the chilaquiles between two plates and top with the eggs, feta, soured cream, avocado, sliced red onion, {chilli} and {coriander}, with lime wedges to squeeze over."
+      "Divide the chilaquiles between plates and top with the eggs, feta, soured cream, avocado, sliced red onion, {chilli} and {coriander}, with lime wedges to squeeze over."
     ],
     "source": "MSTRCHF original"
   },
@@ -261,7 +261,7 @@
     ],
     "steps": [
       "Mix the cabbage with half the lime juice, half the {coriander} and a pinch of salt. In a small bowl, stir the mayonnaise, soured cream, hot sauce and the rest of the lime juice together.",
-      "Mix the flour with the {chilli powder}, smoked paprika, 2 teaspoons of salt and the pepper on a plate. Put the egg in a shallow bowl and the panko on another plate.",
+      "Mix the flour with the {chilli powder}, smoked paprika, {qty 2|teaspoon|teaspoons} of salt and the pepper on a plate. Put the egg in a shallow bowl and the panko on another plate.",
       "Dredge each piece of fish in the flour, dip in the egg, then press into the panko to coat all over.",
       "Heat the oil in a large frying pan over a medium-high heat. Fry the fish in two batches for 2–3 minutes per side until deep golden and cooked through, then drain on {kitchen paper}.",
       "Warm the tortillas in a dry pan for 30 seconds each side. Fill with slaw and fish, drizzle with the lime cream and finish with the remaining {coriander}."
@@ -300,7 +300,7 @@
       "Heat the oil in a large pan over a medium heat and fry the onion and {green pepper} for 6 minutes until softened.",
       "Stir in the garlic, oregano and cumin for 1 minute, then add the tomatoes and cook for 3 minutes until they begin to break down.",
       "Crumble in the {stock cube}, add {ml 700} of water and the whole chicken breasts, then bring to a gentle simmer. Cook for 14–16 minutes until the chicken is cooked through.",
-      "Lift the chicken out, shred it with two forks and return it to the pan. Stir in the juice of 1 lime and the zest of half, then season with salt and pepper.",
+      "Lift the chicken out, shred it with two forks and return it to the pan. Stir in the juice of {qty 1|lime|limes} and the zest of half, then season with salt and pepper.",
       "Ladle into bowls and top with crushed tortilla chips, {coriander} and wedges cut from the second lime."
     ],
     "source": "MSTRCHF original"
@@ -485,7 +485,7 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Rub the steak with half the oil, the juice of 1 lime, the garlic, cumin, {chilli powder}, soy sauce and pepper. Leave for 10–15 minutes while you make the salsa.",
+      "Rub the steak with half the oil, the juice of {qty 1|lime|limes}, the garlic, cumin, {chilli powder}, soy sauce and pepper. Leave for 10–15 minutes while you make the salsa.",
       "For the salsa, mix the tomatoes, the diced red onion, most of the {coriander}, the juice of half the second lime and a good pinch of salt.",
       "Heat a heavy frying pan over a high heat until smoking. Cook the steak for 3–4 minutes per side for medium, then rest on a board for 5 minutes.",
       "In the same pan with the remaining oil, char the {spring onions} for 3–4 minutes, turning, until blackened in spots.",
@@ -562,7 +562,7 @@
     ],
     "steps": [
       "Heat the oven to {oven 220}. Toss the {red pepper}, onion wedges and {sweetcorn} on a tray with half the oil, the cumin, smoked paprika, salt and pepper. Roast for 20–25 minutes until charred at the edges.",
-      "Cook the rice in boiling salted water for 10–12 minutes, drain and stir through the zest and juice of 1 lime and half the {coriander}.",
+      "Cook the rice in boiling salted water for 10–12 minutes, drain and stir through the zest and juice of {qty 1|lime|limes} and half the {coriander}.",
       "Stir the beans into the tray for the last 5 minutes to warm through.",
       "Mix the tomatoes, diced onion, jalapeños, the juice of half the second lime, the remaining oil and a pinch of salt for the salsa.",
       "Spoon the rice into bowls and top with the roasted vegetables and beans, the salsa, avocado, the remaining {coriander} and a wedge of lime."
@@ -860,7 +860,7 @@
       { "id": "black-pepper", "qty": 1 }
     ],
     "steps": [
-      "Heat the oven to {oven 210}. In a large bowl, mix the smoked paprika, cumin, two-thirds of the garlic, soy sauce, vinegar, oil, the juice of 1 lime, salt and pepper.",
+      "Heat the oven to {oven 210}. In a large bowl, mix the smoked paprika, cumin, two-thirds of the garlic, soy sauce, vinegar, oil, the juice of {qty 1|lime|limes}, salt and pepper.",
       "Add the drumsticks and the potato wedges, turning to coat, then spread on a large tray in one layer with space between the pieces.",
       "Roast for 40–45 minutes, turning once, until the chicken is cooked through with dark, sticky skin and the potatoes are golden.",
       "For the green sauce, blitz the {coriander}, jalapeños, mayonnaise, {yoghurt}, the remaining garlic, the juice of half the second lime and a pinch of salt with a stick blender until smooth.",

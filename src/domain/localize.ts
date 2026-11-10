@@ -86,13 +86,19 @@ function matchCase(source: string, out: string): string {
 }
 
 /** Replace every {placeholder} for the given country. Unknown placeholders lose their braces. */
-export function renderText(text: string, market: Market, terms: Terms): string {
+export function renderText(text: string, market: Market, terms: Terms, factor = 1): string {
   const us = MARKETS[market].measures === 'us';
   return text.replace(/\{([^{}]+)\}/g, (_, raw: string) => {
     const inner = raw.trim();
+    const count = /^qty (\d+(?:\.\d+)?)(?:\|([^|]+)\|([^|]+))?$/.exec(inner);
+    if (count) {
+      const n = Number(count[1]) * factor;
+      const quantity = n > 0 && n < 0.2 ? '⅛' : nice(n);
+      return count[2] ? `${quantity} ${n <= 1 ? count[2] : count[3]}` : quantity;
+    }
     const m = /^(oven|temp|ml|g|cm) (\d+(?:\.\d+)?)$/.exec(inner);
     if (m) {
-      const n = Number(m[2]);
+      const n = Number(m[2]) * (m[1] === 'ml' || m[1] === 'g' ? factor : 1);
       switch (m[1]) {
         case 'oven': return us ? `${toFahrenheit(n)}°F` : `${n}°C (${n - 20}°C fan)`;
         case 'temp': return us ? `${toFahrenheit(n)}°F` : `${n}°C`;
@@ -102,7 +108,18 @@ export function renderText(text: string, market: Market, terms: Terms): string {
       }
     }
     const pair = inner.split('|');
-    if (pair.length === 2) return market === 'uk' ? pair[0] : pair[1];
+    if (pair.length === 2) {
+      // Explicit spoon equivalents (e.g. {15 g|1 tbsp}) are quantities too.
+      const side = market === 'uk' ? pair[0] : pair[1];
+      const measure = /^(\d+(?:\.\d+)?(?:[¼½¾⅓⅔])?|[¼½¾⅓⅔]) (g|ml|tsp|tbsp|cup|cups)$/.exec(side);
+      if (measure && factor !== 1) {
+        const glyph: Record<string, number> = { '¼': .25, '½': .5, '¾': .75, '⅓': 1 / 3, '⅔': 2 / 3 };
+        const number = Number(measure[1].replace(/[¼½¾⅓⅔]/, '')) + (glyph[measure[1].slice(-1)] ?? 0);
+        const n = number * factor;
+        return `${nice(n)} ${measure[2].startsWith('cup') ? (n > 1 ? 'cups' : 'cup') : measure[2]}`;
+      }
+      return side;
+    }
     if (market === 'uk') return inner;
     const t = terms[inner.toLowerCase()];
     if (!t) return inner;
@@ -115,7 +132,7 @@ export function badPlaceholders(text: string, terms: Terms): string[] {
   const bad: string[] = [];
   for (const [, raw] of text.matchAll(/\{([^{}]*)\}/g)) {
     const inner = raw.trim();
-    if (/^(oven|temp|ml|g|cm) \d+(?:\.\d+)?$/.test(inner)) continue;
+    if (/^(oven|temp|ml|g|cm) \d+(?:\.\d+)?$/.test(inner) || /^qty \d+(?:\.\d+)?(?:\|[^|]+\|[^|]+)?$/.test(inner)) continue;
     const pair = inner.split('|');
     if (pair.length === 2 && pair[0].trim() && pair[1].trim()) continue;
     if (pair.length === 1 && terms[inner.toLowerCase()]) continue;
@@ -139,13 +156,13 @@ export function localIngredient(ing: Ingredient, market: Market, files: Partial<
   };
 }
 
-export function localRecipe(r: Recipe, market: Market, terms: Terms): Recipe {
+export function localRecipe(r: Recipe, market: Market, terms: Terms, people = r.servings): Recipe {
   const t = (s: string) => renderText(s, market, terms);
   return {
     ...r,
     title: t(r.title),
     blurb: t(r.blurb),
-    steps: r.steps.map(t),
+    steps: r.steps.map(s => renderText(s, market, terms, people / r.servings)),
     ingredients: r.ingredients.map(ri => (ri.prep ? { ...ri, prep: t(ri.prep) } : ri)),
   };
 }

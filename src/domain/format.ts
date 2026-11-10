@@ -1,5 +1,5 @@
 import { usLiquidPack, usVolume, usWeight } from './localize';
-import { activeMarket } from './market';
+import { activeMarket, type MarketInfo } from './market';
 import type { Ingredient } from './types';
 
 const FRACTIONS: [number, string][] = [[0.25, '¼'], [0.5, '½'], [0.75, '¾'], [1 / 3, '⅓'], [2 / 3, '⅔']];
@@ -48,8 +48,8 @@ export function amount(qty: number, unit: Ingredient['unit']): string {
   return metricAmount(qty, unit);
 }
 
-export function money(n: number): string {
-  return `${activeMarket().symbol}${n.toFixed(2)}`;
+export function money(n: number, market: MarketInfo = activeMarket()): string {
+  return `${market.symbol}${n.toFixed(2)}`;
 }
 
 /** "£5", "£4.50": no pence when the amount is whole. */

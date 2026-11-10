@@ -78,6 +78,14 @@ Write in British English. The app shows the same recipe to American and Canadian
 
 Ingredient names come from `ingredients.json` and the `catalogue/markets/` files, so the ingredient list needs no braces. `npm run validate` rejects bare British-only words, raw °C, ml, g or cm in the method, and unknown placeholders.
 
+## Quantities inside the method
+
+Method quantities scale with the chosen servings before localisation. `{ml 150}` and `{g 50}` scale; `{oven 220}`, `{temp 180}` and `{cm 2}` stay fixed. Explicit quantity pairs such as `{15 g|1 tbsp}` also scale.
+
+Use `{qty 1.5|lime|limes}` for an absolute ingredient count: it becomes “1½ limes” for two people, “3 limes” for four. `{qty 1}` supplies just the number, for example “{qty 1} of the eggs”. For a range, use “{qty 3}–{qty 4} tablespoons”. Do not mark cooking times, pan dimensions or a number of pieces cut from each ingredient as quantities.
+
+Relative amounts such as “half the oil” or “the remaining lime” already follow the scaled ingredient list. Use these when splitting an ingredient between steps. Avoid fixed leftover counts such as “the remaining lime half”.
+
 ## Make the planner's job easy
 
 The weekly planner groups meals that share fresh ingredients so packs get used up (three peppers across three dinners, one bunch of coriander across two). Deliberately reuse common perishables across your recipes: peppers, spring onions, coriander, parsley, spinach, courgette, cherry tomatoes, lime, lemon, red chilli, feta, Greek yoghurt, mushrooms. Avoid one-off exotic ingredients.

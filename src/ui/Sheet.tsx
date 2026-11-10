@@ -1,8 +1,16 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 
+let openSheets = 0;
+let previousOverflow = '';
+
 /** Modal side sheet built on <dialog>: focus handling and Escape come from the browser. */
 export function Sheet({ open, onClose, label, children, wide = false }: { open: boolean; onClose: () => void; label: string; children: ReactNode; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    if (openSheets++ === 0) { previousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; }
+    return () => { if (--openSheets === 0) document.body.style.overflow = previousOverflow; };
+  }, [open]);
   useEffect(() => {
     const d = ref.current;
     if (!d) return;

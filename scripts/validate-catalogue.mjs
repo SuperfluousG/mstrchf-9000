@@ -74,7 +74,7 @@ function textProblems(text, recipe) {
   for (const [, raw] of text.matchAll(/\{([^{}]*)\}/g)) {
     const inner = raw.trim();
     const pair = inner.split('|');
-    if (MEASURE.test(inner) || (pair.length === 2 && pair[0].trim() && pair[1].trim()) || (pair.length === 1 && terms[inner.toLowerCase()])) continue;
+    if (MEASURE.test(inner) || /^qty \d+(?:\.\d+)?(?:\|[^|]+\|[^|]+)?$/.test(inner) || (pair.length === 2 && pair[0].trim() && pair[1].trim()) || (pair.length === 1 && terms[inner.toLowerCase()])) continue;
     out.push(`unknown placeholder {${raw}}`);
   }
   const plain = text.replace(/\{[^{}]*\}/g, ' ');
