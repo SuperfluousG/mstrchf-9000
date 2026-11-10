@@ -38,7 +38,10 @@ export interface Retailer {
   minBasket?: { under: number; charge: number };
 }
 
-/** Leading online grocers per country. Ids match the guides in the plugin's grocery-basket skill. */
+/**
+ * Leading online grocers per country. Ids match the guides in the plugin's grocery-basket skill.
+ * Amazon Fresh is left out on purpose: Amazon's Conditions of Use bar AI agents, so Claude won't fill its basket.
+ */
 export const RETAILERS: Retailer[] = [
   { id: 'tesco', name: 'Tesco', market: 'uk', minBasket: { under: 50, charge: 5 } },
   { id: 'sainsburys', name: "Sainsbury's", market: 'uk' },
@@ -47,7 +50,6 @@ export const RETAILERS: Retailer[] = [
   { id: 'morrisons', name: 'Morrisons', market: 'uk' },
   { id: 'walmart', name: 'Walmart', market: 'us' },
   { id: 'kroger', name: 'Kroger', market: 'us' },
-  { id: 'amazon-fresh', name: 'Amazon Fresh', market: 'us', covers: 'Whole Foods' },
   { id: 'target', name: 'Target', market: 'us' },
   { id: 'albertsons', name: 'Albertsons', market: 'us', covers: 'Safeway, Vons, Jewel-Osco' },
   { id: 'pc-express', name: 'PC Express', market: 'ca', covers: 'Loblaws, Real Canadian Superstore, No Frills' },

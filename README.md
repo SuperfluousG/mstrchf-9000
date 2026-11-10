@@ -64,7 +64,7 @@ The app is British first and also works in the US and Canada. Kitchen → Where 
 | Words | courgette, coriander, spring onions | zucchini, cilantro, green onions | as the US |
 | Recipe measures | g, ml, °C with fan | oz, cups, °F | as the US |
 | Shop packs and money | 500 g, £ | 1 lb, $ | 454 g, $ (CAD) |
-| Listed shops | Tesco, Sainsbury's, Asda, Ocado, Morrisons | Walmart, Kroger, Amazon Fresh, Target, Albertsons | PC Express, Walmart Canada, Voilà, Metro |
+| Listed shops | Tesco, Sainsbury's, Asda, Ocado, Morrisons | Walmart, Kroger, Target, Albertsons | PC Express, Walmart Canada, Voilà, Metro |
 
 "Another shop" works anywhere: the basket goes to Claude without a shop-specific guide. US and Canadian prices are estimates written for planning, not looked up.
 
