@@ -6,7 +6,7 @@ Owner: Codex, branch `feat/ui-ux-finalisation`, from merged main `0485543`.
 
 Gregg authorised the walkthrough's six behaviour fixes, the agreed desktop/phone layout improvements, a weathered Freya 2.0 oxblood header and distinct logo alternatives. Preserve the current red/gold visual style and the Claude artifact build. Codex packaging/planning is deferred until the UI is settled.
 
-Current checkpoint: implementation and local verification are complete. The review branch includes the app, recipe changes and rebuilt Claude artifact files. A draft pull request and its CI result will be recorded here. Gregg's UI acceptance and final logo preference remain open; the live Claude artifact has not been republished.
+Current checkpoint: implementation and local verification are complete. [Draft PR #6](https://github.com/SuperfluousG/mstrchf-9000/pull/6) includes the app, recipe changes and rebuilt Claude artifact files; its [Checks tab](https://github.com/SuperfluousG/mstrchf-9000/pull/6/checks) is the current CI record. Gregg's UI acceptance and final logo preference remain open; the live Claude artifact has not been republished.
 
 | Behaviour fix | Result and proof |
 |---|---|
