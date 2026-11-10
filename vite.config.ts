@@ -19,6 +19,10 @@ export default defineConfig({
   // Relative URLs so the same build runs from any folder, including as a Claude artifact.
   base: './',
   plugins: [react(), kitchenFile()],
+  build: {
+    assetsInlineLimit: process.env.MSTRCHF_MCP_BUILD === '1' ? file => !/[/\\]photos[/\\]/.test(file) : 4096,
+    ...(process.env.MSTRCHF_MCP_BUILD === '1' ? { rolldownOptions: { output: { codeSplitting: false } } } : {}),
+  },
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],

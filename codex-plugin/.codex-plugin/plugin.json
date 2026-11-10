@@ -1,0 +1,28 @@
+{
+  "name": "mstrchf-9000",
+  "version": "0.1.2",
+  "description": "A local meal planner tuned to your taste, with 390 recipes and grocery/calendar workflows for ChatGPT desktop.",
+  "author": {
+    "name": "Bayes Ltd"
+  },
+  "requires_local_executor": true,
+  "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MSTRCHF 9000",
+    "shortDescription": "Free meal-planning beta",
+    "longDescription": "A free beta for ChatGPT desktop: 390 original recipes, ingredient-sharing meal plans and shopping lists. Uses your existing ChatGPT subscription, with no extra MSTRCHF fees. Your kitchen is saved locally with backups; checkout stays with you.",
+    "developerName": "Bayes Ltd",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "logo": "./assets/icon.svg",
+    "composerIcon": "./assets/icon.svg",
+    "brandColor": "#9B1B26",
+    "brandColorDark": "#4A1F2B",
+    "defaultPrompt": "Open my MSTRCHF 9000 meal planner."
+  }
+}

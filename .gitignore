@@ -26,4 +26,8 @@ credentials*.json
 Thumbs.db
 desktop.ini
 coverage/
+/.codex-build/
+/codex-plugin/app/
+/codex-plugin/server/
+/codex-plugin/catalogue/
 __pycache__/

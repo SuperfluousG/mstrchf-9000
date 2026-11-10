@@ -71,12 +71,12 @@ export function basketText(b: BasketFile): string {
 }
 
 /** Instructions a browser-capable Claude can follow to fill the user's online grocery basket. */
-export function claudePrompt(b: BasketFile): string {
+export function claudePrompt(b: BasketFile, assistant = 'Claude'): string {
   const word = MARKETS[b.market]?.basket ?? 'basket';
   const shop = b.retailerName ?? 'online supermarket';
   const tab = b.retailerName ? `the ${b.retailerName} tab` : 'the supermarket tab';
   return [
-    `Please fill my ${shop} grocery ${word} for this MSTRCHF 9000 meal plan, using the grocery-basket skill if you have it.`,
+    `Please fill my ${shop} grocery ${word} for this MSTRCHF 9000 meal plan, using the grocery-basket skill if you have it in ${assistant}.`,
     '',
     'Rules:',
     `- Use ${tab} I am already signed in to. Do not sign in, enter payment details or check out.`,

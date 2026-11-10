@@ -2,7 +2,7 @@
 
 ## Current commission
 
-10 November 2026: version 1.2.0 is live on `main` and in Gregg's artifact (version 3). The next stage moves to Codex: finalise the UI and UX, then prepare a Codex version alongside the Claude one. Read `HANDOVER.md` first; it records what is built, how to verify it and what is still open.
+10 November 2026: Gregg accepted the refined UI and selected Countercut, the first logo direction. Claude plugin 1.3.0 and Gregg's artifact version 4 are released; main `04d6c36` contains that release. The current commission adds a local ChatGPT desktop plugin alongside Claude and a separate promotional ChatGPT Site, using the existing Freya 2.0 colours, Space Grotesk and weathered oxblood. Present both editions as a free, evolving beta using the user's existing AI subscription, with consumer setup that does not require them to use a command line. Read `HANDOVER.md` for the current checkpoint and verification limits.
 
 9 November 2026: Gregg commissioned a fresh rebuild ("take anything useful and start from scratch") on branch `v2`, since merged into `main`. Goal: a HelloFresh-style experience catered to his taste. He says what he fancies, it plans meals with lots of recipe choice, groups meals that share ingredients to cut cost and waste, works out the basket, and orders it.
 
@@ -11,7 +11,8 @@ Supersedes the September–October guidance (Codex Sites delivery, `loop/001/` r
 ## Working rules
 
 - The repo is https://github.com/SuperfluousG/mstrchf-9000 (private, owned by the `SuperfluousG` account). `main` is the default branch. Make changes on a branch and merge them through a pull request, so CI (`.github/workflows/ci.yml`: validate, build, test) runs first. Branch protection is off because the free plan doesn't offer it for private repos, so this is a convention, not enforced.
-- Keep it simple: TypeScript + React + Vite, no native/Rust/WASM layer. The only server is the dev server's `/api/kitchen` file store (`server/kitchenFile.ts`).
+- Keep it simple: TypeScript + React + Vite, no native/Rust/WASM layer. Browser development uses `/api/kitchen` (`server/kitchenFile.ts`). The Codex edition uses the bundled local stdio MCP server in `server/codex*.ts`; it shares the planner domain and view code. Do not add a hosted meal-plan service.
+- Codex source is `codex-plugin/`, separate from Claude's `plugin/`. Build with `npm run build:codex`, verify with `node scripts/smoke-codex.mjs`, then `npm run pack:codex`. Never edit installed plugin caches. Its kitchen belongs outside the plugin installation, normally `%LOCALAPPDATA%/MSTRCHF9000`; tests must set `MSTRCHF_DATA_DIR` to an owned throwaway directory.
 - The same build runs as a Claude artifact (`npm run plugin`). Inside an artifact: plain `#name` hashes only, no direct downloads (use `src/platform.ts`), no `confirm()`, and the kitchen lives in the viewer's private `data/users/<id>/kitchen` document.
 - Gregg's own planner artifact is https://claude.ai/artifact/65ZQJqG6jJTgia2XFXPw4a. Republish it with the Artifact tool from `plugin/skills/mstrchf-planner/app/index.html` (root that folder, files from `files.json`, capabilities `db`, `user`, `downloads`). Never add `db` rules that open `data/users`.
 - Recipe photos are `src/photos/<id>.webp`, made by Codex from `catalogue/PHOTO-BRIEF.md` and imported with `scripts/import_photos.py`. Generate in fixed batches of one image per recipe; never loop or make variants (the v1 build ran unattended over a weekend and filled half a terabyte). Brand assets and their briefs are in `src/brand/`.
