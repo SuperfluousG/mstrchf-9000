@@ -28,6 +28,8 @@ desktop.ini
 coverage/
 /.codex-build/
 /codex-plugin/app/
+# Packed recipe photos for the Claude artifact build (scripts/pack_photos.py)
+/src/photo-packs/
 /codex-plugin/server/
 /codex-plugin/catalogue/
 __pycache__/

@@ -69,6 +69,8 @@ Each person should publish their own copy: on someone else's artifact, people ou
 | `plugin/` | The Claude plugin: planner, grocery basket and calendar skills. |
 | `codex-plugin/`, `server/codex*.ts` | The Codex package and local stdio MCP implementation. |
 | `scripts/build-artifact.mjs`, `scripts/export-recipes.mjs` | Build the artifact page and the recipe export for the plugin. |
+| `src/photoSource.ts`, `src/photoSource.packed.ts`, `scripts/pack_photos.py` | Recipe photos: one file per photo, or (the Claude artifact build, `vite build --mode artifact`) packed into three files at 720 px so a Claude install publishes 17 files. |
+| `scripts/setup-map.mjs` | Writes the planner skill's upload lists (`app/setup.json`): core files first, then the photo packs. |
 
 Diet and allergen labels are derived from ingredients, never hand-labelled. Prices are rough estimates for planning, not live supermarket prices.
 
