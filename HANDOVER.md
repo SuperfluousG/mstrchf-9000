@@ -20,12 +20,18 @@ Updates publish only the paths the user's copy lacks, and `null` the stale ones.
 
 **The source artifact is now unused.** No plugin version still relies on it: 1.3.1 falls back to uploading. Delete it only on Gregg's word.
 
-**Not verified:** the 1.3.2 install on the second account. The test should check:
-- how long until the planner opens;
-- how long until the last photos arrive;
-- whether the reload when photos land disturbs the first questions.
+**1.3.2 tested on the second account, 11 November 2026.** Usable 34 s after the skill loaded (first publish of the 11 core files); all photos in at 4 min 21 s. About 3 min 45 s of that was Claude writing out the two 195-path photo lists. That session did not open the page to confirm it loaded.
 
-**Next speed-up, not started.** Each install still writes about 400 paths. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
+**1.3.3 (skill only).**
+- If several artifacts are titled "MSTRCHF 9000", the skill uses the most recent and tells the user about the others.
+- It tells the user before each photo part.
+- It says why the lists must be written into the call: the Artifact tool takes `files` inline, not from a file.
+
+Not taken up from that test's suggestions:
+- A sha256 manifest, so Claude could skip reading files before publishing. A manifest cannot replace the Artifact tool's read-before-publish rule.
+- A browser check after the first publish. Not every Claude surface has a browser, and it would add time.
+
+**Next speed-up, not started.** Each install still writes about 400 paths. A cheaper interim step is shorter photo names (hash only, e.g. `assets/p/CuQTOz6r.webp`, set by Vite `assetFileNames`), which roughly halves the writing; it also needs a rebuild. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
 
 ## Claude plugin directory repo — 10 November 2026
 
