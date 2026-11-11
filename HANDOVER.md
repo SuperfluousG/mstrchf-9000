@@ -1,5 +1,28 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Claude install: one-step open — 11 November 2026
+
+Owner: Claude Code. Gregg tested 1.3.0 on a second Claude account. "Open MSTRCHF 9000" found no artifact and stopped to ask. The skill also required uploading 401 files (about 40 MB) from the plugin folder, which a fresh Claude session must first copy to its scratchpad. The Artifact tool also requires Claude to read every file it did not write before publishing it, and a fresh session cannot read a 1 MB minified script and 394 photos. Plugin 1.3.1 (this branch) changes setup as follows. This supersedes "Set up MSTRCHF 9000 for me" in the section below.
+
+**Source artifact for installs.** https://claude.ai/artifact/VjcD3g9juBh6jUBcD9wXvQ ("MSTRCHF 9000 Source", on Gregg's account) holds the 1.3.0 build's 401 files and a short page explaining itself. It has no capabilities and stores nothing.
+- Gregg must set its sharing to "Anyone with the link" in the page's Share menu. Users outside his organisation cannot copy from it until he does, and setup then falls back to uploading from disk.
+- It is additive. When a new Claude build ships, publish the new build's files to it, but do not remove old ones while older plugin versions are installed. Their `setup.json` still names the old paths.
+- It is not a planner, and nobody should be sent to it.
+
+**How setup works now.** `scripts/setup-map.mjs`, now part of `npm run plugin`, writes `plugin/skills/mstrchf-planner/app/setup.json`. It holds two `files` maps of 201 and 200 entries, each of the form `{"artifact": <source>, "path": <path>}`. When there is no planner, the skill:
+1. copies and reads only `app/index.html` (471 bytes);
+2. publishes it twice with those maps, so the server copies everything else;
+3. does all this without asking first.
+
+An update publishes only the missing paths and `null`s stale ones. If the source cannot be opened, the skill falls back to uploading from disk. The artifact listing now uses `limit: 200`. The README tells users to say "Open MSTRCHF 9000".
+
+**Verified here:** copying files from one artifact into a new one, on Gregg's own account. **Not verified:**
+- whether a user on another account can copy from the source once it is shared by link;
+- whether that user's Claude still feels bound to read the copied files;
+- the full install on a clean second account. Gregg's re-test settles these.
+
+**Still slow, and the next fix.** Each install makes Claude write out about 400 copy entries, roughly 76 KB, which takes a minute or two. The fix is fewer files. The app could load photos from a few packed files instead of 394 separate ones, which brings setup to one publish of about ten entries. That change touches `src/data.ts`, where photos are a single `import.meta.glob`, and the artifact build. It needs browser checks at desktop and phone width. It is not started.
+
 ## Claude plugin directory repo — 10 November 2026
 
 Owner: Claude Code. This section records the Claude edition's public release route. It updates the Claude statements in the section below.
@@ -26,7 +49,7 @@ This resolves the "Licence" item under "Open before a public release" below.
 2. Customize → Plugins → Add → Add marketplace, entering `SuperfluousG/mstrchf-9000-claude`.
 3. In Claude Code: `claude plugin marketplace add SuperfluousG/mstrchf-9000-claude`, then `claude plugin install mstrchf-9000@mstrchf-9000`.
 
-After any of these, the user says "Set up MSTRCHF 9000 for me". Claude then publishes that user's own planner artifact, which only its owner can save to. Never point users at Gregg's artifact, where outside viewers cannot save.
+After any of these, the user says "Open MSTRCHF 9000" (from 1.3.1; see the section above). Claude then publishes that user's own planner artifact, which only its owner can save to. Never point users at Gregg's artifact, where outside viewers cannot save.
 
 **Directory submission.** Gregg submits it himself at https://claude.ai/directory/manage → Submit new → Plugin bundle → `SuperfluousG/mstrchf-9000-claude`. Anthropic states no review time. Claude has not submitted anything.
 

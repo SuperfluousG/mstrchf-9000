@@ -11,7 +11,7 @@
     "test": "vitest run",
     "validate": "node scripts/validate-catalogue.mjs",
     "build:artifact": "npm run build && node scripts/build-artifact.mjs",
-    "plugin": "npm run build:artifact && node scripts/export-recipes.mjs && python scripts/pack_plugin.py",
+    "plugin": "npm run build:artifact && node scripts/setup-map.mjs && node scripts/export-recipes.mjs && python scripts/pack_plugin.py",
     "build:codex": "npm run check && node scripts/build-codex.mjs",
     "pack:codex": "node scripts/pack-codex.mjs"
   },
