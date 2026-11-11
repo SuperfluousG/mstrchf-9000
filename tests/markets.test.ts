@@ -133,4 +133,28 @@ describe('countries', () => {
     expect(retailerOf({ ...DEFAULT_PROFILE, market: 'us', retailer: 'tesco' })).toBeUndefined();
     expect(retailerById('voila')?.market).toBe('ca');
   });
+
+  it('hands over the selected shop and exact basket in the built-in ChatGPT browser', () => {
+    const recipes = [catalogue.recipes.find(r => r.meal === 'dinner')!];
+    const list = buildShoppingList({ recipes, people: 2, have: new Set() }, catalogue);
+    for (const id of ['tesco', 'morrisons', 'ocado']) {
+      const retailer = retailerById(id)!;
+      const basket = buildBasket(list, '2026-11-16', 2, recipes.map(r => r.title), catalogue.market, retailer);
+      const prompt = claudePrompt(basket, 'ChatGPT');
+      expect(prompt).toContain(`Open the ${retailer.name} online grocery site in a visible browser tab beside this chat`);
+      expect(prompt).toContain('Use ChatGPT’s built-in browser inside the desktop app (@Browser)');
+      expect(prompt).toContain('only if it is in that built-in browser');
+      expect(prompt).toContain('Do not use Chrome, Edge, an external browser, or a browser extension');
+      expect(prompt).toContain('ask me to sign in there myself');
+      expect(prompt).toContain('Keep the tab open and resume after I hand control back');
+      expect(prompt).toContain('If the built-in browser is unavailable, explain that and stop');
+      expect(prompt).not.toContain('I am already signed in');
+      expect(prompt).toContain('ask me before booking a delivery slot');
+      const payload = JSON.parse(prompt.slice(prompt.indexOf('{')));
+      expect(payload).toMatchObject({ weekId: '2026-11-16', retailer: id, retailerName: retailer.name });
+      expect(payload.items).toEqual(basket.items.map(({ name, search, buy, need, estPrice }) => ({ name, search, buy, need, estPrice })));
+    }
+    const other = buildBasket(list, '2026-11-16', 2, [], catalogue.market);
+    expect(claudePrompt(other, 'ChatGPT')).toContain('Ask me which online supermarket to use');
+  });
 });

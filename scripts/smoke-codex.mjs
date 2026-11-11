@@ -20,6 +20,9 @@ try {
   assert(tools.some(t => t.name === 'open_planner'));
   const version = JSON.parse(await readFile('codex-plugin/plugin.json', 'utf8')).version;
   assert.equal(client.getServerVersion().version, version);
+  const icon = client.getServerVersion().icons?.[0];
+  assert.equal(icon?.mimeType, 'image/svg+xml');
+  assert.equal(Buffer.from(icon.src.split(',')[1], 'base64').toString(), await readFile('codex-plugin/assets/icon.svg', 'utf8'));
   const plannerUri = tools.find(t => t.name === 'open_planner')._meta.ui.resourceUri;
   assert(plannerUri.includes(version));
   const empty = await call('get_kitchen'); assert.equal(empty.state, null);

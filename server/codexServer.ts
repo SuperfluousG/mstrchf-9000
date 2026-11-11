@@ -31,7 +31,11 @@ function weekId(value?: string): string {
 export async function createCodexServer(root: string, dataDir = defaultKitchenDir()) {
   const library = await loadCodexLibrary(join(root, 'catalogue'));
   const kitchen = new CodexKitchen(dataDir, library);
-  const server = new McpServer({ name: 'mstrchf-9000', version: DESKTOP_VERSION });
+  // Sidebar entrypoints use the MCP server icon, independently of the package listing icon.
+  const icon = await readFile(join(root, 'assets', 'icon.svg'));
+  const server = new McpServer({ name: 'mstrchf-9000', version: DESKTOP_VERSION,
+    icons: [{ src: `data:image/svg+xml;base64,${icon.toString('base64')}`, mimeType: 'image/svg+xml', sizes: ['80x80'] }],
+  });
   registerAppTool(server, 'open_planner', {
     title: 'MSTRCHF 9000', description: 'Open the interactive meal planner to set up a kitchen, browse recipes, plan meals and review shopping.', inputSchema: {}, annotations: readOnly,
     _meta: { ui: { resourceUri: PLANNER_URI }, 'openai/ui': { entrypoints: [{ type: 'global' }] } },

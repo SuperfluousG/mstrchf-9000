@@ -17,6 +17,7 @@ describe('local Codex plugin', () => {
     folder = await mkdtemp(join(tmpdir(), 'mstrchf-codex-test-'));
     await cp(resolve('catalogue'), join(folder, 'catalogue'), { recursive: true });
     await mkdir(join(folder, 'app', 'photos'), { recursive: true });
+    await cp(resolve('codex-plugin/assets'), join(folder, 'assets'), { recursive: true });
     await writeFile(join(folder, 'app', 'planner.html'), '<!doctype html><html><body>Planner fixture</body></html>');
     await cp(resolve('src/photos/thai-larb-style-pork-lettuce-cups.webp'), join(folder, 'app', 'photos', 'thai-larb-style-pork-lettuce-cups.webp'));
     built = await createCodexServer(folder, join(folder, 'data'));
@@ -33,6 +34,11 @@ describe('local Codex plugin', () => {
     return built.kitchen.update(() => ({ ...structuredClone(EMPTY_STATE), profile: { ...structuredClone(DEFAULT_PROFILE), market: 'uk', retailer: 'tesco', people: 4 } }), undefined, true);
   }
   it('discovers a zero-argument global planner entrypoint and its fullscreen app resource', async () => {
+    const icon = client.getServerVersion()!.icons![0];
+    expect(icon.mimeType).toBe('image/svg+xml');
+    const svg = Buffer.from(icon.src.split(',')[1], 'base64').toString();
+    expect(svg).toContain('M6 56V8h11l15 22');
+    expect(icon.sizes).toEqual(['80x80']);
     const tools = (await client.listTools()).tools;
     const opener = tools.find(t => t.name === 'open_planner')!;
     expect(opener._meta).toMatchObject({ ui: { resourceUri: PLANNER_URI }, 'openai/ui': { entrypoints: [{ type: 'global' }] } });

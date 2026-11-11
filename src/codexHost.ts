@@ -3,6 +3,7 @@ import { DESKTOP_VERSION } from './domain/desktopEdition';
 
 declare global { interface Window { __MSTRCHF_CODEX__?: boolean } }
 export const isCodexApp = typeof window !== 'undefined' && window.__MSTRCHF_CODEX__ === true;
+if (isCodexApp) document.documentElement.classList.add('codex-app');
 let connection: Promise<App> | null = null;
 let teardown: (() => Promise<void>) | null = null;
 export interface CodexSnapshot { state: unknown; savedAt: number; revision: string; selectedWeekId?: string }
@@ -43,6 +44,12 @@ export async function codexCall<T>(name: string, args: Record<string, unknown> =
   }
   if (!result.structuredContent) throw new Error('The local kitchen returned no data.');
   return result.structuredContent as T;
+}
+
+/** A button-initiated handoff to the conversation associated with this app. */
+export async function sendCodexMessage(prompt: string): Promise<void> {
+  const result = await (await codexApp()).sendMessage({ role: 'user', content: [{ type: 'text', text: prompt }] });
+  if (result.isError) throw new Error('ChatGPT did not accept the shopping handoff.');
 }
 
 const photoCache = new Map<string, Promise<string>>();

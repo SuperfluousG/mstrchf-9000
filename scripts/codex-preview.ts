@@ -14,6 +14,16 @@ const bridge = new AppBridge(null, { name: 'MSTRCHF test host', version: '0.1.0'
 }, { hostContext: { displayMode: 'fullscreen', availableDisplayModes: ['fullscreen'], theme: 'light', locale: 'en-GB', safeAreaInsets: { top: 0, right: 0, bottom: 0, left: 0 } } });
 bridge.oncalltool = params => rpc('tools/call', params);
 bridge.onreadresource = params => rpc('resources/read', params);
+// Capture the real bridge handoff without starting an agent or shopping.
+bridge.onmessage = async params => {
+  const text = params.content.filter(c => c.type === 'text').map(c => c.text).join('\n');
+  const output = document.querySelector<HTMLElement>('#handoff')!;
+  output.hidden = false;
+  output.textContent = text;
+  const reject = new URLSearchParams(location.search).has('reject-message');
+  status.textContent = reject ? 'Test host rejected shopping handoff' : 'Shopping handoff received · no shopping performed';
+  return reject ? { isError: true } : {};
+};
 bridge.oninitialized = async () => {
   await bridge.sendToolInput({ arguments: {} });
   await bridge.sendToolResult(await rpc('tools/call', { name: 'open_planner', arguments: {} }));

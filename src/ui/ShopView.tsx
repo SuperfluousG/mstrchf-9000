@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import bagUrl from '../brand/market-bag.webp';
 import plateUrl from '../brand/empty-plate.webp';
 import { catalogue } from '../data';
+import { isCodexApp, sendCodexMessage } from '../codexHost';
 import { basketText, buildBasket, claudePrompt, type BasketFile } from '../domain/basket';
 import { amount, money, packLabel, shortMoney } from '../domain/format';
 import { retailerOf } from '../domain/profile';
@@ -24,6 +25,10 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const [fallback, setFallback] = useState('');
   const [fileMsg, setFileMsg] = useState('');
   const [toolsOpen, setToolsOpen] = useState(false);
+  const sendingRef = useRef(false);
+  const [sending, setSending] = useState(false);
+  const [sentBasket, setSentBasket] = useState('');
+  const [handoffError, setHandoffError] = useState('');
   const canSave = useCanSaveFiles();
   const people = s.profile?.people ?? 2;
   const ordered = w.status === 'ordered';
@@ -33,6 +38,17 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
   const word = catalogue.market.basket;
   const basket = (ordered ? w.orderedBasket : undefined) ?? buildBasket(list, weekId, people, meals, catalogue.market, retailer);
   const conflicts = weekExclusions(s, weekId);
+  const prompt = claudePrompt(basket, assistantName);
+  const handedOver = sentBasket === prompt;
+  const orderLabel = sending ? 'Sending to ChatGPT…' : handedOver ? 'Sent to ChatGPT' : `Order with ${assistantName}`;
+  const startOrder = async () => {
+    if (conflicts.length || !basket.items.length || sendingRef.current || handedOver) return;
+    if (!isCodexApp) { setOrder(true); return; }
+    sendingRef.current = true; setSending(true); setHandoffError('');
+    try { await sendCodexMessage(prompt); setSentBasket(prompt); }
+    catch { setHandoffError('Could not confirm the handoff. Check your chat before trying again. You can also copy the instructions below.'); setOrder(true); }
+    finally { sendingRef.current = false; setSending(false); }
+  };
 
   if (!w.picks.length) {
     return (
@@ -111,7 +127,8 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           <p className="muted small">Shopping at {retailer ? retailer.name : 'another shop'} · <button type="button" className="link" onClick={() => go('kitchen')}>change</button></p>
           {conflicts.length > 0 && <p className="notice warn" role="alert">{conflicts.length} {conflicts.length === 1 ? 'meal conflicts' : 'meals conflict'} with your kitchen exclusions. Review and re-plan from Week before ordering.</p>}
           {!basket.items.length && <p className="notice">Nothing to buy. Review the items you already have and the cupboard staples below.</p>}
-          <button type="button" className="btn primary wide" disabled={!!conflicts.length || !basket.items.length} onClick={() => setOrder(true)}>Order with {assistantName}</button>
+          <button type="button" className="btn primary wide" disabled={!!conflicts.length || !basket.items.length || sending || handedOver} onClick={startOrder}>{orderLabel}</button>
+          {handedOver && <p className="small" role="status">Your list has been sent to ChatGPT. Continue in the chat; if you need to sign in, ChatGPT will open {shop} first.</p>}
           <button type="button" className="btn ghost shopping-tools-toggle" aria-expanded={toolsOpen} aria-controls="shopping-tools" onClick={() => setToolsOpen(!toolsOpen)}>List and order options</button>
           <div id="shopping-tools" className={`shopping-tools${toolsOpen ? ' expanded' : ''}`}>
           <button type="button" className="btn ghost wide" onClick={() => copy('list', basketText(basket))}>{copied === 'list' ? 'Copied' : 'Copy list'}</button>
@@ -128,15 +145,16 @@ export function ShopView({ weekId, go }: { weekId: string; go: (r: string) => vo
           </div>
         </aside>
       </div>
-      {!!basket.items.length && <div className="shop-mobile-action" aria-label="Shopping actions"><span><strong>{money(basket.estTotal)}</strong> <span className="small">estimated</span></span><button type="button" className="btn primary" disabled={!!conflicts.length} onClick={() => setOrder(true)}>Review basket</button></div>}
+      {!!basket.items.length && <div className="shop-mobile-action" aria-label="Shopping actions"><span><strong>{money(basket.estTotal)}</strong> <span className="small">estimated</span></span><button type="button" className="btn primary" disabled={!!conflicts.length || sending || handedOver} onClick={startOrder}>{orderLabel}</button></div>}
 
       <Sheet open={order} onClose={() => setOrder(false)} label={`Order with ${assistantName}`}>
         <div className="order-sheet">
           <p className="eyebrow">{retailer?.name ?? 'Any shop'} · {basket.items.length} items · est. {money(basket.estTotal)}</p>
           <h2 className="display small">Order with {assistantName}</h2>
+          {handoffError && <p className="notice warn" role="alert">{handoffError}</p>}
           <ol className="how">
-            <li><strong>Open {shop}.</strong> Sign in yourself in Chrome.</li>
-            <li><strong>Hand over the list.</strong> Copy these instructions to {assistantName} with browser access. The MSTRCHF 9000 plugin supplies the retailer guide.</li>
+            <li><strong>{assistantName} opens {shop}.</strong> If you need to sign in, you'll be prompted on the supermarket's site.</li>
+            <li><strong>Fill the {word}.</strong> {assistantName} uses your list and the MSTRCHF 9000 retailer guide. {isCodexApp ? 'If the handoff is unavailable, copy the instructions to your chat.' : `Copy the instructions to your ${assistantName} chat with browser access.`}</li>
             <li><strong>Review and finish.</strong> {assistantName} reports additions and substitutions. You confirm any delivery slot and complete checkout.</li>
           </ol>
           <button type="button" className="btn primary" onClick={() => copy('prompt', claudePrompt(basket, assistantName))}>{copied === 'prompt' ? `Copied — paste it to ${assistantName}` : 'Copy order instructions'}</button>
