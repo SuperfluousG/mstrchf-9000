@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "mstrchf-9000",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A local meal planner tuned to your taste, with 390 original recipes, shared-ingredient planning, shopping estimates and grocery/calendar workflows for ChatGPT desktop.",
   "author": {
     "name": "Bayes Ltd"

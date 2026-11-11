@@ -252,6 +252,13 @@ input:focus, select:focus { border-color: var(--ink); }
 .summary-bar .btn { margin-left: auto; }
 .summary-bar .btn.primary { background: var(--gold); border-color: var(--gold); color: var(--ink); }
 .summary-bar .btn.primary:hover { background: var(--bright-gold); border-color: var(--bright-gold); }
+/* Leave the expanded desktop chat composer clear on the right. */
+@media (min-width: 1000px) {
+  .codex-app .summary-bar {
+    width: min(66.6667%, calc(100vw - 600px - max(48px, calc((100vw - var(--shell)) / 2))));
+    column-gap: 12px;
+  }
+}
 .saving { color: var(--bright-gold); }
 .shop .saving, .shop-total .saving { color: var(--deep-gold); font-weight: 600; }
 
