@@ -70,16 +70,19 @@ export function basketText(b: BasketFile): string {
   return lines.join('\n');
 }
 
-/** Instructions a browser-capable Claude can follow to fill the user's online grocery basket. */
+/** A self-contained shopping handoff, using the exact list reviewed in the planner. */
 export function claudePrompt(b: BasketFile, assistant = 'Claude'): string {
   const word = MARKETS[b.market]?.basket ?? 'basket';
   const shop = b.retailerName ?? 'online supermarket';
-  const tab = b.retailerName ? `the ${b.retailerName} tab` : 'the supermarket tab';
   return [
     `Please fill my ${shop} grocery ${word} for this MSTRCHF 9000 meal plan, using the grocery-basket skill if you have it in ${assistant}.`,
     '',
     'Rules:',
-    `- Use ${tab} I am already signed in to. Do not sign in, enter payment details or check out.`,
+    b.retailerName
+      ? `- Open your browser and navigate to the ${b.retailerName} online grocery site. Reuse my existing ${b.retailerName} grocery tab if available.`
+      : '- Ask me which online supermarket to use, then open your browser and navigate to its grocery site.',
+    '- If login is needed, open the site first and ask me to sign in there. Continue filling the basket after I hand control back. Do not require Chrome or a separate browser setup.',
+    '- Do not sign in, enter payment details or check out. Never enter passwords or create accounts on my behalf.',
     '- Work in one tab, one item at a time. If the site shows a security check or CAPTCHA, stop and hand back to me.',
     `- Leave anything already in my ${word} alone.`,
     "- For each item, search the given phrase, pick the best-value product that matches the pack size (the shop's own brand is fine), and add the stated count.",
@@ -87,6 +90,6 @@ export function claudePrompt(b: BasketFile, assistant = 'Claude'): string {
     `- When done, show me the ${word} total and a list of what you added, substituted or skipped. Then ask me before booking a delivery slot.`,
     '',
     `Basket (${b.market.toUpperCase()}, prices in ${b.currency}, JSON):`,
-    JSON.stringify({ market: b.market, retailer: b.retailer, items: b.items.map(i => ({ name: i.name, search: i.search, buy: i.buy, need: i.need, estPrice: i.estPrice })) }, null, 1),
+    JSON.stringify({ weekId: b.weekId, people: b.people, market: b.market, retailer: b.retailer, retailerName: b.retailerName, items: b.items.map(i => ({ name: i.name, search: i.search, buy: i.buy, need: i.need, estPrice: i.estPrice })) }, null, 1),
   ].join('\n');
 }

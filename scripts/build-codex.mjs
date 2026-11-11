@@ -42,7 +42,7 @@ await cp(join(root, 'src/photos'), join(out, 'app/photos'), { recursive: true })
 await cp(join(root, 'catalogue'), join(out, 'catalogue'), { recursive: true, filter: path => !/PHOTO-BRIEF|AUTHORING/.test(path) });
 await build({ entryPoints: [join(root, 'server/codex.ts')], outfile: join(out, 'server/index.mjs'), bundle: true, platform: 'node', format: 'esm', target: 'node20', minify: true,
   banner: { js: 'import {createRequire} from "node:module";const require=createRequire(import.meta.url);' }, logLevel: 'info' });
-const mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="#E2C779" d="M6 56V8h11l15 22L47 8h11v48H45V31L32 49 19 31v25Z"/><path fill="#4A1F2B" d="m12 8 33 48h5L17 8Z"/><path fill="#EEEDE5" d="m40 18 7-10h11v7H47l-4 6Z"/></svg>';
+const mark = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="#E2C779" d="M6 56V8h11l15 22L47 8h11v48H45V31L32 49 19 31v25Z"/><path fill="#741F29" d="m12 8 33 48h5L17 8Z"/><path fill="#EEEDE5" d="m40 18 7-10h11v7H47l-4 6Z"/></svg>';
 await writeFile(join(out, 'assets/mark.svg'), mark);
-await writeFile(join(out, 'assets/icon.svg'), mark.replace('viewBox="0 0 64 64"', 'viewBox="0 0 80 80"').replace('<path', '<rect width="80" height="80" rx="16" fill="#4A1F2B"/><g transform="translate(8 8)"><path').replace('</svg>', '</g></svg>'));
+await writeFile(join(out, 'assets/icon.svg'), mark.replace('viewBox="0 0 64 64"', 'viewBox="0 0 80 80"').replace('<path', '<rect width="80" height="80" rx="16" fill="#741F29"/><g transform="translate(8 8)"><path').replace('</svg>', '</g></svg>'));
 console.log(`Codex app: ${(Buffer.byteLength(page) / 1024 / 1024).toFixed(1)} MB HTML; photos served lazily through MCP resources.`);

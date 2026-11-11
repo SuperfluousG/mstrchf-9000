@@ -13,9 +13,9 @@
   --gold: #D7B461;           /* Freya agency */
   --deep-gold: #8A641F;      /* Freya deep gold: gold that reads on chalk */
   --bright-gold: #E2C779;    /* Freya bright gold: gold that reads on oxblood */
-  --oxblood: #4A1F2B;        /* Freya qualification, used here as the band ground */
+  --oxblood: #741F29;        /* Warm oxblood, matched to the MSTRCHF Sites */
   /* MSTRCHF roles in place of Freya's blue principal */
-  --cardinal: #9B1B26;
+  --cardinal: #932431;
   --cardinal-deep: #78131D;
   --ink: #2A1517;
   --ink-soft: #6B5552;
@@ -407,7 +407,7 @@ summary { cursor: pointer; font-weight: 600; }
 
 /* UI refinement: retain the established type, colour and food photography. */
 [hidden] { display: none !important; }
-.band { background: linear-gradient(rgba(74,31,43,.16), rgba(74,31,43,.16)), url('./brand/weathered-oxblood.webp') center 48% / cover, var(--oxblood); }
+.band { background: linear-gradient(110deg,#a6262726,#b62b2726), url('./brand/weathered-oxblood.webp') center 48% / cover, var(--oxblood); background-blend-mode: screen, luminosity; }
 .wordmark { letter-spacing: -.035em; }
 .wordmark-name { display: inline-flex; align-items: center; gap: 10px; }
 .wordmark-edition { color: var(--bright-gold); padding-left: 10px; border-left: 1px solid rgba(226,199,121,.55); font-size: .78em; font-weight: 500; letter-spacing: .01em; }

@@ -45,6 +45,12 @@ export async function codexCall<T>(name: string, args: Record<string, unknown> =
   return result.structuredContent as T;
 }
 
+/** A button-initiated handoff to the conversation associated with this app. */
+export async function sendCodexMessage(prompt: string): Promise<void> {
+  const result = await (await codexApp()).sendMessage({ role: 'user', content: [{ type: 'text', text: prompt }] });
+  if (result.isError) throw new Error('ChatGPT did not accept the shopping handoff.');
+}
+
 const photoCache = new Map<string, Promise<string>>();
 export function codexPhoto(id: string): Promise<string> {
   let photo = photoCache.get(id);
