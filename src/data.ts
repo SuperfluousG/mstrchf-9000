@@ -4,6 +4,7 @@ import { buildCatalogue, type Catalogue } from './domain/catalogue';
 import { localIngredient, localRecipe, type MarketFile, type Terms } from './domain/localize';
 import { type Market, MARKETS, setActiveMarket } from './domain/market';
 import type { Ingredient, Recipe } from './domain/types';
+import { photoUrl } from './photoSource';
 
 const files = import.meta.glob<Recipe[]>('../catalogue/recipes/*.json', { eager: true, import: 'default' });
 /** British source recipes, placeholders unrendered. */
@@ -43,9 +44,9 @@ export function selectMarket(m: Market): void {
 }
 
 // Recipe photos are src/photos/<recipe id>.webp (add them with scripts/import_photos.py). Recipes without one get a drawn plate.
-const photos = import.meta.glob<string>('./photos/*.webp', { eager: true, query: '?url', import: 'default' });
-const photoById = new Map(Object.entries(photos).map(([path, url]) => [path.slice(path.lastIndexOf('/') + 1, -'.webp'.length), url]));
+// They load from photoSource.ts, or from packed files in the Claude artifact build (photoSource.packed.ts).
+export { loadPhoto, photosPacked } from './photoSource';
 
 export function imageUrl(r: Recipe): string | null {
-  return photoById.get(r.id) ?? null;
+  return photoUrl(r.id);
 }

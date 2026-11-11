@@ -7,6 +7,40 @@ Gregg verified 0.1.5 in full view, then reported that the expanded chat composer
 Verification: TypeScript/desktop build and packaged stdio smoke passed with disposable data. SDK-host checks at 1915px and 1440px put the bar's right edge at approximately 1155px and 832px respectively, with the Shopping list button inside it and no horizontal overflow. At 375px the summary remains full width with its button inside. The Claude `plugin/` tree, photo loader and Vite settings are untouched. Website download promotion is held for Gregg's review of the final native candidate.
 
 The preceding native 0.1.5 verification confirmed the sidebar Countercut M, loaded recipe photo and ingredients/method for two people, shopping controls, and successful Order with ChatGPT acceptance into the current chat. Gregg explicitly authorised an open-only handoff test: Tesco opened in the built-in browser, already signed in, with an empty £0.00 basket. No basket items, slots or checkout were changed. The automatically queued shopping prompt is part of that open-only test, not authority to fill a basket later.
+The candidate has also been reconciled with main `4efa97c` (Claude photo packing). Those incoming changes are retained unchanged; only artifact-mode builds use the packs.
+
+## Claude 1.4.0: packed recipe photos — 11 November 2026
+
+Owner: Claude Code. This is built from main `bca4f39`, so it includes the ChatGPT-review changes to shared `src/` (PR #12). It supersedes "Next speed-up, not started" below.
+
+**What changed**
+- `vite build --mode artifact`, now part of `npm run build:artifact`, swaps `src/photoSource.ts` for `src/photoSource.packed.ts`. A small plugin in `vite.config.ts` does the swap. Every other build, including the web, test and Codex builds, still has one file per photo.
+- `scripts/pack_photos.py` runs first in the artifact build:
+  - It resizes the 390 recipe photos to 720×480 (WebP, quality 72).
+  - It packs them as base64 into `src/photo-packs/photos-{0,1,2}.json`, which is git-ignored, plus an `index.json` of recipe id to pack.
+  - It skips this work when the packs are newer than every photo.
+- `DishArt` shows a drawn plate until a photo's pack has loaded. A pack that fails to load, for example while an install is still uploading, is tried again the next time the dish appears.
+- The Claude planner is now 17 files and 22.8 MB: 13 core files, then 3 photo packs of about 7 MB each. It was 402 files and 38 MB. The plugin download is 17.0 MB.
+- `setup.json` is two short lists, and an install writes 16 paths instead of about 400. Updates leave old files in place unless the copy would pass 480 files, so a 1.3.x copy keeps its 390 old photo files instead of the update writing out every path.
+
+**Checked**
+- `npm run validate`, `npm test` (72 passed), `npm run build` (the normal build still emits 394 `.webp` files), `npm run plugin`, and directory validation.
+- The built artifact, served statically:
+  - onboarding through to Week;
+  - the recipe sheet, where photos are sharp at sheet width;
+  - Menu: all 294 dinner tiles have packed photos and none fell back to a plate;
+  - 374 px frames for Week and Menu: no horizontal overflow;
+  - with a pack's request blocked, its dish showed the plate, then the photo once the pack was reachable;
+  - no script errors (only the expected `/api/kitchen` 404 on a static copy).
+
+**Not checked**
+- An install on the second account.
+- The Claude artifact viewer itself: data URIs inside the artifact, and whether its file serving compresses the JSON.
+- Gregg's planner artifact still runs the 1.3.0 build; republish it with the 1.4.0 files.
+
+**Trade-off.** The first visit downloads all three packs, about 20 MB (about 15.5 MB gzipped if the server compresses them). The browser caches them after that. Before, each photo loaded on its own (about 100 KB) as it scrolled into view.
+
+**For the Site:** offer `release/mstrchf-9000-1.4.0.plugin` once this ships. Its hash is in the pull request.
 
 ## ChatGPT review integration with Claude 1.3.3 — 11 November 2026
 
@@ -82,7 +116,7 @@ Not taken up from that test's suggestions:
 - A sha256 manifest, so Claude could skip reading files before publishing. A manifest cannot replace the Artifact tool's read-before-publish rule.
 - A browser check after the first publish. Not every Claude surface has a browser, and it would add time.
 
-**Next speed-up, not started.** Each install still writes about 400 paths. A cheaper interim step is shorter photo names (hash only, e.g. `assets/p/CuQTOz6r.webp`, set by Vite `assetFileNames`), which roughly halves the writing; it also needs a rebuild. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
+**Next speed-up (done in 1.4.0, see the top section).** Each install still writes about 400 paths. A cheaper interim step is shorter photo names (hash only, e.g. `assets/p/CuQTOz6r.webp`, set by Vite `assetFileNames`), which roughly halves the writing; it also needs a rebuild. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
 
 ## Claude plugin directory repo — 10 November 2026
 
