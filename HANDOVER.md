@@ -1,5 +1,13 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## ChatGPT review integration with Claude 1.3.3 — 11 November 2026
+
+Gregg authorised updating `feat/chatgpt-final-review` from main `e396731` and merging it through PR #12 after checks pass. The main merge applied cleanly, preserving Claude's 1.3.3 setup changes and the ChatGPT 0.1.5 changes below. The entire `plugin/` tree is identical to main; `npm run plugin` was not run and no Claude planner file was edited.
+
+This branch does **not** change `src/data.ts`, the photo loader or Vite build settings relative to main. Claude can proceed with its separately owned photo-packing rebuild after the PR merge. Validation on the updated branch passed: catalogue check (390 recipes), TypeScript/browser build, 72 tests across 9 files, desktop build and packaged stdio smoke (10 tools, 8 planned meals, disposable kitchen). The existing PR remains the integration route; GitHub CI on the final head must pass before merge.
+
+The companion Site update uses the existing, verified Claude 1.3.3 archive (39,793,420 bytes; SHA-256 `261c66225741ea779819abeda82042c0e009e9b0b1d59f0d367b6ff91ee53cfd`) and changes the install/open prompts to use "Open MSTRCHF 9000". The Site's publication and browser-download verification checkpoint is maintained in `../MSTRCHF-9000-site/README.md`.
+
 ## Order bar clearance — 11 November 2026
 
 Gregg reported the fullscreen host's collapsed chat composer covering the week summary and ordering action. Desktop edition **0.1.5** sets the week summary and compact Shop action at least 72px above the bottom edge (58px higher than the previous desktop summary), increasing this when the host reports a larger safe-area inset. A desktop-host root class scopes this clearance to the MCP App; browser and Claude layout defaults are retained.
