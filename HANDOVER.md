@@ -1,5 +1,15 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Built-in ChatGPT browser handover — 11 November 2026
+
+Gregg tested the real shopping handoff and requested keeping the browser and sign-in inside the ChatGPT desktop app. Desktop edition **0.1.4** updates the shared handoff generator only for ChatGPT: explicitly use `@Browser`, open a visible tab beside the chat, reuse a retailer tab only within that browser, hand sign-in to Gregg there, and stop if the built-in browser is unavailable. External browsers and extensions are explicitly excluded. Claude's handoff, exact reviewed basket payload, existing-basket preservation, delivery-slot confirmation and user checkout rules are preserved.
+
+- Verification: TypeScript check, **72 tests in 9 files**, desktop build, packaged stdio smoke (10 tools, 8 planned meals, disposable kitchen), ZIP integrity and `git diff --check` passed. Existing retailer/payload checks now cover the explicit browser wording. The compiled page contains the new handover text.
+- Saved private personal plugin: `plugins_6af381bae888819197337453ced425bc`, release `pluginrel_6af44fa818208191974ebc2420e1cb2a`, version **0.1.4**. Readback confirms USER/PRIVATE and the version; author, presentation and both MCP configurations are unchanged. The partial update replaces only the versioned manifests, app page and bundled server; omitted files are retained. Local full package: `release/mstrchf-9000-chatgpt-0.1.4.zip`.
+- The current chat may still be attached to its previous plugin runtime; reopening/updating in a fresh desktop session and re-testing the button-to-built-in-browser journey remains outstanding. No new shopping handoff was sent, supermarket basket changed, Claude build republished or promotional Site deployed by this edit.
+
+The existing draft PR #12 remains the integration route; this instruction does not authorise merging it. The 0.1.4 source fix is committed locally. Automatic approval review rejected the attempted GitHub push for lack of explicit push authorisation/trusted-destination evidence; user permission to push this fix is pending. No remote branch or PR was changed by this edit.
+
 ## ChatGPT final review changes — 11 November 2026
 
 Owner: Codex, branch `feat/chatgpt-final-review`. Gregg requested matching the current promotional Site red, using the Countercut M for sidebar pinning, retailer-aware shopping copy and a direct **Order with ChatGPT** handoff.

@@ -74,14 +74,25 @@ export function basketText(b: BasketFile): string {
 export function claudePrompt(b: BasketFile, assistant = 'Claude'): string {
   const word = MARKETS[b.market]?.basket ?? 'basket';
   const shop = b.retailerName ?? 'online supermarket';
-  return [
-    `Please fill my ${shop} grocery ${word} for this MSTRCHF 9000 meal plan, using the grocery-basket skill if you have it in ${assistant}.`,
-    '',
-    'Rules:',
+  const browserRules = assistant === 'ChatGPT' ? [
+    "- Use ChatGPT’s built-in browser inside the desktop app (@Browser).",
+    b.retailerName
+      ? `- Open the ${b.retailerName} online grocery site in a visible browser tab beside this chat. Reuse an existing ${b.retailerName} grocery tab only if it is in that built-in browser.`
+      : '- Ask me which online supermarket to use, then open its grocery site in a visible browser tab beside this chat. Reuse an existing grocery tab only if it is in that built-in browser.',
+    '- Do not use Chrome, Edge, an external browser, or a browser extension, even if already connected or signed in.',
+    '- If sign-in is needed, show the retailer’s sign-in page in the built-in browser and ask me to sign in there myself. Keep the tab open and resume after I hand control back.',
+    '- If the built-in browser is unavailable, explain that and stop rather than switching browsers.',
+  ] : [
     b.retailerName
       ? `- Open your browser and navigate to the ${b.retailerName} online grocery site. Reuse my existing ${b.retailerName} grocery tab if available.`
       : '- Ask me which online supermarket to use, then open your browser and navigate to its grocery site.',
     '- If login is needed, open the site first and ask me to sign in there. Continue filling the basket after I hand control back. Do not require Chrome or a separate browser setup.',
+  ];
+  return [
+    `Please fill my ${shop} grocery ${word} for this MSTRCHF 9000 meal plan, using the grocery-basket skill if you have it in ${assistant}.`,
+    '',
+    'Rules:',
+    ...browserRules,
     '- Do not sign in, enter payment details or check out. Never enter passwords or create accounts on my behalf.',
     '- Work in one tab, one item at a time. If the site shows a security check or CAPTCHA, stop and hand back to me.',
     `- Leave anything already in my ${word} alone.`,
