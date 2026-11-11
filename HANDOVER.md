@@ -1,5 +1,13 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Expanded chat composer and compact week summary — 11 November 2026
+
+Gregg verified 0.1.5 in full view, then reported that the expanded chat composer still overlaps the full-width summary bar. He requested reducing the bar to roughly the left two-thirds. Desktop candidate **0.1.6** limits the summary to two-thirds of the content width at viewports of 1000px and above, with a further cap that reserves 600px on the right for the host composer. It retains the existing 72px bottom clearance; compact panes keep their full-width summary. All meal, item, cost and savings information is retained.
+
+Verification: TypeScript/desktop build and packaged stdio smoke passed with disposable data. SDK-host checks at 1915px and 1440px put the bar's right edge at approximately 1155px and 832px respectively, with the Shopping list button inside it and no horizontal overflow. At 375px the summary remains full width with its button inside. The Claude `plugin/` tree, photo loader and Vite settings are untouched. Website download promotion is held for Gregg's review of the final native candidate.
+
+The preceding native 0.1.5 verification confirmed the sidebar Countercut M, loaded recipe photo and ingredients/method for two people, shopping controls, and successful Order with ChatGPT acceptance into the current chat. Gregg explicitly authorised an open-only handoff test: Tesco opened in the built-in browser, already signed in, with an empty £0.00 basket. No basket items, slots or checkout were changed. The automatically queued shopping prompt is part of that open-only test, not authority to fill a basket later.
+
 ## ChatGPT review integration with Claude 1.3.3 — 11 November 2026
 
 Gregg authorised updating `feat/chatgpt-final-review` from main `e396731` and merging it through PR #12 after checks pass. The main merge applied cleanly, preserving Claude's 1.3.3 setup changes and the ChatGPT 0.1.5 changes below. The entire `plugin/` tree is identical to main; `npm run plugin` was not run and no Claude planner file was edited.
