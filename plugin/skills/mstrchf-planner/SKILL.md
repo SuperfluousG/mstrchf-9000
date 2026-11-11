@@ -12,8 +12,8 @@ Each person needs their own copy of the planner on their own Claude account: on 
 Files next to this skill:
 
 - `app/index.html`: the planner page (a few hundred bytes).
-- `app/setup.json`: the rest of the planner (script, stylesheet, fonts, ~390 photos) as ready-made `files` maps. Each entry copies one file server side from the MSTRCHF 9000 source artifact (`source`), which its maker publishes, so nothing large is uploaded from this computer.
-- `app/files.json` and the rest of `app/`: the same build on disk, used only if copying fails.
+- `app/setup.json`: `parts`, ready-made `files` lists for the Artifact tool, one per publish. `parts[0]` is the page's script, stylesheet, fonts, icon and brand images (11 files); the later parts are the recipe photos (about 195 each).
+- `app/files.json` and the rest of `app/`: the files themselves.
 
 ## Open the planner
 
@@ -21,25 +21,23 @@ When the user asks to open, install or set up MSTRCHF 9000:
 
 1. Look for their copy: Artifact `action: "list"` with `limit: 200` (follow `page_token` if there is one), and pick the artifact titled exactly "MSTRCHF 9000".
 2. If there is one, open it (`action: "open"` with its URL). Then check whether it is out of date (see "Update the user's copy") and, if it is, update it.
-3. If there is none, set up their copy now (below) without asking first: they asked to open it, and the new artifact is private to them. Tell them in one line that you are setting up their own copy, that it takes a minute or two, and that their kitchen is saved privately to their Claude account.
+3. If there is none, set up their copy now (below) without asking first: they asked to open it, and the new artifact is private to them. Tell them in one line that you are setting up their own copy and that their kitchen is saved privately to their Claude account.
 
 ## Set up the user's own copy
 
 Publishing needs the Artifact tool, which the Claude desktop app and claude.ai provide.
 
-1. Copy `app/index.html` into your scratchpad directory (the Artifact tool publishes only from the working directory or the scratchpad) and read it.
-2. Read `app/setup.json`. It holds `parts`, an array of `files` maps.
-3. First publish:
+1. Copy the whole `app/` folder into your scratchpad directory in one shell command (the Artifact tool publishes only from the working directory or the scratchpad). Read the copied `index.html` and `setup.json`.
+2. First publish, which makes the planner usable:
    - `file_path`: the copied `index.html`
+   - `root`: the copied `app` folder
    - `files`: `parts[0]`, exactly as written
    - `capabilities`: `{"db": {}, "user": {}, "downloads": true}`
    - `icon`: `"recipe"`
    - `description`: "A weekly meal planner tuned to your taste, with a shopping list ready for Claude to fill your grocery basket."
-4. For each further part: publish again with the same `file_path`, `url` set to the new artifact, and `files` set to that part. Leave out `capabilities` and `icon`; they carry forward.
-5. The publish results list the files copied. If one reports a file it could not copy, publish those paths again from the same part.
-6. Give the user the link. The planner opens after publishing; the first visit asks a few questions (household, likes, budget) and plans the week.
-
-If a publish refuses the copy because the source artifact cannot be opened, upload from disk instead: copy the whole `app/` folder into your scratchpad, then publish the same way with `root` set to the copied `app` folder and `files` mapping each path in `app/files.json` to itself, at most 250 paths per publish, with every non-`.webp` path in the first.
+3. Give the user the link straight away, and say in one line that the recipe photos are still arriving and will appear in a minute or two. The first visit asks a few questions (household, likes, budget), then plans the week.
+4. For each further part, publish again with the same `file_path` and `root`, `url` set to the new artifact, and `files` set to that part, exactly as written. Leave out `capabilities` and `icon`; they carry forward.
+5. When the last part is in, tell the user the photos are all there.
 
 Do not change the page or its files. Do not add `db` rules: the default keeps each person's `data/users/<id>/` private.
 
@@ -48,12 +46,13 @@ Do not change the page or its files. Do not add `db` rules: the default keeps ea
 A new plugin version brings a new planner build, but the user's artifact keeps the build it was published with until it is updated. Their kitchen is saved separately and is not touched by an update.
 
 1. Read their artifact (`action: "read"` with its URL). Compare the script it names (`assets/index-….js`) with the one in `app/index.html`. If they match, the copy is up to date. Stop here.
-2. If they differ, list their files (`action: "list"`, `scope: "files"`, `url`: their artifact), copy `app/index.html` into your scratchpad and read it, then publish with:
+2. If they differ, list their files (`action: "list"`, `scope: "files"`, `url`: their artifact) and copy `app/` into your scratchpad. Then publish with:
    - `url`: their artifact;
    - `file_path`: the copied `index.html`;
-   - `files`: every entry in `app/setup.json`'s parts whose path their listing lacks, exactly as written, plus `null` for every listed path (other than `index.html`) that is in none of the parts.
+   - `root`: the copied `app` folder;
+   - `files`: a map of every path in `app/files.json` that their listing lacks, each to itself, plus `null` for every listed path (other than `index.html`) that is not in `app/files.json`.
 
-   Leave out `capabilities` and `icon`. If there are more than 250 entries, split them across publishes, with the new `assets/index-*.js` and `assets/index-*.css` in the first.
+   Leave out `capabilities` and `icon`. If more than 250 paths are new, publish the ones in `parts[0]` first, then the rest in batches of at most 250.
 3. Tell the user the planner is updated and their kitchen is unchanged.
 
 ## Read this week's plan

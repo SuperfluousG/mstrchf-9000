@@ -2,26 +2,30 @@
 
 ## Claude install: one-step open — 11 November 2026
 
-Owner: Claude Code. Gregg tested 1.3.0 on a second Claude account. "Open MSTRCHF 9000" found no artifact and stopped to ask. The skill also required uploading 401 files (about 40 MB) from the plugin folder, which a fresh Claude session must first copy to its scratchpad. The Artifact tool also requires Claude to read every file it did not write before publishing it, and a fresh session cannot read a 1 MB minified script and 394 photos. Plugin 1.3.1 (this branch) changes setup as follows. This supersedes "Set up MSTRCHF 9000 for me" in the section below.
+Owner: Claude Code. Gregg tested installs on a second Claude account (a personal account outside his organisation).
 
-**Source artifact for installs.** https://claude.ai/artifact/VjcD3g9juBh6jUBcD9wXvQ ("MSTRCHF 9000 Source", on Gregg's account) holds the 1.3.0 build's 401 files and a short page explaining itself. It has no capabilities and stores nothing.
-- Gregg must set its sharing to "Anyone with the link" in the page's Share menu. Users outside his organisation cannot copy from it until he does, and setup then falls back to uploading from disk.
-- It is additive. When a new Claude build ships, publish the new build's files to it, but do not remove old ones while older plugin versions are installed. Their `setup.json` still names the old paths.
-- It is not a planner, and nobody should be sent to it.
+**1.3.0.** "Open MSTRCHF 9000" found no planner and stopped to ask before setting one up.
 
-**How setup works now.** `scripts/setup-map.mjs`, now part of `npm run plugin`, writes `plugin/skills/mstrchf-planner/app/setup.json`. It holds two `files` maps of 201 and 200 entries, each of the form `{"artifact": <source>, "path": <path>}`. When there is no planner, the skill:
-1. copies and reads only `app/index.html` (471 bytes);
-2. publishes it twice with those maps, so the server copies everything else;
-3. does all this without asking first.
+**1.3.1 (PR #11).** Setup no longer asked, and it worked, but it took about 10 minutes. It tried to copy the build server side from a source artifact on Gregg's account (https://claude.ai/artifact/VjcD3g9juBh6jUBcD9wXvQ). That returned 404 from the other account: once at Claude's safety check, which made it resend the call, and once at the server. Each attempt meant writing out a 36 KB copy map. It then fell back to uploading 401 files from disk, which worked.
 
-An update publishes only the missing paths and `null`s stale ones. If the source cannot be opened, the skill falls back to uploading from disk. The artifact listing now uses `limit: 200`. The README tells users to say "Open MSTRCHF 9000".
+**1.3.2 (this change).** The copy route is gone; setup uploads from disk.
+- `scripts/setup-map.mjs` writes `app/setup.json` as `{"path": …}` lists, about 28 KB in total instead of 76 KB.
+- `parts[0]` holds the 11 core files: the script, stylesheet, three fonts and their licence, the icon, and four brand images. Publishing it makes the planner usable straight away.
+- Two further parts of 195 recipe photos each follow, while the user answers the first questions.
+- The skill copies `app/` to the scratchpad in one shell command, publishes each part exactly as written, and gives the link after the first part.
 
-**Verified here:** copying files from one artifact into a new one, on Gregg's own account. **Not verified:**
-- whether a user on another account can copy from the source once it is shared by link;
-- whether that user's Claude still feels bound to read the copied files;
-- the full install on a clean second account. Gregg's re-test settles these.
+Updates publish only the paths the user's copy lacks, and `null` the stale ones.
 
-**Still slow, and the next fix.** Each install makes Claude write out about 400 copy entries, roughly 76 KB, which takes a minute or two. The fix is fewer files. The app could load photos from a few packed files instead of 394 separate ones, which brings setup to one publish of about ten entries. That change touches `src/data.ts`, where photos are a single `import.meta.glob`, and the artifact build. It needs browser checks at desktop and phone width. It is not started.
+**Why not one shared planner.** The platform's db rules (`db.d.ts`, contract 0.2.96) say a signed-in visitor from outside the organisation, arriving by public link or email invitation, holds `view`. They write no data, including their own `data/users/<id>/`. Each person therefore needs their own copy.
+
+**The source artifact is now unused.** No plugin version still relies on it: 1.3.1 falls back to uploading. Delete it only on Gregg's word.
+
+**Not verified:** the 1.3.2 install on the second account. The test should check:
+- how long until the planner opens;
+- how long until the last photos arrive;
+- whether the reload when photos land disturbs the first questions.
+
+**Next speed-up, not started.** Each install still writes about 400 paths. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
 
 ## Claude plugin directory repo — 10 November 2026
 

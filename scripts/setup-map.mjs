@@ -1,27 +1,29 @@
-// Writes plugin/skills/mstrchf-planner/app/setup.json: the `files` maps the planner skill passes to the
-// Artifact tool, so a user's Claude copies the build server side from the source artifact instead of
-// uploading ~400 files from disk. Every path in files.json must already be published to SOURCE
-// (see HANDOVER.md, "Source artifact for installs").
-import { readFileSync, writeFileSync } from 'node:fs';
+// Writes plugin/skills/mstrchf-planner/app/setup.json: the `files` lists the planner skill passes to the
+// Artifact tool, one list per publish. The first holds the page's script, stylesheet, fonts, icon and brand
+// images, so the planner opens after one small publish; the recipe photos follow in the later ones.
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SOURCE = 'https://claude.ai/artifact/VjcD3g9juBh6jUBcD9wXvQ';
 const MAX = 250; // one publish takes at most 255 files
 
-const app = fileURLToPath(new URL('../plugin/skills/mstrchf-planner/app/', import.meta.url));
+const root = fileURLToPath(new URL('..', import.meta.url));
+const app = join(root, 'plugin', 'skills', 'mstrchf-planner', 'app');
 const { files } = JSON.parse(readFileSync(join(app, 'files.json'), 'utf8'));
 
-// The page's script, stylesheet, fonts and icon go in the first part, so the page works as soon as it lands.
-const ordered = [...files.filter(f => !f.endsWith('.webp')), ...files.filter(f => f.endsWith('.webp'))];
-const size = Math.ceil(ordered.length / Math.ceil(ordered.length / MAX));
-const parts = [];
-for (let i = 0; i < ordered.length; i += size) parts.push(ordered.slice(i, i + size));
+// A built photo is assets/<recipe id>-<8-character hash>.webp; it is a recipe photo when src/photos has that id.
+const isRecipePhoto = f => /^assets\/.+\.webp$/.test(f) && existsSync(join(root, 'src', 'photos', `${f.slice(7, -14)}.webp`));
+const core = files.filter(f => !isRecipePhoto(f));
+const photos = files.filter(isRecipePhoto);
 
-// One file per line, so the skill can pass each part to the Artifact tool exactly as written.
-const entry = path => `   ${JSON.stringify(path)}: ${JSON.stringify({ artifact: SOURCE, path })}`;
-const body = parts.map(p => `  {\n${p.map(entry).join(',\n')}\n  }`).join(',\n');
-const text = `{\n "source": ${JSON.stringify(SOURCE)},\n "parts": [\n${body}\n ]\n}\n`;
+const parts = [core];
+const n = Math.ceil(photos.length / MAX);
+const size = Math.ceil(photos.length / n);
+for (let i = 0; i < photos.length; i += size) parts.push(photos.slice(i, i + size));
+
+// One file per line, so the skill can pass each list to the Artifact tool exactly as written.
+const list = p => `  [\n${p.map(path => `   {"path": ${JSON.stringify(path)}}`).join(',\n')}\n  ]`;
+const text = `{\n "parts": [\n${parts.map(list).join(',\n')}\n ]\n}\n`;
 JSON.parse(text);
 writeFileSync(join(app, 'setup.json'), text);
-console.log(`setup.json: ${ordered.length} files from ${SOURCE} in ${parts.length} parts.`);
+console.log(`setup.json: ${core.length} core files, then ${photos.length} recipe photos in ${parts.length - 1} parts (${parts.map(p => p.length).join(' + ')}).`);
