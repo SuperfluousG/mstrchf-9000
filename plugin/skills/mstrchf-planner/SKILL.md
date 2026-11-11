@@ -19,7 +19,7 @@ Files next to this skill:
 
 When the user asks to open, install or set up MSTRCHF 9000:
 
-1. Look for their copy: Artifact `action: "list"` with `limit: 200` (follow `page_token` if there is one), and pick the artifact titled exactly "MSTRCHF 9000".
+1. Look for their copy: Artifact `action: "list"` with `limit: 200` (follow `page_token` if there is one), and pick the artifact titled exactly "MSTRCHF 9000". The list is most recently opened or updated first, so if more than one has that title, use the first and tell the user in one line that they have other copies they can delete.
 2. If there is one, open it (`action: "open"` with its URL). Then check whether it is out of date (see "Update the user's copy") and, if it is, update it.
 3. If there is none, set up their copy now (below) without asking first: they asked to open it, and the new artifact is private to them. Tell them in one line that you are setting up their own copy and that their kitchen is saved privately to their Claude account.
 
@@ -27,7 +27,7 @@ When the user asks to open, install or set up MSTRCHF 9000:
 
 Publishing needs the Artifact tool, which the Claude desktop app and claude.ai provide.
 
-1. Copy the whole `app/` folder into your scratchpad directory in one shell command (the Artifact tool publishes only from the working directory or the scratchpad). Read the copied `index.html` and `setup.json`.
+1. Copy the whole `app/` folder into your scratchpad directory in one shell command (the Artifact tool publishes only from the working directory or the scratchpad). Read the copied `index.html` and `setup.json`. The Artifact tool takes each `files` list inside the call itself, not from a file, so each part has to be written into its publish call; pass it exactly as written in `setup.json`.
 2. First publish, which makes the planner usable:
    - `file_path`: the copied `index.html`
    - `root`: the copied `app` folder
@@ -36,7 +36,7 @@ Publishing needs the Artifact tool, which the Claude desktop app and claude.ai p
    - `icon`: `"recipe"`
    - `description`: "A weekly meal planner tuned to your taste, with a shopping list ready for Claude to fill your grocery basket."
 3. Give the user the link straight away, and say in one line that the recipe photos are still arriving and will appear in a minute or two. The first visit asks a few questions (household, likes, budget), then plans the week.
-4. For each further part, publish again with the same `file_path` and `root`, `url` set to the new artifact, and `files` set to that part, exactly as written. Leave out `capabilities` and `icon`; they carry forward.
+4. For each further part, first tell the user in one line which photos are on their way (for example "Adding recipe photos, part 1 of 2"), then publish again with the same `file_path` and `root`, `url` set to the new artifact, and `files` set to that part, exactly as written. Leave out `capabilities` and `icon`; they carry forward.
 5. When the last part is in, tell the user the photos are all there.
 
 Do not change the page or its files. Do not add `db` rules: the default keeps each person's `data/users/<id>/` private.

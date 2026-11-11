@@ -20,12 +20,18 @@ Updates publish only the paths the user's copy lacks, and `null` the stale ones.
 
 **The source artifact is now unused.** No plugin version still relies on it: 1.3.1 falls back to uploading. Delete it only on Gregg's word.
 
-**Not verified:** the 1.3.2 install on the second account. The test should check:
-- how long until the planner opens;
-- how long until the last photos arrive;
-- whether the reload when photos land disturbs the first questions.
+**1.3.2 tested on the second account, 11 November 2026.** Usable 34 s after the skill loaded (first publish of the 11 core files); all photos in at 4 min 21 s. About 3 min 45 s of that was Claude writing out the two 195-path photo lists. That session did not open the page to confirm it loaded.
 
-**Next speed-up, not started.** Each install still writes about 400 paths. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
+**1.3.3 (skill only).**
+- If several artifacts are titled "MSTRCHF 9000", the skill uses the most recent and tells the user about the others.
+- It tells the user before each photo part.
+- It says why the lists must be written into the call: the Artifact tool takes `files` inline, not from a file.
+
+Not taken up from that test's suggestions:
+- A sha256 manifest, so Claude could skip reading files before publishing. A manifest cannot replace the Artifact tool's read-before-publish rule.
+- A browser check after the first publish. Not every Claude surface has a browser, and it would add time.
+
+**Next speed-up, not started.** Each install still writes about 400 paths. A cheaper interim step is shorter photo names (hash only, e.g. `assets/p/CuQTOz6r.webp`, set by Vite `assetFileNames`), which roughly halves the writing; it also needs a rebuild. Packing the recipe photos into a few files, and serving smaller ones to the Claude build, would cut that to about 15 paths and roughly 10 MB. That means a runtime photo loader in `src/data.ts` (photos are now one `import.meta.glob`), a change to the artifact build, and browser checks at desktop and phone width. A rebuilt artifact also picks up the shared `src/` changes from PR #8, so it needs a full UI check.
 
 ## Claude plugin directory repo — 10 November 2026
 
@@ -49,7 +55,7 @@ This resolves the "Licence" item under "Open before a public release" below.
 **Validation.** `claude plugin validate . --profile directory --strict`, run in the repo root with Claude Code 2.1.322, passed with nothing to report. The directory also runs a safety scan and a human policy review, which this command does not.
 
 **Install routes.** These are documented in `plugin/README.md`; plans other than paid are out of scope:
-1. Download `release/mstrchf-9000-1.3.0.plugin`, then Customize → Plugins → Add → Upload plugin.
+1. Download `release/mstrchf-9000-1.3.3.plugin` (the current release), then Customize → Plugins → Add → Upload plugin.
 2. Customize → Plugins → Add → Add marketplace, entering `SuperfluousG/mstrchf-9000-claude`.
 3. In Claude Code: `claude plugin marketplace add SuperfluousG/mstrchf-9000-claude`, then `claude plugin install mstrchf-9000@mstrchf-9000`.
 
@@ -57,11 +63,11 @@ After any of these, the user says "Open MSTRCHF 9000" (from 1.3.1; see the secti
 
 **Directory submission.** Gregg submits it himself at https://claude.ai/directory/manage → Submit new → Plugin bundle → `SuperfluousG/mstrchf-9000-claude`. Anthropic states no review time. Claude has not submitted anything.
 
-**Action for the Site: rebuild the Claude download.**
-- `release/mstrchf-9000-1.3.0.plugin` was repacked with `LICENSE` and the updated README. It is now 39,784,344 bytes, SHA-256 `52054d1c8788969a7ce43a55fd98458c6fcb091c8fe2c8d2d5ac09a84b7da756`.
-- The deployed Site's `dist/downloads/claude.json` still lists the earlier file: 39,783,115 bytes, `41bab5fafda7a45f7497f0763ee24fa649c04e455953a3e699ee1fc911e4ec55`.
-- To fix it, rerun `../MSTRCHF-9000-site/package-downloads.py`, check that the joined browser download matches the new hash, and redeploy.
-- The app and skills inside are unchanged: version 1.3.0, the same build as Gregg's artifact version 4.
+**Action for the Site: offer plugin 1.3.3.** Gregg shipped 1.3.3 on 11 November 2026. The public repo now holds it.
+- The Claude download should be `release/mstrchf-9000-1.3.3.plugin`: 39,793,420 bytes, SHA-256 `261c66225741ea779819abeda82042c0e009e9b0b1d59f0d367b6ff91ee53cfd`.
+- The deployed Site's `dist/downloads/claude.json` still lists a 1.3.0 file: 39,783,115 bytes, `41bab5fafda7a45f7497f0763ee24fa649c04e455953a3e699ee1fc911e4ec55`. That version stops to ask before setting up, and installs slowly. See the section at the top.
+- To fix it, rebuild the parts from the 1.3.3 file with `../MSTRCHF-9000-site/package-downloads.py`, check that the joined browser download matches the hash above, and redeploy. Any Site text that tells users what to say should use "Open MSTRCHF 9000".
+- The planner app inside is the same build as 1.3.0 and Gregg's artifact version 4. Only the skills, README and LICENSE differ.
 
 **Keeping the public repo current.** It is a manual copy, not a mirror. For each Claude release:
 1. Rebuild with `npm run plugin`.
