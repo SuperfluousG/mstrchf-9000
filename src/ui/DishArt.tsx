@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { codexPhoto, isCodexApp } from '../codexHost';
-import { catalogue, imageUrl } from '../data';
+import { catalogue, imageUrl, loadPhoto, photosPacked } from '../data';
 import type { Recipe } from '../domain/types';
 
 const SKIP_AISLES = new Set(['spices', 'sauces', 'cupboard']);
@@ -95,7 +95,22 @@ function Plate({ recipe }: { recipe: Recipe }) {
 
 export function DishArt({ recipe }: { recipe: Recipe }) {
   if (isCodexApp) return <CodexDish recipe={recipe} />;
+  if (photosPacked) return <PackedDish recipe={recipe} />;
   const src = imageUrl(recipe);
+  if (src) return <img className="dish-photo" src={src} alt={recipe.title} loading="lazy" />;
+  return <Plate recipe={recipe} />;
+}
+
+// Claude artifact build: the photo comes from a packed file that may still be loading, so show the plate until it is ready.
+function PackedDish({ recipe }: { recipe: Recipe }) {
+  const [src, setSrc] = useState<string | null>(() => imageUrl(recipe));
+  useEffect(() => {
+    let live = true;
+    const now = imageUrl(recipe);
+    setSrc(now);
+    if (!now) void loadPhoto(recipe.id).then(url => { if (live) setSrc(url); }).catch(() => {});
+    return () => { live = false; };
+  }, [recipe]);
   if (src) return <img className="dish-photo" src={src} alt={recipe.title} loading="lazy" />;
   return <Plate recipe={recipe} />;
 }
