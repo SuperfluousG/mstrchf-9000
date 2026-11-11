@@ -3,6 +3,7 @@ import { DESKTOP_VERSION } from './domain/desktopEdition';
 
 declare global { interface Window { __MSTRCHF_CODEX__?: boolean } }
 export const isCodexApp = typeof window !== 'undefined' && window.__MSTRCHF_CODEX__ === true;
+if (isCodexApp) document.documentElement.classList.add('codex-app');
 let connection: Promise<App> | null = null;
 let teardown: (() => Promise<void>) | null = null;
 export interface CodexSnapshot { state: unknown; savedAt: number; revision: string; selectedWeekId?: string }

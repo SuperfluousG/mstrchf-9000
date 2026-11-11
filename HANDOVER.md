@@ -1,5 +1,15 @@
 # MSTRCHF 9000 handover: Claude Code to Codex
 
+## Order bar clearance — 11 November 2026
+
+Gregg reported the fullscreen host's collapsed chat composer covering the week summary and ordering action. Desktop edition **0.1.5** sets the week summary and compact Shop action at least 72px above the bottom edge (58px higher than the previous desktop summary), increasing this when the host reports a larger safe-area inset. A desktop-host root class scopes this clearance to the MCP App; browser and Claude layout defaults are retained.
+
+- Verification: TypeScript check and desktop build passed; packaged stdio smoke passed with 10 tools and 8 planned meals using a disposable kitchen. Full ZIP and four-file partial update ZIP pass integrity checks. The SDK-host UI at desktop and 375px showed a computed 72px bottom offset and no horizontal overflow. The original in-app browser could not reach the local preview; Chrome was used for this visual check. Smoke initially hit the known Windows sandbox temporary-file rename restriction, then passed outside it. The actual fullscreen chat overlay in a freshly loaded 0.1.5 host remains unverified.
+- Saved private personal plugin: `plugins_6af381bae888819197337453ced425bc`, release `pluginrel_6af453d3afec8191ac908156642989e2`, version **0.1.5**. Readback confirms both manifests, the app size and unchanged USER/PRIVATE scope and MCP configurations. The update uses the current account manifests to preserve Gregg's author/developer metadata and prompt; only versions, app page and bundled server change. Local package: `release/mstrchf-9000-chatgpt-0.1.5.zip`.
+- The separate promotional Site's ticker transition is also corrected and published as version 8; its source and checkpoint are in `../MSTRCHF-9000-site/README.md`. Site access was observed as public before this edit and preserved. No Claude artifact was republished or kitchen/shopping data changed.
+
+Next action: reopen/update the desktop planner to load 0.1.5 and verify the clearance against the real collapsed chat composer. Source remains on `feat/chatgpt-final-review`; the existing draft PR #12 is still the integration route, with no push or merge performed by this layout edit.
+
 ## Built-in ChatGPT browser handover — 11 November 2026
 
 Gregg tested the real shopping handoff and requested keeping the browser and sign-in inside the ChatGPT desktop app. Desktop edition **0.1.4** updates the shared handoff generator only for ChatGPT: explicitly use `@Browser`, open a visible tab beside the chat, reuse a retailer tab only within that browser, hand sign-in to Gregg there, and stop if the built-in browser is unavailable. External browsers and extensions are explicitly excluded. Claude's handoff, exact reviewed basket payload, existing-basket preservation, delivery-slot confirmation and user checkout rules are preserved.

@@ -35,6 +35,8 @@
 }
 
 * { box-sizing: border-box; }
+/* Keep floating order actions above the desktop host's collapsed chat composer. */
+.codex-app { --order-action-bottom: max(72px, calc(var(--safe-bottom, 0px) + 14px)); }
 .codex-photo { width: 100%; height: 100%; }
 .notice { overflow-wrap: anywhere; }
 html { -webkit-text-size-adjust: 100%; }
@@ -242,7 +244,7 @@ input:focus, select:focus { border-color: var(--ink); }
 .card-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
 .summary-bar {
-  position: sticky; bottom: 14px; margin-top: 40px; display: flex; gap: 8px 22px; align-items: center; flex-wrap: wrap;
+  position: sticky; bottom: var(--order-action-bottom, 14px); margin-top: 40px; display: flex; gap: 8px 22px; align-items: center; flex-wrap: wrap;
   background: var(--oxblood); color: var(--chalk); padding: 10px 10px 10px 28px; border-radius: var(--pill);
   box-shadow: 0 0 0 1px rgba(215, 180, 97, .45), 0 16px 36px rgba(42, 21, 23, .3); font-variant-numeric: tabular-nums;
 }
@@ -481,7 +483,7 @@ label.line { cursor: pointer; min-height: 64px; }
   .shopping-tools.expanded { display: flex; }
   .order-panel { padding: 18px; gap: 8px; }
   .order-panel h2 { font-size: 1.25rem; }
-  .shop-mobile-action { display: flex; position: sticky; bottom: 12px; margin-top: 24px; z-index: 8; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 18px; background: var(--oxblood); color: var(--chalk); border-radius: 18px; box-shadow: 0 8px 28px #2a151733; }
+  .shop-mobile-action { display: flex; position: sticky; bottom: var(--order-action-bottom, 12px); margin-top: 24px; z-index: 8; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 18px; background: var(--oxblood); color: var(--chalk); border-radius: 18px; box-shadow: 0 8px 28px #2a151733; }
   .shop-mobile-action .btn { background: var(--gold); border-color: var(--gold); color: var(--ink); }
   .shop-mobile-action > span { display: flex; flex-direction: column; flex: 1; }
   .shop-mobile-action .btn { white-space: nowrap; padding: 10px 18px; }
@@ -516,7 +518,7 @@ label.line { cursor: pointer; min-height: 64px; }
   .card-actions { gap: 5px; margin-top: 8px; }
   .card-actions .btn.small { min-height: 44px; padding: 7px 10px; font-size: .82rem; }
   .day select { min-height: 44px; padding-top: 8px; padding-bottom: 8px; }
-  .summary-bar { border-radius: 18px; padding: 10px 12px; gap: 6px 12px; margin-top: 22px; bottom: 12px; }
+  .summary-bar { border-radius: 18px; padding: 10px 12px; gap: 6px 12px; margin-top: 22px; bottom: var(--order-action-bottom, 12px); }
   .summary-bar .saving { display: none; }
   .summary-bar .btn { min-height: 44px; padding: 8px 14px; }
   .sharing-details summary span { display: block; margin-top: 2px; }
